@@ -600,7 +600,7 @@ function pic(p,i=0,extra=""){
 
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
-const MODE_IMG={natacao:"assets/modes/natacao.jpg",bike:"assets/modes/bike.jpg",corrida:"assets/modes/corrida.jpg"};
+const MODE_IMG={natacao:"assets/modes/natacao.jpg?v=2",bike:"assets/modes/bike.jpg?v=2",corrida:"assets/modes/corrida.jpg"};
 const st={cat:null,sub:null,group:null,q:"",limit:12};
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
 const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
