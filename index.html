@@ -197,12 +197,16 @@ section,#loja{scroll-margin-top:68px}
 .brand-intro .specs b{display:block;font-size:20px;font-weight:600;letter-spacing:-.03em}
 .brand-intro .specs span{font-size:12px;color:var(--muted)}
 
-.steps{display:grid;counter-reset:s;border-top:1px solid var(--ink)}
-.step{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
+.pd-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.how{margin-top:10px;display:grid;gap:12px;padding-top:20px;border-top:1px solid var(--line)}
+.how h4{margin:0;font-size:20px;font-weight:600;letter-spacing:-.03em}
+.how .lead{color:var(--muted);font-size:14px}
+.steps{display:grid;counter-reset:s;border-top:1px solid var(--line)}
+.step{display:grid;grid-template-columns:32px 1fr;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
 .step::before{counter-increment:s;content:counter(s,decimal-leading-zero);font:600 14px/1.6 var(--mono);color:var(--muted)}
-.step b{display:block;font-size:17px;margin-bottom:4px}
-.step p{color:var(--muted);font-size:15px}
-.rule{margin-top:18px;padding:16px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:15px;display:grid;gap:4px}
+.step b{display:block;font-size:15px;margin-bottom:2px}
+.step p{color:var(--muted);font-size:14px}
+.rule{padding:14px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:15px;display:grid;gap:4px}
 .rule b{color:var(--ink)}
 
 .sell{display:none;background:var(--bg)}
@@ -452,23 +456,6 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
       <h3 class="latest-title" id="latestTitle">Últimos anúncios</h3>
       <div class="grid" id="grid"></div>
       <div class="more" hidden><button class="btn" id="moreBtn">Ver mais</button></div>
-    </div>
-  </section>
-
-  <section id="oferta">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="eyebrow">Fazer oferta</p>
-        <h2>Oferta séria.<br>Resposta rápida.</h2>
-        <p>Você propõe um valor e deixa o cartão reservado. Se o vendedor aceitar, a compra fecha na hora. Se não aceitar, nada é cobrado.</p>
-      </div>
-      <div class="steps">
-        <div class="step"><div><b>Escolha o valor</b><p>Na página do produto, toque em Fazer oferta e digite quanto quer pagar. Mostramos na hora a chance de ser aceita.</p></div></div>
-        <div class="step"><div><b>Reserve no cartão</b><p>O valor fica pré-autorizado no limite do seu cartão. Não é uma cobrança e não aparece como compra na fatura.</p></div></div>
-        <div class="step"><div><b>O vendedor responde em até 24h</b><p>Durante esse prazo, o produto fica marcado como “em negociação”.</p></div></div>
-        <div class="step"><div><b>Aceitou: compra feita. Recusou: valor liberado.</b><p>Aceita, a cobrança é confirmada e combinamos a entrega. Recusada ou sem resposta, a reserva é cancelada automaticamente.</p></div></div>
-      </div>
-      <div class="rule"><b id="floorTxt">Oferta abaixo de 75% do preço não é enviada.</b>O sistema recusa antes de tocar no cartão, e você pode ajustar o valor.</div>
     </div>
   </section>
 
@@ -738,15 +725,32 @@ function openProduct(id){
       <div class="trust-mini">
         <div>${SHIELD}<span>${p.cond==="usado"?"Usado conferido pela equipe Cave antes de ir para a loja.":"Produto novo com nota fiscal."}</span></div>
         <div>${SHIELD}<span>Faça uma oferta: se o vendedor não aceitar, nada é cobrado.</span></div>
-      </div>`}
+      </div>
+      <div class="pd-actions"><button class="btn" id="offerBtn">Fazer oferta</button><button class="btn buy" id="buyBtn">Comprar</button></div>
+      ${HOW_OFFER()}`}
     </div>`;
   const foot=s?`<a class="btn wa" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Vi que ${p.title} (${p.subtitle}) foi vendido. Me avisem se chegar algo parecido.`)}">Quero algo parecido</a>`
-              :`<button class="btn" id="offerBtn">Fazer oferta</button><button class="btn buy" id="buyBtn">Comprar</button>`;
+              :"";
   openSheet(s?"Vendido":"Produto",body,foot);
   const g=$("#gal");g.addEventListener("scroll",()=>{const w=g.firstElementChild.getBoundingClientRect().width+8;const i=Math.round(g.scrollLeft/w);document.querySelectorAll("#dots i").forEach((d,k)=>d.classList.toggle("on",k===i))},{passive:true});
   if(!s){$("#buyBtn").onclick=buyFlow;$("#offerBtn").onclick=()=>offerFlow(1)}
 }
 
+// Como funciona o Fazer oferta: aparece no produto, abaixo dos botões
+function HOW_OFFER(){
+  const pct=Math.round((CFG.offerFloor||.75)*100);
+  return `<div class="how">
+    <h4>Como funciona o Fazer oferta</h4>
+    <p class="lead">Você propõe um valor e deixa o cartão reservado. Se o vendedor aceitar, a compra fecha na hora. Se não aceitar, nada é cobrado.</p>
+    <div class="steps">
+      <div class="step"><div><b>Escolha o valor</b><p>Toque em Fazer oferta e digite quanto quer pagar. Mostramos na hora a chance de ser aceita.</p></div></div>
+      <div class="step"><div><b>Reserve no cartão</b><p>O valor fica pré-autorizado no limite do seu cartão. Não é uma cobrança e não aparece como compra na fatura.</p></div></div>
+      <div class="step"><div><b>O vendedor responde em até 24h</b><p>Durante esse prazo, o produto fica marcado como “em negociação”.</p></div></div>
+      <div class="step"><div><b>Aceitou: compra feita. Recusou: valor liberado.</b><p>Aceita, a cobrança é confirmada e combinamos a entrega. Recusada ou sem resposta, a reserva é cancelada automaticamente.</p></div></div>
+    </div>
+    <div class="rule"><b>Oferta abaixo de ${pct}% do preço não é enviada.</b>O sistema recusa antes de tocar no cartão, e você pode ajustar o valor.</div>
+  </div>`;
+}
 function summary(p,price){return `<div class="offer-sum"><div class="ph"><span class="grain"></span>${pic(p)}</div><div style="min-width:0"><b>${esc(p.title)}</b><span>${esc(p.subtitle)}</span><br><span style="color:var(--ink)">${brl(price??p.price)}</span></div></div>`}
 function openProductInPlace(){const id=cur.id;sheet.classList.remove("on");sheet.hidden=true;scrim.hidden=true;scrim.classList.remove("on");document.body.style.overflow="";openProduct(id)}
 function buyFlow(){
@@ -898,7 +902,6 @@ function renderConfig(){
     <p class="eyebrow">${esc(f.name)}</p><div class="v">${f.price?brl(f.price):"Sob consulta"}</div><p>${esc(f.desc)}</p>
     <a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.fit,`Olá, Guilherme! Quero agendar um Bike Fit: ${f.name}${f.price?` (${brl(f.price)})`:""}.`)}">Agendar pelo WhatsApp</a></div>`).join("");
   $("#rent").innerHTML=CFG.rentals.map(r=>`<a class="rent-item" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Quero alugar: ${r.name}. Prova/data: `)}"><div class="ph"><span class="grain"></span>${svg(r.icon)}</div><div><b>${esc(r.name)}</b><p>${esc(r.desc)}</p><span class="tag">${r.price?esc(r.price):"Sob consulta"} →</span></div></a>`).join("");
-  $("#floorTxt").textContent=`Oferta abaixo de ${Math.round((CFG.offerFloor||.75)*100)}% do preço não é enviada.`;
   const waHome=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
   $("#footWa").href=$("#topWa").href=$("#heroWa").href=waHome;
 }
