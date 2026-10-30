@@ -162,6 +162,13 @@ section,#loja{scroll-margin-top:68px}
 .sort{border:1px solid var(--line);background:var(--surface);border-radius:999px;height:38px;padding:0 12px;font-size:13px}
 
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}
+/* Últimos anúncios: fileira que arrasta para o lado */
+.latest-title{font-size:clamp(24px,6.4vw,36px);font-weight:600;letter-spacing:-.035em;margin:8px 0 16px}
+.grid.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px));scroll-padding-inline:max(16px,env(safe-area-inset-left,0px));padding-bottom:4px}
+.grid.rail::-webkit-scrollbar{display:none}
+.grid.rail .card{flex:0 0 46%;scroll-snap-align:start}
+@media (min-width:720px){.grid.rail .card{flex-basis:30%}}
+@media (min-width:1000px){.grid.rail .card{flex-basis:calc(25% - 9px)}}
 .card{display:grid;gap:10px;text-align:left;background:none;border:0;padding:0;min-width:0;align-content:start}
 .ph{position:relative;aspect-ratio:4/5;max-width:100%;border-radius:var(--r);background:var(--tile);overflow:hidden;display:grid;place-items:center;color:var(--ink)}
 .ph .grain{position:absolute;inset:0;background:radial-gradient(120% 80% at 80% 0%,var(--tile-2),transparent 60%)}
@@ -435,7 +442,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
           <div class="qf" id="qf" hidden></div>
         </div>
       </div>
-      <p class="eyebrow" id="latestTitle" style="margin:8px 0 14px">Últimos anúncios</p>
+      <h3 class="latest-title" id="latestTitle">Últimos anúncios</h3>
       <div class="grid" id="grid"></div>
       <div class="more" hidden><button class="btn" id="moreBtn">Ver mais</button></div>
     </div>
@@ -661,7 +668,9 @@ function card(p){
   </button>`;
 }
 function renderGrid(){
-  const l=st.cat?filtered():P.filter(p=>!sold(p)).slice(0,8);
+  // sem modalidade escolhida: os 5 anúncios mais recentes, numa fileira que arrasta
+  $("#grid").classList.toggle("rail",!st.cat);
+  const l=st.cat?filtered():P.filter(p=>!sold(p)).slice(0,5);
   $("#grid").innerHTML=l.length?l.slice(0,st.limit).map(card).join(""):`<p class="empty">Nada por aqui agora. Tem um desses parado em casa? <a href="#vender">A gente vende para você</a>.</p>`;
   document.querySelector(".more").hidden=!st.cat||l.length<=st.limit;
 }
