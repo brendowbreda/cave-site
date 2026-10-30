@@ -1,0 +1,137 @@
+{
+ "whatsapp": {
+  "loja": "5548900000000",
+  "fit": "5548900000001"
+ },
+ "offerFloor": 0.75,
+ "categories": [
+  {
+   "id": "natacao",
+   "name": "Natação",
+   "subs": [
+    "Neoprene",
+    "Sungas",
+    "Óculos",
+    "Toucas",
+    "Acessórios"
+   ]
+  },
+  {
+   "id": "bike",
+   "name": "Bikes",
+   "subs": [
+    "Road",
+    "Triathlon / TT",
+    "Gravel"
+   ]
+  },
+  {
+   "id": "componentes",
+   "name": "Componentes",
+   "subs": [
+    "Rodas",
+    "Pneus",
+    "Grupo Shimano",
+    "Grupo SRAM",
+    "Bateria SRAM",
+    "Cassetes",
+    "Corrente",
+    "Coroa",
+    "Pedivela",
+    "Medidor de potência",
+    "Disco de freio",
+    "Pastilha de freio",
+    "Guidão / Cockpit",
+    "Selins",
+    "Pedais",
+    "Taco sapatilha",
+    "Hidratação",
+    "Bombas",
+    "CO2",
+    "Rolo de treino",
+    "CeramicSpeed",
+    "Mala bike"
+   ]
+  },
+  {
+   "id": "vestuario",
+   "name": "Vestuário",
+   "subs": [
+    "Capacetes",
+    "Sapatilhas",
+    "Macaquinhos",
+    "Bretelles",
+    "Jerseys",
+    "Jaquetas",
+    "Óculos"
+   ]
+  },
+  {
+   "id": "corrida",
+   "name": "Corrida",
+   "subs": [
+    "Tênis",
+    "Meias",
+    "Shorts",
+    "Elástico"
+   ]
+  },
+  {
+   "id": "garmin",
+   "name": "Garmin",
+   "subs": [
+    "Relógios",
+    "Ciclocomputadores",
+    "Cintas cardíacas",
+    "Carregadores",
+    "Varia radar"
+   ]
+  },
+  {
+   "id": "wahoo",
+   "name": "Wahoo",
+   "subs": [
+    "Pedais",
+    "Cintas cardíacas"
+   ]
+  }
+ ],
+ "fit": [
+  {
+   "name": "Estrada & Mountain Bike",
+   "price": 400,
+   "desc": "Bike Fit completo para ciclistas de estrada ou mountain bike."
+  },
+  {
+   "name": "Triathlon / TT (contrarrelógio)",
+   "price": 500,
+   "desc": "Posicionamento aerodinâmico para bikes de triathlon ou contrarrelógio."
+  }
+ ],
+ "rentals": [
+  {
+   "icon": "tt",
+   "name": "Bike de triathlon / TT",
+   "desc": "Tamanhos P, M e G. Ajuste de posição antes da prova.",
+   "price": ""
+  },
+  {
+   "icon": "bike",
+   "name": "Bike road",
+   "desc": "Para provas de estrada e viagens de treino.",
+   "price": ""
+  },
+  {
+   "icon": "disc",
+   "name": "Roda fechada traseira",
+   "desc": "Disco para TT e triathlon. Shimano/SRAM.",
+   "price": ""
+  },
+  {
+   "icon": "spoke",
+   "name": "Roda de perfil alto dianteira",
+   "desc": "Par ideal para a roda fechada.",
+   "price": ""
+  }
+ ]
+}

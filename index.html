@@ -3,48 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Cave Floripa</title>
 <meta name="description" content="Cave Floripa: equipamento de endurance novo e usado, Bike Fit e locação para provas.">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Cave Endurance</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<meta property="og:title" content="Cave Floripa">
+<meta property="og:description" content="Compre bem. Venda melhor. Natação, bike e corrida em Florianópolis.">
+<meta property="og:image" content="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
-/* Layout: mobile-first single column, results-sheet rhythm (hairline rows, mono figures), condensed display type, fixed bottom tab bar. */
+/* Layout: mobile-first, preto e branco da marca, ritmo de folha de resultados (linhas finas, números em mono), barra de atalhos fixa embaixo. */
 :root{
-  --bg:#F2F3F0; --surface:#FFFFFF; --tile:#E6E8E3; --tile-2:#DCE0DA;
-  --ink:#111513; --muted:#5D6560; --line:#D8DCD5;
-  --buy:#14804A; --buy-ink:#FFFFFF; --buy-soft:#E1F1E7;
-  --sea:#0D5266; --sea-soft:#DDEBEF;
-  --warn:#9A5B00; --warn-soft:#F6EBD8; --bad:#B42318; --bad-soft:#F8E1DE;
+  --bg:#000000; --surface:#0E0E0E; --tile:#151515; --tile-2:#222222;
+  --ink:#FFFFFF; --muted:#9B9B9B; --line:#262626;
+  --buy:#22C55E; --buy-ink:#03140A; --buy-soft:#0D2416;
+  --info:#8EC9D8; --info-soft:#10222A;
+  --warn:#F0B35A; --warn-soft:#2A1F0E; --bad:#FF7A6E; --bad-soft:#2E1412;
   --display:"Archivo","Arial Narrow",system-ui,sans-serif;
   --body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
   --r:14px; --tabbar:64px;
+  color-scheme:dark;
+  padding-top:env(safe-area-inset-top,0px);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0C0F0E; --surface:#151917; --tile:#1C211F; --tile-2:#232926;
-  --ink:#ECEFEC; --muted:#9AA39E; --line:#2A302D;
-  --buy:#22A35D; --buy-ink:#06140C; --buy-soft:#123222;
-  --sea:#6CB8CC; --sea-soft:#13282E;
-  --warn:#E0A44A; --warn-soft:#2D2312; --bad:#F07A6E; --bad-soft:#331816;
-  color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0C0F0E; --surface:#151917; --tile:#1C211F; --tile-2:#232926;
-  --ink:#ECEFEC; --muted:#9AA39E; --line:#2A302D;
-  --buy:#22A35D; --buy-ink:#06140C; --buy-soft:#123222;
-  --sea:#6CB8CC; --sea-soft:#13282E;
-  --warn:#E0A44A; --warn-soft:#2D2312; --bad:#F07A6E; --bad-soft:#331816;
-  color-scheme:dark}
-
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--body);padding-bottom:calc(var(--tabbar) + env(safe-area-inset-bottom,0px));overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--body);padding-bottom:calc(var(--tabbar) + env(safe-area-inset-bottom,0px));overflow-x:hidden;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+img{max-width:100%;display:block}
+[hidden]{display:none!important}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--sea);outline-offset:2px;border-radius:6px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -56,28 +50,23 @@ section{padding-block:56px}
 .sec-head{display:grid;gap:12px;margin-bottom:28px}
 .sec-head p{color:var(--muted);max-width:60ch}
 
-/* Buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;font-weight:600;font-size:16px;text-decoration:none;transition:transform .15s ease, background .15s ease}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;font-weight:600;font-size:16px;text-decoration:none;transition:transform .15s ease}
 .btn:active{transform:scale(.98)}
 .btn.solid{background:var(--ink);color:var(--bg)}
-.btn.buy{background:var(--buy);border-color:var(--buy);color:var(--buy-ink)}
-.btn.wa{background:var(--buy);border-color:var(--buy);color:var(--buy-ink)}
+.btn.buy,.btn.wa{background:var(--buy);border-color:var(--buy);color:var(--buy-ink)}
 .btn.block{width:100%}
-.btn[disabled]{opacity:.4;cursor:not-allowed}
+.btn[disabled]{opacity:.35;cursor:not-allowed}
 .btn svg{width:20px;height:20px;flex:none}
 
-/* Header */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:12px}
-.logo{font:900 26px/1 var(--display);font-stretch:62%;letter-spacing:.02em;text-decoration:none;display:flex;align-items:baseline;gap:8px}
-.logo small{font:500 10px/1 var(--mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(0,0,0,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.logo img{height:30px;width:auto}
 .top nav{display:none;gap:22px;font-weight:500}
 .top nav a{text-decoration:none;color:var(--muted)}
 .top nav a:hover{color:var(--ink)}
 .icon-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
 .icon-btn svg{width:20px;height:20px}
 
-/* Hero */
 .hero{padding-block:36px 28px}
 .hero h1{font-size:clamp(64px,19vw,168px);font-weight:900;font-stretch:62%;line-height:.84;text-transform:uppercase;letter-spacing:-.015em}
 .hero h1 span{display:block}
@@ -90,16 +79,15 @@ section{padding-block:56px}
 .proof::-webkit-scrollbar{display:none}
 .proof span{flex:none;font:500 12px/1 var(--mono);letter-spacing:.04em;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);white-space:nowrap}
 
-/* 70.3 split strip */
 .splits{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);border-bottom:1px solid var(--line)}
-.split{display:grid;gap:4px;padding:14px 10px 16px;text-decoration:none;border-right:1px solid var(--line);background:none;border-left:0;border-top:0;border-bottom:0;text-align:left}
+.split{display:grid;gap:4px;padding:14px 10px 16px;border:0;border-right:1px solid var(--line);background:none;text-align:left}
 .split:last-child{border-right:0}
 .split .d{font:600 clamp(20px,6vw,34px)/1 var(--mono);letter-spacing:-.03em}
+.split .d small{font-size:.5em}
 .split .n{font-weight:600}
 .split .eyebrow{font-size:10px}
 .split-note{display:flex;justify-content:space-between;gap:12px;margin-top:10px;font:500 11px/1.3 var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 
-/* Shop */
 .search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 16px;height:50px}
 .search svg{width:18px;height:18px;color:var(--muted);flex:none}
 .search input{border:0;outline:0;background:transparent;flex:1;min-width:0;font-size:16px}
@@ -108,7 +96,7 @@ section{padding-block:56px}
 .chip{flex:none;height:38px;padding:0 15px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;font-weight:500;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chips.sub .chip{height:32px;font-size:13px;background:transparent}
-.chips.sub .chip[aria-pressed="true"]{background:var(--sea-soft);color:var(--sea);border-color:var(--sea)}
+.chips.sub .chip[aria-pressed="true"]{background:var(--tile-2);color:var(--ink);border-color:var(--ink)}
 .filters{display:grid;gap:12px;margin-bottom:18px}
 .filter-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
@@ -118,44 +106,45 @@ section{padding-block:56px}
 .sort{border:1px solid var(--line);background:var(--surface);border-radius:999px;height:38px;padding:0 12px;font-size:13px}
 
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}
-.card{display:grid;gap:10px;text-align:left;background:none;border:0;padding:0;min-width:0}
+.card{display:grid;gap:10px;text-align:left;background:none;border:0;padding:0;min-width:0;align-content:start}
 .ph{position:relative;aspect-ratio:4/5;max-width:100%;border-radius:var(--r);background:var(--tile);overflow:hidden;display:grid;place-items:center;color:var(--ink)}
-.ph svg{width:58%;height:auto;opacity:.82;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .ph .grain{position:absolute;inset:0;background:radial-gradient(120% 80% at 80% 0%,var(--tile-2),transparent 60%)}
-.ph svg{position:relative}
-.badge{position:absolute;top:10px;left:10px;font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:6px;background:var(--surface);color:var(--ink);z-index:2}
-.badge.novo{background:var(--buy-soft);color:var(--buy)}
+.ph svg{position:relative;width:58%;height:auto;opacity:.85;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.badge{position:absolute;top:10px;left:10px;font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.7);color:var(--ink);z-index:2}
+.badge.novo{background:var(--buy);color:var(--buy-ink)}
 .badge.hl{left:auto;right:10px;background:var(--ink);color:var(--bg)}
-.pics{position:absolute;bottom:10px;right:10px;font:500 10px/1 var(--mono);color:var(--muted);z-index:2}
+.badge.sold{background:var(--ink);color:var(--bg)}
+.pics{position:absolute;bottom:10px;right:10px;font:500 10px/1 var(--mono);color:var(--muted);z-index:2;background:rgba(0,0,0,.6);padding:4px 6px;border-radius:4px}
 .card .t{font-weight:600;line-height:1.25;font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card .s{font-size:13px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .p{font:600 15px/1 var(--mono);letter-spacing:-.02em}
 .card .meta{display:grid;gap:4px;min-width:0}
+/* Vendido: foto borrada em preto e branco, preço escondido */
+.is-sold .ph img,.is-sold .ph svg{filter:grayscale(1) blur(7px);transform:scale(1.08);opacity:.55}
+.is-sold .p{color:var(--muted);letter-spacing:.06em}
 .empty{padding:40px 0;text-align:center;color:var(--muted);grid-column:1/-1}
 .more{margin-top:24px;display:flex;justify-content:center}
 
-/* CeramicSpeed band */
 .band{background:var(--ink);color:var(--bg)}
 .band .wrap{padding-block:44px;display:grid;gap:18px}
-.band .eyebrow{color:color-mix(in srgb,var(--bg) 60%,transparent)}
+.band .eyebrow{color:#555}
 .band h2{font-size:clamp(40px,11vw,84px)}
-.band p{color:color-mix(in srgb,var(--bg) 72%,transparent);max-width:46ch}
+.band p{color:#333;max-width:46ch}
 .band .btn{border-color:var(--bg);color:var(--bg);justify-self:start}
-.band .specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid color-mix(in srgb,var(--bg) 25%,transparent)}
+.band .specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #BBB}
 .band .specs div{padding:12px 8px 0 0}
 .band .specs b{display:block;font:600 22px/1 var(--mono);letter-spacing:-.03em}
-.band .specs span{font-size:12px;color:color-mix(in srgb,var(--bg) 60%,transparent)}
+.band .specs span{font-size:12px;color:#555}
 
-/* Offer explainer */
-.steps{display:grid;gap:0;counter-reset:s;border-top:1px solid var(--ink)}
+.steps{display:grid;counter-reset:s;border-top:1px solid var(--ink)}
 .step{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
 .step::before{counter-increment:s;content:counter(s,decimal-leading-zero);font:600 14px/1.6 var(--mono);color:var(--muted)}
 .step b{display:block;font-size:17px;margin-bottom:4px}
 .step p{color:var(--muted);font-size:15px}
-.rule{margin-top:18px;padding:16px;border-radius:var(--r);background:var(--sea-soft);color:var(--sea);font-size:15px;display:grid;gap:4px}
+.rule{margin-top:18px;padding:16px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:15px;display:grid;gap:4px}
 .rule b{color:var(--ink)}
 
-/* Sell */
 .sell{background:var(--surface);border-block:1px solid var(--line)}
 .sell h2 em{font-style:normal;color:var(--buy)}
 .sell-flow{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:24px}
@@ -166,7 +155,6 @@ section{padding-block:56px}
 .field{display:grid;gap:6px;min-width:0}
 .field label,.lbl{font-size:13px;font-weight:600}
 .field input,.field select,.field textarea{width:100%;min-height:50px;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:12px 14px;font-size:16px}
-.field textarea{min-height:90px;resize:vertical}
 .field .hint{font-size:12px;color:var(--muted)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .uploader{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
@@ -175,13 +163,12 @@ section{padding-block:56px}
 .slot.add{border-color:var(--ink);color:var(--ink);cursor:pointer}
 .slot input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .pillset{display:flex;flex-wrap:wrap;gap:8px}
-.pillset label{display:inline-flex}
+.pillset label{display:inline-flex;position:relative}
 .pillset input{position:absolute;opacity:0;pointer-events:none}
 .pillset span{height:40px;padding:0 16px;display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;font-size:14px;font-weight:500;background:var(--bg)}
 .pillset input:checked + span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.pillset input:focus-visible + span{outline:2px solid var(--sea);outline-offset:2px}
+.pillset input:focus-visible + span{outline:2px solid var(--ink);outline-offset:2px}
 
-/* Fit */
 .fit-hero{display:grid;gap:16px}
 .person{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center;padding:16px 0;border-top:1px solid var(--ink)}
 .avatar{width:72px;height:72px;border-radius:50%;background:var(--tile);display:grid;place-items:center;font:800 24px/1 var(--display);font-stretch:70%}
@@ -204,16 +191,14 @@ section{padding-block:56px}
 .process div{padding:12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14px;display:grid;gap:2px}
 .process .k{font:600 11px/1 var(--mono);color:var(--muted)}
 
-/* Rental */
 .rent{display:grid;gap:12px}
-.rent-item{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.rent-item{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);text-decoration:none}
 .rent-item .ph{aspect-ratio:1;border-radius:10px}
 .rent-item .ph svg{width:70%}
 .rent-item b{display:block}
 .rent-item p{font-size:14px;color:var(--muted)}
-.rent-item .tag{font:500 11px/1 var(--mono);color:var(--sea);letter-spacing:.04em;text-transform:uppercase;margin-top:6px;display:block}
+.rent-item .tag{font:500 12px/1.3 var(--mono);color:var(--ink);margin-top:6px;display:block}
 
-/* About */
 .about-grid{display:grid;gap:28px}
 .quote{font:500 clamp(22px,5.6vw,34px)/1.2 var(--display);font-stretch:88%;text-wrap:balance}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink)}
@@ -222,24 +207,23 @@ section{padding-block:56px}
 .stats span{font-size:12px;color:var(--muted);line-height:1.3}
 .flag{display:inline-block;font:600 10px/1 var(--mono);padding:4px 6px;border:1px solid currentColor;border-radius:4px;vertical-align:2px;margin-left:4px}
 
-footer{padding-block:40px 24px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+footer{padding-block:48px 24px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 footer .wrap{display:grid;gap:18px}
-footer .logo{color:var(--ink);font-size:44px}
+footer .flogo{width:min(320px,70%);height:auto}
+footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;justify-self:start}
 
-/* Tab bar */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:55;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:0 max(8px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(8px,env(safe-area-inset-left,0px))}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(10,10,10,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:0 max(8px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(8px,env(safe-area-inset-left,0px))}
 .tabbar ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(5,1fr);max-width:560px;height:var(--tabbar)}
 .tabbar a{display:grid;place-items:center;align-content:center;gap:3px;height:100%;text-decoration:none;font-size:11px;font-weight:600;color:var(--muted)}
 .tabbar a svg{width:22px;height:22px}
-.tabbar a.wa-tab span.dot{width:40px;height:40px;border-radius:50%;background:var(--buy);color:var(--buy-ink);display:grid;place-items:center;margin-top:-2px}
 .tabbar a.wa-tab{color:var(--buy)}
+.tabbar a.wa-tab .dot{width:40px;height:40px;border-radius:50%;background:var(--buy);color:var(--buy-ink);display:grid;place-items:center;margin-top:-2px}
 
-/* Sheet */
-.scrim{position:fixed;inset:0;z-index:80;background:rgba(5,8,7,.5);opacity:0;transition:opacity .2s ease}
+.scrim{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.7);opacity:0;transition:opacity .2s ease}
 .scrim.on{opacity:1}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:90;max-height:94vh;max-height:94dvh;background:var(--bg);border-radius:20px 20px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);max-width:720px;margin:0 auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:90;max-height:94vh;max-height:94dvh;background:var(--bg);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);max-width:720px;margin:0 auto}
 .sheet.on{transform:none}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);flex:none}
+.sheet-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);flex:none}
 .sheet-head .grab{position:absolute;top:6px;left:50%;width:36px;height:4px;border-radius:2px;background:var(--line);transform:translateX(-50%)}
 .sheet-head b{font-size:15px}
 .sheet-body{overflow-y:auto;overscroll-behavior:contain;padding:16px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px));flex:1;min-height:0}
@@ -255,10 +239,11 @@ footer .logo{color:var(--ink);font-size:44px}
 .dots i.on{background:var(--ink);width:18px;border-radius:3px}
 .pd{display:grid;gap:14px;margin-top:18px}
 .pd .cond{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pd .cond .badge{position:static}
 .pd h3{font-size:28px;font-stretch:78%;font-weight:800}
 .pd .sub{color:var(--muted)}
 .pd .price{font:600 30px/1 var(--mono);letter-spacing:-.04em}
-.pd .desc{font-size:15px}
+.pd .desc{font-size:15px;white-space:pre-line}
 .kv{display:grid;border-top:1px solid var(--line)}
 .kv div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
 .kv span{color:var(--muted)}
@@ -266,7 +251,6 @@ footer .logo{color:var(--ink);font-size:44px}
 .trust-mini div{display:flex;gap:10px;align-items:flex-start}
 .trust-mini svg{width:18px;height:18px;flex:none;margin-top:2px;color:var(--buy)}
 
-/* Offer flow */
 .stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:18px}
 .stepper i{height:4px;border-radius:2px;background:var(--line)}
 .stepper i.on{background:var(--ink)}
@@ -281,26 +265,25 @@ footer .logo{color:var(--ink);font-size:44px}
 .quick{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .quick button{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font:500 13px/1 var(--mono)}
 .meter{margin-top:18px;display:grid;gap:8px}
-.meter-bar{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--bad) 0 16.7%,var(--warn) 16.7% 50%,var(--sea) 50% 76.7%,var(--buy) 76.7%)}
-.meter-bar i{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--surface);border:3px solid var(--ink);transform:translate(-50%,-50%);transition:left .2s ease}
+.meter-bar{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--bad) 0 16.7%,var(--warn) 16.7% 50%,var(--info) 50% 76.7%,var(--buy) 76.7%)}
+.meter-bar i{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--bg);border:3px solid var(--ink);transform:translate(-50%,-50%);transition:left .2s ease}
 .meter-scale{display:flex;justify-content:space-between;font:500 10px/1 var(--mono);color:var(--muted)}
 .verdict{padding:14px;border-radius:12px;font-size:14px;display:grid;gap:2px}
 .verdict b{font-size:15px}
 .v-bad{background:var(--bad-soft);color:var(--bad)}
 .v-warn{background:var(--warn-soft);color:var(--warn)}
-.v-ok{background:var(--sea-soft);color:var(--sea)}
+.v-ok{background:var(--info-soft);color:var(--info)}
 .v-good{background:var(--buy-soft);color:var(--buy)}
 .note{display:flex;gap:10px;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14px;color:var(--muted)}
-.note svg{width:20px;height:20px;flex:none;color:var(--sea)}
+.note svg{width:20px;height:20px;flex:none;color:var(--buy)}
 .note b{color:var(--ink)}
 .check{display:flex;gap:12px;align-items:flex-start;font-size:14px}
 .check input{width:22px;height:22px;flex:none;accent-color:var(--buy);margin-top:1px}
 .timeline{display:grid;border-left:2px solid var(--line);margin-left:8px;padding-left:20px;gap:18px}
 .tl{position:relative;font-size:14px}
-.tl::before{content:"";position:absolute;left:-28px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--line)}
+.tl::before{content:"";position:absolute;left:-29px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--line)}
 .tl.done::before{background:var(--buy);border-color:var(--buy)}
 .tl.now::before{border-color:var(--ink);background:var(--ink)}
-.tl.fail::before{background:var(--bad);border-color:var(--bad)}
 .tl b{display:block;font-size:15px}
 .tl span{color:var(--muted)}
 .demo{display:grid;gap:8px;padding:14px;border:1px dashed var(--line);border-radius:12px}
@@ -315,6 +298,8 @@ footer .logo{color:var(--ink);font-size:44px}
 .toast{position:fixed;left:50%;bottom:calc(var(--tabbar) + 16px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:100;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font-size:14px;font-weight:500;transition:all .2s ease;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .demo-flag{font:500 11px/1.4 var(--mono);color:var(--muted);letter-spacing:.03em}
+.sold-note{padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:14px}
+.sold-note b{color:var(--ink)}
 
 @media (min-width:720px){
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 18px}
@@ -325,7 +310,7 @@ footer .logo{color:var(--ink);font-size:44px}
   .about-grid{grid-template-columns:1.1fr 1fr;align-items:start}
   .sell-cols{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start}
   .fit-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-  .sheet{border-radius:20px;bottom:16px}
+  .sheet{border-radius:20px;bottom:16px;border-bottom:1px solid var(--line)}
 }
 @media (min-width:1000px){
   .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -339,7 +324,7 @@ footer .logo{color:var(--ink);font-size:44px}
 
 <header class="top">
   <div class="wrap">
-    <a class="logo" href="#inicio" aria-label="Cave, início">CAVE <small>Floripa</small></a>
+    <a class="logo" href="#inicio" aria-label="Cave Floripa, início"><img src="assets/logo.png" alt="Cave Floripa" width="92" height="30"></a>
     <nav aria-label="Principal">
       <a href="#loja">Loja</a><a href="#vender">Vender</a><a href="#fit">Bike Fit</a><a href="#locacao">Locação</a><a href="#sobre">Sobre</a>
     </nav>
@@ -349,7 +334,7 @@ footer .logo{color:var(--ink);font-size:44px}
 
 <main id="inicio">
   <div class="wrap hero">
-    <p class="eyebrow">Natação · Bike · Corrida — Florianópolis</p>
+    <p class="eyebrow">Natação · Bike · Corrida · Florianópolis</p>
     <h1 style="margin-top:14px"><span>Compre bem.</span><span class="thin">Venda melhor.</span></h1>
     <p class="lede">Equipamento de endurance novo e usado, <b>escolhido e revisado por quem compete.</b></p>
     <div class="ctas">
@@ -366,14 +351,13 @@ footer .logo{color:var(--ink);font-size:44px}
 
   <div class="wrap">
     <div class="splits" role="list" aria-label="Categorias na ordem da prova">
-      <button class="split" data-go="natacao" role="listitem"><span class="eyebrow">Swim</span><span class="d">1,9<small style="font-size:.5em"> km</small></span><span class="n">Natação</span></button>
-      <button class="split" data-go="bike" role="listitem"><span class="eyebrow">Bike</span><span class="d">90<small style="font-size:.5em"> km</small></span><span class="n">Bike</span></button>
-      <button class="split" data-go="corrida" role="listitem"><span class="eyebrow">Run</span><span class="d">21,1<small style="font-size:.5em"> km</small></span><span class="n">Corrida</span></button>
+      <button class="split" data-go="natacao" role="listitem"><span class="eyebrow">Swim</span><span class="d">1,9<small> km</small></span><span class="n">Natação</span></button>
+      <button class="split" data-go="bike" role="listitem"><span class="eyebrow">Bike</span><span class="d">90<small> km</small></span><span class="n">Bike</span></button>
+      <button class="split" data-go="corrida" role="listitem"><span class="eyebrow">Run</span><span class="d">21,1<small> km</small></span><span class="n">Corrida</span></button>
     </div>
     <div class="split-note"><span>A loja na ordem da prova</span><span>113 km · 70.3</span></div>
   </div>
 
-  <!-- LOJA -->
   <section id="loja">
     <div class="wrap">
       <div class="sec-head">
@@ -389,18 +373,16 @@ footer .logo{color:var(--ink);font-size:44px}
             <button data-cond="all" aria-pressed="true">Todos</button><button data-cond="novo" aria-pressed="false">Novos</button><button data-cond="usado" aria-pressed="false">Usados</button>
           </div>
           <select class="sort" id="sort" aria-label="Ordenar">
-            <option value="rel">Relevância</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option>
+            <option value="rel">Mais recentes</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option>
           </select>
         </div>
-        <p class="count" id="count"></p>
+        <p class="count" id="count">Carregando produtos…</p>
       </div>
       <div class="grid" id="grid"></div>
-      <div class="more"><button class="btn" id="moreBtn">Ver mais</button></div>
-      <p class="demo-flag" style="margin-top:16px">Produtos, fotos e preços desta versão são exemplos para aprovação do layout.</p>
+      <div class="more" hidden><button class="btn" id="moreBtn">Ver mais</button></div>
     </div>
   </section>
 
-  <!-- CERAMICSPEED -->
   <div class="band" id="ceramicspeed">
     <div class="wrap">
       <p class="eyebrow">Destaque da casa</p>
@@ -415,7 +397,6 @@ footer .logo{color:var(--ink);font-size:44px}
     </div>
   </div>
 
-  <!-- OFERTA -->
   <section id="oferta">
     <div class="wrap">
       <div class="sec-head">
@@ -429,11 +410,10 @@ footer .logo{color:var(--ink);font-size:44px}
         <div class="step"><div><b>O vendedor responde em até 24h</b><p>Durante esse prazo, o produto fica marcado como “em negociação”.</p></div></div>
         <div class="step"><div><b>Aceitou: compra feita. Recusou: valor liberado.</b><p>Aceita, a cobrança é confirmada e combinamos a entrega. Recusada ou sem resposta, a reserva é cancelada automaticamente.</p></div></div>
       </div>
-      <div class="rule"><b>Oferta abaixo de 75% do preço não é enviada.</b>O sistema recusa antes de tocar no cartão, e você pode ajustar o valor.</div>
+      <div class="rule"><b id="floorTxt">Oferta abaixo de 75% do preço não é enviada.</b>O sistema recusa antes de tocar no cartão, e você pode ajustar o valor.</div>
     </div>
   </section>
 
-  <!-- VENDER -->
   <section class="sell" id="vender">
     <div class="wrap sell-cols">
       <div>
@@ -454,7 +434,7 @@ footer .logo{color:var(--ink);font-size:44px}
         <div class="row2">
           <div class="field"><label for="s-cat">Categoria</label>
             <select id="s-cat"><option>Bike</option><option>Rodas e componentes</option><option>Natação</option><option>Vestuário e capacete</option><option>Corrida</option><option>Garmin / Wahoo</option><option>Outro</option></select></div>
-          <div class="field"><label for="s-price">Valor desejado</label><input id="s-price" inputmode="numeric" placeholder="R$ 0,00"></div>
+          <div class="field"><label for="s-price">Valor desejado</label><input id="s-price" inputmode="numeric" placeholder="R$ 0"></div>
         </div>
         <div class="field"><span class="lbl">Estado</span>
           <div class="pillset" role="radiogroup" aria-label="Estado do produto">
@@ -476,7 +456,6 @@ footer .logo{color:var(--ink);font-size:44px}
     </div>
   </section>
 
-  <!-- BIKE FIT -->
   <section id="fit">
     <div class="wrap fit-cols">
       <div class="fit-hero">
@@ -503,24 +482,10 @@ footer .logo{color:var(--ink);font-size:44px}
         </div>
         <p style="color:var(--muted);font-size:15px">Cada ajuste equilibra conforto, eficiência mecânica, controle da bike e uma posição que você sustenta do primeiro ao último quilômetro.</p>
       </div>
-      <div class="prices" style="margin-top:24px">
-        <div class="price-card">
-          <p class="eyebrow">Estrada &amp; Mountain Bike</p>
-          <div class="v">R$ 400,00</div>
-          <p>Bike Fit completo para ciclistas de estrada ou mountain bike.</p>
-          <a class="btn wa block fit-wa" data-type="Estrada & Mountain Bike (R$ 400,00)" target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
-        </div>
-        <div class="price-card feat">
-          <p class="eyebrow">Triathlon / TT (contrarrelógio)</p>
-          <div class="v">R$ 500,00</div>
-          <p>Posicionamento aerodinâmico para bikes de triathlon ou contrarrelógio.</p>
-          <a class="btn wa block fit-wa" data-type="Triathlon / TT (R$ 500,00)" target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
-        </div>
-      </div>
+      <div class="prices" id="fitPrices" style="margin-top:24px"></div>
     </div>
   </section>
 
-  <!-- LOCAÇÃO -->
   <section id="locacao" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
@@ -532,7 +497,6 @@ footer .logo{color:var(--ink);font-size:44px}
     </div>
   </section>
 
-  <!-- SOBRE -->
   <section id="sobre" style="background:var(--surface);border-top:1px solid var(--line)">
     <div class="wrap about-grid">
       <div style="display:grid;gap:20px">
@@ -556,11 +520,11 @@ footer .logo{color:var(--ink);font-size:44px}
 
 <footer>
   <div class="wrap">
-    <span class="logo">CAVE</span>
+    <img class="flogo" src="assets/logo.png" alt="Cave Floripa" width="320" height="104" loading="lazy">
     <p>Equipamento de endurance · Florianópolis, SC</p>
     <p>Natação · Bike · Corrida · Garmin · Wahoo · CeramicSpeed</p>
     <a class="btn wa" id="footWa" target="_blank" rel="noopener" style="justify-self:start">Falar com a Cave</a>
-    <p class="demo-flag">WhatsApp: <span class="mono" id="waShow"></span></p>
+    <a class="admin-link" href="admin/">Área do administrador</a>
   </div>
 </footer>
 
@@ -570,7 +534,7 @@ footer .logo{color:var(--ink);font-size:44px}
     <li><a href="#vender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Vender</a></li>
     <li><a href="#fit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="4"/><circle cx="18" cy="16" r="4"/><path d="M6 16l4-7h6l2 7M10 9l3 7 3-7M9 6h3"/></svg>Bike Fit</a></li>
     <li><a href="#locacao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Locação</a></li>
-    <li><a class="wa-tab" id="tabWa" target="_blank" rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.6-.1 1.1Z"/></svg></span></a></li>
+    <li><a class="wa-tab" id="tabWa" target="_blank" rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.6-.1 1.1Z"/></svg></span>WhatsApp</a></li>
   </ul>
 </nav>
 
@@ -582,156 +546,57 @@ footer .logo{color:var(--ink);font-size:44px}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="assets/icons.js"></script>
 <script>
-// ---- Configuração: troque pelos números reais (formato 55 + DDD + número)
-const WA_LOJA = "5548900000000";
-const WA_FIT  = "5548900000001";
-const OFFER_FLOOR = 0.75; // abaixo disso a oferta é recusada antes de tocar no cartão
-
-const I = {
-  bike:'<circle cx="15" cy="42" r="10"/><circle cx="49" cy="42" r="10"/><path d="M15 42 25 24h17l7 18M25 24l8 18 9-18M33 42H15M21 19h8M42 24l-2-7h6"/>',
-  tt:'<circle cx="15" cy="42" r="10"/><circle cx="49" cy="42" r="10"/><path d="M15 42 24 25h20l5 17M24 25l9 17 11-17M33 42H15M20 21h9M44 25l2-6h10"/>',
-  wheel:'<circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="16"/><circle cx="32" cy="32" r="3"/>',
-  spoke:'<circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="19"/><circle cx="32" cy="32" r="3"/><path d="M32 13v16M32 35v16M13 32h16M35 32h16M19 19l11 11M34 34l11 11M19 45l11-11M34 30l11-11"/>',
-  helmet:'<path d="M8 42c0-15 11-26 25-26 13 0 23 10 23 24v2H8z"/><path d="M8 42h48M19 22l7 20M34 16l2 26M47 22l-5 20"/>',
-  aero:'<path d="M6 40c0-12 10-20 24-20 14 0 24 6 28 20z"/><path d="M6 40h52M18 33h18"/>',
-  watch:'<rect x="20" y="18" width="24" height="28" rx="7"/><path d="M24 18l2-10h12l2 10M24 46l2 10h12l2-10M32 26v7l5 3"/>',
-  computer:'<rect x="18" y="10" width="28" height="40" rx="5"/><rect x="23" y="16" width="18" height="20" rx="2"/><path d="M26 42h12M32 50v6M24 56h16"/>',
-  shoe:'<path d="M6 44c0-6 2-14 6-18l8 4c4 2 8 2 12 0l6 6c6 6 14 6 20 8v4c0 2-1 4-4 4H10c-2 0-4-2-4-4z"/><path d="M6 46h52M24 30l3 5M30 30l3 6"/>',
-  cleat:'<path d="M6 42c0-8 4-14 10-16l12 2 8 4 18 4c4 1 4 6 0 8L10 48c-2 0-4-2-4-6z"/><path d="M22 34l4 6M30 36l3 5M40 38v4"/>',
-  goggles:'<ellipse cx="20" cy="32" rx="11" ry="8"/><ellipse cx="44" cy="32" rx="11" ry="8"/><path d="M31 32h2M9 30c-4 0-5 2-5 2M55 30c4 0 5 2 5 2"/>',
-  wetsuit:'<path d="M22 8h20l8 8-4 18v22H36l-4-14-4 14H18V34l-4-18z"/><path d="M26 8c2 4 10 4 12 0M32 14v16"/>',
-  sleeveless:'<path d="M24 8h16l4 8v18l2 22H36l-4-14-4 14H18l2-22V16z"/><path d="M27 8c2 3 8 3 10 0"/>',
-  shorts:'<path d="M14 14h36l4 36H38l-6-20-6 20H10z"/><path d="M14 20h36"/>',
-  cap:'<path d="M12 40c0-14 9-24 20-24s20 10 20 24c-6 4-34 4-40 0z"/>',
-  jersey:'<path d="M22 10 10 18l5 10 6-3v29h22V25l6 3 5-10-12-8c-2 4-6 6-10 6s-8-2-10-6z"/>',
-  sock:'<path d="M24 6h16v28l10 10c4 4 2 12-6 12H32c-6 0-8-4-8-8z"/><path d="M24 14h16"/>',
-  gear:'<circle cx="32" cy="32" r="18"/><circle cx="32" cy="32" r="6"/><path d="M32 8v6M32 50v6M8 32h6M50 32h6M15 15l4 4M45 45l4 4M15 49l4-4M45 19l4-4"/>',
-  cassette:'<circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="16"/><circle cx="32" cy="32" r="10"/><circle cx="32" cy="32" r="4"/>',
-  chain:'<rect x="6" y="26" width="18" height="12" rx="6"/><rect x="22" y="26" width="18" height="12" rx="6"/><rect x="38" y="26" width="18" height="12" rx="6"/>',
-  disc:'<circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="8"/><path d="M32 10c6 6 6 10 0 14M54 32c-6 6-10 6-14 0M32 54c-6-6-6-10 0-14M10 32c6-6 10-6 14 0"/>',
-  pad:'<path d="M14 22c0-6 6-10 18-10s18 4 18 10v18c0 6-6 10-18 10S14 46 14 40z"/><path d="M22 24h20v16H22z"/>',
-  saddle:'<path d="M6 28c8-6 24-8 40-6 8 1 12 4 12 8 0 3-4 4-10 4-8 0-14 6-26 6-8 0-16-4-16-12z"/><path d="M28 40l-2 14M36 38l2 16"/>',
-  pump:'<path d="M28 8h8M32 8v32M22 40h20v8H22zM14 56h36"/><path d="M42 44c8 0 10-6 10-14"/>',
-  co2:'<rect x="24" y="14" width="16" height="40" rx="8"/><path d="M28 14V8h8v6"/>',
-  bottle:'<path d="M26 6h12v6l4 6v38H22V18l4-6z"/><path d="M22 28h20"/>',
-  pedal:'<rect x="14" y="22" width="36" height="20" rx="6"/><path d="M4 32h10M24 22v20M40 22v20"/>',
-  crank:'<circle cx="20" cy="40" r="14"/><circle cx="20" cy="40" r="4"/><path d="M23 37 52 10"/><circle cx="52" cy="10" r="3"/>',
-  bar:'<path d="M6 30c0 10 6 16 12 16M58 30c0 10-6 16-12 16M6 30h52M28 30v-8h14"/>',
-  trainer:'<path d="M10 52h44M18 52l8-24h12l8 24"/><circle cx="32" cy="24" r="10"/><circle cx="32" cy="24" r="3"/>',
-  bag:'<rect x="8" y="16" width="48" height="34" rx="6"/><path d="M24 16v-6h16v6M8 30h48"/><circle cx="16" cy="54" r="3"/><circle cx="48" cy="54" r="3"/>',
-  strap:'<path d="M4 32c8-6 16-8 28-8s20 2 28 8"/><rect x="24" y="24" width="16" height="14" rx="4"/>',
-  radar:'<rect x="22" y="14" width="20" height="36" rx="5"/><circle cx="32" cy="38" r="5"/><path d="M10 22c-3 6-3 14 0 20M54 22c3 6 3 14 0 20"/>',
-  plug:'<rect x="20" y="22" width="24" height="16" rx="4"/><path d="M26 22v-8M38 22v-8M32 38v18"/>',
-  lace:'<path d="M10 40c10-16 34-16 44 0M14 44c8-10 28-10 36 0"/><circle cx="32" cy="22" r="5"/>',
-  buoy:'<rect x="16" y="12" width="32" height="40" rx="12"/><path d="M32 4v8M24 32h16"/>',
-  box:'<path d="M10 22 32 12l22 10v22L32 54 10 44z"/><path d="M10 22l22 10 22-10M32 32v22"/>',
-  glasses:'<path d="M6 28h52"/><path d="M8 28c0 8 4 12 11 12 6 0 10-4 11-12M34 28c1 8 5 12 11 12 7 0 11-4 11-12"/>',
-  jacket:'<path d="M22 10 10 18l2 36h40l2-36-12-8"/><path d="M32 14v40M22 10c2 4 6 6 10 4 4 2 8 0 10-4"/>',
-};
-
-const CATS = [
-  {id:"natacao", name:"Natação"},
-  {id:"bike", name:"Bikes"},
-  {id:"componentes", name:"Componentes"},
-  {id:"vestuario", name:"Vestuário"},
-  {id:"corrida", name:"Corrida"},
-  {id:"garmin", name:"Garmin"},
-  {id:"wahoo", name:"Wahoo"},
-];
-// [cat, sub, cond, preço, nº fotos, ícone, título, subtítulo, descrição, destaque?]
-const RAW = [
- ["bike","Triathlon / TT","usado",32900,5,"tt","Canyon Speedmax CF SLX 8 Di2","Tam. M · Shimano Ultegra Di2 · 2023","Usada em 3 provas. Revisada na Cave: rolamentos, cabos e sangria do freio. Sem quedas, pintura com marcas leves de uso no top tube.","Revisada"],
- ["bike","Road","usado",24500,5,"bike","Specialized Tarmac SL7 Expert","Tam. 54 · Ultegra Di2 · Rodas Roval C38","Pouco uso, cerca de 4.000 km. Transmissão trocada em agosto. Acompanha caixa de transporte da fábrica.","Revisada"],
- ["bike","Gravel","novo",28990,4,"bike","Specialized Crux Comp","Tam. 56 · SRAM Rival XPLR AXS 1x12","Zero km, na caixa. Pneus 700x38c tubeless. Montagem e ajuste básico inclusos.",""],
- ["bike","Road","novo",19900,4,"bike","Cervélo Caledonia","Tam. 54 · Shimano 105 Di2","Zero km. Geometria endurance para treinos longos. Montagem e ajuste básico inclusos.",""],
- ["componentes","Rodas","usado",9800,5,"spoke","Zipp 404 Firecrest Tubeless Disc","Par · Perfil 58 mm · Center Lock · XDR","Cerca de 2.500 km. Rolamentos revisados, sem trincas ou reparos. Acompanha bolsas originais.",""],
- ["componentes","Rodas","usado",6900,4,"disc","Roda fechada traseira Roval 321 Disc","Traseira · Disco · Shimano HG","Usada apenas em provas. Pequeno risco na lateral, sem impacto estrutural.",""],
- ["componentes","Pneus","novo",449,3,"wheel","Continental GP5000 S TR","700x28c · Tubeless ready · unidade","Novo, na embalagem. Preço por unidade.",""],
- ["componentes","Grupos","novo",8900,4,"gear","Grupo fechado Shimano 105 Di2 R7100","2x12 · Disco · Pedivela 172,5 mm","Grupo completo, novo na caixa: trocadores, câmbios, freios, pedivela 52/36, cassete 11-34 e corrente.",""],
- ["componentes","Grupos","novo",12900,4,"gear","Grupo fechado SRAM Force AXS","2x12 · Disco · Pedivela 170 mm","Novo na caixa. Inclui duas baterias e carregador.",""],
- ["componentes","Transmissão","novo",549,2,"box","Bateria SRAM eTap AXS","Original · compatível com todos os câmbios AXS","Nova, lacrada.",""],
- ["componentes","Transmissão","novo",899,3,"cassette","Cassete Shimano Ultegra R8100","12v · 11-30","Novo na caixa.",""],
- ["componentes","Transmissão","novo",449,2,"chain","Corrente Shimano Dura-Ace M9100","12v · 116 elos","Nova, com pino de emenda.",""],
- ["componentes","Transmissão","usado",1290,3,"crank","Pedivela SRAM Force AXS","172,5 mm · Coroa 48/35","Cerca de 3.000 km. Coroas com desgaste baixo.",""],
- ["componentes","Potência","usado",3900,5,"crank","Medidor de potência Quarq DZero","Spider · 172,5 mm · DUB","Calibrado na Cave. Funciona com Garmin e Wahoo via ANT+ e Bluetooth.",""],
- ["componentes","Freios","novo",329,2,"disc","Disco de freio Shimano RT-MT800","160 mm · Center Lock","Novo, unidade.",""],
- ["componentes","Freios","novo",129,2,"pad","Pastilha de freio Shimano L05A","Resina · Ultegra / 105 / Dura-Ace","Par novo.",""],
- ["componentes","Cockpit","usado",3400,4,"bar","Cockpit Vision Metron 5D ACR","42 cm · 110 mm","Sem quedas. Passagem interna de cabos.",""],
- ["componentes","Selins","usado",690,3,"saddle","Selim Fizik Tritone 5.5","Triathlon · Canal central","Usado por uma temporada. Capa sem rasgos.",""],
- ["componentes","Pedais","novo",899,3,"pedal","Pedais Shimano Ultegra R8000","Carbono · com tacos SPD-SL","Novos na caixa.",""],
- ["componentes","Pedais","novo",149,2,"cleat","Taco Look Keo Grip","Flutuação 4,5° · cinza","Par novo.",""],
- ["componentes","Hidratação","novo",399,3,"bottle","Profile Design Aero HC","Garrafa aero frontal · 1.200 ml","Nova. Montagem entre os clipes.",""],
- ["componentes","Ferramentas","novo",399,2,"pump","Bomba de pé Topeak JoeBlow Sport III","Manômetro · Presta e Schrader","Nova.",""],
- ["componentes","Ferramentas","novo",149,2,"co2","Kit CO2 com 2 cilindros","Válvula de controle · 16 g","Novo.",""],
- ["componentes","Rolos","novo",6490,4,"trainer","Wahoo KICKR Core","Rolo smart · direct drive","Novo na caixa. Cassete não incluso.",""],
- ["componentes","CeramicSpeed","novo",3290,4,"gear","CeramicSpeed OSPW","Sistema de polias oversized · Shimano R9200/R8100","Novo. Menos atrito no câmbio traseiro. Instalação na Cave inclusa.","CeramicSpeed"],
- ["componentes","CeramicSpeed","novo",2190,3,"cassette","CeramicSpeed movimento central","BB · rolamentos cerâmicos · BSA","Novo. Instalação na Cave inclusa.","CeramicSpeed"],
- ["componentes","CeramicSpeed","novo",249,2,"bottle","CeramicSpeed UFO Drip","Lubrificante de corrente · 100 ml","Novo.","CeramicSpeed"],
- ["componentes","Mala bike","usado",2900,4,"bag","Mala bike Scicon AeroComfort 3.0","Road e TT · com rodinhas","Usada em 4 viagens. Zíperes e rodinhas em ótimo estado.",""],
- ["natacao","Neoprene","usado",2900,5,"wetsuit","Neoprene Orca Athlex Flow","Masculino · Tam. M · Com manga","Usado em duas provas. Sem cortes ou reparos.",""],
- ["natacao","Neoprene","novo",4590,4,"sleeveless","Neoprene Roka Maverick X2","Feminino · Tam. S · Sem manga","Novo com etiqueta.",""],
- ["natacao","Neoprene","novo",890,3,"shorts","Bermuda de neoprene Huub","Unissex · Tam. G · 5 mm","Nova. Mais flutuação no quadril para treino em mar.",""],
- ["natacao","Óculos","novo",229,3,"goggles","Óculos Speedo Vanquisher 2.0","Lente espelhada · antiembaçante","Novo.",""],
- ["natacao","Toucas","novo",69,2,"cap","Touca de silicone Arena","Tamanho único · preta","Nova.",""],
- ["natacao","Sungas","novo",189,3,"shorts","Sunga Speedo Endurance+","Tam. 40 · resistente ao cloro","Nova com etiqueta.",""],
- ["natacao","Acessórios","novo",149,2,"buoy","Boia de segurança para mar","Com compartimento seco · laranja","Nova.",""],
- ["vestuario","Capacetes","novo",2490,4,"helmet","Capacete Kask Utopia Y","Tam. M · aero road","Novo na caixa.",""],
- ["vestuario","Capacetes","usado",1600,4,"aero","Capacete Giro Aerohead II","Tam. M · TT · viseira","Usado em 2 provas. Sem quedas.",""],
- ["vestuario","Sapatilhas","novo",2590,4,"cleat","Sapatilha Shimano S-Phyre RC903","Tam. 42 · BOA","Nova na caixa.",""],
- ["vestuario","Macaquinhos","novo",1290,3,"sleeveless","Macaquinho de triathlon Castelli","Masculino · Tam. M","Novo.",""],
- ["vestuario","Bretelles","novo",1490,3,"shorts","Bretelle Assos Mille GT","Tam. M","Nova.",""],
- ["vestuario","Jerseys","novo",590,3,"jersey","Jersey Cave Endurance","Tam. M · corte race","Novo. Edição da casa.",""],
- ["vestuario","Jaquetas","novo",690,3,"jacket","Jaqueta corta-vento","Tam. M · dobrável no bolso","Nova.",""],
- ["vestuario","Óculos","novo",1190,3,"glasses","Óculos Oakley Sutro Lite","Lente Prizm Road","Novo com estojo.",""],
- ["corrida","Tênis","novo",2299,4,"shoe","Nike Alphafly 3","Tam. 41","Novo na caixa.",""],
- ["corrida","Tênis","usado",990,4,"shoe","ASICS Metaspeed Sky Paris","Tam. 40 · cerca de 80 km","Usado em uma prova e dois treinos.",""],
- ["corrida","Meias","novo",129,2,"sock","Meia de compressão","Tam. M · cano alto","Nova.",""],
- ["corrida","Shorts","novo",249,2,"shorts","Shorts de corrida 5\"","Tam. M · bolso traseiro","Novo.",""],
- ["corrida","Elásticos","novo",59,2,"lace","Cadarço elástico Lock Laces","Para transição rápida","Novo.",""],
- ["garmin","Relógios","novo",4299,4,"watch","Garmin Forerunner 965","AMOLED · 47 mm","Novo, lacrado. Garantia oficial.",""],
- ["garmin","Ciclocomputadores","novo",4999,4,"computer","Garmin Edge 1050","Touch · mapas","Novo, lacrado. Garantia oficial.",""],
- ["garmin","Cintas","novo",899,2,"strap","Garmin HRM-Pro Plus","Cinta cardíaca · ANT+ e Bluetooth","Nova.",""],
- ["garmin","Varia","novo",1899,3,"radar","Garmin Varia RTL515","Radar traseiro com luz","Novo, lacrado.",""],
- ["garmin","Carregadores","novo",99,1,"plug","Cabo carregador Garmin","USB-C","Novo.",""],
- ["wahoo","Pedais","novo",6990,4,"pedal","Wahoo POWRLINK ZERO Dual","Pedais com medidor de potência duplo","Novo na caixa.",""],
- ["wahoo","Cintas","novo",499,2,"strap","Wahoo TICKR","Cinta cardíaca","Nova.",""],
-];
-const P = RAW.map((r,i)=>({id:i,cat:r[0],sub:r[1],cond:r[2],price:r[3],n:r[4],icon:r[5],title:r[6],subtitle:r[7],desc:r[8],hl:r[9]}));
+// Dados vêm de data/config.json e data/products.json, editados pela área do administrador (/admin).
+let CFG = {whatsapp:{loja:"",fit:""},offerFloor:.75,categories:[],fit:[],rentals:[]};
+let P = [];
 
 const $ = s=>document.querySelector(s);
-const brl = v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2,maximumFractionDigits:2});
-const svg = (k,extra="")=>`<svg viewBox="0 0 64 64" aria-hidden="true" ${extra}>${I[k]||I.box}</svg>`;
-const esc = s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const brl = v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2,maximumFractionDigits:2});
+const HIDDEN_PRICE = "R$ *****,**";
+const svg = (k,extra="")=>`<svg viewBox="0 0 64 64" aria-hidden="true" ${extra}>${CAVE_ICONS[k]||CAVE_ICONS.box}</svg>`;
+const esc = s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const wa = (num,msg)=>`https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+const sold = p=>p.status==="vendido";
+const catName = id=>(CFG.categories.find(c=>c.id===id)||{}).name||"";
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2600)}
+// Imagem da foto i do produto, ou o desenho da categoria quando não há foto.
+function pic(p,i=0,extra=""){
+  const src=(p.photos||[])[i];
+  return src?`<img src="${esc(src)}" alt="" loading="lazy" decoding="async">`:svg(caveIcon(p),extra);
+}
 
 // ---------- Loja
 const st={cat:"all",sub:"all",cond:"all",q:"",sort:"rel",limit:12};
 function renderCats(){
-  $("#cats").innerHTML=[{id:"all",name:"Tudo"},...CATS].map(c=>`<button class="chip" data-cat="${c.id}" aria-pressed="${st.cat===c.id}">${c.name}</button>`).join("");
-  const subs=st.cat==="all"?[]:[...new Set(P.filter(p=>p.cat===st.cat).map(p=>p.sub))];
-  $("#subs").hidden=!subs.length;
-  $("#subs").innerHTML=subs.length?["all",...subs].map(s=>`<button class="chip" data-sub="${esc(s)}" aria-pressed="${st.sub===s}">${s==="all"?"Todos":esc(s)}</button>`).join(""):"";
+  const used=CFG.categories.filter(c=>P.some(p=>p.cat===c.id));
+  $("#cats").innerHTML=[{id:"all",name:"Tudo"},...used].map(c=>`<button class="chip" data-cat="${c.id}" aria-pressed="${st.cat===c.id}">${esc(c.name)}</button>`).join("");
+  const order=(CFG.categories.find(c=>c.id===st.cat)||{subs:[]}).subs;
+  const subs=st.cat==="all"?[]:[...new Set(P.filter(p=>p.cat===st.cat).map(p=>p.sub))].sort((a,b)=>order.indexOf(a)-order.indexOf(b));
+  $("#subs").hidden=subs.length<2;
+  $("#subs").innerHTML=subs.length>1?["all",...subs].map(s=>`<button class="chip" data-sub="${esc(s)}" aria-pressed="${st.sub===s}">${s==="all"?"Todos":esc(s)}</button>`).join(""):"";
 }
 function filtered(){
   const q=st.q.trim().toLowerCase();
   let l=P.filter(p=>(st.cat==="all"||p.cat===st.cat)&&(st.sub==="all"||p.sub===st.sub)&&(st.cond==="all"||p.cond===st.cond)&&(!q||(p.title+" "+p.subtitle+" "+p.sub).toLowerCase().includes(q)));
   if(st.sort==="asc")l=[...l].sort((a,b)=>a.price-b.price);
   if(st.sort==="desc")l=[...l].sort((a,b)=>b.price-a.price);
-  return l;
+  // vendidos sempre no fim
+  return [...l.filter(p=>!sold(p)),...l.filter(sold)];
 }
 function card(p){
-  return `<button class="card" data-id="${p.id}" aria-label="${esc(p.title)}, ${brl(p.price)}">
-    <div class="ph"><span class="grain"></span>${svg(p.icon)}<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>${p.hl?`<span class="badge hl">${esc(p.hl)}</span>`:""}<span class="pics">${p.n} fotos</span></div>
-    <div class="meta"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.subtitle)}</span><span class="p">${brl(p.price)}</span></div>
+  const s=sold(p);
+  return `<button class="card${s?" is-sold":""}" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${s?"vendido":brl(p.price)}">
+    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>${p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&p.photos?.length>1?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
+    <div class="meta"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.subtitle)}</span><span class="p">${s?HIDDEN_PRICE:brl(p.price)}</span></div>
   </button>`;
 }
 function renderGrid(){
-  const l=filtered();
-  $("#count").textContent=`${l.length} ${l.length===1?"produto":"produtos"}`;
+  const l=filtered();const n=l.filter(p=>!sold(p)).length;
+  $("#count").textContent=`${n} ${n===1?"produto à venda":"produtos à venda"}`;
   $("#grid").innerHTML=l.length?l.slice(0,st.limit).map(card).join(""):`<p class="empty">Nada por aqui com esses filtros. Tem algo assim para vender? <a href="#vender">Anuncie com a gente</a>.</p>`;
-  $("#moreBtn").parentElement.hidden=l.length<=st.limit;
+  document.querySelector(".more").hidden=l.length<=st.limit;
 }
 function setCat(c,sub="all"){st.cat=c;st.sub=sub;st.limit=12;renderCats();renderGrid()}
 $("#cats").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
@@ -740,7 +605,7 @@ document.querySelectorAll("[data-cond]").forEach(b=>b.addEventListener("click",(
 $("#q").addEventListener("input",e=>{st.q=e.target.value;st.limit=12;renderGrid()});
 $("#sort").addEventListener("change",e=>{st.sort=e.target.value;renderGrid()});
 $("#moreBtn").addEventListener("click",()=>{st.limit+=12;renderGrid()});
-$("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openProduct(+c.dataset.id)});
+$("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openProduct(c.dataset.id)});
 function goShop(cat,sub){setCat(cat,sub||"all");$("#loja").scrollIntoView({behavior:"smooth"})}
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>goShop(b.dataset.go)));
 document.querySelectorAll("[data-go-sub]").forEach(b=>b.addEventListener("click",()=>{const [c,s]=b.dataset.goSub.split("|");goShop(c,s)}));
@@ -750,10 +615,10 @@ $("#searchJump").addEventListener("click",()=>{$("#loja").scrollIntoView({behavi
 const sheet=$("#sheet"),scrim=$("#scrim");let lastFocus=null;
 function openSheet(title,body,foot){
   lastFocus=document.activeElement;
-  $("#sheetTitle").textContent=title;$("#sheetBody").innerHTML=body;$("#sheetFoot").innerHTML=foot||"";$("#sheetFoot").hidden=!foot;
+  setSheet(title,body,foot);
   sheet.hidden=false;scrim.hidden=false;document.body.style.overflow="hidden";
-  requestAnimationFrame(()=>{sheet.classList.add("on");scrim.classList.add("on")});
-  $("#sheetBody").scrollTop=0;setTimeout(()=>$("#sheetClose").focus(),50);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{sheet.classList.add("on");scrim.classList.add("on")}));
+  setTimeout(()=>$("#sheetClose").focus(),50);
 }
 function setSheet(title,body,foot){$("#sheetTitle").textContent=title;$("#sheetBody").innerHTML=body;$("#sheetFoot").innerHTML=foot||"";$("#sheetFoot").hidden=!foot;$("#sheetBody").scrollTop=0}
 function closeSheet(){sheet.classList.remove("on");scrim.classList.remove("on");document.body.style.overflow="";setTimeout(()=>{sheet.hidden=true;scrim.hidden=true},280);lastFocus&&lastFocus.focus&&lastFocus.focus()}
@@ -765,17 +630,21 @@ const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 const SHIELD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>';
 let cur=null;
 function openProduct(id){
-  const p=P[id];cur=p;
-  const shots=Array.from({length:p.n},(_,i)=>`<div class="ph" role="img" aria-label="Foto ${i+1} de ${p.n}"><span class="grain"></span>${svg(p.icon,`style="${SHOTS[i]}"`)}<span class="pics">${i+1}/${p.n}</span></div>`).join("");
+  const p=P.find(x=>x.id===id);if(!p)return;cur=p;
+  const s=sold(p);
+  const n=Math.max(1,(p.photos||[]).length);
+  const shots=Array.from({length:n},(_,i)=>`<div class="ph" role="img" aria-label="Foto ${i+1} de ${n}"><span class="grain"></span>${pic(p,i,p.photos?.length?"":`style="${SHOTS[i]}"`)}${n>1?`<span class="pics">${i+1}/${n}</span>`:""}</div>`).join("");
   const body=`
-    <div class="gallery" id="gal">${shots}</div>
-    <div class="dots" id="dots">${Array.from({length:p.n},(_,i)=>`<i class="${i?"":"on"}"></i>`).join("")}</div>
+    <div class="gallery${s?" is-sold":""}" id="gal">${shots}</div>
+    ${n>1?`<div class="dots" id="dots">${Array.from({length:n},(_,i)=>`<i class="${i?"":"on"}"></i>`).join("")}</div>`:""}
     <div class="pd">
-      <div class="cond"><span class="badge ${p.cond}" style="position:static">${p.cond==="novo"?"Novo":"Usado"}</span><span class="eyebrow">${esc(CATS.find(c=>c.id===p.cat).name)} · ${esc(p.sub)}</span></div>
+      <div class="cond">${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>`}<span class="eyebrow">${esc(catName(p.cat))} · ${esc(p.sub)}</span></div>
       <h3>${esc(p.title)}</h3>
       <p class="sub">${esc(p.subtitle)}</p>
+      ${s?`<p class="price" style="color:var(--muted)">${HIDDEN_PRICE}</p>
+      <div class="sold-note"><b>Este item já foi vendido.</b> Quer algo parecido? Avisamos quando chegar.</div>`:`
       <p class="price">${brl(p.price)}</p>
-      <p class="desc">${esc(p.desc)}</p>
+      ${p.desc?`<p class="desc">${esc(p.desc)}</p>`:""}
       <div class="kv">
         <div><span>Estado</span><b>${p.cond==="novo"?"Novo":"Usado"}</b></div>
         <div><span>Retirada</span><b>Na loja, Florianópolis</b></div>
@@ -784,20 +653,17 @@ function openProduct(id){
       <div class="trust-mini">
         <div>${SHIELD}<span>${p.cond==="usado"?"Usado conferido pela equipe Cave antes de ir para a loja.":"Produto novo com nota fiscal."}</span></div>
         <div>${SHIELD}<span>Faça uma oferta: se o vendedor não aceitar, nada é cobrado.</span></div>
-      </div>
+      </div>`}
     </div>`;
-  const foot=`<button class="btn" id="offerBtn">Fazer oferta</button><button class="btn buy" id="buyBtn">Comprar</button>`;
-  openSheet("Produto",body,foot);
-  bindProduct();
-}
-function bindProduct(){
+  const foot=s?`<a class="btn wa" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Vi que ${p.title} (${p.subtitle}) foi vendido. Me avisem se chegar algo parecido.`)}">Quero algo parecido</a>`
+              :`<button class="btn" id="offerBtn">Fazer oferta</button><button class="btn buy" id="buyBtn">Comprar</button>`;
+  openSheet(s?"Vendido":"Produto",body,foot);
   const g=$("#gal");g.addEventListener("scroll",()=>{const w=g.firstElementChild.getBoundingClientRect().width+8;const i=Math.round(g.scrollLeft/w);document.querySelectorAll("#dots i").forEach((d,k)=>d.classList.toggle("on",k===i))},{passive:true});
-  $("#buyBtn").onclick=()=>buyFlow();
-  $("#offerBtn").onclick=()=>offerFlow(1);
+  if(!s){$("#buyBtn").onclick=buyFlow;$("#offerBtn").onclick=()=>offerFlow(1)}
 }
 
-// ---------- Comprar
-function summary(p,price){return `<div class="offer-sum"><div class="ph"><span class="grain"></span>${svg(p.icon)}</div><div style="min-width:0"><b>${esc(p.title)}</b><span>${esc(p.subtitle)}</span><br><span style="color:var(--ink)">${brl(price??p.price)}</span></div></div>`}
+function summary(p,price){return `<div class="offer-sum"><div class="ph"><span class="grain"></span>${pic(p)}</div><div style="min-width:0"><b>${esc(p.title)}</b><span>${esc(p.subtitle)}</span><br><span style="color:var(--ink)">${brl(price??p.price)}</span></div></div>`}
+function openProductInPlace(){const id=cur.id;sheet.classList.remove("on");sheet.hidden=true;scrim.hidden=true;scrim.classList.remove("on");document.body.style.overflow="";openProduct(id)}
 function buyFlow(){
   const p=cur;
   setSheet("Comprar",`${summary(p)}
@@ -811,23 +677,22 @@ function buyFlow(){
       <div class="kv"><div><span>Produto</span><b class="mono">${brl(p.price)}</b></div><div><span>Frete</span><b>Calculado no envio</b></div><div><span>Total</span><b class="mono">${brl(p.price)}</b></div></div>
     </div>`,
     `<button class="btn" id="back">Voltar</button><button class="btn buy" id="confirmBuy">Confirmar compra</button>`);
-  $("#back").onclick=()=>openProductInPlace();
+  $("#back").onclick=openProductInPlace;
   $("#confirmBuy").onclick=()=>{
-    setSheet("Pedido",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Pedido reservado</h3><p>${esc(p.title)} está reservado para você. Vamos confirmar pagamento e entrega pelo WhatsApp.</p><p class="demo-flag">Demonstração: nenhum pagamento foi feito.</p></div>`,
-      `<a class="btn wa" target="_blank" rel="noopener" href="${wa(WA_LOJA,`Olá! Quero finalizar a compra: ${p.title} (${brl(p.price)}).`)}">Falar no WhatsApp</a>`);
+    const ship=$("#ship2").checked?"Enviar para mim":"Retirar na loja",pay=$("#pay2").checked?"Cartão":"Pix";
+    setSheet("Pedido",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Pedido reservado</h3><p>${esc(p.title)} está reservado para você. Vamos confirmar pagamento e entrega pelo WhatsApp.</p><p class="demo-flag">Pagamento online ainda não está ativo. Nada foi cobrado.</p></div>`,
+      `<a class="btn wa" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Quero comprar: ${p.title} (${p.subtitle}) por ${brl(p.price)}.\nEntrega: ${ship}\nPagamento: ${pay}`)}">Finalizar no WhatsApp</a>`);
   };
 }
-function openProductInPlace(){const id=cur.id;closeSheetInstant();openProduct(id)}
-function closeSheetInstant(){sheet.classList.remove("on");sheet.hidden=true;scrim.hidden=true;scrim.classList.remove("on");document.body.style.overflow=""}
 
 // ---------- Fazer oferta
 const offer={value:0,card:{}};
 function stepper(n){return `<div class="stepper" aria-label="Etapa ${n} de 4">${[1,2,3,4].map(i=>`<i class="${i<=n?"on":""}"></i>`).join("")}</div>`}
 function judge(v,price){
-  const r=v/price;
+  const r=v/price,floor=CFG.offerFloor||.75;
   if(!v) return {k:"",t:"",d:"",ok:false,r:0};
   if(v>=price) return {k:"v-good",t:"Esse é o preço cheio",d:"Use o botão Comprar e feche na hora.",ok:false,r};
-  if(r<OFFER_FLOOR) return {k:"v-bad",t:"Abaixo do mínimo",d:`Ofertas abaixo de ${brl(Math.ceil(price*OFFER_FLOOR))} não são enviadas. Seu cartão não é usado.`,ok:false,r};
+  if(r<floor) return {k:"v-bad",t:"Abaixo do mínimo",d:`Ofertas abaixo de ${brl(Math.ceil(price*floor))} não são enviadas. Seu cartão não é usado.`,ok:false,r};
   if(r<0.85) return {k:"v-warn",t:"Chance baixa",d:"O vendedor pode recusar. Se recusar, nada é cobrado.",ok:true,r};
   if(r<0.93) return {k:"v-ok",t:"Chance razoável",d:"Ofertas nessa faixa costumam abrir negociação.",ok:true,r};
   return {k:"v-good",t:"Boa chance",d:"Ofertas perto do preço costumam ser aceitas rápido.",ok:true,r};
@@ -850,13 +715,13 @@ function offerFlow(step){
       offer.value=v;offer.pid=p.id;
       const j=judge(v,p.price);
       $("#verdict").innerHTML=j.t?`<div class="verdict ${j.k}"><b>${j.t}</b>${j.d}</div>`:"";
-      const pos=Math.max(0,Math.min(1,(j.r-.7)/.3));$("#mk").style.left=(v?pos*100:0)+"%";
+      $("#mk").style.left=(v?Math.max(0,Math.min(1,(j.r-.7)/.3))*100:0)+"%";
       $("#next").disabled=!j.ok;
     };
     inp.addEventListener("input",upd);
     document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{inp.value=String(Math.round(p.price*(1-b.dataset.d/100)));upd()});
     upd();setTimeout(()=>inp.focus(),300);
-    $("#back").onclick=()=>openProductInPlace();
+    $("#back").onclick=openProductInPlace;
     $("#next").onclick=()=>offerFlow(2);
   }
   if(step===2){
@@ -871,7 +736,7 @@ function offerFlow(step){
           <div class="field"><label for="ccv">CVV</label><input id="ccv" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" value="${c.ccv||""}"></div>
         </div>
         <div class="field"><label for="cpf">CPF</label><input id="cpf" inputmode="numeric" placeholder="000.000.000-00" value="${c.cpf||""}"></div>
-        <p class="demo-flag">Demonstração: os dados do cartão não são enviados nem guardados.</p>
+        <p class="demo-flag">Teste: pagamento online ainda não está ativo. Os dados do cartão não são enviados nem guardados.</p>
       </div>`,
       `<button class="btn" id="back">Voltar</button><button class="btn solid" id="next" disabled>Revisar oferta</button>`);
     const fmt={cn:v=>v.replace(/\D/g,"").slice(0,16).replace(/(\d{4})(?=\d)/g,"$1 "),cexp:v=>v.replace(/\D/g,"").slice(0,4).replace(/(\d{2})(?=\d)/,"$1/"),ccv:v=>v.replace(/\D/g,"").slice(0,4),cpf:v=>{const d=v.replace(/\D/g,"").slice(0,11);return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2")},cname:v=>v};
@@ -903,7 +768,7 @@ function offerFlow(step){
     $("#send").onclick=()=>offerFlow(4);
   }
   if(step===4){
-    const t=new Date();const exp=new Date(t.getTime()+864e5);
+    const t=new Date(),exp=new Date(t.getTime()+864e5);
     const hh=d=>d.toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
     setSheet("Oferta enviada",`${stepper(4)}
       <div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta enviada</h3><p>${brl(offer.value)} por ${esc(p.title)}. Avisamos você assim que o vendedor responder.</p></div>
@@ -913,54 +778,55 @@ function offerFlow(step){
         <div class="tl now"><b>Aguardando o vendedor</b><span>Responde até ${hh(exp)}</span></div>
         <div class="tl"><b>Compra concluída ou valor liberado</b><span>Depende da resposta</span></div>
       </div>
-      <div class="demo"><span class="demo-flag">Simular a resposta do vendedor</span><div class="row"><button id="simY">Aceita</button><button id="simN">Recusa</button></div></div>`,
+      <div class="demo"><span class="demo-flag">Teste: simular a resposta do vendedor</span><div class="row"><button id="simY">Aceita</button><button id="simN">Recusa</button></div></div>`,
       `<button class="btn block" id="done">Voltar para a loja</button>`);
     $("#done").onclick=closeSheet;
-    $("#simY").onclick=()=>setSheet("Oferta aceita",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Compra feita</h3><p>O vendedor aceitou ${brl(offer.value)}. A cobrança foi confirmada no cartão final ${(offer.card.cn||"").replace(/\D/g,"").slice(-4)}. Vamos combinar a entrega pelo WhatsApp.</p></div>`,`<a class="btn wa block" target="_blank" rel="noopener" href="${wa(WA_LOJA,`Olá! Minha oferta de ${brl(offer.value)} pelo ${p.title} foi aceita. Vamos combinar a entrega?`)}">Combinar entrega</a>`);
-    $("#simN").onclick=()=>setSheet("Oferta recusada",`<div class="big-ok"><div class="circ r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div><h3>Oferta recusada</h3><p>Nada foi cobrado. A reserva de ${brl(offer.value)} foi cancelada e o limite volta para o seu cartão.</p></div>`,`<button class="btn" id="again">Nova oferta</button><button class="btn buy" id="buyNow">Comprar por ${brl(p.price)}</button>`)||bindAfterNo();
+    $("#simY").onclick=()=>setSheet("Oferta aceita",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Compra feita</h3><p>O vendedor aceitou ${brl(offer.value)}. A cobrança foi confirmada no cartão final ${(offer.card.cn||"").replace(/\D/g,"").slice(-4)}. Vamos combinar a entrega pelo WhatsApp.</p></div>`,`<a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Minha oferta de ${brl(offer.value)} pelo ${p.title} foi aceita. Vamos combinar a entrega?`)}">Combinar entrega</a>`);
+    $("#simN").onclick=()=>{setSheet("Oferta recusada",`<div class="big-ok"><div class="circ r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div><h3>Oferta recusada</h3><p>Nada foi cobrado. A reserva de ${brl(offer.value)} foi cancelada e o limite volta para o seu cartão.</p></div>`,`<button class="btn" id="again">Nova oferta</button><button class="btn buy" id="buyNow">Comprar por ${brl(p.price)}</button>`);$("#again").onclick=()=>offerFlow(1);$("#buyNow").onclick=buyFlow};
   }
 }
-function bindAfterNo(){$("#again").onclick=()=>offerFlow(1);$("#buyNow").onclick=()=>buyFlow()}
 
 // ---------- Vender
 const photos=[];
 function renderUploader(){
-  const slots=[];
-  photos.forEach((src,i)=>slots.push(`<div class="slot"><img src="${src}" alt="Foto ${i+1}"></div>`));
+  const slots=photos.map((src,i)=>`<div class="slot"><img src="${src}" alt="Foto ${i+1}"></div>`);
   if(photos.length<5)slots.push(`<label class="slot add" for="s-file">+ foto<input id="s-file" type="file" accept="image/*" multiple aria-label="Adicionar fotos"></label>`);
   for(let i=slots.length;i<5;i++)slots.push(`<div class="slot">${i+1}</div>`);
   $("#uploader").innerHTML=slots.join("");$("#s-n").textContent=`${photos.length}/5`;
   const f=$("#s-file");if(f)f.addEventListener("change",()=>{[...f.files].slice(0,5-photos.length).forEach(file=>{const r=new FileReader();r.onload=()=>{if(photos.length<5){photos.push(r.result);renderUploader()}};r.readAsDataURL(file)})});
 }
 renderUploader();
-$("#s-price").addEventListener("input",e=>{const v=parseInt(e.target.value.replace(/\D/g,""))||0;e.target.value=v?brl(v):""});
+$("#s-price").addEventListener("input",e=>{const v=parseInt(e.target.value.replace(/\D/g,""))||0;e.target.value=v?"R$ "+v.toLocaleString("pt-BR"):""});
 $("#sellForm").addEventListener("submit",e=>{
   e.preventDefault();
   const item=$("#s-item").value.trim();
   if(!item){$("#s-item").focus();toast("Conte o que você quer vender.");return}
   const cond=document.querySelector('input[name="s-cond"]:checked').value;
-  const msg=`Olá, Cave! Quero vender:\n• ${item}\n• Categoria: ${$("#s-cat").value}\n• Estado: ${cond}\n• Valor desejado: ${$("#s-price").value||"a combinar"}\n• Nome: ${$("#s-name").value||"-"}\n• Cidade: ${$("#s-city").value||"-"}\n${photos.length?`Tenho ${photos.length} foto(s) para enviar.`:""}`;
-  const a=document.createElement("a");a.href=wa(WA_LOJA,msg);a.target="_blank";a.rel="noopener";document.body.appendChild(a);a.click();a.remove();
+  const msg=`Olá, Cave! Quero vender:\n• ${item}\n• Categoria: ${$("#s-cat").value}\n• Estado: ${cond}\n• Valor desejado: ${$("#s-price").value?$("#s-price").value+",00":"a combinar"}\n• Nome: ${$("#s-name").value||"-"}\n• Cidade: ${$("#s-city").value||"-"}\n${photos.length?`Tenho ${photos.length} foto(s) para enviar.`:""}`;
+  window.open(wa(CFG.whatsapp.loja,msg),"_blank","noopener");
   toast("Abrindo o WhatsApp com a mensagem pronta.");
 });
 
-// ---------- Locação
-const RENT=[
-  ["tt","Bike de triathlon / TT","Tamanhos P, M e G. Ajuste de posição antes da prova.","Por prova · sob consulta"],
-  ["bike","Bike road","Para provas de estrada e viagens de treino.","Diária ou por prova · sob consulta"],
-  ["disc","Roda fechada traseira","Disco para TT e triathlon. Shimano/SRAM.","Por prova · sob consulta"],
-  ["spoke","Roda de perfil alto dianteira","Par ideal para a roda fechada.","Por prova · sob consulta"],
-];
-$("#rent").innerHTML=RENT.map(r=>`<a class="rent-item" style="text-decoration:none" target="_blank" rel="noopener" href="${wa(WA_LOJA,`Olá! Quero alugar: ${r[1]}. Prova/data: `)}"><div class="ph"><span class="grain"></span>${svg(r[0])}</div><div><b>${r[1]}</b><p>${r[2]}</p><span class="tag">${r[3]} →</span></div></a>`).join("");
+// ---------- Seções que vêm da configuração
+function renderConfig(){
+  $("#fitPrices").innerHTML=CFG.fit.map((f,i)=>`<div class="price-card${i===CFG.fit.length-1?" feat":""}">
+    <p class="eyebrow">${esc(f.name)}</p><div class="v">${f.price?brl(f.price):"Sob consulta"}</div><p>${esc(f.desc)}</p>
+    <a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.fit,`Olá, Guilherme! Quero agendar um Bike Fit: ${f.name}${f.price?` (${brl(f.price)})`:""}.`)}">Agendar pelo WhatsApp</a></div>`).join("");
+  $("#rent").innerHTML=CFG.rentals.map(r=>`<a class="rent-item" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Quero alugar: ${r.name}. Prova/data: `)}"><div class="ph"><span class="grain"></span>${svg(r.icon)}</div><div><b>${esc(r.name)}</b><p>${esc(r.desc)}</p><span class="tag">${r.price?esc(r.price):"Sob consulta"} →</span></div></a>`).join("");
+  $("#floorTxt").textContent=`Oferta abaixo de ${Math.round((CFG.offerFloor||.75)*100)}% do preço não é enviada.`;
+  $("#tabWa").href=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
+  $("#footWa").href=$("#tabWa").href;
+}
 
-// ---------- WhatsApp links
-document.querySelectorAll(".fit-wa").forEach(a=>a.href=wa(WA_FIT,`Olá, Guilherme! Quero agendar um Bike Fit: ${a.dataset.type}.`));
-$("#tabWa").href=wa(WA_LOJA,"Olá, Cave! Vim pelo site.");
-$("#tabWa").insertAdjacentHTML("beforeend","WhatsApp");
-$("#footWa").href=$("#tabWa").href;
-$("#waShow").textContent="+"+WA_LOJA;
-
-renderCats();renderGrid();
+async function load(){
+  const v="?v="+Date.now();
+  try{
+    const [c,p]=await Promise.all([fetch("data/config.json"+v).then(r=>r.json()),fetch("data/products.json"+v).then(r=>r.json())]);
+    CFG=c;P=(p.products||[]).filter(x=>!x.hidden);
+  }catch(e){$("#count").textContent="Não foi possível carregar os produtos. Atualize a página.";return}
+  renderConfig();renderCats();renderGrid();
+}
+load();
 </script>
 </body>
 </html>
