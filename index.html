@@ -120,7 +120,7 @@ section,#loja{scroll-margin-top:68px}
 .mode.photo[aria-pressed="true"] img{transform:scale(1.05)}
 .m-bike img{object-position:60% 40%}
 .m-natacao img{object-position:62% 52%}
-.m-corrida img{object-position:45% 50%}
+.m-corrida img{object-position:50% 30%}
 .mode b{font-size:15px;font-weight:600;letter-spacing:-.02em}
 .mode[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 /* Marcas: logo no centro */
@@ -622,7 +622,7 @@ function pic(p,i=0,extra=""){
 
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
-const MODE_IMG={natacao:"assets/modes/natacao.jpg?v=4",bike:"assets/modes/bike.jpg?v=4",corrida:"assets/modes/corrida.jpg?v=3"};
+const MODE_IMG={natacao:"assets/modes/natacao.jpg?v=4",bike:"assets/modes/bike.jpg?v=4",corrida:"assets/modes/corrida.jpg?v=4"};
 const st={cat:null,sub:null,group:null,q:"",limit:12};
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
 const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
