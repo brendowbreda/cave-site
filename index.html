@@ -129,7 +129,10 @@ section,#loja{scroll-margin-top:68px}
 .mode b{font-size:15px;font-weight:600;letter-spacing:-.02em}
 .mode[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 /* Marcas: logo no centro */
-.brands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.brands{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px));scroll-padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.brands::-webkit-scrollbar{display:none}
+.brands .brand{flex:0 0 calc((100% - 16px - 32px) / 3);scroll-snap-align:start}
+@media (min-width:720px){.brands .brand{flex-basis:calc((100% - 16px) / 3 - 16px)}}
 .brand{display:grid;place-items:center;aspect-ratio:1/1.12;max-width:100%;padding:0 14px;border-radius:var(--r);border:1px solid var(--line);background:radial-gradient(90% 70% at 50% 45%,var(--tile-2),var(--surface) 70%)}
 .brand img{width:100%;height:auto;max-height:44px;object-fit:contain;opacity:.92}
 .brand.b-wahoo img{width:88%}
@@ -620,7 +623,9 @@ const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLo
 function inView(p){
   const c=curCat();
   if(!c)return true;
-  return c.matchSub?p.sub===c.matchSub:p.cat===c.id;
+  if(c.matchSub)return p.sub===c.matchSub;
+  if(c.matchBrand)return norm(p.brand||p.title).includes(norm(c.matchBrand)); // ex.: Shimano, SRAM
+  return p.cat===c.id;
 }
 function renderNav(){
   const modes=CFG.categories.filter(c=>!c.brand),brands=CFG.categories.filter(c=>c.brand);
@@ -634,7 +639,11 @@ function renderNav(){
   // filtros rápidos: um bloco por seção (Bicicleta tem Bikes, Componentes e Vestuário)
   const many=c.groups.length>1;
   $("#qf").innerHTML=c.groups.map(g=>`${many?`<p class="eyebrow">${esc(g.name)}</p>`:""}<div class="row">${g.subs.map(x=>`<button type="button" data-sub="${esc(x)}" data-group="${g.id}">${esc(x)}</button>`).join("")}</div>`).join("");
-  if(!c.groups.length)$("#qf").innerHTML="";
+  if(!c.groups.length){
+    // marca sem seções: filtros rápidos com os tipos que existem nos produtos dela
+    const subs=[...new Set(P.filter(inView).map(p=>p.sub))];
+    $("#qf").innerHTML=subs.length>1?`<div class="row">${subs.map(x=>`<button type="button" data-sub="${esc(x)}" data-group="">${esc(x)}</button>`).join("")}</div>`:"";
+  }
 }
 function filtered(){
   const q=norm(st.q);

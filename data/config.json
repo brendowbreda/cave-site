@@ -129,6 +129,22 @@
    "matchSub": "CeramicSpeed",
    "groups": [],
    "logo": "assets/brands/ceramicspeed.png"
+  },
+  {
+   "id": "shimano",
+   "name": "Shimano",
+   "brand": true,
+   "matchBrand": "Shimano",
+   "logo": "assets/brands/shimano.png",
+   "groups": []
+  },
+  {
+   "id": "sram",
+   "name": "SRAM",
+   "brand": true,
+   "matchBrand": "SRAM",
+   "logo": "assets/brands/sram.png",
+   "groups": []
   }
  ],
  "fit": [
