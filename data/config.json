@@ -8,92 +8,124 @@
   {
    "id": "natacao",
    "name": "Natação",
-   "subs": [
-    "Neoprene",
-    "Sungas",
-    "Óculos",
-    "Toucas",
-    "Acessórios"
+   "groups": [
+    {
+     "id": "natacao",
+     "name": "Natação",
+     "subs": [
+      "Neoprene",
+      "Óculos",
+      "Toucas",
+      "Sungas",
+      "Acessórios"
+     ]
+    }
    ]
   },
   {
    "id": "bike",
-   "name": "Bikes",
-   "subs": [
-    "Road",
-    "Triathlon / TT",
-    "Gravel"
-   ]
-  },
-  {
-   "id": "componentes",
-   "name": "Componentes",
-   "subs": [
-    "Rodas",
-    "Pneus",
-    "Grupo Shimano",
-    "Grupo SRAM",
-    "Bateria SRAM",
-    "Cassetes",
-    "Corrente",
-    "Coroa",
-    "Pedivela",
-    "Medidor de potência",
-    "Disco de freio",
-    "Pastilha de freio",
-    "Guidão / Cockpit",
-    "Selins",
-    "Pedais",
-    "Taco sapatilha",
-    "Hidratação",
-    "Bombas",
-    "CO2",
-    "Rolo de treino",
-    "CeramicSpeed",
-    "Mala bike"
-   ]
-  },
-  {
-   "id": "vestuario",
-   "name": "Vestuário",
-   "subs": [
-    "Capacetes",
-    "Sapatilhas",
-    "Macaquinhos",
-    "Bretelles",
-    "Jerseys",
-    "Jaquetas",
-    "Óculos"
+   "name": "Bicicleta",
+   "groups": [
+    {
+     "id": "bikes",
+     "name": "Bikes",
+     "subs": [
+      "Road (estrada)",
+      "Triathlon (TT)",
+      "Gravel"
+     ]
+    },
+    {
+     "id": "componentes",
+     "name": "Componentes",
+     "subs": [
+      "Rodas",
+      "Pneus",
+      "Grupos",
+      "Transmissão",
+      "Potência",
+      "Freios",
+      "Cockpit",
+      "Selins",
+      "Pedais",
+      "Hidratação",
+      "Ferramentas",
+      "Rolos",
+      "CeramicSpeed",
+      "Mala bike"
+     ]
+    },
+    {
+     "id": "vestuario",
+     "name": "Vestuário",
+     "subs": [
+      "Capacetes",
+      "Sapatilhas",
+      "Macaquinhos",
+      "Bretelles",
+      "Jerseys",
+      "Jaquetas",
+      "Óculos"
+     ]
+    }
    ]
   },
   {
    "id": "corrida",
    "name": "Corrida",
-   "subs": [
-    "Tênis",
-    "Meias",
-    "Shorts",
-    "Elástico"
+   "groups": [
+    {
+     "id": "corrida",
+     "name": "Corrida",
+     "subs": [
+      "Tênis",
+      "Meias",
+      "Shorts",
+      "Elásticos"
+     ]
+    }
    ]
   },
   {
    "id": "garmin",
    "name": "Garmin",
-   "subs": [
-    "Relógios",
-    "Ciclocomputadores",
-    "Cintas cardíacas",
-    "Carregadores",
-    "Varia radar"
+   "brand": true,
+   "groups": [
+    {
+     "id": "garmin",
+     "name": "Garmin",
+     "subs": [
+      "Relógios",
+      "Ciclocomputadores",
+      "Cintas",
+      "Varia",
+      "Carregadores"
+     ]
+    }
    ]
   },
   {
    "id": "wahoo",
    "name": "Wahoo",
-   "subs": [
-    "Pedais",
-    "Cintas cardíacas"
+   "brand": true,
+   "groups": [
+    {
+     "id": "wahoo",
+     "name": "Wahoo",
+     "subs": [
+      "Ciclocomputadores",
+      "Pedais",
+      "Cintas"
+     ]
+    }
    ]
+  },
+  {
+   "id": "ceramicspeed",
+   "name": "CeramicSpeed",
+   "brand": true,
+   "matchSub": "CeramicSpeed",
+   "groups": []
   }
  ],
  "fit": [

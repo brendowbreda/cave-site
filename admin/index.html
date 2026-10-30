@@ -240,7 +240,7 @@ p{margin:0}
         <label><input type="radio" name="e-cond" id="e-usado" value="usado"><span>Usado</span></label></div></div>
     </div>
     <div class="row2">
-      <div class="field"><label for="e-cat">Categoria</label><select id="e-cat"></select></div>
+      <div class="field"><label for="e-cat">Seção</label><select id="e-cat"></select></div>
       <div class="field"><label for="e-subcat">Tipo</label><select id="e-subcat"></select></div>
     </div>
     <div class="field" id="e-other-wrap" hidden><label for="e-other">Outro tipo</label><input id="e-other" placeholder="Ex.: Coroa"></div>
@@ -389,21 +389,24 @@ document.querySelectorAll("[data-tab]").forEach(t=>t.addEventListener("click",()
 let D=null,orig=null; // rascunho e produto original
 function openEditor(p){
   orig=p||null;
-  D=p?JSON.parse(JSON.stringify(p)):{id:"p-"+Date.now().toString(36),cat:CFG.categories[0].id,sub:CFG.categories[0].subs[0],cond:"usado",status:"disponivel",price:0,title:"",subtitle:"",desc:"",tag:"",photos:[]};
+  const c0=CFG.categories.find(c=>c.groups.length);
+  D=p?JSON.parse(JSON.stringify(p)):{id:"p-"+Date.now().toString(36),cat:c0.id,group:c0.groups[0].id,sub:c0.groups[0].subs[0],cond:"usado",status:"disponivel",price:0,title:"",subtitle:"",desc:"",tag:"",photos:[]};
   D.photos=(D.photos||[]).map(path=>({path}));
   $("#edTitle").textContent=p?"Editar produto":"Novo produto";
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";$("#e-tag").value=D.tag||"";
   $("#e-price").value=money(D.price);
   $("#e-"+D.cond).checked=true;$(D.status==="vendido"?"#e-vend":"#e-disp").checked=true;
-  $("#e-cat").innerHTML=CFG.categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
-  $("#e-cat").value=D.cat;fillSubs(D.sub);
+  // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
+  $("#e-cat").innerHTML=CFG.categories.flatMap(c=>c.groups.map(g=>`<option value="${c.id}|${g.id}">${esc(c.groups.length>1?c.name+" › "+g.name:c.name)}</option>`)).join("");
+  $("#e-cat").value=`${D.cat}|${D.group}`;if(!$("#e-cat").value)$("#e-cat").selectedIndex=0;fillSubs(D.sub);
   $("#e-delete").hidden=!p;$("#e-delete").dataset.armed="";$("#e-delete").textContent="Apagar produto";
   renderPhotos();renderPreview();
   $("#editor").hidden=false;document.body.style.overflow="hidden";$("#editor .ed-body").scrollTop=0;
 }
 function closeEditor(){$("#editor").hidden=true;document.body.style.overflow="";D=null}
 function fillSubs(sel){
-  const subs=(CFG.categories.find(c=>c.id===$("#e-cat").value)||{subs:[]}).subs;
+  const [cid,gid]=$("#e-cat").value.split("|");
+  const subs=((CFG.categories.find(c=>c.id===cid)||{groups:[]}).groups.find(g=>g.id===gid)||{subs:[]}).subs;
   const custom=sel&&!subs.includes(sel);
   $("#e-subcat").innerHTML=subs.map(s=>`<option>${esc(s)}</option>`).join("")+`<option value="__other">Outro…</option>`;
   $("#e-subcat").value=custom?"__other":(sel&&subs.includes(sel)?sel:subs[0]);
@@ -417,7 +420,7 @@ $("#e-price").addEventListener("input",e=>{e.target.value=money(digits(e.target.
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
   return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:$("#e-tag").value.trim(),
-    price:digits($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value,sub};
+    price:digits($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub};
 }
 function renderPreview(){
   const f=readForm(),s=f.status==="vendido",ph=D.photos[0];

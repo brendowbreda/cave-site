@@ -43,13 +43,12 @@ window.CAVE_ICONS = {
 // Desenho padrão por subcategoria, para produtos novos cadastrados no admin.
 window.CAVE_SUB_ICON = {
   "Neoprene":"wetsuit","Sungas":"shorts","Óculos":"goggles","Toucas":"cap","Acessórios":"buoy",
-  "Road":"bike","Triathlon / TT":"tt","Gravel":"bike",
-  "Rodas":"spoke","Pneus":"wheel","Grupo Shimano":"gear","Grupo SRAM":"gear","Bateria SRAM":"box","Cassetes":"cassette",
-  "Corrente":"chain","Coroa":"gear","Pedivela":"crank","Medidor de potência":"crank","Disco de freio":"disc","Pastilha de freio":"pad",
-  "Guidão / Cockpit":"bar","Selins":"saddle","Pedais":"pedal","Taco sapatilha":"cleat","Hidratação":"bottle","Bombas":"pump","CO2":"co2",
-  "Rolo de treino":"trainer","CeramicSpeed":"gear","Mala bike":"bag",
+  "Road (estrada)":"bike","Triathlon (TT)":"tt","Gravel":"bike",
+  "Rodas":"spoke","Pneus":"wheel","Grupos":"gear","Transmissão":"cassette","Potência":"crank","Freios":"disc",
+  "Cockpit":"bar","Selins":"saddle","Pedais":"pedal","Hidratação":"bottle","Ferramentas":"pump","Rolos":"trainer",
+  "CeramicSpeed":"gear","Mala bike":"bag",
   "Capacetes":"helmet","Sapatilhas":"cleat","Macaquinhos":"sleeveless","Bretelles":"shorts","Jerseys":"jersey","Jaquetas":"jacket",
-  "Tênis":"shoe","Meias":"sock","Shorts":"shorts","Elástico":"lace",
-  "Relógios":"watch","Ciclocomputadores":"computer","Cintas cardíacas":"strap","Carregadores":"plug","Varia radar":"radar",
+  "Tênis":"shoe","Meias":"sock","Shorts":"shorts","Elásticos":"lace",
+  "Relógios":"watch","Ciclocomputadores":"computer","Cintas":"strap","Varia":"radar","Carregadores":"plug",
 };
 window.caveIcon = function(p){ return p.icon || window.CAVE_SUB_ICON[p.sub] || "box"; };
