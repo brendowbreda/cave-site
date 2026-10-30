@@ -83,8 +83,8 @@ section,#loja{scroll-margin-top:68px}
 @media (max-width:719px){.hero .lede{font-size:clamp(12px,3.65vw,18px);line-height:1.5}}
 .hero .lede span+span{margin-top:0}
 .hero .lede b{color:var(--ink);font-weight:600}
-.choose{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px}
-.choose a{display:flex;align-items:flex-end;min-height:120px;padding:18px;border-radius:var(--r);border:2px solid var(--buy);color:var(--buy);text-decoration:none;font-size:24px;font-weight:600;letter-spacing:-.03em;line-height:1.05}
+.choose{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:32px}
+.choose a{display:flex;align-items:flex-end;min-height:112px;padding:14px;border-radius:var(--r);border:2px solid var(--buy);color:var(--buy);text-decoration:none;font-size:clamp(17px,5vw,24px);font-weight:600;letter-spacing:-.03em;line-height:1.05}
 .choose a.buy-it{background:var(--buy);color:var(--buy-ink)}
 
 .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -357,7 +357,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
   .tabbar{display:none}
   body{padding-bottom:0}
   .mtop{display:none}
-  .choose{max-width:620px}
+  .choose{max-width:760px}
   section,#loja{scroll-margin-top:64px}
   .toast{bottom:24px}
 }
@@ -391,6 +391,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
     <div class="choose">
       <a class="buy-it" href="#loja">Quero<br>comprar</a>
       <a href="#vender">Quero<br>vender</a>
+      <a href="#locacao">Quero<br>alugar</a>
     </div>
   </div>
 
