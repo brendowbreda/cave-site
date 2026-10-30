@@ -133,6 +133,7 @@ section,#loja{scroll-margin-top:68px}
 .brands::-webkit-scrollbar{display:none}
 .brands .brand{flex:0 0 calc((100% - 16px - 32px) / 3);scroll-snap-align:start}
 @media (min-width:720px){.brands .brand{flex-basis:calc((100% - 16px) / 3 - 16px)}}
+@media (min-width:1000px){.brands .brand{flex-basis:calc((100% - 32px) / 5)}}
 .brand{display:grid;place-items:center;aspect-ratio:1/1.12;max-width:100%;padding:0 14px;border-radius:var(--r);border:1px solid var(--line);background:radial-gradient(90% 70% at 50% 45%,var(--tile-2),var(--surface) 70%)}
 .brand img{width:100%;height:auto;max-height:44px;object-fit:contain;opacity:.92}
 .brand.b-wahoo img{width:88%}
@@ -153,9 +154,17 @@ section,#loja{scroll-margin-top:68px}
 .secs{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px;margin-top:12px}
 .sec-tile{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-height:96px;padding:12px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-align:left;font-size:14px;font-weight:600;line-height:1.2;letter-spacing:-.01em;min-width:0}
 .sec-tile svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.sec-tile.open{border-color:var(--ink)}
 .sec-tile[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.sub-row{margin-top:12px}
-.sub-row .chip[aria-pressed="true"]{background:var(--buy);color:var(--buy-ink);border-color:var(--buy)}
+@media (min-width:720px){.secs{grid-template-columns:repeat(var(--nd,3),minmax(0,1fr))}}
+/* Painel da seção: lista de tipos em colunas, como menu de loja (abre ao tocar ou passar o mouse) */
+.sec-panel{margin-top:8px;padding:8px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px}
+.sec-panel h4{grid-column:1/-1;margin:6px 8px 4px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sec-panel button{display:block;width:100%;text-align:left;border:0;background:none;padding:10px 8px;border-radius:8px;font-size:14px;line-height:1.25;color:var(--ink)}
+.sec-panel button:hover{background:var(--tile-2)}
+.sec-panel button[aria-pressed="true"]{color:var(--buy);font-weight:600}
+.sec-panel button.all{font-weight:600}
+@media (min-width:720px){.sec-panel{grid-template-columns:repeat(4,minmax(0,1fr));padding:12px}}
 .qf{display:grid;gap:14px;margin-top:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
 .qf .eyebrow{margin-bottom:-4px}
 .qf .row{display:flex;flex-wrap:wrap;gap:8px}
@@ -455,7 +464,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
         <div class="finder" id="finder">
           <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="qClear" hidden aria-label="Limpar busca">×</button></label>
           <div class="secs" id="secs" role="group" aria-label="Seções" hidden></div>
-          <div class="chips sub-row" id="subRow" role="group" aria-label="Tipos" hidden></div>
+          <div class="sec-panel" id="subRow" role="group" aria-label="Tipos" hidden></div>
           <div class="qf" id="qf" hidden></div>
         </div>
       </div>
@@ -611,7 +620,7 @@ function pic(p,i=0,extra=""){
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
 const MODE_IMG={natacao:"assets/modes/natacao.jpg?v=4",bike:"assets/modes/bike.jpg?v=4",corrida:"assets/modes/corrida.jpg?v=4"};
-const st={cat:null,sec:null,sub:null,q:"",limit:12}; // sec = seção (Neoprene, Vestuário...), sub = tipo
+const st={cat:null,sec:null,sub:null,q:"",limit:12,open:null}; // sec = seção (Neoprene, Vestuário...), sub = tipo
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
 const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 function inView(p){
@@ -636,13 +645,9 @@ function renderNav(){
   // botões de seção logo abaixo da busca
   const n=c.groups.length;
   $("#secs").hidden=n<2;
-  $("#secs").style.setProperty("--n",n===4?2:Math.min(n,3));
+  $("#secs").style.setProperty("--n",n===4?2:Math.min(n,3));$("#secs").style.setProperty("--nd",Math.min(n,4));
   $("#secs").innerHTML=n>1?c.groups.map(g=>`<button class="sec-tile" type="button" data-sec="${g.id}" aria-pressed="${st.sec===g.id}">${svg(CAVE_SUB_ICON[g.subs[0]]||"box")}<span>${esc(g.name)}</span></button>`).join(""):"";
-  // tipos da seção escolhida, com "Todos" na frente
-  const sg=c.groups.find(g=>g.id===st.sec);
-  const rowSubs=sg&&!(sg.subs.length===1&&sg.subs[0]===sg.name)?sg.subs:[];
-  $("#subRow").hidden=!rowSubs.length;
-  $("#subRow").innerHTML=rowSubs.length?[null,...rowSubs].map(x=>`<button class="chip" type="button" data-row="${x===null?"":esc(x)}" aria-pressed="${(st.sub||null)===x}">${x===null?"Todos":esc(x)}</button>`).join(""):"";
+  renderPanel();
   const shown=st.sec?c.groups.filter(g=>g.id===st.sec):c.groups;
   $("#qf").innerHTML=shown.map(g=>{
     if(st.sec&&g.subs.length===1&&g.subs[0]===g.name)return "";
@@ -654,6 +659,16 @@ function renderNav(){
     const subs=[...new Set(P.filter(inView).map(p=>p.sub))];
     $("#qf").innerHTML=subs.length>1?`<div class="row">${subs.map(x=>`<button type="button" data-sub="${esc(x)}" data-group="">${esc(x)}</button>`).join("")}</div>`:"";
   }
+}
+// Painel com os tipos da seção aberta (pelo mouse) ou escolhida (pelo toque)
+function renderPanel(){
+  const c=curCat();if(!c)return;
+  const gid=st.open||st.sec,sg=c.groups.find(g=>g.id===gid);
+  const list=sg&&!(sg.subs.length===1&&sg.subs[0]===sg.name)?sg.subs:[];
+  const sel=st.sec===gid?st.sub:undefined;
+  $("#subRow").hidden=!list.length;
+  $("#subRow").innerHTML=list.length?`<h4>${esc(sg.name)}</h4><button type="button" class="all" data-row="" data-g="${sg.id}" aria-pressed="${st.sec===gid&&!st.sub}">Ver todos</button>`+list.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${sg.id}" aria-pressed="${sel===x}">${esc(x)}</button>`).join(""):"";
+  document.querySelectorAll("#secs .sec-tile").forEach(t=>t.classList.toggle("open",t.dataset.sec===st.open));
 }
 function filtered(){
   const q=norm(st.q);
@@ -675,7 +690,7 @@ function renderGrid(){
   document.querySelector(".more").hidden=!st.cat||l.length<=st.limit;
 }
 function clearSearch(){st.sub=null;st.q="";$("#q").value="";$("#qClear").hidden=true;$("#qf").hidden=true}
-function resetSearch(){st.sec=null;st.sub=null;st.q="";$("#q").value="";$("#qClear").hidden=true;$("#qf").hidden=true}
+function resetSearch(){st.sec=null;st.open=null;st.sub=null;st.q="";$("#q").value="";$("#qClear").hidden=true;$("#qf").hidden=true}
 function setCat(id){
   st.cat=st.cat===id?null:id;st.limit=12;resetSearch();
   renderNav();renderGrid();
@@ -702,9 +717,15 @@ qf.addEventListener("click",e=>{const b=e.target.closest("[data-sub]");if(!b)ret
   renderNav();renderGrid()});
 $("#qClear").addEventListener("click",()=>{clearSearch();renderGrid();qi.focus()});
 $("#subRow").addEventListener("click",e=>{const b=e.target.closest("[data-row]");if(!b)return;
-  st.sub=b.dataset.row||null;st.limit=12;renderNav();renderGrid()});
+  st.sec=b.dataset.g;st.sub=b.dataset.row||null;st.open=null;st.q="";qi.value="";$("#qClear").hidden=true;st.limit=12;renderNav();renderGrid()});
+// Computador: passar o mouse num quadrado já abre as opções dele
+const canHover=matchMedia("(hover:hover) and (pointer:fine)").matches;
+if(canHover){
+  $("#secs").addEventListener("mouseover",e=>{const t=e.target.closest("[data-sec]");if(t&&st.open!==t.dataset.sec){st.open=t.dataset.sec;renderPanel()}});
+  $("#finder").addEventListener("mouseleave",()=>{if(st.open){st.open=null;renderPanel()}});
+}
 $("#secs").addEventListener("click",e=>{const b=e.target.closest("[data-sec]");if(!b)return;
-  st.sec=st.sec===b.dataset.sec?null:b.dataset.sec;clearSearch();st.limit=12;renderNav();renderGrid()});
+  st.sec=st.sec===b.dataset.sec&&!st.open?null:b.dataset.sec;st.open=null;clearSearch();st.limit=12;renderNav();renderGrid()});
 document.addEventListener("click",e=>{if(!$("#finder").contains(e.target))qf.hidden=true});
 $("#moreBtn").addEventListener("click",()=>{st.limit+=12;renderGrid()});
 $("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openProduct(c.dataset.id)});
