@@ -49,6 +49,6 @@ window.CAVE_SUB_ICON = {
   "CeramicSpeed":"gear","Mala bike":"bag",
   "Capacetes":"helmet","Sapatilhas":"cleat","Macaquinhos":"sleeveless","Bretelles":"shorts","Jerseys":"jersey","Jaquetas":"jacket",
   "Tênis":"shoe","Meias":"sock","Shorts":"shorts","Elásticos":"lace",
-  "Relógios":"watch","Ciclocomputadores":"computer","Cintas":"strap","Varia":"radar","Carregadores":"plug",
+  "Relógios":"watch","Ciclocomputadores":"computer","Cinta cardíaca":"strap","Varia":"radar","Carregador":"plug",
 };
 window.caveIcon = function(p){ return p.icon || window.CAVE_SUB_ICON[p.sub] || "box"; };

@@ -97,12 +97,19 @@ section{padding-block:56px}
 .brand.b-ceramicspeed img{width:86%;max-height:64px}
 .brand[aria-pressed="true"]{border:2px solid var(--ink);background:var(--tile-2)}
 .brand[aria-pressed="true"] img{opacity:1}
-.view-logo{height:28px;width:auto}
-.groups{display:flex;gap:18px;border-bottom:1px solid var(--line)}
-.groups button{border:0;background:none;padding:10px 0;font-size:16px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
-.groups button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
-.view-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-.view-title h3{font-size:26px}
+/* Busca da modalidade: lupa + filtros rápidos que abrem ao tocar */
+.finder{position:relative}
+.search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 6px 0 16px;height:52px}
+.search:focus-within{border-color:var(--ink)}
+.search svg{width:20px;height:20px;color:var(--muted);flex:none}
+.search input{border:0;outline:0;background:transparent;flex:1;min-width:0;font-size:16px}
+.search input::-webkit-search-cancel-button{display:none}
+.search .clear{width:40px;height:40px;border-radius:50%;border:0;background:var(--tile-2);font-size:18px;line-height:1;flex:none}
+.qf{display:grid;gap:14px;margin-top:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.qf .eyebrow{margin-bottom:-4px}
+.qf .row{display:flex;flex-wrap:wrap;gap:8px}
+.qf button{height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:14px;font-weight:500}
+.qf button:active{background:var(--ink);color:var(--bg)}
 .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px));padding-block:2px}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:none;height:38px;padding:0 15px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;font-weight:500;white-space:nowrap}
@@ -379,11 +386,9 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
         <div class="brands" id="brands" role="group" aria-label="Marcas"></div>
       </div>
       <div class="filters" id="viewBar" hidden>
-        <div class="view-title"><h3 id="viewName"></h3><span class="count" id="count"></span></div>
-        <div class="groups" id="groups" role="group" aria-label="Seção"></div>
-        <div class="chips sub" id="subs" role="group" aria-label="Tipo"></div>
-        <div class="seg" role="group" aria-label="Estado" style="justify-self:start">
-          <button data-cond="all" aria-pressed="true">Todos</button><button data-cond="novo" aria-pressed="false">Novos</button><button data-cond="usado" aria-pressed="false">Usados</button>
+        <div class="finder" id="finder">
+          <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="qClear" hidden aria-label="Limpar busca">×</button></label>
+          <div class="qf" id="qf" hidden></div>
         </div>
       </div>
       <p class="eyebrow" id="latestTitle" style="margin:8px 0 14px">Últimos anúncios</p>
@@ -578,13 +583,13 @@ function pic(p,i=0,extra=""){
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
 const MODE_IMG={natacao:"assets/modes/natacao.png",bike:"assets/modes/bike.png",corrida:"assets/modes/corrida.png"};
-const st={cat:null,group:null,sub:"all",cond:"all",limit:12};
+const st={cat:null,sub:null,group:null,q:"",limit:12};
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
+const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 function inView(p){
   const c=curCat();
   if(!c)return true;
-  if(c.matchSub)return p.sub===c.matchSub;
-  return p.cat===c.id&&(!st.group||p.group===st.group);
+  return c.matchSub?p.sub===c.matchSub:p.cat===c.id;
 }
 function renderNav(){
   const modes=CFG.categories.filter(c=>!c.brand),brands=CFG.categories.filter(c=>c.brand);
@@ -593,16 +598,15 @@ function renderNav(){
   const c=curCat();
   $("#viewBar").hidden=!c;$("#latestTitle").hidden=!!c;
   if(!c)return;
-  $("#viewName").innerHTML=c.logo?`<img class="view-logo" src="${esc(c.logo)}" alt="${esc(c.name)}">`:esc(c.name);
-  $("#groups").hidden=c.groups.length<2;
-  $("#groups").innerHTML=c.groups.length>1?c.groups.map(g=>`<button data-group="${g.id}" aria-pressed="${st.group===g.id}">${esc(g.name)}</button>`).join(""):"";
-  const g=c.groups.find(x=>x.id===st.group);
-  const subs=g?g.subs:[];
-  $("#subs").hidden=!subs.length;
-  $("#subs").innerHTML=subs.length?["all",...subs].map(x=>`<button class="chip" data-sub="${esc(x)}" aria-pressed="${st.sub===x}">${x==="all"?"Todos":esc(x)}</button>`).join(""):"";
+  $("#q").placeholder=`Buscar em ${c.name}`;
+  // filtros rápidos: um bloco por seção (Bicicleta tem Bikes, Componentes e Vestuário)
+  const many=c.groups.length>1;
+  $("#qf").innerHTML=c.groups.map(g=>`${many?`<p class="eyebrow">${esc(g.name)}</p>`:""}<div class="row">${g.subs.map(x=>`<button type="button" data-sub="${esc(x)}" data-group="${g.id}">${esc(x)}</button>`).join("")}</div>`).join("");
+  if(!c.groups.length)$("#qf").innerHTML="";
 }
 function filtered(){
-  const l=P.filter(p=>inView(p)&&(st.sub==="all"||p.sub===st.sub)&&(st.cond==="all"||p.cond===st.cond));
+  const q=norm(st.q);
+  const l=P.filter(p=>inView(p)&&(!st.sub||(p.sub===st.sub&&(!st.group||p.group===st.group)))&&(!q||norm(p.title+" "+p.subtitle+" "+p.sub).includes(q)));
   return [...l.filter(p=>!sold(p)),...l.filter(sold)]; // vendidos sempre no fim
 }
 function card(p){
@@ -614,22 +618,28 @@ function card(p){
 }
 function renderGrid(){
   const l=st.cat?filtered():P.filter(p=>!sold(p)).slice(0,8);
-  const n=l.filter(p=>!sold(p)).length;
-  $("#count").textContent=`${n} à venda`;
   $("#grid").innerHTML=l.length?l.slice(0,st.limit).map(card).join(""):`<p class="empty">Nada por aqui agora. Tem um desses parado em casa? <a href="#vender">A gente vende para você</a>.</p>`;
   document.querySelector(".more").hidden=!st.cat||l.length<=st.limit;
 }
+function resetSearch(){st.sub=null;st.group=null;st.q="";$("#q").value="";$("#qClear").hidden=true;$("#qf").hidden=true}
 function setCat(id){
-  st.cat=st.cat===id?null:id;
-  const c=curCat();st.group=c&&c.groups.length?c.groups[0].id:null;st.sub="all";st.limit=12;
+  st.cat=st.cat===id?null:id;st.limit=12;resetSearch();
   renderNav();renderGrid();
 }
 function openView(id){st.cat=null;setCat(id);$("#loja").scrollIntoView({behavior:"smooth"})}
 $("#modes").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
 $("#brands").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
-$("#groups").addEventListener("click",e=>{const b=e.target.closest("[data-group]");if(b){st.group=b.dataset.group;st.sub="all";st.limit=12;renderNav();renderGrid()}});
-$("#subs").addEventListener("click",e=>{const b=e.target.closest("[data-sub]");if(b){st.sub=b.dataset.sub;st.limit=12;renderNav();renderGrid()}});
-document.querySelectorAll("[data-cond]").forEach(b=>b.addEventListener("click",()=>{st.cond=b.dataset.cond;document.querySelectorAll("[data-cond]").forEach(x=>x.setAttribute("aria-pressed",x===b));st.limit=12;renderGrid()}));
+const qf=$("#qf"),qi=$("#q");
+const showQuick=()=>{qf.hidden=!!qi.value.trim()||!qf.innerHTML};
+qi.addEventListener("focus",showQuick);
+qi.addEventListener("click",showQuick);
+qi.addEventListener("input",()=>{st.sub=null;st.group=null;st.q=qi.value;st.limit=12;$("#qClear").hidden=!qi.value;showQuick();renderGrid()});
+qi.addEventListener("keydown",e=>{if(e.key==="Enter"){qi.blur();qf.hidden=true}});
+qf.addEventListener("mousedown",e=>e.preventDefault()); // não fecha o teclado/painel antes do toque
+qf.addEventListener("click",e=>{const b=e.target.closest("[data-sub]");if(!b)return;
+  st.sub=b.dataset.sub;st.group=b.dataset.group;st.q="";st.limit=12;qi.value=b.dataset.sub;$("#qClear").hidden=false;qf.hidden=true;qi.blur();renderGrid()});
+$("#qClear").addEventListener("click",()=>{resetSearch();renderGrid();qi.focus()});
+document.addEventListener("click",e=>{if(!$("#finder").contains(e.target))qf.hidden=true});
 $("#moreBtn").addEventListener("click",()=>{st.limit+=12;renderGrid()});
 $("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openProduct(c.dataset.id)});
 $("#csBtn").addEventListener("click",()=>openView("ceramicspeed"));
@@ -856,7 +866,7 @@ async function load(){
   try{
     const [c,p]=await Promise.all([fetch("data/config.json"+v).then(r=>r.json()),fetch("data/products.json"+v).then(r=>r.json())]);
     CFG=c;P=(p.products||[]).filter(x=>!x.hidden);
-  }catch(e){$("#count").textContent="Não foi possível carregar os produtos. Atualize a página.";return}
+  }catch(e){$("#grid").innerHTML=`<p class="empty">Não foi possível carregar os produtos. Atualize a página.</p>`;return}
   renderConfig();renderNav();renderGrid();
 }
 load();
