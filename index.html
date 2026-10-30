@@ -200,13 +200,6 @@ section,#loja{scroll-margin-top:68px}
 .empty{padding:40px 0;text-align:center;color:var(--muted);grid-column:1/-1}
 .more{margin-top:24px;display:flex;justify-content:center}
 
-.brand-intro{display:grid;gap:16px;padding:22px 18px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line)}
-.brand-intro img{width:min(200px,60%);height:auto;filter:var(--logo-filter)}
-.brand-intro p{color:var(--muted);max-width:46ch;font-size:15px}
-.brand-intro .specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
-.brand-intro .specs div{padding:12px 8px 0 0}
-.brand-intro .specs b{display:block;font-size:20px;font-weight:600;letter-spacing:-.03em}
-.brand-intro .specs span{font-size:12px;color:var(--muted)}
 
 .pd-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
 .how{margin-top:10px;display:grid;gap:12px;padding-top:20px;border-top:1px solid var(--line)}
@@ -450,16 +443,6 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
         <div class="brands" id="brands" role="group" aria-label="Marcas"></div>
       </div>
       <div class="filters" id="viewBar" hidden>
-        <!-- Página da CeramicSpeed: aparece só quando a marca é escolhida -->
-        <div class="brand-intro" id="csIntro" hidden>
-          <img src="assets/brands/ceramicspeed.png" alt="CeramicSpeed" width="240" height="77">
-          <p>Rolamentos cerâmicos, polias oversized e lubrificação de corrida. O ganho que sobra quando o treino já está feito.</p>
-          <div class="specs">
-            <div><b>OSPW</b><span>Polias oversized</span></div>
-            <div><b>BB</b><span>Movimento central</span></div>
-            <div><b>UFO</b><span>Lubrificação</span></div>
-          </div>
-        </div>
         <div class="finder" id="finder">
           <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="qClear" hidden aria-label="Limpar busca">×</button></label>
           <div class="qf" id="qf" hidden></div>
@@ -633,7 +616,6 @@ function renderNav(){
   $("#brands").innerHTML=brands.map(c=>`<button class="brand b-${c.id}" data-cat="${c.id}" aria-pressed="${st.cat===c.id}" aria-label="${esc(c.name)}">${c.logo?`<img src="${esc(c.logo)}" alt="${esc(c.name)}">`:esc(c.name)}</button>`).join("");
   const c=curCat();
   $("#viewBar").hidden=!c;$("#latestTitle").hidden=!!c;
-  $("#csIntro").hidden=!c||c.id!=="ceramicspeed";
   if(!c)return;
   $("#q").placeholder=`Buscar em ${c.name}`;
   // filtros rápidos: um bloco por seção (Bicicleta tem Bikes, Componentes e Vestuário)
