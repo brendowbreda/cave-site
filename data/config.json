@@ -135,12 +135,12 @@
   {
    "name": "Estrada & Mountain Bike",
    "price": 400,
-   "desc": "Bike Fit completo para ciclistas de estrada ou mountain bike."
+   "desc": ""
   },
   {
-   "name": "Triathlon / TT (contrarrelógio)",
+   "name": "Triathlon / TT",
    "price": 500,
-   "desc": "Posicionamento aerodinâmico para bikes de triathlon ou contrarrelógio."
+   "desc": ""
   }
  ],
  "rentals": [
