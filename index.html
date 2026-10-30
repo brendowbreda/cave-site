@@ -154,6 +154,9 @@ section,#loja{scroll-margin-top:68px}
 /* Seções em lista (sanfona): toca na seção e todas as opções abrem embaixo, sem arrastar */
 .secs{display:grid;margin-top:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
 .acc+.acc{border-top:1px solid var(--line)}
+/* Foco: a seção aberta ou escolhida fica clara, as outras escurecem */
+.acc{transition:opacity .2s ease}
+.secs.has-focus .acc:not(.focus){opacity:.35}
 .acc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:0 16px;border:0;background:none;text-align:left;font-size:16px;font-weight:600;letter-spacing:-.01em}
 .acc-head small{display:block;font-size:13px;font-weight:500;color:var(--buy);margin-top:2px}
 .acc-head svg{width:18px;height:18px;flex:none;color:var(--muted);transition:transform .2s ease}
@@ -660,11 +663,13 @@ function renderSecs(){
   const c=curCat();if(!c)return;
   const n=c.groups.length;
   $("#secs").hidden=n<2;
+  const focus=st.open||st.sec;
+  $("#secs").classList.toggle("has-focus",!!focus);
   $("#secs").innerHTML=n<2?"":c.groups.map(g=>{
     const solo=g.subs.length===1&&g.subs[0]===g.name,open=st.open===g.id,active=st.sec===g.id;
     const note=active?`<small>${esc(st.sub||"Todos")}</small>`:"";
     const body=open&&!solo?`<div class="acc-body"><button type="button" class="all" data-row="" data-g="${g.id}" aria-pressed="${active&&!st.sub}">Ver todos</button>${g.subs.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${g.id}" aria-pressed="${active&&st.sub===x}">${esc(x)}</button>`).join("")}</div>`:"";
-    return `<div class="acc${open?" open":""}"><button class="acc-head" type="button" data-acc="${g.id}" aria-expanded="${open}"><span>${esc(g.name)}${note}</span>${solo?"":CHEV}</button>${body}</div>`;
+    return `<div class="acc${open?" open":""}${focus===g.id?" focus":""}"><button class="acc-head" type="button" data-acc="${g.id}" aria-expanded="${open}"><span>${esc(g.name)}${note}</span>${solo?"":CHEV}</button>${body}</div>`;
   }).join("");
 }
 function filtered(){
