@@ -75,11 +75,8 @@ section{padding-block:56px}
 .hero h1 .thin{font-weight:300;color:var(--muted)}
 .hero .lede{margin-top:20px;font-size:18px;max-width:36ch;color:var(--muted)}
 .choose{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px}
-.choose a{display:grid;gap:28px;align-content:space-between;min-height:132px;padding:18px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-decoration:none}
-.choose a.buy-it{background:var(--buy);color:var(--buy-ink);border-color:var(--buy)}
-.choose b{font-size:22px;font-weight:600;letter-spacing:-.03em;line-height:1.05}
-.choose span{font-size:13px;opacity:.65}
-.choose svg{width:22px;height:22px}
+.choose a{display:flex;align-items:flex-end;min-height:120px;padding:18px;border-radius:var(--r);border:2px solid var(--buy);color:var(--buy);text-decoration:none;font-size:24px;font-weight:600;letter-spacing:-.03em;line-height:1.05}
+.choose a.buy-it{background:var(--buy);color:var(--buy-ink)}
 
 .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 /* Cartões de modalidade: desenho no centro, nome embaixo */
@@ -90,10 +87,9 @@ section{padding-block:56px}
 .mode[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 /* Marcas: logo no centro */
 .brands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.brand{display:grid;place-items:center;height:64px;padding:0 12px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
-.brand img{max-width:100%;max-height:22px;width:auto;height:auto;opacity:.9}
-.brand.b-wahoo img{max-height:20px}
-.brand.b-garmin img{max-height:24px}
+.brand{display:grid;place-items:center;aspect-ratio:1/1.12;max-width:100%;padding:0 14px;border-radius:var(--r);border:1px solid var(--line);background:radial-gradient(90% 70% at 50% 45%,var(--tile-2),var(--surface) 70%)}
+.brand img{width:100%;height:auto;max-height:44px;object-fit:contain;opacity:.92}
+.brand.b-wahoo img{width:88%}
 .brand[aria-pressed="true"]{border:2px solid var(--ink);background:var(--tile-2)}
 .brand[aria-pressed="true"] img{opacity:1}
 .view-logo{height:28px;width:auto}
@@ -156,7 +152,12 @@ section{padding-block:56px}
 .rule{margin-top:18px;padding:16px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:15px;display:grid;gap:4px}
 .rule b{color:var(--ink)}
 
-.sell{background:var(--surface);border-block:1px solid var(--line)}
+.sell{display:none;background:var(--bg)}
+/* Página Quero vender: abre sozinha, sem o resto do site */
+body.on-sell main > :not(#vender){display:none}
+body.on-sell .sell{display:block;padding-top:20px}
+body.on-sell footer{display:none}
+.back{display:inline-flex;align-items:center;min-height:44px;margin-bottom:12px;color:var(--muted);text-decoration:none;font-weight:500}
 .sell h2 em{font-style:normal;color:var(--buy)}
 .sell-flow{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:24px}
 .sell-flow div{background:var(--surface);padding:14px;display:grid;gap:4px}
@@ -355,8 +356,8 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
     <h1><span>Compre bem.</span><span class="thin">Venda melhor.</span></h1>
     <p class="lede">Equipamento de endurance novo e usado, escolhido e revisado por quem compete.</p>
     <div class="choose">
-      <a class="buy-it" href="#loja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16l-1.2 11.2a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg><div><b>Quero<br>comprar</b></div></a>
-      <a href="#vender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><div><b>Quero<br>vender</b></div></a>
+      <a class="buy-it" href="#loja">Quero<br>comprar</a>
+      <a href="#vender">Quero<br>vender</a>
     </div>
   </div>
 
@@ -418,6 +419,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
   <section class="sell" id="vender">
     <div class="wrap sell-cols">
       <div>
+        <a class="back" href="#inicio">← Voltar</a>
         <div class="sec-head">
           <p class="eyebrow">Venda com a Cave</p>
           <h2>Tem algo parado em casa? <em>A gente vende.</em></h2>
@@ -836,6 +838,16 @@ function renderConfig(){
   $("#tabWa").href=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
   $("#footWa").href=$("#tabWa").href;$("#topWa").href=$("#tabWa").href;
 }
+
+// ---------- Página Quero vender
+function route(){
+  const sell=location.hash==="#vender";
+  const was=document.body.classList.contains("on-sell");
+  document.body.classList.toggle("on-sell",sell);
+  if(sell){window.scrollTo({top:0,behavior:"instant"});return}
+  if(was){const t=location.hash&&document.querySelector(location.hash);requestAnimationFrame(()=>t&&t.id!=="inicio"?t.scrollIntoView({behavior:"instant"}):window.scrollTo({top:0,behavior:"instant"}))}
+}
+addEventListener("hashchange",route);route();
 
 async function load(){
   const v="?v="+Date.now();
