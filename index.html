@@ -98,9 +98,9 @@ section,#loja{scroll-margin-top:68px}
 .mode.photo b{position:absolute;left:0;right:0;bottom:12px;z-index:1;text-align:center}
 .mode.photo[aria-pressed="true"]{background:var(--surface);color:#fff;outline:3px solid var(--buy);outline-offset:-3px}
 .mode.photo[aria-pressed="true"] img{transform:scale(1.05)}
-.m-bike img{object-position:50% 25%}
-.m-natacao img{object-position:40% 50%}
-.m-corrida img{object-position:60% 45%}
+.m-bike img{object-position:48% 50%}
+.m-natacao img{object-position:55% 45%}
+.m-corrida img{object-position:45% 50%}
 .mode b{font-size:15px;font-weight:600;letter-spacing:-.02em}
 .mode[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 /* Marcas: logo no centro */
@@ -600,7 +600,7 @@ function pic(p,i=0,extra=""){
 
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
-const MODE_IMG={natacao:"assets/modes/natacao.jpg?v=2",bike:"assets/modes/bike.jpg?v=2",corrida:"assets/modes/corrida.jpg?v=2"};
+const MODE_IMG={natacao:"assets/modes/natacao.jpg?v=3",bike:"assets/modes/bike.jpg?v=3",corrida:"assets/modes/corrida.jpg?v=3"};
 const st={cat:null,sub:null,group:null,q:"",limit:12};
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
 const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
