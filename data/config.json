@@ -145,6 +145,14 @@
    "matchBrand": "SRAM",
    "logo": "assets/brands/sram.png",
    "groups": []
+  },
+  {
+   "id": "winow",
+   "name": "Winow",
+   "brand": true,
+   "matchBrand": "Winow",
+   "logo": "assets/brands/winow.png",
+   "groups": []
   }
  ],
  "fit": [
