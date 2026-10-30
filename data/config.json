@@ -119,30 +119,36 @@
    "groups": [
     {
      "id": "tenis",
-     "name": "Tênis",
+     "name": "Tênis de corrida",
      "subs": [
-      "Tênis"
+      "Corrida de rua",
+      "Corrida de trilha",
+      "Atletismo",
+      "Maratona"
      ]
     },
     {
-     "id": "vestuario",
-     "name": "Vestuário",
+     "id": "roupas",
+     "name": "Roupas para corrida",
      "subs": [
+      "Camisetas",
+      "Jaquetas",
       "Shorts masculino",
       "Shorts feminino",
-      "Meia de corrida",
-      "Boné / bucket",
-      "Canelito e manguito"
+      "Leggings"
      ]
     },
     {
      "id": "acessorios",
-     "name": "Acessórios",
+     "name": "Acessórios para corrida",
      "subs": [
+      "Boné & bucket",
       "Cadarço elástico",
       "Óculos de sol",
       "Cinto porta-número",
-      "Garrafa de silicone"
+      "Garrafa de silicone",
+      "Meia de corrida",
+      "Canelito e manguito"
      ]
     }
    ]

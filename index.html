@@ -141,15 +141,21 @@ section,#loja{scroll-margin-top:68px}
 .brand[aria-pressed="true"]{border:2px solid var(--ink);background:var(--tile-2)}
 .brand[aria-pressed="true"] img{opacity:1}
 /* Busca da modalidade: lupa + filtros rápidos que abrem ao tocar */
-.finder{position:relative}
+.finder{position:relative;min-width:0}
+.filters>*{min-width:0}
 .search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 6px 0 16px;height:52px}
 .search:focus-within{border-color:var(--ink)}
 .search svg{width:20px;height:20px;color:var(--muted);flex:none}
 .search input{border:0;outline:0;background:transparent;flex:1;min-width:0;font-size:16px}
 .search input::-webkit-search-cancel-button{display:none}
 .search .clear{width:40px;height:40px;border-radius:50%;border:0;background:var(--tile-2);font-size:18px;line-height:1;flex:none}
-.finder .secs{margin-top:12px}
-.secs .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* Seções da modalidade em quadrados (ex.: Tênis de corrida, Roupas, Acessórios) */
+.secs{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px;margin-top:12px}
+.sec-tile{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-height:96px;padding:12px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-align:left;font-size:14px;font-weight:600;line-height:1.2;letter-spacing:-.01em;min-width:0}
+.sec-tile svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.sec-tile[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sub-row{margin-top:12px}
+.sub-row .chip[aria-pressed="true"]{background:var(--buy);color:var(--buy-ink);border-color:var(--buy)}
 .qf{display:grid;gap:14px;margin-top:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
 .qf .eyebrow{margin-bottom:-4px}
 .qf .row{display:flex;flex-wrap:wrap;gap:8px}
@@ -448,7 +454,8 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
       <div class="filters" id="viewBar" hidden>
         <div class="finder" id="finder">
           <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="qClear" hidden aria-label="Limpar busca">×</button></label>
-          <div class="chips secs" id="secs" role="group" aria-label="Seções" hidden></div>
+          <div class="secs" id="secs" role="group" aria-label="Seções" hidden></div>
+          <div class="chips sub-row" id="subRow" role="group" aria-label="Tipos" hidden></div>
           <div class="qf" id="qf" hidden></div>
         </div>
       </div>
@@ -627,8 +634,15 @@ function renderNav(){
   const many=c.groups.length>1;
   const chip=(x,g)=>`<button type="button" data-sub="${esc(x)}" data-group="${g.id}">${esc(x)}</button>`;
   // botões de seção logo abaixo da busca
-  $("#secs").hidden=c.groups.length<2;
-  $("#secs").innerHTML=c.groups.length>1?c.groups.map(g=>`<button class="chip" type="button" data-sec="${g.id}" aria-pressed="${st.sec===g.id}">${esc(g.name)}</button>`).join(""):"";
+  const n=c.groups.length;
+  $("#secs").hidden=n<2;
+  $("#secs").style.setProperty("--n",n===4?2:Math.min(n,3));
+  $("#secs").innerHTML=n>1?c.groups.map(g=>`<button class="sec-tile" type="button" data-sec="${g.id}" aria-pressed="${st.sec===g.id}">${svg(CAVE_SUB_ICON[g.subs[0]]||"box")}<span>${esc(g.name)}</span></button>`).join(""):"";
+  // tipos da seção escolhida, com "Todos" na frente
+  const sg=c.groups.find(g=>g.id===st.sec);
+  const rowSubs=sg&&!(sg.subs.length===1&&sg.subs[0]===sg.name)?sg.subs:[];
+  $("#subRow").hidden=!rowSubs.length;
+  $("#subRow").innerHTML=rowSubs.length?[null,...rowSubs].map(x=>`<button class="chip" type="button" data-row="${x===null?"":esc(x)}" aria-pressed="${(st.sub||null)===x}">${x===null?"Todos":esc(x)}</button>`).join(""):"";
   const shown=st.sec?c.groups.filter(g=>g.id===st.sec):c.groups;
   $("#qf").innerHTML=shown.map(g=>{
     if(st.sec&&g.subs.length===1&&g.subs[0]===g.name)return "";
@@ -676,15 +690,19 @@ function openView(id){st.cat=null;setCat(id)}
 $("#modes").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
 $("#brands").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
 const qf=$("#qf"),qi=$("#q");
-const showQuick=()=>{qf.hidden=!!qi.value.trim()||!qf.innerHTML};
+const showQuick=()=>{qf.hidden=!!st.sec||!!qi.value.trim()||!qf.innerHTML}; // com seção escolhida, os tipos já aparecem embaixo
 qi.addEventListener("focus",showQuick);
 qi.addEventListener("click",showQuick);
 qi.addEventListener("input",()=>{st.sub=null;st.q=qi.value;st.limit=12;$("#qClear").hidden=!qi.value;showQuick();renderGrid()});
 qi.addEventListener("keydown",e=>{if(e.key==="Enter"){qi.blur();qf.hidden=true}});
 qf.addEventListener("mousedown",e=>e.preventDefault()); // não fecha o teclado/painel antes do toque
 qf.addEventListener("click",e=>{const b=e.target.closest("[data-sub]");if(!b)return;
-  st.sub=b.dataset.sub;if(b.dataset.group)st.sec=b.dataset.group;st.q="";renderNav();st.limit=12;qi.value=b.dataset.sub;$("#qClear").hidden=false;qf.hidden=true;qi.blur();renderGrid()});
+  st.sub=b.dataset.sub;st.q="";st.limit=12;qf.hidden=true;qi.blur();
+  if(b.dataset.group){st.sec=b.dataset.group;qi.value="";$("#qClear").hidden=true}else{qi.value=b.dataset.sub;$("#qClear").hidden=false}
+  renderNav();renderGrid()});
 $("#qClear").addEventListener("click",()=>{clearSearch();renderGrid();qi.focus()});
+$("#subRow").addEventListener("click",e=>{const b=e.target.closest("[data-row]");if(!b)return;
+  st.sub=b.dataset.row||null;st.limit=12;renderNav();renderGrid()});
 $("#secs").addEventListener("click",e=>{const b=e.target.closest("[data-sec]");if(!b)return;
   st.sec=st.sec===b.dataset.sec?null:b.dataset.sec;clearSearch();st.limit=12;renderNav();renderGrid()});
 document.addEventListener("click",e=>{if(!$("#finder").contains(e.target))qf.hidden=true});

@@ -58,6 +58,8 @@ window.CAVE_SUB_ICON = {
   // Corrida
   "Tênis":"shoe","Shorts masculino":"shorts","Shorts feminino":"shorts","Meia de corrida":"sock","Boné / bucket":"cap",
   "Cadarço elástico":"lace","Canelito e manguito":"sock","Óculos de sol":"glasses","Cinto porta-número":"strap","Garrafa de silicone":"bottle",
+  "Corrida de rua":"shoe","Corrida de trilha":"shoe","Atletismo":"shoe","Maratona":"shoe","Camisetas":"jersey","Jaquetas":"jacket",
+  "Leggings":"shorts","Boné & bucket":"cap",
   // Marcas
   "Relógios":"watch","Ciclocomputadores":"computer","Cinta cardíaca":"strap","Varia":"radar","Carregador":"plug",
 };
