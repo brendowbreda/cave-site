@@ -85,7 +85,8 @@ section{padding-block:56px}
 /* Cartões de modalidade: desenho no centro, nome embaixo */
 .mode{position:relative;display:grid;grid-template-rows:1fr auto;justify-items:center;align-items:center;gap:6px;aspect-ratio:1/1.12;max-width:100%;padding:12px 8px 14px;border-radius:var(--r);border:1px solid var(--line);background:radial-gradient(90% 70% at 50% 40%,var(--tile-2),var(--surface) 70%);overflow:hidden}
 .mode svg{width:84%;height:auto;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.mode svg .fill{fill:currentColor;stroke:none}
+.mode img{width:78%;height:auto;max-height:100%;object-fit:contain;align-self:center}
+.mode[aria-pressed="true"] img{filter:invert(1)}
 .mode b{font-size:15px;font-weight:600;letter-spacing:-.02em}
 .mode[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 /* Marcas: logo no centro */
@@ -578,11 +579,7 @@ function pic(p,i=0,extra=""){
 
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
-const MODE_ART={
-  natacao:'<svg viewBox="0 0 120 80" aria-hidden="true"><path d="M8 38c4-1 7-1 9 0M103 38c2-1 5-1 9 0"/><path d="M17 38c0-10 8-16 21-16 12 0 19 6 19 15 0 10-8 17-20 17S17 48 17 38z"/><path d="M103 38c0-10-8-16-21-16-12 0-19 6-19 15 0 10 8 17 20 17s20-6 20-16z"/><path d="M57 36c2-3 4-4 3-4M57 35c1-2 5-2 6 0"/><path d="M26 34c2-4 6-6 11-6M73 34c2-4 6-6 11-6" opacity=".5"/></svg>',
-  bike:'<svg viewBox="0 0 120 80" aria-hidden="true"><circle cx="26" cy="52" r="19"/><circle cx="94" cy="52" r="19"/><circle cx="26" cy="52" r="2"/><circle cx="94" cy="52" r="2"/><path d="M26 52 47 24h37M56 52 47 24M56 52l30-24M26 52h30M86 28l8 24M84 24l3-7 6-1c3 0 4 2 4 4M41 20h13"/><circle cx="56" cy="52" r="4"/></svg>',
-  corrida:'<svg viewBox="0 0 120 80" aria-hidden="true"><path d="M10 54c0-10 3-23 9-29l11 7c7 4 15 4 22-2l10 10c10 9 27 11 42 13 7 1 12 5 12 10v2c0 3-2 5-5 5H15c-3 0-5-2-5-5z"/><path d="M10 56h104M40 31l5 6M48 28l5 7M56 31l4 6M75 48c10 3 22 4 32 5"/></svg>'
-};
+const MODE_IMG={natacao:"assets/modes/natacao.png",bike:"assets/modes/bike.png",corrida:"assets/modes/corrida.png"};
 const st={cat:null,group:null,sub:"all",cond:"all",limit:12};
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
 function inView(p){
@@ -593,7 +590,7 @@ function inView(p){
 }
 function renderNav(){
   const modes=CFG.categories.filter(c=>!c.brand),brands=CFG.categories.filter(c=>c.brand);
-  $("#modes").innerHTML=modes.map(c=>`<button class="mode" data-cat="${c.id}" aria-pressed="${st.cat===c.id}">${MODE_ART[c.id]||svg("box")}<b>${esc(c.name)}</b></button>`).join("");
+  $("#modes").innerHTML=modes.map(c=>`<button class="mode" data-cat="${c.id}" aria-pressed="${st.cat===c.id}">${MODE_IMG[c.id]?`<img src="${MODE_IMG[c.id]}" alt="">`:svg("box")}<b>${esc(c.name)}</b></button>`).join("");
   $("#brands").innerHTML=brands.map(c=>`<button class="brand b-${c.id}" data-cat="${c.id}" aria-pressed="${st.cat===c.id}" aria-label="${esc(c.name)}">${c.logo?`<img src="${esc(c.logo)}" alt="${esc(c.name)}">`:esc(c.name)}</button>`).join("");
   const c=curCat();
   $("#viewBar").hidden=!c;$("#latestTitle").hidden=!!c;
