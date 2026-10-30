@@ -27,7 +27,7 @@
   --body:var(--display);
   --mono:var(--display);
   --r:14px; --tabbar:64px;
-  --logo-filter:none; --band-logo-filter:invert(1);
+  --logo-filter:none;
   color-scheme:dark;
   padding-top:env(safe-area-inset-top,0px);
 }
@@ -38,7 +38,7 @@
   --buy:#169C46; --buy-ink:#FFFFFF; --buy-soft:#E2F4E8;
   --info:#0D5266; --info-soft:#DDEBEF;
   --warn:#8A5200; --warn-soft:#F6EBD8; --bad:#B42318; --bad-soft:#F8E1DE;
-  --logo-filter:invert(1); --band-logo-filter:none;
+  --logo-filter:invert(1);
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -189,16 +189,13 @@ section,#loja{scroll-margin-top:68px}
 .empty{padding:40px 0;text-align:center;color:var(--muted);grid-column:1/-1}
 .more{margin-top:24px;display:flex;justify-content:center}
 
-.band{background:var(--ink);color:var(--bg)}
-.band .wrap{padding-block:44px;display:grid;gap:18px}
-.band .eyebrow{color:color-mix(in srgb,var(--bg) 60%,var(--ink))}
-.band h2{font-size:clamp(40px,11vw,84px)}
-.band p{color:color-mix(in srgb,var(--bg) 78%,var(--ink));max-width:46ch}
-.band .btn{border-color:var(--bg);color:var(--bg);justify-self:start}
-.band .specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid color-mix(in srgb,var(--bg) 30%,var(--ink))}
-.band .specs div{padding:12px 8px 0 0}
-.band .specs b{display:block;font:600 22px/1 var(--mono);letter-spacing:-.03em}
-.band .specs span{font-size:12px;color:color-mix(in srgb,var(--bg) 60%,var(--ink))}
+.brand-intro{display:grid;gap:16px;padding:22px 18px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line)}
+.brand-intro img{width:min(200px,60%);height:auto;filter:var(--logo-filter)}
+.brand-intro p{color:var(--muted);max-width:46ch;font-size:15px}
+.brand-intro .specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.brand-intro .specs div{padding:12px 8px 0 0}
+.brand-intro .specs b{display:block;font-size:20px;font-weight:600;letter-spacing:-.03em}
+.brand-intro .specs span{font-size:12px;color:var(--muted)}
 
 .steps{display:grid;counter-reset:s;border-top:1px solid var(--ink)}
 .step{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
@@ -437,6 +434,16 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
         <div class="brands" id="brands" role="group" aria-label="Marcas"></div>
       </div>
       <div class="filters" id="viewBar" hidden>
+        <!-- Página da CeramicSpeed: aparece só quando a marca é escolhida -->
+        <div class="brand-intro" id="csIntro" hidden>
+          <img src="assets/brands/ceramicspeed.png" alt="CeramicSpeed" width="240" height="77">
+          <p>Rolamentos cerâmicos, polias oversized e lubrificação de corrida. O ganho que sobra quando o treino já está feito.</p>
+          <div class="specs">
+            <div><b>OSPW</b><span>Polias oversized</span></div>
+            <div><b>BB</b><span>Movimento central</span></div>
+            <div><b>UFO</b><span>Lubrificação</span></div>
+          </div>
+        </div>
         <div class="finder" id="finder">
           <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="qClear" hidden aria-label="Limpar busca">×</button></label>
           <div class="qf" id="qf" hidden></div>
@@ -447,20 +454,6 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
       <div class="more" hidden><button class="btn" id="moreBtn">Ver mais</button></div>
     </div>
   </section>
-
-  <div class="band" id="ceramicspeed">
-    <div class="wrap">
-      <p class="eyebrow">Destaque da casa</p>
-      <h2><img src="assets/brands/ceramicspeed.png" alt="CeramicSpeed" width="240" height="80" style="width:min(240px,64%);height:auto;filter:var(--band-logo-filter)"></h2>
-      <p>Rolamentos cerâmicos, polias oversized e lubrificação de corrida. O ganho que sobra quando o treino já está feito.</p>
-      <div class="specs">
-        <div><b>OSPW</b><span>Polias oversized</span></div>
-        <div><b>BB</b><span>Movimento central</span></div>
-        <div><b>UFO</b><span>Lubrificação</span></div>
-      </div>
-      <button class="btn" id="csBtn">Ver CeramicSpeed</button>
-    </div>
-  </div>
 
   <section id="oferta">
     <div class="wrap">
@@ -648,6 +641,7 @@ function renderNav(){
   $("#brands").innerHTML=brands.map(c=>`<button class="brand b-${c.id}" data-cat="${c.id}" aria-pressed="${st.cat===c.id}" aria-label="${esc(c.name)}">${c.logo?`<img src="${esc(c.logo)}" alt="${esc(c.name)}">`:esc(c.name)}</button>`).join("");
   const c=curCat();
   $("#viewBar").hidden=!c;$("#latestTitle").hidden=!!c;
+  $("#csIntro").hidden=!c||c.id!=="ceramicspeed";
   if(!c)return;
   $("#q").placeholder=`Buscar em ${c.name}`;
   // filtros rápidos: um bloco por seção (Bicicleta tem Bikes, Componentes e Vestuário)
@@ -701,7 +695,6 @@ $("#qClear").addEventListener("click",()=>{resetSearch();renderGrid();qi.focus()
 document.addEventListener("click",e=>{if(!$("#finder").contains(e.target))qf.hidden=true});
 $("#moreBtn").addEventListener("click",()=>{st.limit+=12;renderGrid()});
 $("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openProduct(c.dataset.id)});
-$("#csBtn").addEventListener("click",()=>openView("ceramicspeed"));
 
 // ---------- Sheet
 const sheet=$("#sheet"),scrim=$("#scrim");let lastFocus=null;
