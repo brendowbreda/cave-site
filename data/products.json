@@ -675,7 +675,7 @@
   {
    "id": "ex-044",
    "cat": "corrida",
-   "group": "corrida",
+   "group": "tenis",
    "sub": "Tênis",
    "cond": "novo",
    "price": 2299,
@@ -691,7 +691,7 @@
   {
    "id": "ex-045",
    "cat": "corrida",
-   "group": "corrida",
+   "group": "tenis",
    "sub": "Tênis",
    "cond": "usado",
    "price": 990,
@@ -707,7 +707,7 @@
   {
    "id": "ex-046",
    "cat": "corrida",
-   "group": "corrida",
+   "group": "vestuario",
    "sub": "Meia de corrida",
    "cond": "novo",
    "price": 129,
@@ -723,7 +723,7 @@
   {
    "id": "ex-047",
    "cat": "corrida",
-   "group": "corrida",
+   "group": "vestuario",
    "sub": "Shorts masculino",
    "cond": "novo",
    "price": 249,
@@ -739,7 +739,7 @@
   {
    "id": "ex-048",
    "cat": "corrida",
-   "group": "corrida",
+   "group": "acessorios",
    "sub": "Cadarço elástico",
    "cond": "novo",
    "price": 59,

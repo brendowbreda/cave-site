@@ -52,6 +52,38 @@
      ]
     },
     {
+     "id": "vestuario",
+     "name": "Vestuário",
+     "subs": [
+      "Capacete",
+      "Sapatilha",
+      "Macaquinho",
+      "Bretelle",
+      "Jersey",
+      "Óculos"
+     ]
+    },
+    {
+     "id": "acessorios",
+     "name": "Acessórios",
+     "subs": [
+      "Cintas cardíacas",
+      "Ferramentas",
+      "Garrafas",
+      "GPS",
+      "Lubrificantes e graxas",
+      "Mala bike",
+      "Faróis e sinalizadores",
+      "Produtos de limpeza",
+      "Refis de CO2",
+      "Remendos",
+      "Rolo de treino",
+      "Suportes de garrafa",
+      "Transbike",
+      "Tubeless"
+     ]
+    },
+    {
      "id": "componentes",
      "name": "Componentes",
      "subs": [
@@ -78,38 +110,6 @@
       "Rodas",
       "Selins"
      ]
-    },
-    {
-     "id": "acessorios",
-     "name": "Acessórios",
-     "subs": [
-      "Cintas cardíacas",
-      "Ferramentas",
-      "Garrafas",
-      "GPS",
-      "Lubrificantes e graxas",
-      "Mala bike",
-      "Faróis e sinalizadores",
-      "Produtos de limpeza",
-      "Refis de CO2",
-      "Remendos",
-      "Rolo de treino",
-      "Suportes de garrafa",
-      "Transbike",
-      "Tubeless"
-     ]
-    },
-    {
-     "id": "vestuario",
-     "name": "Vestuário",
-     "subs": [
-      "Capacete",
-      "Sapatilha",
-      "Macaquinho",
-      "Bretelle",
-      "Jersey",
-      "Óculos"
-     ]
     }
    ]
   },
@@ -118,16 +118,28 @@
    "name": "Corrida",
    "groups": [
     {
-     "id": "corrida",
-     "name": "Corrida",
+     "id": "tenis",
+     "name": "Tênis",
      "subs": [
-      "Tênis",
+      "Tênis"
+     ]
+    },
+    {
+     "id": "vestuario",
+     "name": "Vestuário",
+     "subs": [
       "Shorts masculino",
       "Shorts feminino",
       "Meia de corrida",
       "Boné / bucket",
+      "Canelito e manguito"
+     ]
+    },
+    {
+     "id": "acessorios",
+     "name": "Acessórios",
+     "subs": [
       "Cadarço elástico",
-      "Canelito e manguito",
       "Óculos de sol",
       "Cinto porta-número",
       "Garrafa de silicone"

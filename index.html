@@ -148,6 +148,8 @@ section,#loja{scroll-margin-top:68px}
 .search input{border:0;outline:0;background:transparent;flex:1;min-width:0;font-size:16px}
 .search input::-webkit-search-cancel-button{display:none}
 .search .clear{width:40px;height:40px;border-radius:50%;border:0;background:var(--tile-2);font-size:18px;line-height:1;flex:none}
+.finder .secs{margin-top:12px}
+.secs .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .qf{display:grid;gap:14px;margin-top:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
 .qf .eyebrow{margin-bottom:-4px}
 .qf .row{display:flex;flex-wrap:wrap;gap:8px}
@@ -446,6 +448,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
       <div class="filters" id="viewBar" hidden>
         <div class="finder" id="finder">
           <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="qClear" hidden aria-label="Limpar busca">×</button></label>
+          <div class="chips secs" id="secs" role="group" aria-label="Seções" hidden></div>
           <div class="qf" id="qf" hidden></div>
         </div>
       </div>
@@ -601,7 +604,7 @@ function pic(p,i=0,extra=""){
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
 const MODE_IMG={natacao:"assets/modes/natacao.jpg?v=4",bike:"assets/modes/bike.jpg?v=4",corrida:"assets/modes/corrida.jpg?v=4"};
-const st={cat:null,sub:null,group:null,q:"",limit:12};
+const st={cat:null,sec:null,sub:null,q:"",limit:12}; // sec = seção (Neoprene, Vestuário...), sub = tipo
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
 const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 function inView(p){
@@ -623,9 +626,14 @@ function renderNav(){
   // uma seção com um tipo só e o mesmo nome (ex.: Neoprene) vira um botão sem título
   const many=c.groups.length>1;
   const chip=(x,g)=>`<button type="button" data-sub="${esc(x)}" data-group="${g.id}">${esc(x)}</button>`;
-  $("#qf").innerHTML=c.groups.map(g=>{
+  // botões de seção logo abaixo da busca
+  $("#secs").hidden=c.groups.length<2;
+  $("#secs").innerHTML=c.groups.length>1?c.groups.map(g=>`<button class="chip" type="button" data-sec="${g.id}" aria-pressed="${st.sec===g.id}">${esc(g.name)}</button>`).join(""):"";
+  const shown=st.sec?c.groups.filter(g=>g.id===st.sec):c.groups;
+  $("#qf").innerHTML=shown.map(g=>{
+    if(st.sec&&g.subs.length===1&&g.subs[0]===g.name)return "";
     const solo=g.subs.length===1&&g.subs[0]===g.name;
-    return `${many&&!solo?`<p class="eyebrow">${esc(g.name)}</p>`:""}<div class="row">${g.subs.map(x=>chip(x,g)).join("")}</div>`;
+    return `${many&&!solo&&!st.sec?`<p class="eyebrow">${esc(g.name)}</p>`:""}<div class="row">${g.subs.map(x=>chip(x,g)).join("")}</div>`;
   }).join("");
   if(!c.groups.length){
     // marca sem seções: filtros rápidos com os tipos que existem nos produtos dela
@@ -635,7 +643,7 @@ function renderNav(){
 }
 function filtered(){
   const q=norm(st.q);
-  const l=P.filter(p=>inView(p)&&(!st.sub||(p.sub===st.sub&&(!st.group||p.group===st.group)))&&(!q||norm(p.title+" "+p.subtitle+" "+p.sub).includes(q)));
+  const l=P.filter(p=>inView(p)&&(!st.sec||p.group===st.sec)&&(!st.sub||p.sub===st.sub)&&(!q||norm(p.title+" "+p.subtitle+" "+p.sub).includes(q)));
   return [...l.filter(p=>!sold(p)),...l.filter(sold)]; // vendidos sempre no fim
 }
 function card(p){
@@ -652,7 +660,8 @@ function renderGrid(){
   $("#grid").innerHTML=l.length?l.slice(0,st.limit).map(card).join(""):`<p class="empty">Nada por aqui agora. Tem um desses parado em casa? <a href="#vender">A gente vende para você</a>.</p>`;
   document.querySelector(".more").hidden=!st.cat||l.length<=st.limit;
 }
-function resetSearch(){st.sub=null;st.group=null;st.q="";$("#q").value="";$("#qClear").hidden=true;$("#qf").hidden=true}
+function clearSearch(){st.sub=null;st.q="";$("#q").value="";$("#qClear").hidden=true;$("#qf").hidden=true}
+function resetSearch(){st.sec=null;st.sub=null;st.q="";$("#q").value="";$("#qClear").hidden=true;$("#qf").hidden=true}
 function setCat(id){
   st.cat=st.cat===id?null:id;st.limit=12;resetSearch();
   renderNav();renderGrid();
@@ -670,12 +679,14 @@ const qf=$("#qf"),qi=$("#q");
 const showQuick=()=>{qf.hidden=!!qi.value.trim()||!qf.innerHTML};
 qi.addEventListener("focus",showQuick);
 qi.addEventListener("click",showQuick);
-qi.addEventListener("input",()=>{st.sub=null;st.group=null;st.q=qi.value;st.limit=12;$("#qClear").hidden=!qi.value;showQuick();renderGrid()});
+qi.addEventListener("input",()=>{st.sub=null;st.q=qi.value;st.limit=12;$("#qClear").hidden=!qi.value;showQuick();renderGrid()});
 qi.addEventListener("keydown",e=>{if(e.key==="Enter"){qi.blur();qf.hidden=true}});
 qf.addEventListener("mousedown",e=>e.preventDefault()); // não fecha o teclado/painel antes do toque
 qf.addEventListener("click",e=>{const b=e.target.closest("[data-sub]");if(!b)return;
-  st.sub=b.dataset.sub;st.group=b.dataset.group;st.q="";st.limit=12;qi.value=b.dataset.sub;$("#qClear").hidden=false;qf.hidden=true;qi.blur();renderGrid()});
-$("#qClear").addEventListener("click",()=>{resetSearch();renderGrid();qi.focus()});
+  st.sub=b.dataset.sub;if(b.dataset.group)st.sec=b.dataset.group;st.q="";renderNav();st.limit=12;qi.value=b.dataset.sub;$("#qClear").hidden=false;qf.hidden=true;qi.blur();renderGrid()});
+$("#qClear").addEventListener("click",()=>{clearSearch();renderGrid();qi.focus()});
+$("#secs").addEventListener("click",e=>{const b=e.target.closest("[data-sec]");if(!b)return;
+  st.sec=st.sec===b.dataset.sec?null:b.dataset.sec;clearSearch();st.limit=12;renderNav();renderGrid()});
 document.addEventListener("click",e=>{if(!$("#finder").contains(e.target))qf.hidden=true});
 $("#moreBtn").addEventListener("click",()=>{st.limit+=12;renderGrid()});
 $("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openProduct(c.dataset.id)});
