@@ -10,14 +10,30 @@
    "name": "Natação",
    "groups": [
     {
-     "id": "natacao",
-     "name": "Natação",
+     "id": "neoprene",
+     "name": "Neoprene",
      "subs": [
-      "Neoprene",
-      "Óculos",
-      "Toucas",
-      "Sungas",
-      "Acessórios"
+      "Neoprene"
+     ]
+    },
+    {
+     "id": "vestuario",
+     "name": "Vestuário",
+     "subs": [
+      "Sunga",
+      "Maiô de natação"
+     ]
+    },
+    {
+     "id": "acessorios",
+     "name": "Acessórios",
+     "subs": [
+      "Óculos de natação",
+      "Touca",
+      "Palmar",
+      "Nadadeira",
+      "Toalha / roupão",
+      "Boia sinalizadora"
      ]
     }
    ]
@@ -28,7 +44,7 @@
    "groups": [
     {
      "id": "bikes",
-     "name": "Bikes",
+     "name": "Bicicletas",
      "subs": [
       "Road (estrada)",
       "Triathlon (TT)",
@@ -39,32 +55,59 @@
      "id": "componentes",
      "name": "Componentes",
      "subs": [
-      "Rodas",
-      "Pneus",
-      "Grupos",
-      "Transmissão",
-      "Potência",
+      "Baterias e eletrônicos",
+      "Câmbio dianteiro",
+      "Câmbio traseiro",
+      "Cassetes",
+      "Coroas",
+      "Correntes",
+      "Discos de freio",
+      "Fitas de guidão",
       "Freios",
-      "Cockpit",
-      "Selins",
+      "Grupos",
+      "Guidões / cockpit",
+      "Manetes",
+      "Medidores de potência",
+      "Movimentos centrais",
+      "Movimento de direção e espaçadores",
+      "Pastilhas",
       "Pedais",
-      "Hidratação",
+      "Pedivelas",
+      "Pneus",
+      "Frameset",
+      "Rodas",
+      "Selins"
+     ]
+    },
+    {
+     "id": "acessorios",
+     "name": "Acessórios",
+     "subs": [
+      "Cintas cardíacas",
       "Ferramentas",
-      "Rolos",
-      "CeramicSpeed",
-      "Mala bike"
+      "Garrafas",
+      "GPS",
+      "Lubrificantes e graxas",
+      "Mala bike",
+      "Faróis e sinalizadores",
+      "Produtos de limpeza",
+      "Refis de CO2",
+      "Remendos",
+      "Rolo de treino",
+      "Suportes de garrafa",
+      "Transbike",
+      "Tubeless"
      ]
     },
     {
      "id": "vestuario",
      "name": "Vestuário",
      "subs": [
-      "Capacetes",
-      "Sapatilhas",
-      "Macaquinhos",
-      "Bretelles",
-      "Jerseys",
-      "Jaquetas",
+      "Capacete",
+      "Sapatilha",
+      "Macaquinho",
+      "Bretelle",
+      "Jersey",
       "Óculos"
      ]
     }
@@ -79,9 +122,15 @@
      "name": "Corrida",
      "subs": [
       "Tênis",
-      "Meias",
-      "Shorts",
-      "Elásticos"
+      "Shorts masculino",
+      "Shorts feminino",
+      "Meia de corrida",
+      "Boné / bucket",
+      "Cadarço elástico",
+      "Canelito e manguito",
+      "Óculos de sol",
+      "Cinto porta-número",
+      "Garrafa de silicone"
      ]
     }
    ]
@@ -126,9 +175,9 @@
    "id": "ceramicspeed",
    "name": "CeramicSpeed",
    "brand": true,
-   "matchSub": "CeramicSpeed",
    "groups": [],
-   "logo": "assets/brands/ceramicspeed.png"
+   "logo": "assets/brands/ceramicspeed.png",
+   "matchBrand": "CeramicSpeed"
   },
   {
    "id": "shimano",

@@ -42,13 +42,23 @@ window.CAVE_ICONS = {
 };
 // Desenho padrão por subcategoria, para produtos novos cadastrados no admin.
 window.CAVE_SUB_ICON = {
-  "Neoprene":"wetsuit","Sungas":"shorts","Óculos":"goggles","Toucas":"cap","Acessórios":"buoy",
+  // Natação
+  "Neoprene":"wetsuit","Sunga":"shorts","Maiô de natação":"sleeveless","Óculos de natação":"goggles","Touca":"cap",
+  "Palmar":"box","Nadadeira":"box","Toalha / roupão":"jacket","Boia sinalizadora":"buoy",
+  // Bicicleta
   "Road (estrada)":"bike","Triathlon (TT)":"tt","Gravel":"bike",
-  "Rodas":"spoke","Pneus":"wheel","Grupos":"gear","Transmissão":"cassette","Potência":"crank","Freios":"disc",
-  "Cockpit":"bar","Selins":"saddle","Pedais":"pedal","Hidratação":"bottle","Ferramentas":"pump","Rolos":"trainer",
-  "CeramicSpeed":"gear","Mala bike":"bag",
-  "Capacetes":"helmet","Sapatilhas":"cleat","Macaquinhos":"sleeveless","Bretelles":"shorts","Jerseys":"jersey","Jaquetas":"jacket",
-  "Tênis":"shoe","Meias":"sock","Shorts":"shorts","Elásticos":"lace",
+  "Baterias e eletrônicos":"box","Câmbio dianteiro":"gear","Câmbio traseiro":"gear","Cassetes":"cassette","Coroas":"gear",
+  "Correntes":"chain","Discos de freio":"disc","Fitas de guidão":"bar","Freios":"disc","Grupos":"gear","Guidões / cockpit":"bar",
+  "Manetes":"bar","Medidores de potência":"crank","Movimentos centrais":"cassette","Movimento de direção e espaçadores":"box",
+  "Pastilhas":"pad","Pedais":"pedal","Pedivelas":"crank","Pneus":"wheel","Frameset":"tt","Rodas":"spoke","Selins":"saddle",
+  "Cintas cardíacas":"strap","Ferramentas":"pump","Garrafas":"bottle","GPS":"computer","Lubrificantes e graxas":"bottle",
+  "Mala bike":"bag","Faróis e sinalizadores":"radar","Produtos de limpeza":"bottle","Refis de CO2":"co2","Remendos":"box",
+  "Rolo de treino":"trainer","Suportes de garrafa":"bottle","Transbike":"bike","Tubeless":"wheel",
+  "Capacete":"helmet","Sapatilha":"cleat","Macaquinho":"sleeveless","Bretelle":"shorts","Jersey":"jersey","Óculos":"glasses",
+  // Corrida
+  "Tênis":"shoe","Shorts masculino":"shorts","Shorts feminino":"shorts","Meia de corrida":"sock","Boné / bucket":"cap",
+  "Cadarço elástico":"lace","Canelito e manguito":"sock","Óculos de sol":"glasses","Cinto porta-número":"strap","Garrafa de silicone":"bottle",
+  // Marcas
   "Relógios":"watch","Ciclocomputadores":"computer","Cinta cardíaca":"strap","Varia":"radar","Carregador":"plug",
 };
 window.caveIcon = function(p){ return p.icon || window.CAVE_SUB_ICON[p.sub] || "box"; };

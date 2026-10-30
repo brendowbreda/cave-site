@@ -620,8 +620,13 @@ function renderNav(){
   if(!c)return;
   $("#q").placeholder=`Buscar em ${c.name}`;
   // filtros rápidos: um bloco por seção (Bicicleta tem Bikes, Componentes e Vestuário)
+  // uma seção com um tipo só e o mesmo nome (ex.: Neoprene) vira um botão sem título
   const many=c.groups.length>1;
-  $("#qf").innerHTML=c.groups.map(g=>`${many?`<p class="eyebrow">${esc(g.name)}</p>`:""}<div class="row">${g.subs.map(x=>`<button type="button" data-sub="${esc(x)}" data-group="${g.id}">${esc(x)}</button>`).join("")}</div>`).join("");
+  const chip=(x,g)=>`<button type="button" data-sub="${esc(x)}" data-group="${g.id}">${esc(x)}</button>`;
+  $("#qf").innerHTML=c.groups.map(g=>{
+    const solo=g.subs.length===1&&g.subs[0]===g.name;
+    return `${many&&!solo?`<p class="eyebrow">${esc(g.name)}</p>`:""}<div class="row">${g.subs.map(x=>chip(x,g)).join("")}</div>`;
+  }).join("");
   if(!c.groups.length){
     // marca sem seções: filtros rápidos com os tipos que existem nos produtos dela
     const subs=[...new Set(P.filter(inView).map(p=>p.sub))];
