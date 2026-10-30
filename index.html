@@ -84,8 +84,9 @@ section,#loja{scroll-margin-top:68px}
 .hero .lede span+span{margin-top:0}
 .hero .lede b{color:var(--ink);font-weight:600}
 .choose{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:32px}
-.choose a{display:flex;align-items:flex-end;min-height:112px;padding:14px;border-radius:var(--r);border:2px solid var(--buy);color:var(--buy);text-decoration:none;font-size:clamp(17px,5vw,24px);font-weight:600;letter-spacing:-.03em;line-height:1.05}
-.choose a.buy-it{background:var(--buy);color:var(--buy-ink)}
+.choose a{display:flex;align-items:flex-end;min-height:112px;padding:14px;border-radius:var(--r);border:2px solid var(--ink);color:var(--ink);text-decoration:none;font-size:clamp(17px,5vw,24px);transition:background .15s ease,border-color .15s ease,color .15s ease;font-weight:600;letter-spacing:-.03em;line-height:1.05}
+/* O botão escolhido fica verde; os outros, contorno branco */
+.choose a.on{background:var(--buy);border-color:var(--buy);color:var(--buy-ink)}
 
 .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 /* Cartões de modalidade: desenho no centro, nome embaixo */
@@ -389,7 +390,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
     <h1><span>Sua próxima bike.</span><span class="thin">Sua melhor venda.</span></h1>
     <p class="lede"><span>Equipamentos de endurance, <b>novos</b> e <b>usados</b>,</span> <span>selecionados e revisados por quem vive o esporte.</span></p>
     <div class="choose">
-      <a class="buy-it" href="#loja">Quero<br>comprar</a>
+      <a class="on" href="#loja">Quero<br>comprar</a>
       <a href="#vender">Quero<br>vender</a>
       <a href="#locacao">Quero<br>alugar</a>
     </div>
@@ -869,6 +870,9 @@ function renderConfig(){
   const waHome=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
   $("#footWa").href=$("#topWa").href=$("#heroWa").href=waHome;
 }
+
+// ---------- Botões Quero comprar / vender / alugar
+document.querySelector(".choose").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;document.querySelectorAll(".choose a").forEach(x=>x.classList.toggle("on",x===a))});
 
 // ---------- Página Quero vender
 function route(){
