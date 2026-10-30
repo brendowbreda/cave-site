@@ -897,7 +897,7 @@ $("#sellForm").addEventListener("submit",e=>{
 function renderConfig(){
   $("#fitPrices").innerHTML=CFG.fit.map((f,i)=>`<div class="price-card${i===CFG.fit.length-1?" feat":""}">
     <p class="eyebrow">${esc(f.name)}</p><div class="v">${f.price?brl(f.price):"Sob consulta"}</div><p>${esc(f.desc)}</p>
-    <a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.fit,`Olá, Guilherme! Quero agendar um Bike Fit: ${f.name}${f.price?` (${brl(f.price)})`:""}.`)}">Agendar pelo WhatsApp</a></div>`).join("");
+    <a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.fit,`Olá, Guilherme! Gostaria de agendar meu Bike Fit: ${f.name}${f.price?` (${brl(f.price)})`:""}. Quais horários você tem disponíveis?`)}">Agendar Bike Fit</a></div>`).join("");
   $("#rent").innerHTML=CFG.rentals.map(r=>`<a class="rent-item" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Quero alugar: ${r.name}. Prova/data: `)}"><div class="ph"><span class="grain"></span>${svg(r.icon)}</div><div><b>${esc(r.name)}</b><p>${esc(r.desc)}</p><span class="tag">${r.price?esc(r.price):"Sob consulta"} →</span></div></a>`).join("");
   const waHome=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
   $("#footWa").href=$("#topWa").href=$("#heroWa").href=waHome;
