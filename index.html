@@ -669,8 +669,14 @@ function resetSearch(){st.sub=null;st.group=null;st.q="";$("#q").value="";$("#qC
 function setCat(id){
   st.cat=st.cat===id?null:id;st.limit=12;resetSearch();
   renderNav();renderGrid();
+  if(st.cat)goToProducts();
 }
-function openView(id){st.cat=null;setCat(id);$("#loja").scrollIntoView({behavior:"smooth"})}
+// Desce até a busca e os produtos, descontando o topo fixo
+function goToProducts(){
+  const top=$("#viewBar").getBoundingClientRect().top+scrollY-76;
+  scrollTo({top,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}
+function openView(id){st.cat=null;setCat(id)}
 $("#modes").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
 $("#brands").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
 const qf=$("#qf"),qi=$("#q");
