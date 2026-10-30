@@ -166,7 +166,7 @@ section,#loja{scroll-margin-top:68px}
 .latest-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 16px}
 .latest-title{font-size:clamp(24px,6.4vw,36px);font-weight:600;letter-spacing:-.035em;margin:0}
 /* Selo "Atualizado": ponto verde pulsando, mostra que a loja está viva */
-.live{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap;flex:none}
+.live{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--buy) 45%,transparent);background:var(--buy-soft);font-size:12px;font-weight:600;color:var(--buy);white-space:nowrap;flex:none}
 .live i{position:relative;width:7px;height:7px;border-radius:50%;background:var(--buy)}
 .live i::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--buy);animation:pulse 1.8s ease-out infinite}
 @keyframes pulse{from{transform:scale(1);opacity:.7}to{transform:scale(3);opacity:0}}
@@ -459,7 +459,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
           <div class="qf" id="qf" hidden></div>
         </div>
       </div>
-      <div class="latest-head" id="latestTitle"><h3 class="latest-title">Últimos anúncios</h3><span class="live" id="live" hidden><i aria-hidden="true"></i><span id="liveTxt">Atualizado</span></span></div>
+      <div class="latest-head" id="latestTitle"><h3 class="latest-title">Últimos anúncios</h3><span class="live"><i aria-hidden="true"></i>Atualizado</span></div>
       <div class="grid" id="grid"></div>
       <div class="more" hidden><button class="btn" id="moreBtn">Ver mais</button></div>
     </div>
@@ -926,25 +926,11 @@ function route(){
 }
 addEventListener("hashchange",route);route();
 
-// Quando a loja mudou pela última vez: data do produto mais recente ou do arquivo
-function showUpdated(list,lastMod){
-  const times=list.flatMap(x=>[x.updatedAt,x.createdAt,x.soldAt]).filter(Boolean).map(t=>+new Date(t));
-  if(lastMod)times.push(+new Date(lastMod));
-  const t=Math.max(...times.filter(n=>!isNaN(n)));
-  if(!isFinite(t))return;
-  const min=Math.max(0,Math.round((Date.now()-t)/6e4));
-  const d=new Date(t),today=new Date();const days=Math.round((new Date(today.toDateString())-new Date(d.toDateString()))/864e5);
-  const txt=min<2?"Atualizado agora":min<60?`Atualizado há ${min} min`:days===0?`Atualizado há ${Math.round(min/60)} h`:days===1?"Atualizado ontem":days<7?`Atualizado há ${days} dias`:`Atualizado em ${d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})}`;
-  $("#liveTxt").textContent=txt;$("#live").hidden=false;
-}
-
 async function load(){
   const v="?v="+Date.now();
   try{
-    const [c,pr]=await Promise.all([fetch("data/config.json"+v).then(r=>r.json()),fetch("data/products.json"+v)]);
-    const p=await pr.json();
+    const [c,p]=await Promise.all([fetch("data/config.json"+v).then(r=>r.json()),fetch("data/products.json"+v).then(r=>r.json())]);
     CFG=c;P=(p.products||[]).filter(x=>!x.hidden);
-    showUpdated(p.products||[],pr.headers.get("last-modified"));
   }catch(e){$("#grid").innerHTML=`<p class="empty">Não foi possível carregar os produtos. Atualize a página.</p>`;return}
   renderConfig();renderNav();renderGrid();
 }
