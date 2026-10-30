@@ -106,7 +106,7 @@ section,#loja{scroll-margin-top:68px}
 .hero .lede .by{margin-top:8px;font-size:.85em;color:var(--ink);font-weight:500}
 .hero .lede .by::before{content:"— "}
 /* Computador: a frase inteira numa linha; no celular continua em duas */
-@media (min-width:720px){.hero .lede{max-width:none}.hero .lede span:not(.by){display:inline}}
+@media (min-width:720px){.hero .lede{max-width:none;font-size:clamp(15px,1.5vw,19px)}.hero .lede span:not(.by){display:inline}}
 .choose{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:32px}
 .choose a{display:flex;align-items:flex-end;min-height:112px;padding:14px;border-radius:var(--r);border:2px solid var(--ink);color:var(--ink);text-decoration:none;font-size:clamp(17px,5vw,24px);transition:background .15s ease,border-color .15s ease,color .15s ease;font-weight:600;letter-spacing:-.03em;line-height:1.05}
 /* O botão escolhido fica verde; os outros, contorno branco */
@@ -428,7 +428,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
 <main id="inicio">
   <div class="wrap hero">
     <h1><span>Sua próxima compra.</span><span class="thin">Sua melhor venda.</span></h1>
-    <p class="lede"><span>“Equipamentos de endurance, <b>novos</b> e <b>usados</b>,</span> <span>selecionados e revisados por quem vive o esporte.”</span> <span class="by">Marcelo Leal (Tchello)</span></p>
+    <p class="lede"><span>Equipamentos de endurance, <b>novos</b> e <b>usados</b>,</span> <span>selecionados e revisados por quem vive o esporte.</span> <span class="by">Marcelo Leal (Tchello)</span></p>
     <div class="choose">
       <a class="on" href="#loja">Quero<br>comprar</a>
       <a href="#vender">Quero<br>vender</a>
