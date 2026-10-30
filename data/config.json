@@ -145,27 +145,27 @@
  ],
  "rentals": [
   {
-   "icon": "tt",
-   "name": "Bike de triathlon / TT",
-   "desc": "Tamanhos P, M e G. Ajuste de posição antes da prova.",
-   "price": ""
-  },
-  {
    "icon": "bike",
    "name": "Bike road",
    "desc": "Para provas de estrada e viagens de treino.",
    "price": ""
   },
   {
+   "icon": "tt",
+   "name": "Bike de triathlon / TT",
+   "desc": "Com ajuste de posição antes da prova.",
+   "price": ""
+  },
+  {
    "icon": "disc",
-   "name": "Roda fechada traseira",
-   "desc": "Disco para TT e triathlon. Shimano/SRAM.",
+   "name": "Roda fechada",
+   "desc": "Com ou sem disco, para triathlon e TT. Shimano ou SRAM.",
    "price": ""
   },
   {
    "icon": "spoke",
    "name": "Roda de perfil alto dianteira",
-   "desc": "Par ideal para a roda fechada.",
+   "desc": "O par ideal para a roda traseira fechada.",
    "price": ""
   }
  ]
