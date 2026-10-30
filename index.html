@@ -69,7 +69,10 @@ section{padding-block:56px}
 .icon-btn svg{width:20px;height:20px}
 
 .hero{padding-block:28px 8px}
-.hero-logo{width:150px;height:auto;margin-bottom:40px}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:36px}
+.hero-logo{width:96px;height:auto}
+.hero-wa{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:999px;background:var(--buy);color:var(--buy-ink);font-size:14px;font-weight:600;text-decoration:none}
+.hero-wa svg{width:17px;height:17px}
 .hero h1{font-size:clamp(52px,14.5vw,124px);font-weight:600;line-height:.95;letter-spacing:-.055em}
 .hero h1 span{display:block}
 .hero h1 .thin{font-weight:300;color:var(--muted)}
@@ -331,7 +334,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
   .top nav{display:flex}
   .tabbar{display:none}
   body{padding-bottom:0}
-  .hero-logo{display:none}
+  .hero-top{display:none}
   .choose{max-width:620px}
   section,#loja{scroll-margin-top:64px}
   .toast{bottom:24px}
@@ -353,7 +356,10 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
 
 <main id="inicio">
   <div class="wrap hero">
-    <img class="hero-logo" src="assets/logo.png" alt="Cave Floripa" width="150" height="49">
+    <div class="hero-top">
+      <img class="hero-logo" src="assets/logo.png" alt="Cave Floripa" width="96" height="31">
+      <a class="hero-wa" id="heroWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.6-.1 1.1Z"/></svg>WhatsApp</a>
+    </div>
     <h1><span>Compre bem.</span><span class="thin">Venda melhor.</span></h1>
     <p class="lede">Equipamento de endurance novo e usado, escolhido e revisado por quem compete.</p>
     <div class="choose">
@@ -837,7 +843,7 @@ function renderConfig(){
   $("#rent").innerHTML=CFG.rentals.map(r=>`<a class="rent-item" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Quero alugar: ${r.name}. Prova/data: `)}"><div class="ph"><span class="grain"></span>${svg(r.icon)}</div><div><b>${esc(r.name)}</b><p>${esc(r.desc)}</p><span class="tag">${r.price?esc(r.price):"Sob consulta"} →</span></div></a>`).join("");
   $("#floorTxt").textContent=`Oferta abaixo de ${Math.round((CFG.offerFloor||.75)*100)}% do preço não é enviada.`;
   $("#tabWa").href=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
-  $("#footWa").href=$("#tabWa").href;$("#topWa").href=$("#tabWa").href;
+  $("#footWa").href=$("#tabWa").href;$("#topWa").href=$("#heroWa").href=$("#tabWa").href;
 }
 
 // ---------- Página Quero vender
