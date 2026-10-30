@@ -151,20 +151,19 @@ section,#loja{scroll-margin-top:68px}
 .search input::-webkit-search-cancel-button{display:none}
 .search .clear{width:40px;height:40px;border-radius:50%;border:0;background:var(--tile-2);font-size:18px;line-height:1;flex:none}
 /* Seções da modalidade em quadrados (ex.: Tênis de corrida, Roupas, Acessórios) */
-.secs{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px;margin-top:12px}
-.sec-tile{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-height:96px;padding:12px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-align:left;font-size:14px;font-weight:600;line-height:1.2;letter-spacing:-.01em;min-width:0}
-.sec-tile svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
-.sec-tile.open{border-color:var(--ink)}
-.sec-tile[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-@media (min-width:720px){.secs{grid-template-columns:repeat(var(--nd,3),minmax(0,1fr))}}
-/* Painel da seção: lista de tipos em colunas, como menu de loja (abre ao tocar ou passar o mouse) */
-.sec-panel{margin-top:8px;padding:8px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px}
-.sec-panel h4{grid-column:1/-1;margin:6px 8px 4px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.sec-panel button{display:block;width:100%;text-align:left;border:0;background:none;padding:10px 8px;border-radius:8px;font-size:14px;line-height:1.25;color:var(--ink)}
-.sec-panel button:hover{background:var(--tile-2)}
-.sec-panel button[aria-pressed="true"]{color:var(--buy);font-weight:600}
-.sec-panel button.all{font-weight:600}
-@media (min-width:720px){.sec-panel{grid-template-columns:repeat(4,minmax(0,1fr));padding:12px}}
+/* Seções em lista (sanfona): toca na seção e todas as opções abrem embaixo, sem arrastar */
+.secs{display:grid;margin-top:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.acc+.acc{border-top:1px solid var(--line)}
+.acc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:0 16px;border:0;background:none;text-align:left;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.acc-head small{display:block;font-size:13px;font-weight:500;color:var(--buy);margin-top:2px}
+.acc-head svg{width:18px;height:18px;flex:none;color:var(--muted);transition:transform .2s ease}
+.acc.open .acc-head svg{transform:rotate(180deg)}
+.acc-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px;padding:0 8px 12px}
+.acc-body button{display:block;width:100%;text-align:left;border:0;background:none;padding:10px 8px;border-radius:8px;font-size:14px;line-height:1.25}
+.acc-body button:hover{background:var(--tile-2)}
+.acc-body button[aria-pressed="true"]{color:var(--buy);font-weight:600}
+.acc-body button.all{font-weight:600}
+@media (min-width:720px){.acc-body{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .qf{display:grid;gap:14px;margin-top:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
 .qf .eyebrow{margin-bottom:-4px}
 .qf .row{display:flex;flex-wrap:wrap;gap:8px}
@@ -464,7 +463,6 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
         <div class="finder" id="finder">
           <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="qClear" hidden aria-label="Limpar busca">×</button></label>
           <div class="secs" id="secs" role="group" aria-label="Seções" hidden></div>
-          <div class="sec-panel" id="subRow" role="group" aria-label="Tipos" hidden></div>
           <div class="qf" id="qf" hidden></div>
         </div>
       </div>
@@ -643,11 +641,7 @@ function renderNav(){
   const many=c.groups.length>1;
   const chip=(x,g)=>`<button type="button" data-sub="${esc(x)}" data-group="${g.id}">${esc(x)}</button>`;
   // botões de seção logo abaixo da busca
-  const n=c.groups.length;
-  $("#secs").hidden=n<2;
-  $("#secs").style.setProperty("--n",n===4?2:Math.min(n,3));$("#secs").style.setProperty("--nd",Math.min(n,4));
-  $("#secs").innerHTML=n>1?c.groups.map(g=>`<button class="sec-tile" type="button" data-sec="${g.id}" aria-pressed="${st.sec===g.id}">${svg(CAVE_SUB_ICON[g.subs[0]]||"box")}<span>${esc(g.name)}</span></button>`).join(""):"";
-  renderPanel();
+  renderSecs();
   const shown=st.sec?c.groups.filter(g=>g.id===st.sec):c.groups;
   $("#qf").innerHTML=shown.map(g=>{
     if(st.sec&&g.subs.length===1&&g.subs[0]===g.name)return "";
@@ -660,15 +654,18 @@ function renderNav(){
     $("#qf").innerHTML=subs.length>1?`<div class="row">${subs.map(x=>`<button type="button" data-sub="${esc(x)}" data-group="">${esc(x)}</button>`).join("")}</div>`:"";
   }
 }
-// Painel com os tipos da seção aberta (pelo mouse) ou escolhida (pelo toque)
-function renderPanel(){
+// Lista de seções: cada uma abre e mostra todas as opções (Ver todos + tipos)
+const CHEV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+function renderSecs(){
   const c=curCat();if(!c)return;
-  const gid=st.open||st.sec,sg=c.groups.find(g=>g.id===gid);
-  const list=sg&&!(sg.subs.length===1&&sg.subs[0]===sg.name)?sg.subs:[];
-  const sel=st.sec===gid?st.sub:undefined;
-  $("#subRow").hidden=!list.length;
-  $("#subRow").innerHTML=list.length?`<h4>${esc(sg.name)}</h4><button type="button" class="all" data-row="" data-g="${sg.id}" aria-pressed="${st.sec===gid&&!st.sub}">Ver todos</button>`+list.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${sg.id}" aria-pressed="${sel===x}">${esc(x)}</button>`).join(""):"";
-  document.querySelectorAll("#secs .sec-tile").forEach(t=>t.classList.toggle("open",t.dataset.sec===st.open));
+  const n=c.groups.length;
+  $("#secs").hidden=n<2;
+  $("#secs").innerHTML=n<2?"":c.groups.map(g=>{
+    const solo=g.subs.length===1&&g.subs[0]===g.name,open=st.open===g.id,active=st.sec===g.id;
+    const note=active?`<small>${esc(st.sub||"Todos")}</small>`:"";
+    const body=open&&!solo?`<div class="acc-body"><button type="button" class="all" data-row="" data-g="${g.id}" aria-pressed="${active&&!st.sub}">Ver todos</button>${g.subs.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${g.id}" aria-pressed="${active&&st.sub===x}">${esc(x)}</button>`).join("")}</div>`:"";
+    return `<div class="acc${open?" open":""}"><button class="acc-head" type="button" data-acc="${g.id}" aria-expanded="${open}"><span>${esc(g.name)}${note}</span>${solo?"":CHEV}</button>${body}</div>`;
+  }).join("");
 }
 function filtered(){
   const q=norm(st.q);
@@ -705,7 +702,7 @@ function openView(id){st.cat=null;setCat(id)}
 $("#modes").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
 $("#brands").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(b)setCat(b.dataset.cat)});
 const qf=$("#qf"),qi=$("#q");
-const showQuick=()=>{qf.hidden=!!st.sec||!!qi.value.trim()||!qf.innerHTML}; // com seção escolhida, os tipos já aparecem embaixo
+const showQuick=()=>{const c=curCat();qf.hidden=!!(c&&c.groups.length>1)||!!qi.value.trim()||!qf.innerHTML}; // com seção escolhida, os tipos já aparecem embaixo
 qi.addEventListener("focus",showQuick);
 qi.addEventListener("click",showQuick);
 qi.addEventListener("input",()=>{st.sub=null;st.q=qi.value;st.limit=12;$("#qClear").hidden=!qi.value;showQuick();renderGrid()});
@@ -716,16 +713,18 @@ qf.addEventListener("click",e=>{const b=e.target.closest("[data-sub]");if(!b)ret
   if(b.dataset.group){st.sec=b.dataset.group;qi.value="";$("#qClear").hidden=true}else{qi.value=b.dataset.sub;$("#qClear").hidden=false}
   renderNav();renderGrid()});
 $("#qClear").addEventListener("click",()=>{clearSearch();renderGrid();qi.focus()});
-$("#subRow").addEventListener("click",e=>{const b=e.target.closest("[data-row]");if(!b)return;
-  st.sec=b.dataset.g;st.sub=b.dataset.row||null;st.open=null;st.q="";qi.value="";$("#qClear").hidden=true;st.limit=12;renderNav();renderGrid()});
-// Computador: passar o mouse num quadrado já abre as opções dele
-const canHover=matchMedia("(hover:hover) and (pointer:fine)").matches;
-if(canHover){
-  $("#secs").addEventListener("mouseover",e=>{const t=e.target.closest("[data-sec]");if(t&&st.open!==t.dataset.sec){st.open=t.dataset.sec;renderPanel()}});
-  $("#finder").addEventListener("mouseleave",()=>{if(st.open){st.open=null;renderPanel()}});
-}
-$("#secs").addEventListener("click",e=>{const b=e.target.closest("[data-sec]");if(!b)return;
-  st.sec=st.sec===b.dataset.sec&&!st.open?null:b.dataset.sec;st.open=null;clearSearch();st.limit=12;renderNav();renderGrid()});
+$("#secs").addEventListener("click",e=>{
+  const h=e.target.closest("[data-acc]"),it=e.target.closest("[data-row]");
+  if(h){
+    const c=curCat(),g=c.groups.find(x=>x.id===h.dataset.acc);
+    if(g.subs.length===1&&g.subs[0]===g.name){ // seção de um tipo só (ex.: Neoprene): filtra direto
+      clearSearch();st.sec=st.sec===g.id?null:g.id;st.open=null;st.limit=12;renderSecs();renderGrid();return;
+    }
+    st.open=st.open===g.id?null:g.id;renderSecs();return;
+  }
+  if(it){clearSearch();st.sec=it.dataset.g;st.sub=it.dataset.row||null;st.open=null;st.limit=12;renderSecs();renderGrid();
+    scrollTo({top:$("#grid").getBoundingClientRect().top+scrollY-140,behavior:"smooth"})}
+});
 document.addEventListener("click",e=>{if(!$("#finder").contains(e.target))qf.hidden=true});
 $("#moreBtn").addEventListener("click",()=>{st.limit+=12;renderGrid()});
 $("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openProduct(c.dataset.id)});
