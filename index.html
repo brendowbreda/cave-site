@@ -62,6 +62,7 @@ p{margin:0}
 section{padding-block:56px}
 .sec-head{display:grid;gap:12px;margin-bottom:28px}
 .sec-head p{color:var(--muted);max-width:60ch}
+@media (max-width:719px){#loja .sec-head p{font-size:clamp(11px,3.55vw,16px);white-space:nowrap}}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;font-weight:600;font-size:16px;text-decoration:none;transition:transform .15s ease}
 .btn:active{transform:scale(.98)}
@@ -94,7 +95,7 @@ section,#loja{scroll-margin-top:68px}
 .hero-logo{width:96px;height:auto}
 .hero-wa{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:999px;background:var(--buy);color:var(--buy-ink);font-size:14px;font-weight:600;text-decoration:none}
 .hero-wa svg{width:17px;height:17px}
-.hero h1{font-size:clamp(34px,10.2vw,124px);white-space:nowrap;font-weight:600;line-height:.95;letter-spacing:-.055em}
+.hero h1{font-size:clamp(30px,9.2vw,124px);white-space:nowrap;font-weight:600;line-height:.95;letter-spacing:-.055em}
 .hero h1 span{display:block}
 .hero h1 .thin{font-weight:300;color:var(--muted)}
 .hero .lede{margin-top:20px;font-size:18px;max-width:62ch;color:var(--muted)}
@@ -102,6 +103,8 @@ section,#loja{scroll-margin-top:68px}
 @media (max-width:719px){.hero .lede{font-size:clamp(12px,3.65vw,18px);line-height:1.5}}
 .hero .lede span+span{margin-top:0}
 .hero .lede b{color:var(--ink);font-weight:600}
+.hero .lede .by{margin-top:8px;font-size:.85em;color:var(--ink);font-weight:500}
+.hero .lede .by::before{content:"— "}
 .choose{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:32px}
 .choose a{display:flex;align-items:flex-end;min-height:112px;padding:14px;border-radius:var(--r);border:2px solid var(--ink);color:var(--ink);text-decoration:none;font-size:clamp(17px,5vw,24px);transition:background .15s ease,border-color .15s ease,color .15s ease;font-weight:600;letter-spacing:-.03em;line-height:1.05}
 /* O botão escolhido fica verde; os outros, contorno branco */
@@ -407,8 +410,8 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
 
 <main id="inicio">
   <div class="wrap hero">
-    <h1><span>Sua próxima bike.</span><span class="thin">Sua melhor venda.</span></h1>
-    <p class="lede"><span>Equipamentos de endurance, <b>novos</b> e <b>usados</b>,</span> <span>selecionados e revisados por quem vive o esporte.</span></p>
+    <h1><span>Sua próxima compra.</span><span class="thin">Sua melhor venda.</span></h1>
+    <p class="lede"><span>“Equipamentos de endurance, <b>novos</b> e <b>usados</b>,</span> <span>selecionados e revisados por quem vive o esporte.”</span> <span class="by">Marcelo Leal (Tchello)</span></p>
     <div class="choose">
       <a class="on" href="#loja">Quero<br>comprar</a>
       <a href="#vender">Quero<br>vender</a>
@@ -419,8 +422,8 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
   <section id="loja">
     <div class="wrap">
       <div class="sec-head">
-        <h2>O que você está procurando?</h2>
-        <p>Toque na modalidade ou na marca e veja o que temos à venda.</p>
+        <h2>O que você procura?</h2>
+        <p>Toque na modalidade ou marca e veja nossos produtos.</p>
       </div>
       <div class="filters">
         <div class="modes" id="modes" role="group" aria-label="Modalidade"></div>
