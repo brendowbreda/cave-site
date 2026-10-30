@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
+<script>try{if(localStorage.getItem("cave-theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <title>Cave Floripa</title>
 <meta name="description" content="Cave Floripa: equipamento de endurance novo e usado, Bike Fit e locação para provas.">
 <link rel="icon" href="assets/favicon.png">
@@ -26,8 +27,19 @@
   --body:var(--display);
   --mono:var(--display);
   --r:14px; --tabbar:64px;
+  --logo-filter:none; --band-logo-filter:invert(1);
   color-scheme:dark;
   padding-top:env(safe-area-inset-top,0px);
+}
+/* Tema claro (botão sol/lua no topo) */
+:root[data-theme="light"]{
+  --bg:#FFFFFF; --surface:#F4F4F3; --tile:#EEEEED; --tile-2:#E2E2E0;
+  --ink:#0A0A0A; --muted:#5E5E5E; --line:#E0E0DE;
+  --buy:#169C46; --buy-ink:#FFFFFF; --buy-soft:#E2F4E8;
+  --info:#0D5266; --info-soft:#DDEBEF;
+  --warn:#8A5200; --warn-soft:#F6EBD8; --bad:#B42318; --bad-soft:#F8E1DE;
+  --logo-filter:invert(1); --band-logo-filter:none;
+  color-scheme:light;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -59,9 +71,16 @@ section{padding-block:56px}
 .btn[disabled]{opacity:.35;cursor:not-allowed}
 .btn svg{width:20px;height:20px;flex:none}
 
-.top{display:none;position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(0,0,0,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top{display:none;position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.logo img,.hero-logo,footer .flogo,.brand img{filter:var(--logo-filter)}
 .logo img{height:30px;width:auto}
+.top-actions{display:flex;align-items:center;gap:8px}
+.theme-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;flex:none}
+.theme-btn svg{width:18px;height:18px}
+.theme-btn .i-moon{display:none}
+:root[data-theme="light"] .theme-btn .i-sun{display:none}
+:root[data-theme="light"] .theme-btn .i-moon{display:block}
 .top nav{display:none;gap:22px;font-weight:500}
 .top nav a{text-decoration:none;color:var(--muted)}
 .top nav a:hover{color:var(--ink)}
@@ -69,7 +88,7 @@ section{padding-block:56px}
 .icon-btn svg{width:20px;height:20px}
 
 .hero{padding-block:32px 8px}
-.mtop{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.mtop{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;height:60px}
 section,#loja{scroll-margin-top:68px}
 .hero-logo{width:96px;height:auto}
@@ -145,11 +164,11 @@ section,#loja{scroll-margin-top:68px}
 .ph .grain{position:absolute;inset:0;background:radial-gradient(120% 80% at 80% 0%,var(--tile-2),transparent 60%)}
 .ph svg{position:relative;width:58%;height:auto;opacity:.85;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.badge{position:absolute;top:10px;left:10px;font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.7);color:var(--ink);z-index:2}
+.badge{position:absolute;top:10px;left:10px;font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.72);color:#fff;z-index:2}
 .badge.novo{background:var(--buy);color:var(--buy-ink)}
 .badge.hl{left:auto;right:10px;background:var(--ink);color:var(--bg)}
 .badge.sold{background:var(--ink);color:var(--bg)}
-.pics{position:absolute;bottom:10px;right:10px;font:500 10px/1 var(--mono);color:var(--muted);z-index:2;background:rgba(0,0,0,.6);padding:4px 6px;border-radius:4px}
+.pics{position:absolute;bottom:10px;right:10px;font:500 10px/1 var(--mono);color:#ddd;z-index:2;background:rgba(0,0,0,.6);padding:4px 6px;border-radius:4px}
 .card .t{font-weight:600;line-height:1.25;font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card .s{font-size:13px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .p{font:600 15px/1 var(--mono);letter-spacing:-.02em}
@@ -162,14 +181,14 @@ section,#loja{scroll-margin-top:68px}
 
 .band{background:var(--ink);color:var(--bg)}
 .band .wrap{padding-block:44px;display:grid;gap:18px}
-.band .eyebrow{color:#555}
+.band .eyebrow{color:color-mix(in srgb,var(--bg) 60%,var(--ink))}
 .band h2{font-size:clamp(40px,11vw,84px)}
-.band p{color:#333;max-width:46ch}
+.band p{color:color-mix(in srgb,var(--bg) 78%,var(--ink));max-width:46ch}
 .band .btn{border-color:var(--bg);color:var(--bg);justify-self:start}
-.band .specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #BBB}
+.band .specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid color-mix(in srgb,var(--bg) 30%,var(--ink))}
 .band .specs div{padding:12px 8px 0 0}
 .band .specs b{display:block;font:600 22px/1 var(--mono);letter-spacing:-.03em}
-.band .specs span{font-size:12px;color:#555}
+.band .specs span{font-size:12px;color:color-mix(in srgb,var(--bg) 60%,var(--ink))}
 
 .steps{display:grid;counter-reset:s;border-top:1px solid var(--ink)}
 .step{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
@@ -249,9 +268,9 @@ body.on-sell footer{display:none}
 footer{padding-block:48px 24px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 footer .wrap{display:grid;gap:18px}
 footer .flogo{width:min(320px,70%);height:auto}
-footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;justify-self:start}
+footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoration:none;justify-self:start}
 
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(10,10,10,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:0 max(8px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(8px,env(safe-area-inset-left,0px))}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:55;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:0 max(8px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(8px,env(safe-area-inset-left,0px))}
 .tabbar ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(4,1fr);max-width:560px;height:var(--tabbar)}
 .tabbar a{display:grid;place-items:center;align-content:center;gap:3px;height:100%;text-decoration:none;font-size:11px;font-weight:600;color:var(--muted)}
 .tabbar a svg{width:22px;height:22px}
@@ -373,7 +392,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
     <nav aria-label="Principal">
       <a href="#loja">Loja</a><a href="#vender">Vender</a><a href="#fit">Bike Fit</a><a href="#locacao">Locação</a><a href="#sobre">Sobre</a>
     </nav>
-    <a class="btn wa" id="topWa" target="_blank" rel="noopener" style="min-height:40px;font-size:14px">WhatsApp</a>
+    <div class="top-actions"><button class="theme-btn" type="button" aria-label="Mudar cor do site"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button><a class="btn wa" id="topWa" target="_blank" rel="noopener" style="min-height:40px;font-size:14px">WhatsApp</a></div>
   </div>
 </header>
 
@@ -381,7 +400,8 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
 <div class="mtop">
   <div class="wrap hero-top">
     <a href="#inicio" aria-label="Cave Floripa, início"><img class="hero-logo" src="assets/logo.png" alt="Cave Floripa" width="96" height="31"></a>
-    <a class="hero-wa" id="heroWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.6-.1 1.1Z"/></svg>WhatsApp</a>
+    <div class="top-actions"><button class="theme-btn" type="button" aria-label="Mudar cor do site"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+    <a class="hero-wa" id="heroWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.6-.1 1.1Z"/></svg>WhatsApp</a></div>
   </div>
 </div>
 
@@ -420,7 +440,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
   <div class="band" id="ceramicspeed">
     <div class="wrap">
       <p class="eyebrow">Destaque da casa</p>
-      <h2><img src="assets/brands/ceramicspeed.png" alt="CeramicSpeed" width="240" height="80" style="width:min(240px,64%);height:auto;filter:invert(1)"></h2>
+      <h2><img src="assets/brands/ceramicspeed.png" alt="CeramicSpeed" width="240" height="80" style="width:min(240px,64%);height:auto;filter:var(--band-logo-filter)"></h2>
       <p>Rolamentos cerâmicos, polias oversized e lubrificação de corrida. O ganho que sobra quando o treino já está feito.</p>
       <div class="specs">
         <div><b>OSPW</b><span>Polias oversized</span></div>
@@ -870,6 +890,16 @@ function renderConfig(){
   const waHome=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
   $("#footWa").href=$("#topWa").href=$("#heroWa").href=waHome;
 }
+
+// ---------- Tema claro / escuro
+function syncTheme(){const light=document.documentElement.dataset.theme==="light";document.querySelector('meta[name="theme-color"]').content=light?"#FFFFFF":"#000000";document.querySelectorAll(".theme-btn").forEach(b=>b.setAttribute("aria-label",light?"Mudar para fundo preto":"Mudar para fundo branco"))}
+document.querySelectorAll(".theme-btn").forEach(b=>b.addEventListener("click",()=>{
+  const light=document.documentElement.dataset.theme!=="light";
+  if(light)document.documentElement.dataset.theme="light";else delete document.documentElement.dataset.theme;
+  try{localStorage.setItem("cave-theme",light?"light":"dark")}catch(e){}
+  syncTheme();
+}));
+syncTheme();
 
 // ---------- Botões Quero comprar / vender / alugar
 document.querySelector(".choose").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;document.querySelectorAll(".choose a").forEach(x=>x.classList.toggle("on",x===a))});
