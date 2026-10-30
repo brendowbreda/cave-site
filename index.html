@@ -76,19 +76,27 @@ section{padding-block:56px}
 .hero .lede{margin-top:20px;font-size:18px;max-width:36ch;color:var(--muted)}
 .choose{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px}
 .choose a{display:grid;gap:28px;align-content:space-between;min-height:132px;padding:18px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-decoration:none}
-.choose a.buy-it{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.choose a.buy-it{background:var(--buy);color:var(--buy-ink);border-color:var(--buy)}
 .choose b{font-size:22px;font-weight:600;letter-spacing:-.03em;line-height:1.05}
 .choose span{font-size:13px;opacity:.65}
 .choose svg{width:22px;height:22px}
 
 .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.mode{display:grid;justify-items:start;gap:14px;padding:14px 12px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-align:left}
-.mode svg{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.mode b{font-size:16px;font-weight:600;letter-spacing:-.02em}
+/* Cartões de modalidade: desenho no centro, nome embaixo */
+.mode{position:relative;display:grid;grid-template-rows:1fr auto;justify-items:center;align-items:center;gap:6px;aspect-ratio:1/1.12;max-width:100%;padding:12px 8px 14px;border-radius:var(--r);border:1px solid var(--line);background:radial-gradient(90% 70% at 50% 40%,var(--tile-2),var(--surface) 70%);overflow:hidden}
+.mode svg{width:84%;height:auto;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.mode svg .fill{fill:currentColor;stroke:none}
+.mode b{font-size:15px;font-weight:600;letter-spacing:-.02em}
 .mode[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* Marcas: logo no centro */
 .brands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.brand{height:46px;border-radius:999px;border:1px solid var(--line);background:transparent;font-size:14px;font-weight:600;letter-spacing:-.01em}
-.brand[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.brand{display:grid;place-items:center;height:64px;padding:0 12px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
+.brand img{max-width:100%;max-height:22px;width:auto;height:auto;opacity:.9}
+.brand.b-wahoo img{max-height:20px}
+.brand.b-garmin img{max-height:24px}
+.brand[aria-pressed="true"]{border:2px solid var(--ink);background:var(--tile-2)}
+.brand[aria-pressed="true"] img{opacity:1}
+.view-logo{height:28px;width:auto}
 .groups{display:flex;gap:18px;border-bottom:1px solid var(--line)}
 .groups button{border:0;background:none;padding:10px 0;font-size:16px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
 .groups button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
@@ -379,7 +387,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:#555;text-decoration:none;j
   <div class="band" id="ceramicspeed">
     <div class="wrap">
       <p class="eyebrow">Destaque da casa</p>
-      <h2>CeramicSpeed</h2>
+      <h2><img src="assets/brands/ceramicspeed.png" alt="CeramicSpeed" width="320" height="65" style="width:min(340px,80%);height:auto;filter:invert(1)"></h2>
       <p>Rolamentos cerâmicos, polias oversized e lubrificação de corrida. O ganho que sobra quando o treino já está feito.</p>
       <div class="specs">
         <div><b>OSPW</b><span>Polias oversized</span></div>
@@ -561,7 +569,11 @@ function pic(p,i=0,extra=""){
 
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
-const MODE_ICON={natacao:"goggles",bike:"bike",corrida:"shoe"};
+const MODE_ART={
+  natacao:'<svg viewBox="0 0 120 80" aria-hidden="true"><path d="M8 38c4-1 7-1 9 0M103 38c2-1 5-1 9 0"/><path d="M17 38c0-10 8-16 21-16 12 0 19 6 19 15 0 10-8 17-20 17S17 48 17 38z"/><path d="M103 38c0-10-8-16-21-16-12 0-19 6-19 15 0 10 8 17 20 17s20-6 20-16z"/><path d="M57 36c2-3 4-4 3-4M57 35c1-2 5-2 6 0"/><path d="M26 34c2-4 6-6 11-6M73 34c2-4 6-6 11-6" opacity=".5"/></svg>',
+  bike:'<svg viewBox="0 0 120 80" aria-hidden="true"><circle cx="26" cy="52" r="19"/><circle cx="94" cy="52" r="19"/><circle cx="26" cy="52" r="2"/><circle cx="94" cy="52" r="2"/><path d="M26 52 47 24h37M56 52 47 24M56 52l30-24M26 52h30M86 28l8 24M84 24l3-7 6-1c3 0 4 2 4 4M41 20h13"/><circle cx="56" cy="52" r="4"/></svg>',
+  corrida:'<svg viewBox="0 0 120 80" aria-hidden="true"><path d="M10 54c0-10 3-23 9-29l11 7c7 4 15 4 22-2l10 10c10 9 27 11 42 13 7 1 12 5 12 10v2c0 3-2 5-5 5H15c-3 0-5-2-5-5z"/><path d="M10 56h104M40 31l5 6M48 28l5 7M56 31l4 6M75 48c10 3 22 4 32 5"/></svg>'
+};
 const st={cat:null,group:null,sub:"all",cond:"all",limit:12};
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
 function inView(p){
@@ -572,12 +584,12 @@ function inView(p){
 }
 function renderNav(){
   const modes=CFG.categories.filter(c=>!c.brand),brands=CFG.categories.filter(c=>c.brand);
-  $("#modes").innerHTML=modes.map(c=>`<button class="mode" data-cat="${c.id}" aria-pressed="${st.cat===c.id}">${svg(MODE_ICON[c.id]||"box")}<b>${esc(c.name)}</b></button>`).join("");
-  $("#brands").innerHTML=brands.map(c=>`<button class="brand" data-cat="${c.id}" aria-pressed="${st.cat===c.id}">${esc(c.name)}</button>`).join("");
+  $("#modes").innerHTML=modes.map(c=>`<button class="mode" data-cat="${c.id}" aria-pressed="${st.cat===c.id}">${MODE_ART[c.id]||svg("box")}<b>${esc(c.name)}</b></button>`).join("");
+  $("#brands").innerHTML=brands.map(c=>`<button class="brand b-${c.id}" data-cat="${c.id}" aria-pressed="${st.cat===c.id}" aria-label="${esc(c.name)}">${c.logo?`<img src="${esc(c.logo)}" alt="${esc(c.name)}">`:esc(c.name)}</button>`).join("");
   const c=curCat();
   $("#viewBar").hidden=!c;$("#latestTitle").hidden=!!c;
   if(!c)return;
-  $("#viewName").textContent=c.name;
+  $("#viewName").innerHTML=c.logo?`<img class="view-logo" src="${esc(c.logo)}" alt="${esc(c.name)}">`:esc(c.name);
   $("#groups").hidden=c.groups.length<2;
   $("#groups").innerHTML=c.groups.length>1?c.groups.map(g=>`<button data-group="${g.id}" aria-pressed="${st.group===g.id}">${esc(g.name)}</button>`).join(""):"";
   const g=c.groups.find(x=>x.id===st.group);
