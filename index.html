@@ -105,6 +105,8 @@ section,#loja{scroll-margin-top:68px}
 .hero .lede b{color:var(--ink);font-weight:600}
 .hero .lede .by{margin-top:8px;font-size:.85em;color:var(--ink);font-weight:500}
 .hero .lede .by::before{content:"— "}
+/* Computador: a frase inteira numa linha; no celular continua em duas */
+@media (min-width:720px){.hero .lede{max-width:none}.hero .lede span:not(.by){display:inline}}
 .choose{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:32px}
 .choose a{display:flex;align-items:flex-end;min-height:112px;padding:14px;border-radius:var(--r);border:2px solid var(--ink);color:var(--ink);text-decoration:none;font-size:clamp(17px,5vw,24px);transition:background .15s ease,border-color .15s ease,color .15s ease;font-weight:600;letter-spacing:-.03em;line-height:1.05}
 /* O botão escolhido fica verde; os outros, contorno branco */
