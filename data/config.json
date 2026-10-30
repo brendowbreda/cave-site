@@ -220,6 +220,30 @@
    "matchBrand": "Winow",
    "logo": "assets/brands/winow.png",
    "groups": []
+  },
+  {
+   "id": "canyon",
+   "name": "Canyon",
+   "brand": true,
+   "matchBrand": "Canyon",
+   "logo": "assets/brands/canyon.png",
+   "groups": []
+  },
+  {
+   "id": "specialized",
+   "name": "Specialized",
+   "brand": true,
+   "matchBrand": "Specialized",
+   "logo": "assets/brands/specialized.png",
+   "groups": []
+  },
+  {
+   "id": "trek",
+   "name": "Trek",
+   "brand": true,
+   "matchBrand": "Trek",
+   "logo": "assets/brands/trek.png",
+   "groups": []
   }
  ],
  "fit": [
