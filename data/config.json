@@ -263,28 +263,28 @@
    "group": "Bicicletas",
    "icon": "bike",
    "name": "Road (estrada)",
-   "desc": "Para provas de estrada e treinos longos.",
+   "desc": "Consulte modelos e tamanhos disponíveis.",
    "price": ""
   },
   {
    "group": "Bicicletas",
    "icon": "tt",
    "name": "Triathlon (TT)",
-   "desc": "Com ajuste de posição antes da prova.",
+   "desc": "Consulte modelos e tamanhos disponíveis.",
    "price": ""
   },
   {
    "group": "Rodas",
    "icon": "spoke",
-   "name": "Roda de perfil alto",
-   "desc": "Dianteira, o par ideal para a roda fechada.",
+   "name": "Rodas de carbono",
+   "desc": "Shimano ou SRAM. Consulte os modelos disponíveis.",
    "price": ""
   },
   {
    "group": "Rodas",
    "icon": "disc",
-   "name": "Roda fechada",
-   "desc": "Traseira, com ou sem disco. Shimano ou SRAM.",
+   "name": "Rodas fechadas (TT)",
+   "desc": "Shimano ou SRAM. Consulte os modelos disponíveis.",
    "price": ""
   },
   {

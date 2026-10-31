@@ -289,8 +289,10 @@ body.on-sell footer{display:none}
 /* Aluguel em grupos: Bicicletas, Rodas, Mala bike */
 .rent{display:grid;gap:22px}
 .rent-group{display:grid;gap:10px;align-content:start}
-.rent-group h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.rent-cta{margin-top:22px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:18px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
+.rent-group h3{font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+@media (max-width:719px){.rent-lead span{display:block}}
+.rent-cta{margin-top:22px;display:flex}
+.rent-cta .btn{flex:1 1 auto;max-width:420px}
 .rent-cta p{color:var(--muted);font-size:15px;max-width:46ch}
 .rent-cta b{color:var(--ink)}
 @media (min-width:720px){.rent{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -529,12 +531,10 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
     <div class="wrap">
       <div class="sec-head">
         <h2>Quero alugar</h2>
-        <p class="rent-lead">Monte o seu equipamento de prova e alugue pelo tempo que precisar.</p>
-        <p>Bicicletas revisadas e ajustadas antes da largada, rodas de alta performance e mala bike para a viagem. Você retira na loja e devolve depois da prova.</p>
+        <p class="rent-lead"><span>Monte o seu equipamento de prova</span> <span>e alugue pelo tempo que precisar.</span></p>
       </div>
       <div class="rent" id="rent"></div>
       <div class="rent-cta">
-        <p><b>Entre em contato e garanta o seu.</b> Reserve com antecedência para a data da sua prova.</p>
         <a class="btn wa" id="rentWa" target="_blank" rel="noopener">Reservar pelo WhatsApp</a>
       </div>
     </div>
