@@ -260,27 +260,38 @@
  ],
  "rentals": [
   {
+   "group": "Bicicletas",
    "icon": "bike",
-   "name": "Bike road",
-   "desc": "Para provas de estrada e viagens de treino.",
+   "name": "Road (estrada)",
+   "desc": "Para provas de estrada e treinos longos.",
    "price": ""
   },
   {
+   "group": "Bicicletas",
    "icon": "tt",
-   "name": "Bike de triathlon / TT",
+   "name": "Triathlon (TT)",
    "desc": "Com ajuste de posição antes da prova.",
    "price": ""
   },
   {
-   "icon": "disc",
-   "name": "Roda fechada",
-   "desc": "Com ou sem disco, para triathlon e TT. Shimano ou SRAM.",
+   "group": "Rodas",
+   "icon": "spoke",
+   "name": "Roda de perfil alto",
+   "desc": "Dianteira, o par ideal para a roda fechada.",
    "price": ""
   },
   {
-   "icon": "spoke",
-   "name": "Roda de perfil alto dianteira",
-   "desc": "O par ideal para a roda traseira fechada.",
+   "group": "Rodas",
+   "icon": "disc",
+   "name": "Roda fechada",
+   "desc": "Traseira, com ou sem disco. Shimano ou SRAM.",
+   "price": ""
+  },
+  {
+   "group": "Mala bike",
+   "icon": "bag",
+   "name": "Mala bike",
+   "desc": "Leve a sua bike protegida até a prova.",
    "price": ""
   }
  ]
