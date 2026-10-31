@@ -674,7 +674,7 @@ function renderSecs(){
     return `<button class="acc-head${open?" open":""}${focus===g.id?" focus":""}" type="button" data-acc="${g.id}" aria-expanded="${open}"><span>${esc(g.name)}${active?`<small>${esc(st.sub||"Todos")}</small>`:""}</span>${solo(g)?"":CHEV}</button>`;
   }).join("");
   const g=c.groups.find(x=>x.id===st.open);
-  const body=g&&!solo(g)?`<div class="acc-body"><button type="button" class="all" data-row="" data-g="${g.id}" aria-pressed="${st.sec===g.id&&!st.sub}">Ver todos</button>${g.subs.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${g.id}" aria-pressed="${st.sec===g.id&&st.sub===x}">${esc(x)}</button>`).join("")}</div>`:"";
+  const body=g&&!solo(g)?`<div class="acc-body">${g.subs.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${g.id}" aria-pressed="${st.sec===g.id&&st.sub===x}">${esc(x)}</button>`).join("")}</div>`:"";
   $("#secs").innerHTML=`<div class="acc-heads${n===4?" four":""}" style="--n:${n}">${heads}</div>${body}`;
 }
 function filtered(){
@@ -730,9 +730,12 @@ $("#secs").addEventListener("click",e=>{
     if(g.subs.length===1&&g.subs[0]===g.name){ // seção de um tipo só (ex.: Neoprene): filtra direto
       clearSearch();st.sec=st.sec===g.id?null:g.id;st.open=null;st.limit=12;renderSecs();renderGrid();return;
     }
-    st.open=st.open===g.id?null:g.id;renderSecs();return;
+    // tocar na seção já mostra todos os produtos dela e abre as opções; tocar de novo fecha e volta a mostrar tudo
+    clearSearch();st.limit=12;
+    if(st.open===g.id){st.open=null;st.sec=null}else{st.open=g.id;st.sec=g.id}
+    renderSecs();renderGrid();return;
   }
-  if(it){clearSearch();st.sec=it.dataset.g;st.sub=it.dataset.row||null;st.open=null;st.limit=12;renderSecs();renderGrid();
+  if(it){clearSearch();st.sec=it.dataset.g;st.sub=st.sub===it.dataset.row?null:it.dataset.row;st.open=null;st.limit=12;renderSecs();renderGrid();
     scrollTo({top:$("#grid").getBoundingClientRect().top+scrollY-140,behavior:"smooth"})}
 });
 document.addEventListener("click",e=>{if(!$("#finder").contains(e.target))qf.hidden=true});
