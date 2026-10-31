@@ -284,7 +284,6 @@ body.on-sell footer{display:none}
 .price-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:10px}
 .price-card .v{font:600 32px/1 var(--mono);letter-spacing:-.04em}
 .price-card p{color:var(--muted);font-size:15px}
-.price-card.feat{border-color:var(--ink)}
 .process{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .process div{padding:12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14px;display:grid;gap:2px}
 .process .k{font:600 11px/1 var(--mono);color:var(--muted)}
@@ -963,7 +962,7 @@ $("#sellForm").addEventListener("submit",e=>{
 
 // ---------- Seções que vêm da configuração
 function renderConfig(){
-  $("#fitPrices").innerHTML=CFG.fit.map((f,i)=>`<div class="price-card${i===CFG.fit.length-1?" feat":""}">
+  $("#fitPrices").innerHTML=CFG.fit.map(f=>`<div class="price-card">
     <p class="eyebrow">${esc(f.name)}</p><div class="v">${f.price?brl(f.price):"Sob consulta"}</div>${f.desc?`<p>${esc(f.desc)}</p>`:""}
     <a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.fit,`Olá, Guilherme! Gostaria de agendar meu Bike Fit: ${f.name}${f.price?` (${brl(f.price)})`:""}. Quais horários você tem disponíveis?`)}">Agendar Bike Fit</a></div>`).join("");
   const rentItem=r=>`<a class="rent-item" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá, Cave! Quero alugar: ${r.group&&r.group!==r.name?r.group+" · ":""}${r.name}. Qual prova e data: `)}"><div class="ph"><span class="grain"></span>${svg(r.icon)}</div><div><b>${esc(r.name)}</b><p>${esc(r.desc)}</p>${r.price?`<span class="tag">${esc(r.price)}</span>`:""}</div></a>`;
