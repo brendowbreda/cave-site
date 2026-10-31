@@ -674,7 +674,7 @@ function renderSecs(){
     return `<button class="acc-head${open?" open":""}${focus===g.id?" focus":""}" type="button" data-acc="${g.id}" aria-expanded="${open}"><span>${esc(g.name)}${active?`<small>${esc(st.sub||"Todos")}</small>`:""}</span>${solo(g)?"":CHEV}</button>`;
   }).join("");
   const g=c.groups.find(x=>x.id===st.open);
-  const body=g&&!solo(g)?`<div class="acc-body">${g.subs.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${g.id}" aria-pressed="${st.sec===g.id&&st.sub===x}">${esc(x)}</button>`).join("")}</div>`:"";
+  const body=g&&!solo(g)?`<div class="acc-body">${[...g.subs].sort((a,b)=>a.localeCompare(b,"pt-BR")).map(x=>`<button type="button" data-row="${esc(x)}" data-g="${g.id}" aria-pressed="${st.sec===g.id&&st.sub===x}">${esc(x)}</button>`).join("")}</div>`:"";
   $("#secs").innerHTML=`<div class="acc-heads${n===4?" four":""}" style="--n:${n}">${heads}</div>${body}`;
 }
 function filtered(){

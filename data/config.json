@@ -20,20 +20,20 @@
      "id": "vestuario",
      "name": "Vestuário",
      "subs": [
-      "Sunga",
-      "Maiô de natação"
+      "Maiô de natação",
+      "Sunga"
      ]
     },
     {
      "id": "acessorios",
      "name": "Acessórios",
      "subs": [
-      "Óculos de natação",
-      "Touca",
-      "Palmar",
+      "Boia sinalizadora",
       "Nadadeira",
+      "Óculos de natação",
+      "Palmar",
       "Toalha / roupão",
-      "Boia sinalizadora"
+      "Touca"
      ]
     }
    ]
@@ -46,21 +46,21 @@
      "id": "bikes",
      "name": "Bicicletas",
      "subs": [
+      "Gravel",
       "Road (estrada)",
-      "Triathlon (TT)",
-      "Gravel"
+      "Triathlon (TT)"
      ]
     },
     {
      "id": "vestuario",
      "name": "Vestuário",
      "subs": [
-      "Capacete",
-      "Sapatilha",
-      "Macaquinho",
       "Bretelle",
+      "Capacete",
       "Jersey",
-      "Óculos"
+      "Macaquinho",
+      "Óculos",
+      "Sapatilha"
      ]
     },
     {
@@ -68,12 +68,12 @@
      "name": "Acessórios",
      "subs": [
       "Cintas cardíacas",
+      "Faróis e sinalizadores",
       "Ferramentas",
       "Garrafas",
       "GPS",
       "Lubrificantes e graxas",
       "Mala bike",
-      "Faróis e sinalizadores",
       "Produtos de limpeza",
       "Refis de CO2",
       "Remendos",
@@ -95,18 +95,18 @@
       "Correntes",
       "Discos de freio",
       "Fitas de guidão",
+      "Frameset",
       "Freios",
       "Grupos",
       "Guidões / cockpit",
       "Manetes",
       "Medidores de potência",
-      "Movimentos centrais",
       "Movimento de direção e espaçadores",
+      "Movimentos centrais",
       "Pastilhas",
       "Pedais",
       "Pedivelas",
       "Pneus",
-      "Frameset",
       "Rodas",
       "Selins"
      ]
@@ -121,9 +121,9 @@
      "id": "tenis",
      "name": "Tênis de corrida",
      "subs": [
+      "Atletismo",
       "Corrida de rua",
       "Corrida de trilha",
-      "Atletismo",
       "Maratona"
      ]
     },
@@ -133,9 +133,9 @@
      "subs": [
       "Camisetas",
       "Jaquetas",
-      "Shorts masculino",
+      "Leggings",
       "Shorts feminino",
-      "Leggings"
+      "Shorts masculino"
      ]
     },
     {
@@ -144,11 +144,11 @@
      "subs": [
       "Boné & bucket",
       "Cadarço elástico",
-      "Óculos de sol",
+      "Canelito e manguito",
       "Cinto porta-número",
       "Garrafa de silicone",
       "Meia de corrida",
-      "Canelito e manguito"
+      "Óculos de sol"
      ]
     }
    ]
@@ -162,11 +162,11 @@
      "id": "garmin",
      "name": "Garmin",
      "subs": [
-      "Relógios",
+      "Carregador",
       "Ciclocomputadores",
       "Cinta cardíaca",
-      "Varia",
-      "Carregador"
+      "Relógios",
+      "Varia"
      ]
     }
    ],
@@ -182,8 +182,8 @@
      "name": "Wahoo",
      "subs": [
       "Ciclocomputadores",
-      "Pedais",
-      "Cinta cardíaca"
+      "Cinta cardíaca",
+      "Pedais"
      ]
     }
    ],
