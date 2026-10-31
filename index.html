@@ -151,22 +151,24 @@ section,#loja{scroll-margin-top:68px}
 .search input::-webkit-search-cancel-button{display:none}
 .search .clear{width:40px;height:40px;border-radius:50%;border:0;background:var(--tile-2);font-size:18px;line-height:1;flex:none}
 /* Seções da modalidade em quadrados (ex.: Tênis de corrida, Roupas, Acessórios) */
-/* Seções em lista (sanfona): toca na seção e todas as opções abrem embaixo, sem arrastar */
-.secs{display:grid;margin-top:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
-.acc+.acc{border-top:1px solid var(--line)}
-/* Foco: a seção aberta ou escolhida fica clara, as outras escurecem */
-.acc{transition:opacity .2s ease}
-.secs.has-focus .acc:not(.focus){opacity:.35}
-.acc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:0 16px;border:0;background:none;text-align:left;font-size:16px;font-weight:600;letter-spacing:-.01em}
-.acc-head small{display:block;font-size:13px;font-weight:500;color:var(--buy);margin-top:2px}
-.acc-head svg{width:18px;height:18px;flex:none;color:var(--muted);transition:transform .2s ease}
-.acc.open .acc-head svg{transform:rotate(180deg)}
-.acc-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px;padding:0 8px 12px}
+/* Seções lado a lado; ao tocar, as opções abrem embaixo de todas */
+.secs{margin-top:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.acc-heads{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr))}
+.acc-head{display:flex;align-items:center;justify-content:center;gap:6px;min-height:54px;padding:6px 8px;border:0;background:none;font-size:15px;font-weight:600;letter-spacing:-.01em;text-align:center;line-height:1.15;border-right:1px solid var(--line);border-bottom:1px solid transparent;transition:opacity .2s ease}
+.acc-heads .acc-head:last-child{border-right:0}
+.acc-head span{min-width:0}
+.acc-head small{display:block;font-size:12px;font-weight:500;color:var(--buy);margin-top:2px}
+.acc-head svg{width:16px;height:16px;flex:none;color:var(--muted);transition:transform .2s ease}
+.acc-head.open{background:var(--tile-2)}
+.acc-head.open svg{transform:rotate(180deg)}
+.secs.has-focus .acc-head:not(.focus){opacity:.35}
+.acc-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px;padding:10px 8px 12px;border-top:1px solid var(--line)}
 .acc-body button{display:block;width:100%;text-align:left;border:0;background:none;padding:10px 8px;border-radius:8px;font-size:14px;line-height:1.25}
 .acc-body button:hover{background:var(--tile-2)}
 .acc-body button[aria-pressed="true"]{color:var(--buy);font-weight:600}
 .acc-body button.all{font-weight:600}
-@media (min-width:720px){.acc-body{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:719px){.acc-head{font-size:14px;gap:4px;padding:6px 4px}.acc-head svg{width:14px;height:14px}.acc-heads.four{grid-template-columns:repeat(2,minmax(0,1fr))}.acc-heads.four .acc-head:nth-child(2n){border-right:0}.acc-heads.four .acc-head:nth-child(-n+2){border-bottom-color:var(--line)}}
+@media (min-width:720px){.acc-body{grid-template-columns:repeat(4,minmax(0,1fr))}.acc-head{font-size:16px}}
 .qf{display:grid;gap:14px;margin-top:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
 .qf .eyebrow{margin-bottom:-4px}
 .qf .row{display:flex;flex-wrap:wrap;gap:8px}
@@ -663,14 +665,17 @@ function renderSecs(){
   const c=curCat();if(!c)return;
   const n=c.groups.length;
   $("#secs").hidden=n<2;
+  if(n<2){$("#secs").innerHTML="";return}
   const focus=st.open||st.sec;
   $("#secs").classList.toggle("has-focus",!!focus);
-  $("#secs").innerHTML=n<2?"":c.groups.map(g=>{
-    const solo=g.subs.length===1&&g.subs[0]===g.name,open=st.open===g.id,active=st.sec===g.id;
-    const note=active?`<small>${esc(st.sub||"Todos")}</small>`:"";
-    const body=open&&!solo?`<div class="acc-body"><button type="button" class="all" data-row="" data-g="${g.id}" aria-pressed="${active&&!st.sub}">Ver todos</button>${g.subs.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${g.id}" aria-pressed="${active&&st.sub===x}">${esc(x)}</button>`).join("")}</div>`:"";
-    return `<div class="acc${open?" open":""}${focus===g.id?" focus":""}"><button class="acc-head" type="button" data-acc="${g.id}" aria-expanded="${open}"><span>${esc(g.name)}${note}</span>${solo?"":CHEV}</button>${body}</div>`;
+  const solo=g=>g.subs.length===1&&g.subs[0]===g.name;
+  const heads=c.groups.map(g=>{
+    const active=st.sec===g.id,open=st.open===g.id;
+    return `<button class="acc-head${open?" open":""}${focus===g.id?" focus":""}" type="button" data-acc="${g.id}" aria-expanded="${open}"><span>${esc(g.name)}${active?`<small>${esc(st.sub||"Todos")}</small>`:""}</span>${solo(g)?"":CHEV}</button>`;
   }).join("");
+  const g=c.groups.find(x=>x.id===st.open);
+  const body=g&&!solo(g)?`<div class="acc-body"><button type="button" class="all" data-row="" data-g="${g.id}" aria-pressed="${st.sec===g.id&&!st.sub}">Ver todos</button>${g.subs.map(x=>`<button type="button" data-row="${esc(x)}" data-g="${g.id}" aria-pressed="${st.sec===g.id&&st.sub===x}">${esc(x)}</button>`).join("")}</div>`:"";
+  $("#secs").innerHTML=`<div class="acc-heads${n===4?" four":""}" style="--n:${n}">${heads}</div>${body}`;
 }
 function filtered(){
   const q=norm(st.q);
