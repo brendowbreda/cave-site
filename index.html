@@ -27,7 +27,7 @@
   --body:var(--display);
   --mono:var(--display);
   --r:14px; --tabbar:64px;
-  --logo-filter:none;
+  --logo-filter:none; --band:#1B1B1B;
   color-scheme:dark;
   padding-top:env(safe-area-inset-top,0px);
 }
@@ -38,7 +38,7 @@
   --buy:#169C46; --buy-ink:#FFFFFF; --buy-soft:#E2F4E8;
   --info:#0D5266; --info-soft:#DDEBEF;
   --warn:#8A5200; --warn-soft:#F6EBD8; --bad:#B42318; --bad-soft:#F8E1DE;
-  --logo-filter:invert(1);
+  --logo-filter:invert(1); --band:#ECECEA;
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -278,6 +278,9 @@ body.on-sell footer{display:none}
 .pills-why{display:flex;flex-wrap:wrap;gap:8px}
 .pills-why span{padding:8px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:14px}
 .prices{display:grid;gap:12px}
+/* Bike Fit em destaque: faixa cinza (escura no tema preto, clara no tema branco) */
+.fit-band{background:var(--band);border-block:1px solid var(--line)}
+.fit-band .price-card{background:var(--bg)}
 .price-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:10px}
 .price-card .v{font:600 32px/1 var(--mono);letter-spacing:-.04em}
 .price-card p{color:var(--muted);font-size:15px}
@@ -540,7 +543,7 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
     </div>
   </section>
 
-  <section id="fit" style="padding-top:0">
+  <section id="fit" class="fit-band">
     <div class="wrap fit-cols">
       <div class="fit-hero">
         <div class="sec-head" style="margin-bottom:8px">
