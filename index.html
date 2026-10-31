@@ -294,10 +294,6 @@ body.on-sell footer{display:none}
 .rent-group{display:grid;gap:10px;align-content:start}
 .rent-group h3{font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
 @media (max-width:719px){.rent-lead span{display:block}}
-.rent-cta{margin-top:22px;display:flex}
-.rent-cta .btn{flex:1 1 auto;max-width:420px}
-.rent-cta p{color:var(--muted);font-size:15px;max-width:46ch}
-.rent-cta b{color:var(--ink)}
 @media (min-width:720px){.rent{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .rent-lead{color:var(--ink)!important;font-size:clamp(18px,4.6vw,22px);font-weight:500;letter-spacing:-.02em}
 .rent-item{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);text-decoration:none}
@@ -537,9 +533,6 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
         <p class="rent-lead"><span>Monte o seu equipamento de prova</span> <span>e alugue pelo tempo que precisar.</span></p>
       </div>
       <div class="rent" id="rent"></div>
-      <div class="rent-cta">
-        <a class="btn wa" id="rentWa" target="_blank" rel="noopener">Reservar pelo WhatsApp</a>
-      </div>
     </div>
   </section>
 
@@ -976,7 +969,6 @@ function renderConfig(){
   const rentItem=r=>`<a class="rent-item" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá, Cave! Quero alugar: ${r.group&&r.group!==r.name?r.group+" · ":""}${r.name}. Qual prova e data: `)}"><div class="ph"><span class="grain"></span>${svg(r.icon)}</div><div><b>${esc(r.name)}</b><p>${esc(r.desc)}</p>${r.price?`<span class="tag">${esc(r.price)}</span>`:""}</div></a>`;
   const groups=[...new Set(CFG.rentals.map(r=>r.group||"Outros"))];
   $("#rent").innerHTML=groups.map(g=>`<div class="rent-group"><h3>Aluga-se ${esc(g.toLowerCase())}</h3>${CFG.rentals.filter(r=>(r.group||"Outros")===g).map(rentItem).join("")}</div>`).join("");
-  $("#rentWa").href=wa(CFG.whatsapp.loja,"Olá, Cave! Quero alugar equipamento para uma prova. Qual prova e data: ");
   const waHome=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
   $("#footWa").href=$("#topWa").href=$("#heroWa").href=waHome;
 }
