@@ -242,6 +242,30 @@
    "matchBrand": "Trek",
    "logo": "assets/brands/trek.png",
    "groups": []
+  },
+  {
+   "id": "cervelo",
+   "name": "Cervélo",
+   "brand": true,
+   "matchBrand": "Cervélo",
+   "logo": "assets/brands/cervelo.png",
+   "groups": []
+  },
+  {
+   "id": "camelbak",
+   "name": "CamelBak",
+   "brand": true,
+   "matchBrand": "CamelBak",
+   "logo": "assets/brands/camelbak.png",
+   "groups": []
+  },
+  {
+   "id": "thule",
+   "name": "Thule",
+   "brand": true,
+   "matchBrand": "Thule",
+   "logo": "assets/brands/thule.png",
+   "groups": []
   }
  ],
  "fit": [
