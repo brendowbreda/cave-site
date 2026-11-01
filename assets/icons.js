@@ -48,10 +48,10 @@ window.CAVE_SUB_ICON = {
   "Palmar":"box","Nadadeira":"box","Toalha / roupão":"jacket","Boia sinalizadora":"buoy",
   // Bicicleta
   "Road (estrada)":"bike","Triathlon (TT)":"tt","Gravel":"bike",
-  "Baterias e eletrônicos":"box","Câmbio dianteiro":"gear","Câmbio traseiro":"gear","Cassetes":"cassette","Coroas":"gear",
+  "Baterias":"box","Câmbio dianteiro":"gear","Câmbio traseiro":"gear","Cassetes":"cassette","Coroas":"gear",
   "Correntes":"chain","Discos de freio":"disc","Fitas de guidão":"bar","Freios":"disc","Grupos":"gear","Guidões / cockpit":"bar",
   "Manetes":"bar","Medidores de potência":"crank","Movimentos centrais":"cassette","Movimento de direção e espaçadores":"box",
-  "Pastilhas":"pad","Pedais":"pedal","Pedivelas":"crank","Pneus":"wheel","Frameset":"tt","Rodas":"spoke","Selins":"saddle",
+  "Pastilhas":"pad","Pedais":"pedal","Pedivelas":"crank","Pneus":"wheel","Frameset":"tt","Rodas":"spoke","Selim (banco)":"saddle",
   "Cintas cardíacas":"strap","Ferramentas":"pump","Caramanhola (garrafa)":"bottle","GPS":"computer","Lubrificantes e graxas":"bottle",
   "Mala bike":"bag","Faróis e sinalizadores":"radar","Produtos de limpeza":"bottle","CO2":"co2","Remendos":"box",
   "Rolo de treino":"trainer","Suporte de caramanhola (garrafa)":"bottle","Transbike":"bike","Tubeless":"wheel",
