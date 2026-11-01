@@ -282,8 +282,15 @@ body.on-sell footer{display:none}
 .fit-band{background:var(--band);border-block:1px solid var(--line)}
 /* Bike Fit: celular = texto, Guilherme, preços; computador = coluna 1 texto + preços, coluna 2 Guilherme */
 .fit-grid{display:grid;gap:28px;grid-template-areas:"head" "who" "prices"}
-.fit-head{grid-area:head;margin-bottom:0}.fit-who{grid-area:who;display:grid;gap:16px}.fit-grid .prices{grid-area:prices}
-.fit-note{color:var(--muted);font-size:15px}
+.fit-head{grid-area:head;display:grid;gap:12px;align-content:start}.fit-who{grid-area:who;display:grid;gap:12px;align-content:start}
+.fit-sub{margin:10px 0 0;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fit-text{font-size:17px;line-height:1.55;max-width:52ch}
+.fit-quote{margin:18px 0 0;padding-left:16px;border-left:2px solid var(--buy);display:grid;gap:8px}
+.fit-quote p{font-size:16px;line-height:1.5;color:var(--muted);font-style:italic}
+.fit-quote cite{font-style:normal;font-size:14px;font-weight:600}
+.fit-quote cite::before{content:"— "}
+.fit-name{font-size:clamp(24px,5.5vw,30px);font-weight:600;letter-spacing:-.03em;line-height:1.1}
+.fit-bio{color:var(--muted);font-size:15px;max-width:56ch}.fit-grid .prices{grid-area:prices}
 /* Preços minimalistas: linhas finas, nome e valor à esquerda, botão à direita */
 .prices{gap:0;border-bottom:1px solid var(--line)}
 .price-card{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 16px;padding:18px 0;border-top:1px solid var(--line)}
@@ -543,20 +550,25 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
 
   <section id="fit" class="fit-band">
     <div class="wrap fit-grid">
-      <div class="sec-head fit-head">
+      <div class="fit-head">
         <h2>Bike Fit</h2>
-        <p>Avaliação do atleta e da bicicleta com equipamentos de última geração. Ajustes sob medida para a sua modalidade: mais conforto e performance, com menos risco de lesão.</p>
+        <h3 class="fit-sub">Como funciona</h3>
+        <p class="fit-text">Avaliação do atleta e da bicicleta com equipamentos de última geração. Ajustes sob medida para a sua modalidade: mais conforto e performance, com menos risco de lesão.</p>
+        <blockquote class="fit-quote">
+          <p>“Cada ajuste equilibra conforto, eficiência mecânica, controle da bike e uma posição que você sustenta do primeiro ao último quilômetro.”</p>
+          <cite>Guilherme Garcia Cunha</cite>
+        </blockquote>
       </div>
       <div class="fit-who">
-        <div class="person">
-          <div><b>Guilherme Garcia Cunha</b><p>Profissional formado em Educação Física, com base sólida em fisiologia do exercício, biomecânica e metodologia do treinamento aplicada aos esportes de endurance.</p></div>
-        </div>
-        <div class="results" aria-label="Resultados de Guilherme">
-          <div class="res"><span class="ev">IRONMAN World Championship</span><span class="loc">Kona, Havaí</span><span class="r">Finisher</span></div>
+        <h3 class="fit-name">Guilherme Garcia Cunha</h3>
+        <p class="fit-bio">Profissional formado em Educação Física, com base sólida em fisiologia do exercício, biomecânica e metodologia do treinamento aplicada aos esportes de endurance.</p>
+        <h4 class="fit-sub">Provas no currículo</h4>
+        <div class="results" aria-label="Provas de Guilherme">
+          <div class="res"><span class="ev">3x IRONMAN World Championship</span><span class="loc">Kona, Havaí</span><span class="r">Finisher</span></div>
           <div class="res"><span class="ev">IRONMAN 70.3 World Championship</span><span class="loc">Nice, França</span><span class="r">Finisher</span></div>
-          <div class="res"><span class="ev">Brasil Ride · MTB</span><span class="loc">Bahia, Brasil</span><span class="r gold">Campeão</span></div>
+          <div class="res"><span class="ev">Perskindol Swiss Epic · MTB</span><span class="loc">Graubünden, Suíça</span><span class="r">Finisher</span></div>
+          <div class="res"><span class="ev">Brasil Ride · MTB</span><span class="loc">Bahia, Brasil</span><span class="r">Finisher</span></div>
         </div>
-        <p class="fit-note">Cada ajuste equilibra conforto, eficiência mecânica, controle da bike e uma posição que você sustenta do primeiro ao último quilômetro.</p>
       </div>
       <div class="prices" id="fitPrices"></div>
     </div>
