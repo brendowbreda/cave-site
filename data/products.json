@@ -33,22 +33,6 @@
    "demo": true
   },
   {
-   "id": "ex-003",
-   "cat": "bike",
-   "group": "bikes",
-   "sub": "Gravel",
-   "cond": "novo",
-   "price": 28990,
-   "icon": "bike",
-   "title": "Specialized Crux Comp",
-   "subtitle": "Tam. 56 · SRAM Rival XPLR AXS 1x12",
-   "desc": "Zero km, na caixa. Pneus 700x38c tubeless. Montagem e ajuste básico inclusos.",
-   "tag": "",
-   "status": "disponivel",
-   "photos": [],
-   "demo": true
-  },
-  {
    "id": "ex-004",
    "cat": "bike",
    "group": "bikes",
