@@ -53,7 +53,7 @@ window.CAVE_SUB_ICON = {
   "Manetes":"bar","Medidores de potência":"crank","Movimentos centrais":"cassette","Movimento de direção e espaçadores":"box",
   "Pastilhas":"pad","Pedais":"pedal","Pedivelas":"crank","Pneus":"wheel","Frameset":"tt","Rodas":"spoke","Selins":"saddle",
   "Cintas cardíacas":"strap","Ferramentas":"pump","Caramanhola (garrafa)":"bottle","GPS":"computer","Lubrificantes e graxas":"bottle",
-  "Mala bike":"bag","Faróis e sinalizadores":"radar","Produtos de limpeza":"bottle","Refis de CO2":"co2","Remendos":"box",
+  "Mala bike":"bag","Faróis e sinalizadores":"radar","Produtos de limpeza":"bottle","CO2":"co2","Remendos":"box",
   "Rolo de treino":"trainer","Suporte de caramanhola (garrafa)":"bottle","Transbike":"bike","Tubeless":"wheel",
   "Capacete":"helmet","Sapatilha":"cleat","Macaquinho":"sleeveless","Bretelle":"shorts","Jersey":"jersey","Óculos":"glasses",
   // Corrida
