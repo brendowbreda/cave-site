@@ -288,10 +288,19 @@
    "price": ""
   },
   {
-   "group": "Mala bike",
+   "group": "Viagem",
+   "title": "Vai viajar?",
    "icon": "bag",
    "name": "Mala bike",
    "desc": "Sua bike protegida, boa viagem.",
+   "price": ""
+  },
+  {
+   "group": "Viagem",
+   "title": "Vai viajar?",
+   "icon": "rack",
+   "name": "Transbike",
+   "desc": "Consulte os modelos disponíveis.",
    "price": ""
   }
  ]

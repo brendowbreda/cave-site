@@ -38,6 +38,7 @@ window.CAVE_ICONS = {
   buoy:'<rect x="16" y="12" width="32" height="40" rx="12"/><path d="M32 4v8M24 32h16"/>',
   box:'<path d="M10 22 32 12l22 10v22L32 54 10 44z"/><path d="M10 22l22 10 22-10M32 32v22"/>',
   glasses:'<path d="M6 28h52"/><path d="M8 28c0 8 4 12 11 12 6 0 10-4 11-12M34 28c1 8 5 12 11 12 7 0 11-4 11-12"/>',
+  rack:'<circle cx="22" cy="20" r="7"/><circle cx="42" cy="20" r="7"/><path d="M22 20l6-8h8l6 8M28 12l4 8 4-8M8 46l8-12h32l8 12zM8 46v6h48v-6M18 52v4M46 52v4M20 34v-6h24v6"/>',
   jacket:'<path d="M22 10 10 18l2 36h40l2-36-12-8"/><path d="M32 14v40M22 10c2 4 6 6 10 4 4 2 8 0 10-4"/>',
 };
 // Desenho padrão por subcategoria, para produtos novos cadastrados no admin.
