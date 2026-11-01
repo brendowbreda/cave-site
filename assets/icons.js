@@ -52,9 +52,9 @@ window.CAVE_SUB_ICON = {
   "Correntes":"chain","Discos de freio":"disc","Fitas de guidão":"bar","Freios":"disc","Grupos":"gear","Guidões / cockpit":"bar",
   "Manetes":"bar","Medidores de potência":"crank","Movimentos centrais":"cassette","Movimento de direção e espaçadores":"box",
   "Pastilhas":"pad","Pedais":"pedal","Pedivelas":"crank","Pneus":"wheel","Frameset":"tt","Rodas":"spoke","Selins":"saddle",
-  "Cintas cardíacas":"strap","Ferramentas":"pump","Garrafas":"bottle","GPS":"computer","Lubrificantes e graxas":"bottle",
+  "Cintas cardíacas":"strap","Ferramentas":"pump","Caramanhola (garrafa)":"bottle","GPS":"computer","Lubrificantes e graxas":"bottle",
   "Mala bike":"bag","Faróis e sinalizadores":"radar","Produtos de limpeza":"bottle","Refis de CO2":"co2","Remendos":"box",
-  "Rolo de treino":"trainer","Suportes de garrafa":"bottle","Transbike":"bike","Tubeless":"wheel",
+  "Rolo de treino":"trainer","Suporte de caramanhola (garrafa)":"bottle","Transbike":"bike","Tubeless":"wheel",
   "Capacete":"helmet","Sapatilha":"cleat","Macaquinho":"sleeveless","Bretelle":"shorts","Jersey":"jersey","Óculos":"glasses",
   // Corrida
   "Tênis":"shoe","Shorts masculino":"shorts","Shorts feminino":"shorts","Meia de corrida":"sock","Boné / bucket":"cap",
