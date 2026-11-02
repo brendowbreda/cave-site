@@ -247,6 +247,8 @@ body.on-sell footer{display:none}
 .sell-flow div{background:var(--surface);padding:14px;display:grid;gap:4px}
 .sell-flow .k{font:600 11px/1 var(--mono);color:var(--muted);letter-spacing:.06em}
 .sell-flow b{font-size:15px;line-height:1.25}
+.sell-flow .d{font-size:13px;color:var(--muted);line-height:1.4}
+.terms-link{display:inline-block;margin:-8px 0 24px;color:var(--ink);font-weight:600;font-size:15px;text-underline-offset:3px}
 .form{display:grid;gap:14px}
 .field{display:grid;gap:6px;min-width:0}
 .field label,.lbl{font-size:13px;font-weight:600}
@@ -333,7 +335,7 @@ footer{padding-block:48px 24px;border-top:1px solid var(--line);font-size:14px;c
 .foot{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px}
 .foot-brand{display:grid;gap:12px}
 footer .flogo{width:min(200px,55vw);height:auto}
-.foot-links{display:flex;align-items:center;gap:20px}
+.foot-links{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
 .foot-links a{color:var(--muted);text-decoration:none;font-weight:500}
 .foot-links a:hover{color:var(--ink)}
 .foot-links .ig{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink)}
@@ -430,7 +432,7 @@ footer .flogo{width:min(200px,55vw);height:auto}
 
 @media (min-width:720px){
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 18px}
-  .sell-flow{grid-template-columns:repeat(3,1fr)}
+  .sell-flow{grid-template-columns:repeat(2,1fr)}
   .process{grid-template-columns:repeat(4,1fr)}
   .sell-cols{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start}
   .fit-grid{grid-template-columns:1fr 1fr;grid-template-areas:"head who" "prices who";column-gap:64px;align-items:start}
@@ -512,13 +514,15 @@ footer .flogo{width:min(200px,55vw);height:auto}
         <div class="sec-head">
           <p class="eyebrow">Venda com a Cave</p>
           <h2>Tem algo parado em casa? <em>A gente vende.</em></h2>
-          <p>Bike, roda, capacete, neoprene, relógio. Você entrega, nós avaliamos, fotografamos, anunciamos e negociamos. Você recebe quando vender.</p>
+          <p>Você entrega o equipamento e a Cave cuida do resto: avaliação, fotos, anúncio, divulgação na comunidade, atendimento e repasse.</p>
         </div>
         <div class="sell-flow">
-          <div><span class="k">01</span><b>Mande fotos e detalhes do produto</b></div>
-          <div><span class="k">02</span><b>Anunciamos e negociamos</b></div>
-          <div><span class="k">03</span><b>Vendeu, você recebe</b></div>
+          <div><span class="k">01</span><b>Avaliação</b><span class="d">Você manda fotos e informações. A Cave avalia.</span></div>
+          <div><span class="k">02</span><b>Acordo</b><span class="d">Preço, comissão e regras combinados antes de publicar.</span></div>
+          <div><span class="k">03</span><b>Anúncio</b><span class="d">Fotos, anúncio e divulgação por nossa conta.</span></div>
+          <div><span class="k">04</span><b>Repasse</b><span class="d">Vendeu: repasse em até 8 dias corridos.</span></div>
         </div>
+        <a class="terms-link" href="termos-venda.html">Ver condições e termos de venda →</a>
       </div>
       <form class="form" id="sellForm" novalidate>
         <div class="field"><label for="s-item">O que você quer vender?</label><input id="s-item" placeholder="Ex.: Specialized Tarmac SL7, tam. 54" required></div>
@@ -554,6 +558,7 @@ footer .flogo{width:min(200px,55vw);height:auto}
         <p class="rent-lead"><span>Monte o seu equipamento de prova</span> <span>e alugue pelo tempo que precisar.</span></p>
       </div>
       <div class="rent" id="rent"></div>
+      <a class="terms-link" href="termos-aluguel.html" style="margin:22px 0 0">Ver termos de aluguel →</a>
     </div>
   </section>
 
@@ -597,6 +602,9 @@ footer .flogo{width:min(200px,55vw);height:auto}
     <div class="foot-links">
       <a class="ig" id="igLink" href="https://www.instagram.com/cavefloripa/" target="_blank" rel="noopener" aria-label="Instagram da Cave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
       <a href="termos.html">Termos</a>
+      <a href="termos-venda.html">Venda</a>
+      <a href="termos-aluguel.html">Aluguel</a>
+      <a href="garantia.html">Garantia</a>
       <a href="privacidade.html">Privacidade</a>
     </div>
   </div>
@@ -802,7 +810,7 @@ function openProduct(id){
         <div><span>Envio</span><b>Todo o Brasil</b></div>
       </div>
       <div class="trust-mini">
-        <div>${SHIELD}<span>${p.cond==="usado"?"Usado conferido pela equipe Cave antes de ir para a loja.":"Produto novo com nota fiscal."}</span></div>
+        <div>${SHIELD}<span>${p.cond==="usado"?"Usado conferido pela equipe Cave antes de ir para a loja.":`Produto novo com nota fiscal e <a href="garantia.html" style="color:inherit">garantia</a>.`}</span></div>
         <div>${SHIELD}<span>Faça uma oferta: se o vendedor não aceitar, nada é cobrado.</span></div>
       </div>
       <div class="pd-actions"><button class="btn" id="offerBtn">Fazer oferta</button><button class="btn buy" id="buyBtn">Comprar</button></div>
