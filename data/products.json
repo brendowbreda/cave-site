@@ -363,7 +363,8 @@
    "discount": {
     "type": "brl",
     "value": 200
-   }
+   },
+   "featured": true
   },
   {
    "id": "p-mvzr0crc",

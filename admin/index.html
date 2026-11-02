@@ -278,6 +278,11 @@ p{margin:0}
 .pill.sold{background:var(--bad-soft);color:var(--bad)}
 .row .acts{display:grid;gap:6px;justify-items:end}
 .row .acts button{height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13px;font-weight:600;white-space:nowrap}
+.row .acts{grid-template-columns:auto auto;align-items:center}
+.row .acts button.star{width:34px;padding:0;display:grid;place-items:center}
+.row .acts button.star svg{width:17px;height:17px;fill:none;stroke:var(--muted);stroke-width:1.8;stroke-linejoin:round}
+.row .acts button.star.on{border-color:var(--fit,#F5C518)}
+.row .acts button.star.on svg{fill:var(--fit,#F5C518);stroke:var(--fit,#F5C518)}
 .row .acts button.sell{border-color:var(--bad);color:var(--bad)}
 .empty{padding:40px 0;text-align:center;color:var(--muted)}
 .fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;box-shadow:0 8px 24px rgba(0,0,0,.6)}
@@ -608,6 +613,7 @@ p{margin:0}
     <div id="e-also" class="form"></div>
     <button class="btn small" id="e-addsec" type="button" style="justify-self:start">+ Aparecer em outra seção</button>
     <span class="hint" style="margin-top:-8px">Ex.: uma cinta cardíaca em Garmin e também em Bicicleta › Acessórios e Corrida › Acessórios. Assim ela aparece buscando pela marca e pelo esporte.</span>
+    <label class="check"><input type="checkbox" id="e-feat"><span><b>Fixar no topo</b> · aparece primeiro na marca e no esporte (ex.: lançamento)</span></label>
     <div class="field"><label for="e-tag">Selo (opcional)</label><input id="e-tag" placeholder="Ex.: Revisada, CeramicSpeed" maxlength="18"></div>
     <div class="field"><span class="lbl">Situação</span><div class="pillset">
       <label><input type="radio" name="e-status" id="e-disp" value="disponivel"><span>À venda</span></label>
@@ -858,7 +864,7 @@ function renderList(){
     <div class="thumb">${thumb(p)}</div>
     <div class="info"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.subtitle)}</span>
       <div class="meta"><span class="price">${s?"R$ *****,**":brl(finalPrice(p))}</span>${!s&&p.discount&&p.discount.value?`<span class="pill on">−${p.discount.type==="pct"?p.discount.value+"%":brl(p.discount.value)}</span>`:""}<span class="pill ${s?"sold":"on"}">${s?"Vendido":"À venda"}</span>${p.demo?`<span class="pill">Exemplo</span>`:""}</div></div>
-    <div class="acts"><button data-act="toggle" class="${s?"":"sell"}">${s?"Voltar à venda":"Vendido"}</button></div>
+    <div class="acts"><button data-act="star" class="star${p.featured?" on":""}" aria-pressed="${!!p.featured}" aria-label="${p.featured?"Tirar do topo":"Fixar no topo"}" title="${p.featured?"Fixado no topo":"Fixar no topo"}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button><button data-act="toggle" class="${s?"":"sell"}">${s?"Voltar à venda":"Vendido"}</button></div>
   </div>`}).join(""):`<p class="empty">Nenhum produto aqui. Toque em “Novo produto” para cadastrar.</p>`;
 }
 $("#aq").addEventListener("input",e=>{F.q=e.target.value;renderList()});
@@ -867,6 +873,12 @@ $("#alist").addEventListener("click",async e=>{
   const row=e.target.closest(".row");if(!row)return;
   const id=row.dataset.id,p=PRODS.find(x=>x.id===id),b=e.target.closest("[data-act]");
   if(!b)return openEditor(p);
+  if(b.dataset.act==="star"){
+    const on=!p.featured;busy(on?"Fixando no topo…":"Tirando do topo…");
+    try{await updateProducts(list=>{const x=list.find(y=>y.id===id);if(x){if(on)x.featured=true;else delete x.featured}},`${on?"Fixa no topo":"Tira do topo"}: ${p.title}`);renderList();toast(on?"Fixado no topo. O site atualiza em cerca de 1 minuto.":"Saiu do topo.")}
+    catch(err){toast(errMsg(err),true)}finally{busy()}
+    return;
+  }
   const toSold=p.status!=="vendido";
   const sale=toSold?await askSale(p):null;
   if(toSold&&!sale)return;
@@ -916,7 +928,7 @@ function openEditor(p){
   D=p?JSON.parse(JSON.stringify(p)):{id:"p-"+Date.now().toString(36),cat:c0.id,group:c0.groups[0].id,sub:c0.groups[0].subs[0],cond:"usado",status:"disponivel",price:0,title:"",subtitle:"",desc:"",tag:"",photos:[]};
   D.photos=(D.photos||[]).map(path=>({path}));
   $("#edTitle").textContent=p?"Editar produto":"Novo produto";
-  $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";$("#e-tag").value=D.tag||"";
+  $("#e-feat").checked=!!D.featured;$("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";$("#e-tag").value=D.tag||"";
   $("#e-price").value=money00(D.price);DT=(D.discount&&D.discount.type)||"pct";$("#e-disc").value=D.discount&&D.discount.value?(DT==="brl"?money00(D.discount.value):D.discount.value):"";syncDT();D.also=(D.also||[]).map(x=>({...x}));renderAlso();$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
   $("#e-"+D.cond).checked=true;$(D.status==="vendido"?"#e-vend":"#e-disp").checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
@@ -943,7 +955,7 @@ moneyField($("#e-price"),()=>{renderFinal();renderPreview()});moneyField($("#e-c
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
   return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:$("#e-tag").value.trim(),
-    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
+    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,featured:$("#e-feat").checked,discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
 }
 function renderPreview(){
   const f=readForm(),s=f.status==="vendido",ph=D.photos[0];
@@ -999,7 +1011,7 @@ $("#edSave").addEventListener("click",async()=>{
     }
     const old=(orig&&orig.photos)||[],removed=old.filter(p=>!paths.includes(p));
     const prod={...f,photos:paths,demo:false,updatedAt:new Date().toISOString()};
-    if(!prod.discount)delete prod.discount;if(!prod.also||!prod.also.length)delete prod.also;
+    if(!prod.discount)delete prod.discount;if(!prod.featured)delete prod.featured;if(!prod.also||!prod.also.length)delete prod.also;
     if(prod.status==="vendido"&&!(orig&&orig.status==="vendido"))prod.soldAt=new Date().toISOString();
     if(prod.status!=="vendido")delete prod.soldAt;
     if(!orig)prod.createdAt=prod.updatedAt;
