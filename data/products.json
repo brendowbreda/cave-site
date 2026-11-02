@@ -1,6 +1,25 @@
 {
  "products": [
   {
+   "id": "p-mvzwkdww",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Alavanca de câmbio",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 1750,
+   "title": "SRAM SL-500 Aero Shifter Set 11-Speed",
+   "subtitle": "",
+   "desc": "O SRAM SL-500 Aero foi desenvolvido para ciclistas e triatletas que buscam eficiência, confiabilidade e desempenho nas mudanças de marcha.\n\nCom alavancas em alumínio leve e resistente, design ergonômico e tecnologia Exact Actuation, proporciona trocas de marcha rápidas e precisas, mantendo o conforto e o controle durante os treinos e competições.\n\nProjetado para bicicletas de contrarrelógio e triathlon, oferece acionamento mecânico por cabo, indexação traseira e compatibilidade com transmissões SRAM de estrada de 11 velocidades, incluindo sistemas dianteiros Yaw™.\n\nEspecificações técnicas\n\nModelo: SRAM SL-500 Aero (SL-500-AERO-A2)\n\nModalidade: Triathlon e contrarrelógio (TT)\n\nTransmissão: 2x11 velocidades\n\nTecnologia: Exact Actuation\n\nMaterial: Alavancas em alumínio\n\nAcionamento: Mecânico, por cabo\n\nMontagem: Extremidades das extensões aerodinâmicas (bar-end)\n\nCompatibilidade: SRAM Road 11 velocidades e sistema dianteiro Yaw™\n\nPeso informado: Aproximadamente 154 g o par\n\nPrazo de entrega: Até 30 dias após a aprovação do pagamento\n\nMais precisão. Mais eficiência. Cada segundo faz a diferença.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzwkdww-mvzwn8881.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:43:32.015Z",
+   "createdAt": "2026-11-02T23:43:32.015Z"
+  },
+  {
    "id": "p-mvzwbkrs",
    "cat": "bike",
    "group": "componentes",
