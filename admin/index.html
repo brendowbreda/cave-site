@@ -177,6 +177,15 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .pctrow input{width:72px!important;min-height:44px!important;text-align:center;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:16px}
 .pctrow b{margin-left:auto;font-size:15px}
 .btn.del{background:var(--bad);border-color:var(--bad);color:#fff}
+.disc{display:flex;gap:8px}
+.disc input{flex:1;min-width:0;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:11px 14px;font-size:16px}
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;flex:none}
+.seg button{border:0;background:var(--surface);min-width:46px;font-weight:600;font-size:15px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.final{margin:-6px 0 0;font-size:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.final s{color:var(--muted)}
+.also{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;padding:12px;border:1px dashed var(--line);border-radius:12px}
+@media (max-width:520px){.also{grid-template-columns:1fr auto}.also .field:nth-child(2){grid-column:1}}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -580,16 +589,25 @@ p{margin:0}
     <div class="field"><label for="e-desc">Descrição</label><textarea id="e-desc" placeholder="Estado do produto, uso, revisões, o que acompanha."></textarea></div>
     <div class="row2">
       <div class="field"><label for="e-price">Valor</label><input id="e-price" inputmode="numeric" placeholder="R$ 0,00"></div>
+      <div class="field"><label for="e-disc">Desconto (opcional)</label>
+        <div class="disc"><input id="e-disc" inputmode="numeric" placeholder="0"><div class="seg" role="group" aria-label="Tipo de desconto"><button type="button" data-dt="pct" aria-pressed="true">%</button><button type="button" data-dt="brl" aria-pressed="false">R$</button></div></div></div>
+    </div>
+    <p class="final" id="e-final" hidden></p>
+    <div class="row2">
+      <div class="field"><label for="e-cost">Custo (só no painel)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"></div>
       <div class="field"><span class="lbl">Estado</span><div class="pillset">
         <label><input type="radio" name="e-cond" id="e-novo" value="novo"><span>Novo</span></label>
         <label><input type="radio" name="e-cond" id="e-usado" value="usado"><span>Usado</span></label></div></div>
     </div>
-    <div class="field"><label for="e-cost">Custo do produto (só aparece no painel)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"><span class="hint">Quanto a loja pagou. Deixe vazio em produto consignado.</span></div>
+    <span class="hint" style="margin-top:-8px">Custo: quanto a loja pagou. Deixe vazio em produto consignado.</span>
     <div class="row2">
       <div class="field"><label for="e-cat">Seção</label><select id="e-cat"></select></div>
       <div class="field"><label for="e-subcat">Tipo</label><select id="e-subcat"></select></div>
     </div>
     <div class="field" id="e-other-wrap" hidden><label for="e-other">Outro tipo</label><input id="e-other" placeholder="Ex.: Coroa"></div>
+    <div id="e-also" class="form"></div>
+    <button class="btn small" id="e-addsec" type="button" style="justify-self:start">+ Aparecer em outra seção</button>
+    <span class="hint" style="margin-top:-8px">Ex.: uma cinta cardíaca em Garmin e também em Bicicleta › Acessórios e Corrida › Acessórios. Assim ela aparece buscando pela marca e pelo esporte.</span>
     <div class="field"><label for="e-tag">Selo (opcional)</label><input id="e-tag" placeholder="Ex.: Revisada, CeramicSpeed" maxlength="18"></div>
     <div class="field"><span class="lbl">Situação</span><div class="pillset">
       <label><input type="radio" name="e-status" id="e-disp" value="disponivel"><span>À venda</span></label>
@@ -839,7 +857,7 @@ function renderList(){
   $("#alist").innerHTML=l.length?l.map(p=>{const s=p.status==="vendido";return `<div class="row${s?" sold":""}" data-id="${esc(p.id)}">
     <div class="thumb">${thumb(p)}</div>
     <div class="info"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.subtitle)}</span>
-      <div class="meta"><span class="price">${s?"R$ *****,**":brl(p.price)}</span><span class="pill ${s?"sold":"on"}">${s?"Vendido":"À venda"}</span>${p.demo?`<span class="pill">Exemplo</span>`:""}</div></div>
+      <div class="meta"><span class="price">${s?"R$ *****,**":brl(finalPrice(p))}</span>${!s&&p.discount&&p.discount.value?`<span class="pill on">−${p.discount.type==="pct"?p.discount.value+"%":brl(p.discount.value)}</span>`:""}<span class="pill ${s?"sold":"on"}">${s?"Vendido":"À venda"}</span>${p.demo?`<span class="pill">Exemplo</span>`:""}</div></div>
     <div class="acts"><button data-act="toggle" class="${s?"":"sell"}">${s?"Voltar à venda":"Vendido"}</button></div>
   </div>`}).join(""):`<p class="empty">Nenhum produto aqui. Toque em “Novo produto” para cadastrar.</p>`;
 }
@@ -868,6 +886,29 @@ $("#rmDemo").addEventListener("click",async function(){
 
 
 // ---------- Editor
+// Desconto: % ou R$ sobre o valor. O site mostra o valor riscado e o preço final.
+let DT="pct";
+function finalPrice(p){const d=p.discount;if(!d||!d.value)return p.price;const v=d.type==="pct"?Math.round(p.price*(1-d.value/100)):p.price-d.value;return Math.max(0,v)}
+function syncDT(){document.querySelectorAll(".seg [data-dt]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.dt===DT));$("#e-disc").placeholder=DT==="pct"?"0":"R$ 0,00"}
+function readDisc(){const raw=$("#e-disc").value;const v=DT==="pct"?Math.min(90,digits(raw)):parseMoney(raw);return v?{type:DT,value:v}:null}
+function renderFinal(){const pr=parseMoney($("#e-price").value),d=readDisc(),el=$("#e-final");if(!d||!pr){el.hidden=true;return}const f=finalPrice({price:pr,discount:d});el.hidden=false;el.innerHTML=`Preço no site: <s>${brl(pr)}</s> <b>${brl(f)}</b> <span class="pill on">−${d.type==="pct"?d.value+"%":brl(pr-f)}</span>`}
+document.querySelectorAll(".seg [data-dt]").forEach(b=>b.addEventListener("click",()=>{if(DT===b.dataset.dt)return;DT=b.dataset.dt;$("#e-disc").value="";syncDT();renderFinal();renderPreview()}));
+$("#e-disc").addEventListener("focus",()=>{if(DT==="brl")$("#e-disc").value=$("#e-disc").value.replace(/,\d{0,2}$/,"")});
+$("#e-disc").addEventListener("input",()=>{const el=$("#e-disc");el.value=DT==="pct"?String(Math.min(90,digits(el.value))||""):money(parseMoney(el.value));renderFinal();renderPreview()});
+$("#e-disc").addEventListener("blur",()=>{if(DT==="brl"){const el=$("#e-disc");el.value=money00(parseMoney(el.value))}});
+// Outras seções onde o produto também aparece
+const secOpts=sel=>CFG.categories.flatMap(c=>c.groups.map(g=>`<option value="${c.id}|${g.id}"${sel===c.id+"|"+g.id?" selected":""}>${esc(c.groups.length>1?c.name+" › "+g.name:c.name)}</option>`)).join("");
+const subsOf=v=>{const [cid,gid]=v.split("|");return ((CFG.categories.find(c=>c.id===cid)||{groups:[]}).groups.find(g=>g.id===gid)||{subs:[]}).subs};
+function renderAlso(){
+  $("#e-also").innerHTML=D.also.map((a,i)=>{const v=`${a.cat}|${a.group}`,subs=subsOf(v);return `<div class="also" data-i="${i}">
+    <div class="field"><label for="ea-c${i}">Também em</label><select id="ea-c${i}" data-ac>${secOpts(v)}</select></div>
+    <div class="field"><label for="ea-s${i}">Tipo</label><select id="ea-s${i}" data-as>${subs.map(x=>`<option${x===a.sub?" selected":""}>${esc(x)}</option>`).join("")}</select></div>
+    <button type="button" class="icon-btn" data-arm="${i}" aria-label="Remover esta seção">✕</button></div>`}).join("");
+}
+$("#e-addsec").addEventListener("click",()=>{const [c,g]=$("#e-cat").value.split("|");const other=CFG.categories.flatMap(x=>x.groups.map(y=>({cat:x.id,group:y.id,sub:y.subs[0]}))).find(x=>x.cat!==c)||{cat:c,group:g,sub:""};D.also.push(other);renderAlso()});
+$("#e-also").addEventListener("change",e=>{const row=e.target.closest(".also");if(!row)return;const a=D.also[+row.dataset.i];
+  if(e.target.matches("[data-ac]")){const [c,g]=e.target.value.split("|");a.cat=c;a.group=g;a.sub=subsOf(e.target.value)[0]||"";renderAlso()}else a.sub=e.target.value});
+$("#e-also").addEventListener("click",e=>{const b=e.target.closest("[data-arm]");if(b){D.also.splice(+b.dataset.arm,1);renderAlso()}});
 let D=null,orig=null; // rascunho e produto original
 function openEditor(p){
   orig=p||null;
@@ -876,13 +917,13 @@ function openEditor(p){
   D.photos=(D.photos||[]).map(path=>({path}));
   $("#edTitle").textContent=p?"Editar produto":"Novo produto";
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";$("#e-tag").value=D.tag||"";
-  $("#e-price").value=money00(D.price);$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
+  $("#e-price").value=money00(D.price);DT=(D.discount&&D.discount.type)||"pct";$("#e-disc").value=D.discount&&D.discount.value?(DT==="brl"?money00(D.discount.value):D.discount.value):"";syncDT();D.also=(D.also||[]).map(x=>({...x}));renderAlso();$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
   $("#e-"+D.cond).checked=true;$(D.status==="vendido"?"#e-vend":"#e-disp").checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
   $("#e-cat").innerHTML=CFG.categories.flatMap(c=>c.groups.map(g=>`<option value="${c.id}|${g.id}">${esc(c.groups.length>1?c.name+" › "+g.name:c.name)}</option>`)).join("");
   $("#e-cat").value=`${D.cat}|${D.group}`;if(!$("#e-cat").value)$("#e-cat").selectedIndex=0;fillSubs(D.sub);
   $("#e-delete").hidden=!p;$("#e-delete").dataset.armed="";$("#e-delete").textContent="Apagar produto";
-  renderPhotos();renderPreview();
+  renderPhotos();renderFinal();renderPreview();
   $("#editor").hidden=false;document.body.style.overflow="hidden";$("#editor .ed-body").scrollTop=0;
 }
 function closeEditor(){$("#editor").hidden=true;document.body.style.overflow="";D=null}
@@ -898,16 +939,16 @@ $("#e-cat").addEventListener("change",()=>{fillSubs();renderPreview()});
 $("#e-subcat").addEventListener("change",()=>{$("#e-other-wrap").hidden=$("#e-subcat").value!=="__other";renderPreview()});
 ["#e-title","#e-sub","#e-other","#e-tag"].forEach(s=>$(s).addEventListener("input",renderPreview));
 document.querySelectorAll('[name="e-cond"],[name="e-status"]').forEach(r=>r.addEventListener("change",renderPreview));
-moneyField($("#e-price"),()=>renderPreview());moneyField($("#e-cost"));
+moneyField($("#e-price"),()=>{renderFinal();renderPreview()});moneyField($("#e-cost"));
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
   return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:$("#e-tag").value.trim(),
-    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub};
+    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
 }
 function renderPreview(){
   const f=readForm(),s=f.status==="vendido",ph=D.photos[0];
   const pic=ph?`<img src="${esc(ph.dataUrl||picURL(ph.path))}" alt="">`:icon(f.icon||CAVE_SUB_ICON[f.sub]||"box");
-  $("#e-preview").innerHTML=`<div class="preview${s?" sold":""}"><div class="thumb">${pic}</div><div style="display:grid;gap:4px;min-width:0"><span class="t">${esc(f.title||"Nome do produto")}</span><span class="s">${esc(f.subtitle||"Subtítulo")}</span><span class="price">${s?"R$ *****,**":brl(f.price)}</span><span class="pill ${s?"sold":"on"}" style="justify-self:start">${s?"Vendido":f.cond==="novo"?"Novo":"Usado"}</span></div></div>`;
+  $("#e-preview").innerHTML=`<div class="preview${s?" sold":""}"><div class="thumb">${pic}</div><div style="display:grid;gap:4px;min-width:0"><span class="t">${esc(f.title||"Nome do produto")}</span><span class="s">${esc(f.subtitle||"Subtítulo")}</span><span class="price">${s?"R$ *****,**":(f.discount?`<s class="muted" style="font-weight:400">${brl(f.price)}</s> `:"")+brl(finalPrice(f))}</span><span class="pill ${s?"sold":"on"}" style="justify-self:start">${s?"Vendido":f.cond==="novo"?"Novo":"Usado"}</span></div></div>`;
 }
 function renderPhotos(){
   const n=D.photos.length;
@@ -958,6 +999,7 @@ $("#edSave").addEventListener("click",async()=>{
     }
     const old=(orig&&orig.photos)||[],removed=old.filter(p=>!paths.includes(p));
     const prod={...f,photos:paths,demo:false,updatedAt:new Date().toISOString()};
+    if(!prod.discount)delete prod.discount;if(!prod.also||!prod.also.length)delete prod.also;
     if(prod.status==="vendido"&&!(orig&&orig.status==="vendido"))prod.soldAt=new Date().toISOString();
     if(prod.status!=="vendido")delete prod.soldAt;
     if(!orig)prod.createdAt=prod.updatedAt;
@@ -1163,7 +1205,7 @@ const inRange=(iso,[a,b])=>{const d=new Date(iso.length===10?iso+"T12:00":iso);r
 function finSales(rg){
   const recs=FIN.sales.filter(s=>inRange(s.at,rg));
   const known=new Set(FIN.sales.map(s=>s.pid)); // vendidos antes do financeiro: preço do anúncio e parte padrão
-  PRODS.filter(p=>p.status==="vendido"&&p.soldAt&&!known.has(p.id)&&inRange(p.soldAt,rg)).forEach(p=>recs.push({pid:p.id,title:p.title,cat:p.cat,price:p.price,pct:defPct(p),cost:FIN.costs[p.id]||0,pay:"pix",fee:0,at:p.soldAt,legacy:true}));
+  PRODS.filter(p=>p.status==="vendido"&&p.soldAt&&!known.has(p.id)&&inRange(p.soldAt,rg)).forEach(p=>recs.push({pid:p.id,title:p.title,cat:p.cat,price:finalPrice(p),pct:defPct(p),cost:FIN.costs[p.id]||0,pay:"pix",fee:0,at:p.soldAt,legacy:true}));
   return recs;
 }
 // Gastos fixos: repetem todo mês no mesmo dia, desde a data do 1º lançamento até "until"
@@ -1290,7 +1332,7 @@ const payOpts=sel=>PAYS.map(([k,t])=>`<option value="${k}"${k===sel?" selected":
 function askSale(p){
   saleP=p;
   $("#sl-title").textContent=p.title;
-  $("#sl-price").value=money00(p.price);$("#sl-pct").value=defPct(p);
+  $("#sl-price").value=money00(finalPrice(p));$("#sl-pct").value=defPct(p);
   $("#sl-pay").innerHTML=payOpts("pix");
   $("#sl-cost").value=money00(p._cost??FIN.costs[p.id]??0);
   $("#sl-owner").value="";$("#sl-ophone").value="";
