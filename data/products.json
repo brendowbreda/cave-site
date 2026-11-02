@@ -1,6 +1,27 @@
 {
  "products": [
   {
+   "id": "p-mvzuiwmm",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Relógios",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 5500,
+   "title": "Relógio Garmin Forerunner 970",
+   "subtitle": "47 mm - Black (PRETO)",
+   "desc": "Tecnologia de elite. Precisão absoluta. Performance sem limites.\n\nO Garmin Forerunner® 970 representa o mais alto nível de tecnologia da linha Forerunner, desenvolvido para atletas que buscam superar seus limites e conquistar resultados extraordinários.\n\nCom tela AMOLED, lente de safira, estrutura em titânio e GPS multibanda, oferece monitoramento cardíaco, mapas integrados e métricas avançadas de desempenho, recuperação e prontidão para treinar.\n\nIdeal para corrida, ciclismo, natação e triathlon, conta com análise de economia de corrida, tolerância ao treinamento, lanterna LED integrada, música e até 15 dias de bateria no modo smartwatch.\n\nMais tecnologia. Mais precisão. Sua melhor versão começa aqui.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzuiwmm-mvzulc441.jpg",
+    "img/products/p-mvzuiwmm-mvzuldlk2.jpg",
+    "img/products/p-mvzuiwmm-mvzulf0s3.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T22:46:08.052Z",
+   "createdAt": "2026-11-02T22:46:08.052Z"
+  },
+  {
    "id": "p-mvzueyhh",
    "cat": "garmin",
    "group": "garmin",
