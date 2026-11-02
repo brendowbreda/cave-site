@@ -1,6 +1,25 @@
 {
  "products": [
   {
+   "id": "p-mvzwbkrs",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Alavanca de câmbio",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 3300,
+   "title": "SRAM R2C TT SHIFTER SET - 11V",
+   "subtitle": "",
+   "desc": "O SRAM R2C TT Shifter Set foi desenvolvido para ciclistas e triatletas que buscam máxima eficiência aerodinâmica e precisão nas mudanças de marcha.\n\nCom a exclusiva tecnologia R2C (Return to Center), as alavancas retornam automaticamente à posição central após cada troca, mantendo um perfil aerodinâmico consistente e proporcionando maior controle durante o pedal.\n\nEquipado com alavancas em fibra de carbono, acionamento mecânico por cabo e ajuste de posição, combina leveza, ergonomia e desempenho para bicicletas de contrarrelógio e triathlon.\n\nEspecificações técnicas\n\nModelo: SRAM R2C TT Shifter Set\n\nAplicação: Triathlon e contrarrelógio (TT)\n\nTecnologia: R2C — Return to Center\n\nMaterial: Alavancas em fibra de carbono\n\nAcionamento: Mecânico, por cabo\n\nInstalação: Extremidades de extensões aerodinâmicas (bar-end)\n\nAjuste: Posição inicial configurável em diferentes ângulos\n\nCompatibilidade: Transmissões mecânicas SRAM compatíveis, conforme versão\n\nPrazo de entrega: Até 30 dias após a confirmação do pagamento\n\nMais aerodinâmica. Mais controle. Cada segundo importa.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzwbkrs-mvzwh2rj1.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:38:45.190Z",
+   "createdAt": "2026-11-02T23:38:45.190Z"
+  },
+  {
    "id": "p-mvzvtyef",
    "cat": "garmin",
    "group": "garmin",
