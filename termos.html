@@ -9,20 +9,41 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&display=swap">
 <script>try{if(localStorage.getItem("cave-theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <style>
-:root{--bg:#000;--ink:#fff;--muted:#9B9B9B;--line:#262626;--logo-filter:none;color-scheme:dark}
-:root[data-theme="light"]{--bg:#fff;--ink:#0A0A0A;--muted:#5E5E5E;--line:#E0E0DE;--logo-filter:invert(1);color-scheme:light}
+:root{--bg:#000;--surface:#111;--ink:#fff;--muted:#9B9B9B;--line:#262626;--buy:#22C55E;--bad:#FF7A6E;--logo-filter:none;color-scheme:dark}
+:root[data-theme="light"]{--bg:#fff;--surface:#F4F4F3;--ink:#0A0A0A;--muted:#5E5E5E;--line:#E0E0DE;--buy:#169C46;--bad:#B42318;--logo-filter:invert(1);color-scheme:light}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 "Geist",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-.wrap{max-width:760px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:40px}
 header img{width:96px;height:auto;filter:var(--logo-filter)}
 header a{color:var(--muted);text-decoration:none;font-weight:500}
 h1{font-size:clamp(32px,7vw,48px);font-weight:600;letter-spacing:-.035em;line-height:1.05;margin:0 0 8px}
-.upd{color:var(--muted);font-size:14px;margin:0 0 32px}
-h2{font-size:19px;font-weight:600;letter-spacing:-.02em;margin:32px 0 8px}
+.upd{color:var(--muted);font-size:14px;margin:0 0 28px}
+.lead{font-size:clamp(18px,2.2vw,21px);color:var(--ink);line-height:1.5;margin:0 0 8px}
+h2{font-size:clamp(22px,3.5vw,28px);font-weight:600;letter-spacing:-.03em;margin:48px 0 6px;line-height:1.15}
+h2+.sub{margin-top:0}
+.sub{color:var(--muted);margin:0 0 18px}
+h3{font-size:17px;font-weight:600;margin:0 0 4px}
 p,li{color:var(--muted)}
 ul{padding-left:20px}
 a{color:var(--ink)}
+.steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.card .k{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.06em}
+.card p{margin:6px 0 0;font-size:15px}
+.grid2{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.cmp{width:100%;border-collapse:collapse;font-size:15px}
+.cmp th{text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 12px 10px 0}
+.cmp td{padding:12px 12px 12px 0;border-top:1px solid var(--line);vertical-align:top;color:var(--muted)}
+.cmp td:last-child{color:var(--ink);font-weight:500}
+.cmp td:last-child::before{content:"✓ ";color:var(--buy)}
+.ok,.no{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.ok li,.no li{position:relative;padding-left:28px}
+.ok li::before{content:"✓";position:absolute;left:0;color:var(--buy);font-weight:700}
+.no li::before{content:"✕";position:absolute;left:0;color:var(--bad);font-weight:700}
+.cta{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;background:var(--buy);color:#03140A;font-weight:600;text-decoration:none;margin-top:28px}
+:root[data-theme="light"] .cta{color:#fff}
+.note{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:14px}
 </style>
 </head>
 <body>
@@ -30,17 +51,74 @@ a{color:var(--ink)}
 <header><a href="./"><img src="assets/logo.png" alt="Cave Floripa"></a><a href="./">← Voltar ao site</a></header>
 <h1>Termos de uso</h1>
 <p class="upd">Última atualização: novembro de 2026</p>
-<p>Estes termos valem para quem usa o site da Cave Floripa. Ao navegar, comprar, fazer uma oferta, alugar ou agendar um serviço, você concorda com as regras abaixo.</p>
-<h2>Produtos e preços</h2>
-<p>Os produtos são anunciados com fotos, descrição e estado (novo ou usado). Os preços estão em reais e podem mudar sem aviso até a compra ser confirmada. Produtos usados são vendidos no estado descrito no anúncio.</p>
-<h2>Compras e ofertas</h2>
-<p>A compra é confirmada pela equipe da Cave, que combina pagamento e entrega pelo WhatsApp. Uma oferta só vira compra quando o vendedor aceita. Se a oferta for recusada, nada é cobrado.</p>
-<h2>Vender com a Cave</h2>
-<p>Ao enviar um produto para venda, você confirma que ele é seu e que as informações são verdadeiras. A Cave avalia o produto e combina com você as condições antes de anunciar.</p>
-<h2>Aluguel e Bike Fit</h2>
-<p>Datas, valores e condições de aluguel e de Bike Fit são combinados diretamente pelo WhatsApp antes da reserva.</p>
-<h2>Contato</h2>
-<p>Dúvidas sobre estes termos: fale com a Cave pelo WhatsApp do site.</p>
+<p class="lead">Estes Termos de Uso regulam o acesso e a utilização do site da Cave Floripa (“Cave”) e dos serviços oferecidos por meio dele.</p>
+
+<h2>1. Aceitação</h2>
+<p>1.1. Ao acessar o site, comprar, fazer uma oferta, enviar um produto para venda, alugar equipamentos ou agendar um serviço, o usuário declara ter lido, compreendido e aceitado integralmente estes Termos.</p>
+<p>1.2. Caso não concorde com qualquer disposição, o usuário deve deixar de utilizar o site e os serviços.</p>
+
+<h2>2. Definições</h2>
+<ul>
+  <li><b>Usuário:</b> qualquer pessoa que acesse ou utilize o site.</li>
+  <li><b>Comprador:</b> usuário que adquire ou faz oferta por um produto anunciado.</li>
+  <li><b>Vendedor:</b> pessoa que entrega um produto à Cave para que a venda seja intermediada.</li>
+  <li><b>Locatário:</b> usuário que aluga bicicletas, rodas ou acessórios.</li>
+  <li><b>Produtos:</b> equipamentos novos ou usados anunciados no site.</li>
+</ul>
+
+<h2>3. Produtos, anúncios e preços</h2>
+<p>3.1. Os produtos são apresentados com fotos, descrição e indicação de estado (novo ou usado). As imagens têm caráter ilustrativo e podem apresentar pequenas variações em relação ao produto real.</p>
+<p>3.2. Os preços são expressos em reais (R$) e podem ser alterados a qualquer momento, sem aviso prévio, até a confirmação da compra.</p>
+<p>3.3. A disponibilidade dos produtos está sujeita a confirmação. A existência de um anúncio não garante a reserva do produto.</p>
+<p>3.4. Produtos usados são vendidos no estado descrito no anúncio, que reflete a avaliação realizada pela Cave.</p>
+
+<h2>4. Compras</h2>
+<p>4.1. A compra é concluída somente após a confirmação pela Cave, que combina com o Comprador a forma de pagamento e de entrega, inclusive por WhatsApp.</p>
+<p>4.2. O prazo e o custo de envio, quando houver, são informados antes da confirmação da compra.</p>
+
+<h2>5. Ofertas</h2>
+<p>5.1. O Comprador pode propor um valor diferente do anunciado por meio da função “Fazer oferta”.</p>
+<p>5.2. A oferta é vinculante: se aceita pelo Vendedor, a compra é concluída pelo valor ofertado.</p>
+<p>5.3. Quando disponível o pagamento online, o valor da oferta poderá ser pré-autorizado no cartão do Comprador. Em caso de recusa ou de ausência de resposta no prazo informado, a pré-autorização é cancelada e nenhum valor é cobrado.</p>
+<p>5.4. Ofertas abaixo do percentual mínimo indicado no site não são enviadas ao Vendedor.</p>
+
+<h2>6. Venda por intermédio da Cave</h2>
+<p>6.1. Ao entregar um produto para venda, o Vendedor declara ser seu legítimo proprietário, que o produto tem procedência lícita e que as informações prestadas são verdadeiras.</p>
+<p>6.2. As condições de avaliação, comissão, exclusividade e repasse estão descritas nos <a href="termos-venda.html">Termos de venda</a>, que integram estes Termos.</p>
+
+<h2>7. Aluguel</h2>
+<p>7.1. O aluguel de equipamentos depende de confirmação de disponibilidade e segue as condições dos <a href="termos-aluguel.html">Termos de aluguel</a>, que integram estes Termos.</p>
+
+<h2>8. Bike Fit</h2>
+<p>8.1. O agendamento do Bike Fit é feito diretamente com o profissional responsável. Data, horário, valor e forma de pagamento são confirmados antes do atendimento.</p>
+
+<h2>9. Garantia e direito de arrependimento</h2>
+<p>9.1. Os produtos novos contam com as garantias descritas nos <a href="garantia.html">Termos de garantia</a>.</p>
+<p>9.2. Nas compras realizadas fora do estabelecimento comercial, o Comprador pode exercer o direito de arrependimento no prazo de 7 (sete) dias, contados do recebimento do produto, nos termos do art. 49 do Código de Defesa do Consumidor.</p>
+
+<h2>10. Obrigações do usuário</h2>
+<p>10.1. O usuário se compromete a fornecer informações verdadeiras, a utilizar o site de forma lícita e a não praticar atos que prejudiquem a Cave, outros usuários ou terceiros.</p>
+
+<h2>11. Propriedade intelectual</h2>
+<p>11.1. A marca, o logotipo, os textos, as fotos e o layout do site pertencem à Cave ou a seus licenciantes. É proibida a reprodução sem autorização prévia e por escrito.</p>
+<p>11.2. As marcas de terceiros exibidas no site pertencem aos respectivos titulares e são utilizadas apenas para identificar os produtos.</p>
+
+<h2>12. Responsabilidade</h2>
+<p>12.1. A Cave se empenha para manter o site disponível e as informações corretas, mas não garante o funcionamento ininterrupto ou livre de erros.</p>
+<p>12.2. Nada nestes Termos afasta os direitos assegurados ao consumidor pelo Código de Defesa do Consumidor.</p>
+
+<h2>13. Privacidade</h2>
+<p>13.1. O tratamento de dados pessoais segue a <a href="privacidade.html">Política de Privacidade</a> e a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
+
+<h2>14. Alterações</h2>
+<p>14.1. A Cave pode alterar estes Termos a qualquer momento. A versão vigente é sempre a publicada nesta página, com a data da última atualização.</p>
+
+<h2>15. Legislação e foro</h2>
+<p>15.1. Estes Termos são regidos pelas leis da República Federativa do Brasil.</p>
+<p>15.2. Fica eleito o foro do domicílio do consumidor para dirimir eventuais controvérsias, nos termos do Código de Defesa do Consumidor.</p>
+
+<h2>16. Contato</h2>
+<p>16.1. Dúvidas, solicitações ou reclamações sobre estes Termos podem ser enviadas à Cave pelo WhatsApp disponível no site.</p>
 </div>
 </body>
 </html>
