@@ -63,6 +63,8 @@ p{margin:0}
 /* Login */
 .login{min-height:100vh;display:grid;align-content:center;gap:24px;padding-block:40px}
 .login img{width:180px}
+.login-h{font-size:28px;margin:0}
+.hint{font-size:12px;color:var(--muted);line-height:1.4}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:14px}
 .howto{font-size:14px;color:var(--muted);display:grid;gap:8px;padding-left:18px;margin:0}
 .howto b{color:var(--ink)}
@@ -149,25 +151,28 @@ p{margin:0}
 <!-- LOGIN -->
 <main id="login" class="wrap login" hidden>
   <img src="../assets/logo.png" alt="Cave Floripa" width="180" height="59">
-  <div><p class="eyebrow">Área do administrador</p><h1 style="margin-top:8px">Entrar</h1></div>
+  <h1 class="login-h">Entrar</h1>
   <form class="card form" id="loginForm" novalidate>
-    <div class="field"><label for="l-token">Chave de acesso (token do GitHub)</label><input id="l-token" type="password" autocomplete="current-password" placeholder="github_pat_…" required></div>
-    <div class="field"><label for="l-repo">Repositório</label><input id="l-repo" value="brendowbreda/cave-site" autocapitalize="off" spellcheck="false"></div>
-    <label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" id="l-remember" checked style="width:20px;height:20px;accent-color:var(--buy)">Manter conectado neste aparelho</label>
+    <div class="field"><label for="l-email">E-mail</label><input id="l-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="nome@cave.floripa.com" required></div>
+    <div class="field"><label for="l-pass">Senha</label><input id="l-pass" type="password" autocomplete="current-password" placeholder="Digite sua senha" required></div>
     <div id="loginErr" class="err" hidden></div>
     <button class="btn solid block" type="submit" id="loginBtn">Entrar</button>
   </form>
-  <details class="card">
-    <summary style="cursor:pointer;font-weight:600">Como criar a chave de acesso (uma vez só)</summary>
-    <ol class="howto">
-      <li>No GitHub, abra <b>Settings → Developer settings → Personal access tokens → Fine-grained tokens</b> e toque em <b>Generate new token</b>.</li>
-      <li>Dê um nome (ex.: <b>Admin Cave</b>) e escolha a validade.</li>
-      <li>Em <b>Repository access</b>, escolha <b>Only select repositories</b> e marque <b>cave-site</b>.</li>
-      <li>Em <b>Permissions → Repository permissions</b>, coloque <b>Contents</b> em <b>Read and write</b>.</li>
-      <li>Toque em <b>Generate token</b>, copie a chave e cole acima. Guarde em lugar seguro.</li>
-    </ol>
-    <a class="btn small" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="justify-self:start">Abrir no GitHub</a>
-  </details>
+</main>
+
+<!-- CONFIGURAR ACESSO (admin/#configurar) -->
+<main id="setup" class="wrap login" hidden>
+  <img src="../assets/logo.png" alt="Cave Floripa" width="180" height="59">
+  <h1 class="login-h">Criar acesso</h1>
+  <form class="card form" id="setupForm" novalidate>
+    <div class="field"><label for="u-email">E-mail</label><input id="u-email" type="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="nome@cave.floripa.com" required></div>
+    <div class="field"><label for="u-pass">Senha (mínimo 10 caracteres)</label><input id="u-pass" type="password" autocomplete="new-password" required></div>
+    <div class="field"><label for="u-pass2">Repita a senha</label><input id="u-pass2" type="password" autocomplete="new-password" required></div>
+    <div class="field"><label for="u-token">Chave do GitHub</label><input id="u-token" type="password" autocomplete="off" placeholder="github_pat_…" required>
+      <span class="hint">Fine-grained token só do repositório cave-site, com Contents em Read and write. A chave fica guardada criptografada com a senha.</span></div>
+    <div id="setupErr" class="err" hidden></div>
+    <button class="btn solid block" type="submit" id="setupBtn">Criar acesso</button>
+  </form>
 </main>
 
 <!-- APP -->
@@ -274,8 +279,10 @@ function busy(txt){$("#busy").hidden=!txt;if(txt)$("#busyTxt").textContent=txt}
 // ---------- Sessão
 const KEY="cave-admin";
 let S=null; // {token, repo, branch}
-function loadSession(){try{return JSON.parse(localStorage.getItem(KEY)||sessionStorage.getItem(KEY)||"null")}catch(e){return null}}
-function saveSession(s,remember){try{(remember?localStorage:sessionStorage).setItem(KEY,JSON.stringify(s))}catch(e){}}
+const REPO="brendowbreda/cave-site";
+const endOfDay=()=>{const d=new Date();d.setHours(23,59,59,999);return d.getTime()};
+function loadSession(){try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(!v||!v.token||!v.exp||Date.now()>v.exp){localStorage.removeItem(KEY);return null}return v}catch(e){return null}}
+function saveSession(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
 function clearSession(){try{localStorage.removeItem(KEY);sessionStorage.removeItem(KEY)}catch(e){}}
 
 // ---------- GitHub
@@ -313,22 +320,68 @@ async function updateProducts(mutate,message){
   }
 }
 
-// ---------- Login
+// ---------- Acesso (e-mail + senha protegem a chave do GitHub, criptografada em data/admins.json)
+const te=new TextEncoder(),ITER=600000;
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+const unhex=h=>Uint8Array.from(h.match(/../g),x=>parseInt(x,16));
+const normEmail=e=>e.trim().toLowerCase();
+async function userId(email){return hex(await crypto.subtle.digest("SHA-256",te.encode("cave:"+normEmail(email))))}
+async function deriveKey(pass,salt,iter){const base=await crypto.subtle.importKey("raw",te.encode(pass),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt,iterations:iter},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function sealToken(email,pass,token){const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));const key=await deriveKey(pass,salt,ITER);const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,te.encode(token));return {id:await userId(email),salt:hex(salt),iv:hex(iv),iter:ITER,ct:hex(ct)}}
+async function openToken(u,pass){const key=await deriveKey(pass,unhex(u.salt),u.iter);return new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unhex(u.iv)},key,unhex(u.ct)))}
+async function loadUsers(){
+  for(const url of ["../data/admins.json?t="+Date.now(),"https://raw.githubusercontent.com/"+REPO+"/main/data/admins.json?t="+Date.now()]){
+    try{const r=await fetch(url,{cache:"no-store"});if(r.ok)return (await r.json()).users||[]}catch(e){}
+  }
+  return [];
+}
+async function checkRepo(){const r=await gh(`/repos/${REPO}`);if(r.permissions&&!r.permissions.push)throw Object.assign(new Error("403"),{status:403});return r.default_branch||"main"}
+
 $("#loginForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const token=$("#l-token").value.trim(),repo=$("#l-repo").value.trim().replace(/^https?:\/\/github.com\//,"").replace(/\.git$/,"");
-  $("#loginErr").hidden=true;
-  if(!token){$("#loginErr").textContent="Cole a chave de acesso.";$("#loginErr").hidden=false;return}
+  const email=$("#l-email").value,pass=$("#l-pass").value,err=$("#loginErr");
+  err.hidden=true;
+  if(!email.trim()||!pass){err.textContent="Preencha e-mail e senha.";err.hidden=false;return}
   $("#loginBtn").disabled=true;$("#loginBtn").textContent="Entrando…";
-  S={token,repo,branch:"main"};
   try{
-    const r=await gh(`/repos/${repo}`);
-    S.branch=r.default_branch||"main";
-    if(r.permissions&&!r.permissions.push)throw Object.assign(new Error("403"),{status:403});
-    saveSession(S,$("#l-remember").checked);
+    const id=await userId(email),u=(await loadUsers()).find(x=>x.id===id);
+    let token=null;
+    if(u){try{token=await openToken(u,pass)}catch(_){}}
+    if(!token)throw Object.assign(new Error("auth"),{auth:true});
+    S={token,repo:REPO,branch:"main",exp:endOfDay()};
+    S.branch=await checkRepo();
+    saveSession(S);$("#l-pass").value="";
     await start();
-  }catch(err){S=null;$("#loginErr").textContent=errMsg(err);$("#loginErr").hidden=false}
+  }catch(x){S=null;err.textContent=x.auth?"E-mail ou senha incorretos.":x.status===401?"O acesso expirou. Peça para recriar o acesso.":errMsg(x);err.hidden=false}
   finally{$("#loginBtn").disabled=false;$("#loginBtn").textContent="Entrar"}
+});
+
+$("#setupForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const email=$("#u-email").value,pass=$("#u-pass").value,token=$("#u-token").value.trim(),err=$("#setupErr");
+  err.hidden=true;const fail=m=>{err.textContent=m;err.hidden=false};
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim()))return fail("Digite um e-mail válido.");
+  if(pass.length<10)return fail("A senha precisa ter pelo menos 10 caracteres.");
+  if(pass!==$("#u-pass2").value)return fail("As senhas não são iguais.");
+  if(!token)return fail("Cole a chave do GitHub.");
+  $("#setupBtn").disabled=true;$("#setupBtn").textContent="Criando…";
+  try{
+    S={token,repo:REPO,branch:"main",exp:endOfDay()};
+    S.branch=await checkRepo();
+    const entry=await sealToken(email,pass,token);
+    for(let t=0;t<2;t++){
+      let data={users:[]},sha;
+      try{const r=await getJSON("data/admins.json");data=r.data;sha=r.sha}catch(x){if(x.status!==404)throw x}
+      data.users=(data.users||[]).filter(u=>u.id!==entry.id).concat(entry);
+      try{await putFile("data/admins.json",b64enc(JSON.stringify(data,null,1)+"\n"),"Admin: acesso atualizado",sha);break}
+      catch(x){if(x.status!==409||t)throw x}
+    }
+    saveSession(S);
+    history.replaceState(null,"",location.pathname);
+    $("#setup").hidden=true;toast("Acesso criado. Use e-mail e senha para entrar.");
+    await start();
+  }catch(x){S=null;fail(errMsg(x))}
+  finally{$("#setupBtn").disabled=false;$("#setupBtn").textContent="Criar acesso"}
 });
 $("#logout").addEventListener("click",()=>{clearSession();location.reload()});
 
@@ -342,7 +395,7 @@ async function start(){
   $("#login").hidden=true;$("#app").hidden=false;
   renderList();renderCfg();
 }
-function showLogin(msg){$("#app").hidden=true;$("#login").hidden=false;if(msg){$("#loginErr").textContent=msg;$("#loginErr").hidden=false}}
+function showLogin(msg){$("#app").hidden=true;$("#setup").hidden=true;$("#login").hidden=false;if(msg){$("#loginErr").textContent=msg;$("#loginErr").hidden=false}}
 
 // ---------- Lista
 const F={f:"all",q:""};
@@ -525,7 +578,10 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#editor").hidde
 
 // ---------- Início
 S=loadSession();
-if(S&&S.token)start();else showLogin();
+if(location.hash==="#configurar"){$("#login").hidden=true;$("#setup").hidden=false}
+else if(S)start();else showLogin();
+// Sessão termina todo dia às 23h59
+setInterval(()=>{if(S&&S.exp&&Date.now()>S.exp){clearSession();location.reload()}},30000);
 </script>
 </body>
 </html>
