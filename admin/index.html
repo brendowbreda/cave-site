@@ -65,6 +65,12 @@
 .st b{font-size:22px;letter-spacing:-.01em}
 .st.big b{font-size:36px}
 .st .muted{font-size:12px}
+.tel{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:var(--surface);min-height:48px;overflow:hidden}
+.tel span{padding:0 4px 0 14px;font-size:16px;color:var(--muted)}
+.tel input{border:0!important;background:transparent!important;padding-left:6px!important;min-height:46px!important;outline:0}
+.cfg-item .tel{background:var(--bg)}
+.rent-g{display:grid;gap:10px;margin-top:6px}
+.rent-gt{font-size:15px}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -283,7 +289,7 @@ p{margin:0}
           <div class="field"><label for="co-razao">Razão social</label><input id="co-razao"></div>
           <div class="field"><label for="co-cnpj">CNPJ</label><input id="co-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></div>
           <div class="field"><label for="co-end">Endereço</label><input id="co-end" placeholder="Rua, número, bairro, Florianópolis/SC"></div>
-          <div class="field"><label for="co-tel">Telefone/WhatsApp Cave.&nbsp;Floripa</label><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999"></div>
+          <div class="field"><label for="co-tel">Telefone/WhatsApp Cave.&nbsp;Floripa</label><div class="tel"><span>+55</span><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
           <div class="field"><label for="co-email">E-mail</label><input id="co-email" type="email" autocapitalize="off" placeholder="contato@cave.floripa.com"></div>
           <span class="hint">O telefone é o WhatsApp que recebe as mensagens do site.</span>
           <button class="btn solid block" type="submit">Salvar dados da empresa</button>
@@ -298,13 +304,11 @@ p{margin:0}
 
         <form class="cfg-block" id="cfgForm" novalidate>
           <h3>Bike Fit</h3>
-          <div class="field"><label for="c-wafit">WhatsApp do Guilherme</label><input id="c-wafit" inputmode="tel"></div>
+          <div class="field"><label for="c-wafit">WhatsApp do Guilherme</label><div class="tel"><span>+55</span><input id="c-wafit" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
           <div id="c-fit" class="form"></div>
           <button class="btn small" id="openFit" type="button" style="justify-self:start">Ver agenda e painel do Bike Fit</button>
-          <h3 style="margin-top:10px">Ofertas</h3>
-          <div class="field"><label for="c-floor">Oferta mínima aceita (% do preço)</label><input id="c-floor" inputmode="numeric" style="max-width:160px"><span class="hint">Abaixo disso o site recusa a oferta antes de pedir o cartão.</span></div>
-          <h3 style="margin-top:10px">Aluguel</h3>
-          <p class="hint">Deixe o preço vazio para mostrar “Sob consulta”. Ex.: R$ 350,00 por prova.</p>
+          <h3 style="margin-top:10px">Locação</h3>
+          <p class="hint">Deixe o preço vazio para mostrar “Sob consulta”.</p>
           <div id="c-rent" class="form"></div>
           <button class="btn solid block" type="submit">Salvar site</button>
         </form>
@@ -314,7 +318,7 @@ p{margin:0}
       <div data-role="bikefit">
         <form class="cfg-block" id="meForm" novalidate>
           <h3>Meus dados</h3>
-          <div class="field"><label for="me-wa">WhatsApp</label><input id="me-wa" inputmode="tel"><span class="hint">Número que recebe os pedidos de Bike Fit do site.</span></div>
+          <div class="field"><label for="me-wa">WhatsApp</label><div class="tel"><span>+55</span><input id="me-wa" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div><span class="hint">Número que recebe os pedidos de Bike Fit do site.</span></div>
           <div class="field"><label for="me-email">E-mail</label><input id="me-email" type="email" autocapitalize="off"></div>
           <div class="row2">
             <div class="field"><label for="me-pass">Nova senha</label><input id="me-pass" type="password" autocomplete="new-password"></div>
@@ -370,7 +374,7 @@ p{margin:0}
     <div class="field"><label for="e-sub">Subtítulo</label><input id="e-sub" placeholder="Ex.: Tam. M · Shimano Ultegra Di2 · 2023"><span class="hint">Tamanho, modelo, ano. Aparece mesmo depois de vendido.</span></div>
     <div class="field"><label for="e-desc">Descrição</label><textarea id="e-desc" placeholder="Estado do produto, uso, revisões, o que acompanha."></textarea></div>
     <div class="row2">
-      <div class="field"><label for="e-price">Valor</label><input id="e-price" inputmode="numeric" placeholder="R$ 0"><span class="hint">Em reais. O site mostra com ,00.</span></div>
+      <div class="field"><label for="e-price">Valor</label><input id="e-price" inputmode="numeric" placeholder="R$ 0,00"></div>
       <div class="field"><span class="lbl">Estado</span><div class="pillset">
         <label><input type="radio" name="e-cond" id="e-novo" value="novo"><span>Novo</span></label>
         <label><input type="radio" name="e-cond" id="e-usado" value="usado"><span>Usado</span></label></div></div>
@@ -402,7 +406,17 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2,maximumFractionDigits:2});
 const digits=v=>parseInt(String(v).replace(/\D/g,""))||0;
-const money=v=>v?"R$ "+Number(v).toLocaleString("pt-BR"):""; // campo de valor: reais inteiros, o ",00" é fixo
+const money=v=>v?"R$ "+Number(v).toLocaleString("pt-BR"):"";
+const money00=v=>v?money(v)+",00":"";
+const parseMoney=v=>digits(String(v).replace(/,\d{0,2}$/,""));
+// Campo de valor: digita só os reais; ao sair do campo entra o ",00".
+function moneyField(el,cb){
+  el.addEventListener("focus",()=>{el.value=el.value.replace(/,\d{0,2}$/,"")});
+  el.addEventListener("input",()=>{el.value=money(parseMoney(el.value));cb&&cb()});
+  el.addEventListener("blur",()=>{el.value=money00(parseMoney(el.value));cb&&cb()});
+}
+// Telefone: +55 fixo, campo mostra (DD) 99999-9999
+const telMask=v=>{const d=String(v).replace(/\D/g,"").slice(0,11);if(d.length<3)return d?"("+d:"";const a=`(${d.slice(0,2)}) `,r=d.slice(2);return a+(r.length>8?r.slice(0,5)+"-"+r.slice(5):r.length>4?r.slice(0,4)+"-"+r.slice(4):r)};
 const icon=k=>`<svg viewBox="0 0 64 64" aria-hidden="true">${CAVE_ICONS[k]||CAVE_ICONS.box}</svg>`;
 function toast(m,bad){const t=$("#toast");t.textContent=m;t.classList.toggle("bad",!!bad);t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),bad?5000:2800)}
 function busy(txt){$("#busy").hidden=!txt;if(txt)$("#busyTxt").textContent=txt}
@@ -642,7 +656,7 @@ function openEditor(p){
   D.photos=(D.photos||[]).map(path=>({path}));
   $("#edTitle").textContent=p?"Editar produto":"Novo produto";
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";$("#e-tag").value=D.tag||"";
-  $("#e-price").value=money(D.price);
+  $("#e-price").value=money00(D.price);
   $("#e-"+D.cond).checked=true;$(D.status==="vendido"?"#e-vend":"#e-disp").checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
   $("#e-cat").innerHTML=CFG.categories.flatMap(c=>c.groups.map(g=>`<option value="${c.id}|${g.id}">${esc(c.groups.length>1?c.name+" › "+g.name:c.name)}</option>`)).join("");
@@ -664,11 +678,11 @@ $("#e-cat").addEventListener("change",()=>{fillSubs();renderPreview()});
 $("#e-subcat").addEventListener("change",()=>{$("#e-other-wrap").hidden=$("#e-subcat").value!=="__other";renderPreview()});
 ["#e-title","#e-sub","#e-other","#e-tag"].forEach(s=>$(s).addEventListener("input",renderPreview));
 document.querySelectorAll('[name="e-cond"],[name="e-status"]').forEach(r=>r.addEventListener("change",renderPreview));
-$("#e-price").addEventListener("input",e=>{e.target.value=money(digits(e.target.value));renderPreview()});
+moneyField($("#e-price"),()=>renderPreview());
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
   return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:$("#e-tag").value.trim(),
-    price:digits($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub};
+    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub};
 }
 function renderPreview(){
   const f=readForm(),s=f.status==="vendido",ph=D.photos[0];
@@ -741,8 +755,30 @@ $("#e-delete").addEventListener("click",async function(){
 });
 
 // ---------- Configurações
+// Locação: itens agrupados como no site (Bicicletas, Rodas, Vamos viajar?)
+const RGROUPS=[{group:"Bicicletas",icon:"bike"},{group:"Rodas",icon:"spoke"},{group:"Viagem",title:"Vamos viajar?",icon:"bag"}];
+let RENT=[];
+function syncRent(){RENT.forEach((r,i)=>{const n=$("#cr-n"+i);if(n){r.name=n.value.trim();r.desc=$("#cr-d"+i).value.trim();r.price=$("#cr-p"+i).value.trim()}})}
+function renderRent(){
+  const groups=[...RGROUPS];RENT.forEach(r=>{if(!groups.some(g=>g.group===r.group))groups.push({group:r.group,title:r.title,icon:r.icon})});
+  $("#c-rent").innerHTML=groups.map(g=>`<div class="rent-g"><b class="rent-gt">${esc(g.title||g.group)}</b>`+RENT.map((r,i)=>r.group!==g.group?"":`<div class="cfg-item">
+    <div class="field"><label for="cr-n${i}">Item</label><input id="cr-n${i}" value="${esc(r.name)}" placeholder="Ex.: Canyon Speedmax"></div>
+    <div class="field"><label for="cr-d${i}">Descrição</label><input id="cr-d${i}" value="${esc(r.desc)}"></div>
+    <div class="field"><label for="cr-p${i}">Preço</label><input id="cr-p${i}" value="${esc(r.price)}" placeholder="Sob consulta"></div>
+    <button class="btn small danger" type="button" data-rrm="${i}" style="justify-self:start">Remover</button></div>`).join("")+
+    `<button class="btn small" type="button" data-radd="${esc(g.group)}" style="justify-self:start">+ Adicionar em ${esc(g.title||g.group)}</button></div>`).join("");
+}
+$("#c-rent").addEventListener("click",e=>{
+  const add=e.target.closest("[data-radd]"),rm=e.target.closest("[data-rrm]");
+  if(!add&&!rm)return;syncRent();
+  if(add){const g=RGROUPS.find(x=>x.group===add.dataset.radd)||{group:add.dataset.radd};const it={group:g.group,icon:g.icon||"box",name:"",desc:"",price:""};if(g.title)it.title=g.title;
+    let at=-1;RENT.forEach((r,i)=>{if(r.group===g.group)at=i});RENT.splice(at+1||RENT.length,0,it);renderRent();
+    const i=RENT.indexOf(it);$("#cr-n"+i).focus();}
+  else{RENT.splice(+rm.dataset.rrm,1);renderRent()}
+});
 const waDigits=v=>{let d=String(v||"").replace(/\D/g,"");if(d&&d.length<=11)d="55"+d;return d};
-const fmtTel=w=>{let d=String(w||"").replace(/\D/g,"");if(d.startsWith("55")&&d.length>11)d=d.slice(2);return d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length===10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d};
+const fmtTel=w=>{let d=String(w||"").replace(/\D/g,"");if(d.startsWith("55")&&d.length>11)d=d.slice(2);return telMask(d)};
+document.querySelectorAll("[data-tel]").forEach(el=>el.addEventListener("input",()=>{el.value=telMask(el.value)}));
 const fmtCnpj=v=>{const d=String(v||"").replace(/\D/g,"").slice(0,14);return d.replace(/^(\d{2})(\d)/,"$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d)/,".$1/$2").replace(/(\d{4})(\d)/,"$1-$2")};
 async function updateConfig(mutate,msg){
   for(let t=0;t<2;t++){
@@ -756,15 +792,12 @@ function renderCfg(){
   $("#co-tel").value=fmtTel(CFG.whatsapp.loja);
   $("#c-wafit").value=fmtTel(CFG.whatsapp.fit);$("#me-wa").value=fmtTel(CFG.whatsapp.fit);
   $("#me-email").value=S.email||"";$("#me-pass").value="";$("#me-pass2").value="";
-  $("#c-floor").value=Math.round((CFG.offerFloor||.75)*100);
   $("#c-fit").innerHTML=CFG.fit.map((f,i)=>`<div class="cfg-item">
     <div class="field"><label for="cf-n${i}">Nome</label><input id="cf-n${i}" value="${esc(f.name)}"></div>
-    <div class="field"><label for="cf-p${i}">Valor</label><input id="cf-p${i}" inputmode="numeric" value="${money(f.price)}" data-money></div></div>`).join("");
-  $("#c-rent").innerHTML=CFG.rentals.map((r,i)=>`<div class="cfg-item">
-    <div class="field"><label for="cr-n${i}">Item</label><input id="cr-n${i}" value="${esc(r.name)}"></div>
-    <div class="field"><label for="cr-d${i}">Descrição</label><input id="cr-d${i}" value="${esc(r.desc)}"></div>
-    <div class="field"><label for="cr-p${i}">Preço</label><input id="cr-p${i}" value="${esc(r.price)}" placeholder="Sob consulta"></div></div>`).join("");
-  document.querySelectorAll("[data-money]").forEach(el=>el.addEventListener("input",()=>{el.value=money(digits(el.value))}));
+    <div class="field"><label for="cf-p${i}">Valor</label><input id="cf-p${i}" inputmode="numeric" value="${money00(f.price)}" data-money></div></div>`).join("");
+  RENT=JSON.parse(JSON.stringify(CFG.rentals));
+  document.querySelectorAll("[data-money]").forEach(el=>moneyField(el));
+  renderRent();
   $("#us-list").innerHTML=SLOTS.map((s,i)=>{
     const [id,u]=Object.entries(DIR).find(([,x])=>x.role===s.role)||[];
     return `<div class="cfg-item" data-slot="${i}" data-id="${id||""}">
@@ -785,14 +818,12 @@ $("#coForm").addEventListener("submit",async e=>{
 });
 $("#cfgForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const floor=Math.min(100,Math.max(1,digits($("#c-floor").value)||75))/100;
   busy("Salvando…");
   try{
     await updateConfig(data=>{
       const w=waDigits($("#c-wafit").value);if(w)data.whatsapp.fit=w;
-      data.offerFloor=floor;
-      data.fit=data.fit.map((f,i)=>({...f,name:$("#cf-n"+i).value.trim(),price:digits($("#cf-p"+i).value)}));
-      data.rentals=data.rentals.map((r,i)=>({...r,name:$("#cr-n"+i).value.trim(),desc:$("#cr-d"+i).value.trim(),price:$("#cr-p"+i).value.trim()}));
+      data.fit=data.fit.map((f,i)=>({...f,name:$("#cf-n"+i).value.trim(),price:parseMoney($("#cf-p"+i).value)}));
+      syncRent();data.rentals=RENT.filter(r=>r.name);
     },"Atualiza configurações");
     renderCfg();toast("Salvo. O site atualiza em cerca de 1 minuto.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
