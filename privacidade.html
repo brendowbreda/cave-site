@@ -4,45 +4,119 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>Privacidade · Cave Floripa</title>
+<title>Política de Privacidade e Proteção de Dados Pessoais · Cave Floripa</title>
 <link rel="icon" href="assets/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&display=swap">
 <script>try{if(localStorage.getItem("cave-theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <style>
-:root{--bg:#000;--ink:#fff;--muted:#9B9B9B;--line:#262626;--logo-filter:none;color-scheme:dark}
-:root[data-theme="light"]{--bg:#fff;--ink:#0A0A0A;--muted:#5E5E5E;--line:#E0E0DE;--logo-filter:invert(1);color-scheme:light}
+:root{--bg:#000;--surface:#111;--ink:#fff;--muted:#9B9B9B;--line:#262626;--buy:#22C55E;--bad:#FF7A6E;--logo-filter:none;color-scheme:dark}
+:root[data-theme="light"]{--bg:#fff;--surface:#F4F4F3;--ink:#0A0A0A;--muted:#5E5E5E;--line:#E0E0DE;--buy:#169C46;--bad:#B42318;--logo-filter:invert(1);color-scheme:light}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 "Geist",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-.wrap{max-width:760px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:40px}
 header img{width:96px;height:auto;filter:var(--logo-filter)}
 header a{color:var(--muted);text-decoration:none;font-weight:500}
 h1{font-size:clamp(32px,7vw,48px);font-weight:600;letter-spacing:-.035em;line-height:1.05;margin:0 0 8px}
-.upd{color:var(--muted);font-size:14px;margin:0 0 32px}
-h2{font-size:19px;font-weight:600;letter-spacing:-.02em;margin:32px 0 8px}
+.upd{color:var(--muted);font-size:14px;margin:0 0 28px}
+p b{color:var(--ink);font-weight:600}
+.lead{font-size:clamp(18px,2.2vw,21px);color:var(--ink);line-height:1.5;margin:0 0 8px}
+@media (max-width:719px){.lead.split span{display:block}}
+h2{font-size:clamp(22px,3.5vw,28px);font-weight:600;letter-spacing:-.03em;margin:48px 0 6px;line-height:1.15}
+h2+.sub{margin-top:0}
+.sub{color:var(--muted);margin:0 0 18px}
+h3{font-size:17px;font-weight:600;margin:0 0 4px}
+h3.crit{font-size:19px;font-weight:700;letter-spacing:-.02em;margin-bottom:14px}
 p,li{color:var(--muted)}
 ul{padding-left:20px}
 a{color:var(--ink)}
+.steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.card .k{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.06em}
+.card p{margin:6px 0 0;font-size:15px}
+.grid2{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.cmp{width:100%;border-collapse:collapse;font-size:15px}
+.cmp th{text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 10px 0}
+.cmp th:last-child{color:var(--ink);font-weight:700}
+.cmp td{padding:12px 12px 12px 0;border-top:1px solid var(--line);vertical-align:top;color:var(--muted)}
+.cmp td:last-child{color:var(--buy);font-weight:600}
+.cmp.one th{color:var(--ink);font-weight:700}
+.ok,.no{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.ok li,.no li{position:relative;padding-left:28px}
+.ok li::before{content:"✓";position:absolute;left:0;color:var(--buy);font-weight:700}
+.no li::before{content:"✕";position:absolute;left:0;color:var(--bad);font-weight:700}
+.cta{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;background:var(--buy);color:#03140A;font-weight:600;text-decoration:none;margin-top:28px}
+:root[data-theme="light"] .cta{color:#fff}
+.note{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:14px}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header><a href="./"><img src="assets/logo.png" alt="Cave Floripa"></a><a href="./">← Voltar ao site</a></header>
-<h1>Privacidade</h1>
-<p class="upd">Última atualização: novembro de 2026</p>
-<p>Esta página explica quais informações o site da Cave Floripa usa e por quê.</p>
-<h2>O que coletamos</h2>
+<h1>Política de Privacidade e Proteção de Dados Pessoais</h1>
+<p class="upd">Última atualização: 1º de novembro de 2026</p>
+<h2>1. Disposições gerais</h2>
+<p><b>1.1.</b> A presente Política de Privacidade estabelece as diretrizes adotadas pela <b>Cave. Floripa</b> quanto à coleta, utilização, tratamento, armazenamento e proteção dos dados pessoais dos usuários de sua plataforma digital.</p>
+<p><b>1.2.</b> A Cave Floripa compromete-se a respeitar a privacidade e a proteção dos dados pessoais, em conformidade com a Lei nº 13.709/2018 (Lei Geral de Proteção de Dados Pessoais – LGPD), com a Lei nº 12.965/2014 (Marco Civil da Internet) e com as demais normas aplicáveis.</p>
+<p><b>1.3.</b> O tratamento de dados pessoais observará os princípios da finalidade, adequação, necessidade, transparência, segurança e prevenção, assegurando aos titulares o exercício dos direitos legalmente previstos.</p>
+<h2>2. Da coleta de dados pessoais</h2>
+<p><b>2.1.</b> A plataforma não exige a criação de contas, a realização de cadastros ou a autenticação por login para a navegação e a consulta aos produtos e serviços disponibilizados.</p>
+<p><b>2.2.</b> O contato comercial, a apresentação de propostas, a solicitação de serviços e o envio de informações para a comercialização de produtos poderão ocorrer por meio de redirecionamento ao aplicativo WhatsApp.</p>
+<p><b>2.3.</b> As informações fornecidas voluntariamente pelos usuários, incluindo nome, telefone, características dos produtos e demais dados necessários ao atendimento, são transmitidas por meio do WhatsApp e não são armazenadas pela plataforma em banco de dados próprio.</p>
+<p><b>2.4.</b> Os dados eventualmente recebidos pela Cave Floripa por meio de seus canais de atendimento serão tratados exclusivamente para finalidades legítimas e compatíveis com a relação estabelecida com o titular.</p>
+<h2>3. Das finalidades do tratamento</h2>
+<p><b>3.1.</b> Os dados pessoais eventualmente recebidos pela Cave Floripa poderão ser utilizados para:</p>
 <ul>
-<li>O site não tem cadastro nem pede login para comprar.</li>
-<li>Quando você usa os botões de WhatsApp ou o formulário “Quero vender”, as informações que você escreve são enviadas por você mesmo, pelo WhatsApp. O site não guarda esses dados.</li>
-<li>Os dados do cartão no passo a passo de oferta não são enviados nem guardados pelo site.</li>
+  <li>atendimento de solicitações, dúvidas e propostas comerciais;</li>
+  <li>negociação, intermediação, compra, venda e locação de equipamentos;</li>
+  <li>agendamento e execução de serviços especializados, incluindo Bike Fit;</li>
+  <li>formalização e cumprimento de obrigações contratuais;</li>
+  <li>atendimento de obrigações legais e regulatórias;</li>
+  <li>exercício regular de direitos em procedimentos administrativos ou judiciais.</li>
 </ul>
-<h2>O que fica no seu aparelho</h2>
-<p>A escolha de fundo preto ou branco fica salva só no seu navegador, para o site abrir do jeito que você prefere.</p>
-<h2>Serviços de terceiros</h2>
-<p>O site usa fontes do Google Fonts e abre o WhatsApp e o Instagram, que têm as próprias políticas de privacidade.</p>
-<h2>Seus direitos</h2>
-<p>Você pode pedir informações, correção ou exclusão dos dados que tiver enviado à Cave pelo WhatsApp, conforme a Lei Geral de Proteção de Dados (LGPD).</p>
+<p><b>3.2.</b> O tratamento será realizado com fundamento nas hipóteses legais previstas no artigo 7º da LGPD, conforme a finalidade e a natureza de cada operação.</p>
+<h2>4. Das informações financeiras e de pagamento</h2>
+<p><b>4.1.</b> A plataforma não armazena dados de cartões de crédito ou de débito inseridos nas etapas de simulação ou de apresentação de ofertas, conforme a funcionalidade atualmente disponibilizada.</p>
+<p><b>4.2.</b> As condições de pagamento e a eventual utilização de serviços financeiros de terceiros serão informadas ao usuário durante a formalização da contratação.</p>
+<p><b>4.3.</b> Caso sejam utilizados intermediadores de pagamento, o tratamento de dados realizado por esses prestadores observará as respectivas políticas de privacidade e a legislação aplicável.</p>
+<h2>5. Do armazenamento local e das preferências de navegação</h2>
+<p><b>5.1.</b> A plataforma poderá utilizar mecanismos de armazenamento local do navegador exclusivamente para preservar preferências de utilização, como a seleção do tema visual claro ou escuro.</p>
+<p><b>5.2.</b> Essas preferências permanecem armazenadas no dispositivo do usuário e não são, por essa funcionalidade, transmitidas à Cave Floripa.</p>
+<p><b>5.3.</b> O usuário poderá excluir essas informações a qualquer momento por meio das configurações de seu navegador.</p>
+<h2>6. Dos serviços de terceiros</h2>
+<p><b>6.1.</b> A plataforma utiliza serviços tecnológicos disponibilizados por terceiros, incluindo o Google Fonts, e disponibiliza links de redirecionamento para o WhatsApp e o Instagram.</p>
+<p><b>6.2.</b> A utilização desses serviços poderá envolver o tratamento de dados técnicos, como endereço IP, informações do navegador e dados de conexão, conforme as características de cada serviço.</p>
+<p><b>6.3.</b> Ao acessar plataformas externas, o usuário estará sujeito às respectivas políticas de privacidade e condições de utilização.</p>
+<p><b>6.4.</b> A Cave Floripa não controla as práticas de tratamento de dados realizadas por plataformas independentes, sem prejuízo das responsabilidades que lhe sejam legalmente atribuídas.</p>
+<h2>7. Da segurança e da conservação dos dados</h2>
+<p><b>7.1.</b> A Cave Floripa adotará medidas técnicas e administrativas adequadas à proteção dos dados pessoais sob sua responsabilidade, visando prevenir acessos não autorizados, perdas, alterações, divulgações indevidas e demais incidentes de segurança.</p>
+<p><b>7.2.</b> Os dados pessoais recebidos por canais de atendimento serão conservados pelo período necessário ao cumprimento das finalidades que justificaram o seu tratamento, observados os prazos legais e regulatórios e as hipóteses de conservação previstas na LGPD.</p>
+<p><b>7.3.</b> A Cave Floripa poderá conservar informações quando necessário ao cumprimento de obrigações legais ou regulatórias, à execução de contratos e ao exercício regular de direitos, nos limites da legislação aplicável.</p>
+<h2>8. Dos direitos dos titulares</h2>
+<p><b>8.1.</b> Nos termos do artigo 18 da LGPD, os titulares poderão exercer, conforme aplicável, os seguintes direitos:</p>
+<ul>
+  <li>confirmação da existência de tratamento de dados pessoais;</li>
+  <li>acesso aos dados pessoais tratados;</li>
+  <li>correção de dados incompletos, inexatos ou desatualizados;</li>
+  <li>anonimização, bloqueio ou eliminação de dados desnecessários, excessivos ou tratados em desconformidade com a legislação;</li>
+  <li>portabilidade dos dados, observada a regulamentação aplicável;</li>
+  <li>informação sobre o compartilhamento de dados com terceiros;</li>
+  <li>revogação do consentimento, quando esta for a base legal utilizada;</li>
+  <li>eliminação dos dados tratados com fundamento no consentimento, ressalvadas as hipóteses legais de conservação.</li>
+</ul>
+<p><b>8.2.</b> As solicitações poderão ser encaminhadas por meio do canal oficial de WhatsApp disponibilizado na plataforma.</p>
+<p><b>8.3.</b> A Cave Floripa analisará as solicitações e apresentará resposta nos prazos e condições previstos na legislação aplicável.</p>
+<h2>9. Do compartilhamento de dados</h2>
+<p><b>9.1.</b> A Cave Floripa não comercializa dados pessoais de seus usuários.</p>
+<p><b>9.2.</b> O compartilhamento de informações poderá ocorrer quando necessário à execução de serviços contratados, ao cumprimento de obrigações legais, à utilização de prestadores de serviços ou ao exercício regular de direitos.</p>
+<p><b>9.3.</b> Eventuais compartilhamentos observarão os princípios da necessidade, finalidade e segurança, nos termos da LGPD.</p>
+<h2>10. Das alterações desta política</h2>
+<p><b>10.1.</b> A Cave Floripa poderá atualizar esta Política de Privacidade para adequá-la a alterações legislativas, regulatórias, tecnológicas ou operacionais.</p>
+<p><b>10.2.</b> A versão vigente permanecerá disponível na plataforma, acompanhada da respectiva data de atualização.</p>
+<p><b>10.3.</b> Alterações relevantes que demandem comunicação específica ou novo consentimento serão tratadas conforme as exigências legais aplicáveis.</p>
+<h2>11. Do contato e do exercício de direitos</h2>
+<p><b>11.1.</b> Para esclarecimentos sobre esta Política de Privacidade, solicitações relacionadas ao tratamento de dados pessoais ou exercício dos direitos previstos na LGPD, o titular poderá entrar em contato com a Cave Floripa por meio do WhatsApp oficial disponibilizado na plataforma.</p>
+<p><b>11.2.</b> As solicitações serão analisadas de maneira individualizada, observados os princípios da transparência, da boa-fé e da proteção dos dados pessoais.</p>
 </div>
 </body>
 </html>
