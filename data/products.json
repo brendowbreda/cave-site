@@ -1,6 +1,27 @@
 {
  "products": [
   {
+   "id": "p-mvztyirf",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Relógios",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 2400,
+   "title": "Relógio Garmin Forerunner 165 Music",
+   "subtitle": "43 mm - Black (PRETO)",
+   "desc": "Seu ritmo. Sua evolução. Sua próxima conquista.\n\nO Garmin Forerunner® 165 Music combina tecnologia, conforto e precisão para corredores que desejam transformar cada treino em evolução.\n\nCom tela AMOLED, GPS integrado e monitoramento cardíaco 24 horas, oferece métricas de desempenho, acompanhamento do sono, recuperação e planos de treinamento personalizados com Garmin Coach.\n\nCom música integrada e até 11 dias de bateria no modo smartwatch, proporciona liberdade para correr sem depender do celular para ouvir suas playlists favoritas.\n\nMais motivação. Mais desempenho. Cada quilômetro conta.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvztyirf-mvzu0rvp1.jpg",
+    "img/products/p-mvztyirf-mvzu0tb42.jpg",
+    "img/products/p-mvztyirf-mvzu0up23.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T22:30:08.939Z",
+   "createdAt": "2026-11-02T22:30:08.939Z"
+  },
+  {
    "id": "p-mvztipuj",
    "cat": "garmin",
    "group": "garmin",
