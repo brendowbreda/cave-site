@@ -1,6 +1,28 @@
 {
  "products": [
   {
+   "id": "p-mvzv7qgu",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Relógios",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 1950,
+   "title": "Garmin Forerunner 70",
+   "subtitle": "42,6 mm - Black (PRETO)",
+   "desc": "Cada passo importa. Cada treino é uma oportunidade de evoluir.\n\nO Garmin Forerunner® 70 combina tecnologia, leveza e praticidade para corredores que desejam acompanhar sua evolução e conquistar novos objetivos.\n\nCom tela AMOLED, GPS integrado e monitoramento cardíaco de pulso, oferece informações sobre ritmo, distância, frequência cardíaca, qualidade do sono e recuperação.\n\nEquipado com Garmin Coach, mais de 80 perfis esportivos e até 13 dias de bateria no modo smartwatch, é o parceiro ideal para acompanhar sua rotina, dos primeiros quilômetros aos novos desafios.\n\nMais motivação. Mais precisão. Sua evolução começa aqui.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzv7qgu-mvzv9k1w1.jpg",
+    "img/products/p-mvzv7qgu-mvzv9li82.jpg",
+    "img/products/p-mvzv7qgu-mvzv9mrp3.jpg",
+    "img/products/p-mvzv7qgu-mvzv9o6v4.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:05:00.234Z",
+   "createdAt": "2026-11-02T23:05:00.234Z"
+  },
+  {
    "id": "p-mvzv3l93",
    "cat": "garmin",
    "group": "garmin",
