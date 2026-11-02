@@ -1,6 +1,25 @@
 {
  "products": [
   {
+   "id": "p-mvzx0g8f",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Pneus",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 575,
+   "title": "Pneu Michelin Pro5 Competition Line",
+   "subtitle": "700x30 Tubeless Ready",
+   "desc": "Menos resistência. Mais aderência. Performance em cada quilômetro.\n\nO Michelin Pro5 Competition Line foi desenvolvido para ciclistas que buscam velocidade, eficiência e confiança em cada pedalada.\n\nCom tecnologia Tubeless Ready (TLR) e composto Gum-X, proporciona baixa resistência à rolagem, excelente aderência e durabilidade, oferecendo desempenho consistente em treinos e competições.\n\nSua largura de 30 mm permite utilizar pressões mais baixas, favorecendo a absorção de vibrações, o conforto e a estabilidade em diferentes condições de asfalto, sem comprometer a eficiência da pedalada.\n\nEspecificações técnicas\n\nModelo: Michelin Pro5 Competition Line\n\nModalidade: Ciclismo de estrada\n\nMedida: 700x30C\n\nETRTO: 30-622\n\nTecnologia: Tubeless Ready (TLR)\n\nComposto: Gum-X\n\nCompatibilidade: Aros hooked e hookless, conforme especificações de compatibilidade\n\nPeso informado: Aproximadamente 310 g\n\nLinha: Competition Line\n\nPressão: Ajustável conforme peso do ciclista, aro e condições de utilização\n\nMais velocidade. Mais conforto. Cada watt faz a diferença.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzx0g8f-mvzx211b1.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:55:02.237Z",
+   "createdAt": "2026-11-02T23:55:02.237Z"
+  },
+  {
    "id": "p-mvzwvm21",
    "cat": "bike",
    "group": "vestuario",
