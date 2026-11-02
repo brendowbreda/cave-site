@@ -164,9 +164,9 @@ section,#loja{scroll-margin-top:68px}
 .acc-head.open svg{transform:rotate(180deg)}
 .secs.has-focus .acc-head:not(.focus){opacity:.35}
 .acc-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px;background:var(--tile-2)} /* mesmo cinza da aba aberta: painel e aba viram um bloco só */
-.acc-body button{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);padding:12px;border-radius:10px;font-size:14px;font-weight:500;line-height:1.25}
-.acc-body button:hover{border-color:var(--ink)}
-.acc-body button[aria-pressed="true"]{color:var(--buy-ink);background:var(--buy);border-color:var(--buy);font-weight:600}
+.acc-body button{display:block;width:100%;text-align:left;border:0;background:none;padding:10px 4px;font-size:15px;font-weight:500;line-height:1.25}
+.acc-body button:hover{text-decoration:underline;text-underline-offset:3px}
+.acc-body button[aria-pressed="true"]{color:var(--buy);font-weight:700}
 .acc-body button.all{font-weight:600}
 @media (max-width:719px){.acc-head{font-size:14px;gap:4px;padding:6px 4px}.acc-head svg{width:14px;height:14px}.acc-heads.four{grid-template-columns:repeat(2,minmax(0,1fr))}.acc-heads.four .acc-head:nth-child(2n){border-right:0}.acc-heads.four .acc-head:nth-child(-n+2){border-bottom-color:var(--line)}}
 @media (min-width:720px){.acc-body{grid-template-columns:repeat(4,minmax(0,1fr))}.acc-head{font-size:16px}}
