@@ -1,6 +1,25 @@
 {
  "products": [
   {
+   "id": "p-mvzvtyef",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Cabo Carregador",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 115,
+   "title": "Cabo Carregador/Dados USB-C Garmin",
+   "subtitle": "100m",
+   "desc": "",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzvtyef-mvzvv9071.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:21:46.380Z",
+   "createdAt": "2026-11-02T23:21:46.380Z"
+  },
+  {
    "id": "p-mvzvqfjb",
    "cat": "garmin",
    "group": "garmin",
