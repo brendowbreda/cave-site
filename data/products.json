@@ -1,6 +1,34 @@
 {
  "products": [
   {
+   "id": "p-mvzvqfjb",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Cinta cardíaca",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 550,
+   "title": "Monitor Cardíaco Peitoral Garmin HRM 200",
+   "subtitle": "M / GG",
+   "desc": "Precisão em cada batimento. Evolução em cada treino.\n\nO Garmin HRM 200 combina tecnologia, conforto e confiabilidade para atletas que desejam acompanhar sua intensidade e elevar seu desempenho.\n\nCom monitoramento preciso da frequência cardíaca e da variabilidade da frequência cardíaca (VFC), transmite dados para relógios Garmin, ciclocomputadores Edge e equipamentos de treino compatíveis.\n\nIdeal para corrida, ciclismo, musculação e treinos de alta intensidade, conta com cinta ajustável e lavável, conectividade ANT+ e Bluetooth, resistência à água de 3 ATM e bateria substituível com autonomia de até 1 ano.\n\nMais precisão. Mais controle. Cada batimento impulsiona sua evolução.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzvqfjb-mvzvscc51.jpg",
+    "img/products/p-mvzvqfjb-mvzvsdur2.jpg",
+    "img/products/p-mvzvqfjb-mvzvsf8p3.jpg"
+   ],
+   "also": [
+    {
+     "cat": "bike",
+     "group": "acessorios",
+     "sub": "Cintas cardíacas"
+    }
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:19:34.795Z",
+   "createdAt": "2026-11-02T23:19:34.795Z"
+  },
+  {
    "id": "p-mvzvltje",
    "cat": "garmin",
    "group": "garmin",
