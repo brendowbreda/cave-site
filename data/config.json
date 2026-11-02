@@ -1,6 +1,6 @@
 {
  "whatsapp": {
-  "loja": "5548900000000",
+  "loja": "554884234141",
   "fit": "5548991377660"
  },
  "offerFloor": 0.75,
@@ -325,5 +325,11 @@
    "desc": "Consulte os modelos disponíveis.",
    "price": ""
   }
- ]
+ ],
+ "company": {
+  "razao": "Cave. Floripa",
+  "cnpj": "",
+  "endereco": "Rua Evaldo Schaeffer, n,º 293 — Jardim Atlântico — Florianópolis/SC — CEP: 88095-350",
+  "email": ""
+ }
 }
