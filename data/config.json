@@ -311,7 +311,7 @@
   },
   {
    "group": "Viagem",
-   "title": "Vai viajar?",
+   "title": "Vamos viajar?",
    "icon": "bag",
    "name": "Mala bike",
    "desc": "Sua bike protegida, boa viagem.",
@@ -319,7 +319,7 @@
   },
   {
    "group": "Viagem",
-   "title": "Vai viajar?",
+   "title": "Vamos viajar?",
    "icon": "rack",
    "name": "Transbike",
    "desc": "Consulte os modelos disponíveis.",
