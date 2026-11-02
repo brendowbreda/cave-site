@@ -1,6 +1,28 @@
 {
  "products": [
   {
+   "id": "p-mvzumuuj",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Ciclocomputadores",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 2700,
+   "title": "Garmin Edge 540",
+   "subtitle": "",
+   "desc": "Cada pedalada conta. Cada segundo faz a diferença.\n\nO Garmin Edge® 540 combina precisão, tecnologia e inteligência para ciclistas que buscam evoluir em cada treino e superar seus próprios limites.\n\nCom GPS multibanda, navegação avançada e métricas de desempenho, oferece acompanhamento detalhado das suas atividades, orientação de percursos e recursos inteligentes para otimizar seus resultados.\n\nIdeal para ciclismo de estrada, mountain bike e treinos de triathlon, conta com ClimbPro, sugestões diárias de treino, compatibilidade com sensores de potência e até 26 horas de bateria em uso intenso.\n\nMais precisão. Mais estratégia. Sua próxima conquista começa no pedal.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzumuuj-mvzurfqn1.jpg",
+    "img/products/p-mvzumuuj-mvzurgzr2.jpg",
+    "img/products/p-mvzumuuj-mvzurilh3.jpg",
+    "img/products/p-mvzumuuj-mvzurjxv4.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T22:50:54.156Z",
+   "createdAt": "2026-11-02T22:50:54.156Z"
+  },
+  {
    "id": "p-mvzuiwmm",
    "cat": "garmin",
    "group": "garmin",
