@@ -518,30 +518,22 @@ footer .flogo{width:min(200px,55vw);height:auto}
       <div>
         <a class="back" href="#inicio">← Voltar</a>
         <div class="sec-head">
-          <p class="eyebrow">Venda com a Cave</p>
-          <h2>Tem algo parado em casa? <em>A gente vende.</em></h2>
-          <p>Você entrega o equipamento e a Cave cuida do resto: avaliação, fotos, anúncio, divulgação na comunidade, atendimento e repasse.</p>
+          <h2><span style="display:block">Não está usando?</span><em>A gente vende.</em></h2>
+          <p>Você entrega o equipamento e nós cuidamos de todo o resto.</p>
         </div>
         <div class="sell-flow">
-          <div><span class="k">01</span><b>Avaliação</b><span class="d">Você manda fotos e informações. A Cave avalia.</span></div>
-          <div><span class="k">02</span><b>Acordo</b><span class="d">Preço, comissão e regras combinados antes de publicar.</span></div>
-          <div><span class="k">03</span><b>Anúncio</b><span class="d">Fotos, anúncio e divulgação por nossa conta.</span></div>
-          <div><span class="k">04</span><b>Repasse</b><span class="d">Vendeu: repasse em até 7 dias.</span></div>
+          <div><span class="k">01</span><b>Avaliação</b><span class="d">Envie fotos e informações do seu equipamento. Nossa equipe faz uma avaliação especializada.</span></div>
+          <div><span class="k">02</span><b>Acordo</b><span class="d">Definimos juntos o valor de venda, a comissão e as condições, com total transparência.</span></div>
+          <div><span class="k">03</span><b>Divulgação</b><span class="d">Cuidamos das fotos, do anúncio e da divulgação para alcançar os compradores certos.</span></div>
+          <div><span class="k">04</span><b>Repasse</b><span class="d">Venda concluída, repasse em até 7 dias, conforme as condições acordadas.</span></div>
         </div>
       </div>
       <form class="form" id="sellForm" novalidate>
         <div class="field"><label for="s-item">O que você quer vender?</label><input id="s-item" placeholder="Ex.: Specialized Tarmac SL7, tam. 54" required></div>
         <div class="row2">
-          <div class="field"><label for="s-cat">Categoria</label>
-            <select id="s-cat"><option>Bike</option><option>Rodas e componentes</option><option>Natação</option><option>Vestuário e capacete</option><option>Corrida</option><option>Garmin / Wahoo</option><option>Outro</option></select></div>
-          <div class="field"><label for="s-price">Valor desejado</label><input id="s-price" inputmode="numeric" placeholder="R$ 0"></div>
-        </div>
-        <div class="field"><span class="lbl">Estado</span>
-          <div class="pillset" role="radiogroup" aria-label="Estado do produto">
-            <label><input type="radio" name="s-cond" id="s-c1" value="Novo, nunca usado"><span>Novo</span></label>
-            <label><input type="radio" name="s-cond" id="s-c2" value="Seminovo" checked><span>Seminovo</span></label>
-            <label><input type="radio" name="s-cond" id="s-c3" value="Usado com marcas"><span>Usado com marcas</span></label>
-          </div>
+          <div class="field"><label for="s-price">Valor desejado</label><input id="s-price" inputmode="numeric" placeholder="R$ 0,00"></div>
+          <div class="field"><label for="s-cond">Estado</label>
+            <select id="s-cond"><option value="Novo, nunca usado">Novo</option><option value="Seminovo" selected>Seminovo</option><option value="Usado com marcas">Usado com marcas</option></select></div>
         </div>
         <div class="field"><span class="lbl">Fotos <span class="mono" id="s-n" style="color:var(--muted);font-weight:400">0/5</span></span>
           <div class="uploader" id="uploader"></div>
@@ -976,13 +968,17 @@ function renderUploader(){
   const f=$("#s-file");if(f)f.addEventListener("change",()=>{[...f.files].slice(0,5-photos.length).forEach(file=>{const r=new FileReader();r.onload=()=>{if(photos.length<5){photos.push(r.result);renderUploader()}};r.readAsDataURL(file)})});
 }
 renderUploader();
-$("#s-price").addEventListener("input",e=>{const v=parseInt(e.target.value.replace(/\D/g,""))||0;e.target.value=v?"R$ "+v.toLocaleString("pt-BR"):""});
+// Valor em reais inteiros: digitando mostra "R$ 15.000"; ao sair do campo vira "R$ 15.000,00"
+const sp=$("#s-price"),spDigits=v=>parseInt(v.replace(/,00$/,"").replace(/\D/g,""))||0;
+sp.addEventListener("focus",()=>{sp.value=sp.value.replace(/,00$/,"")});
+sp.addEventListener("input",()=>{const v=spDigits(sp.value);sp.value=v?"R$ "+v.toLocaleString("pt-BR"):""});
+sp.addEventListener("blur",()=>{const v=spDigits(sp.value);sp.value=v?"R$ "+v.toLocaleString("pt-BR")+",00":""});
 $("#sellForm").addEventListener("submit",e=>{
   e.preventDefault();
   const item=$("#s-item").value.trim();
   if(!item){$("#s-item").focus();toast("Conte o que você quer vender.");return}
-  const cond=document.querySelector('input[name="s-cond"]:checked').value;
-  const msg=`Olá, Cave! Quero vender:\n• ${item}\n• Categoria: ${$("#s-cat").value}\n• Estado: ${cond}\n• Valor desejado: ${$("#s-price").value?$("#s-price").value+",00":"a combinar"}\n• Nome: ${$("#s-name").value||"-"}\n• Cidade: ${$("#s-city").value||"-"}\n${photos.length?`Tenho ${photos.length} foto(s) para enviar.`:""}`;
+  const cond=$("#s-cond").value,pv=spDigits(sp.value);
+  const msg=`Olá, Cave! Quero vender:\n• ${item}\n• Estado: ${cond}\n• Valor desejado: ${pv?"R$ "+pv.toLocaleString("pt-BR")+",00":"a combinar"}\n• Nome: ${$("#s-name").value||"-"}\n• Cidade: ${$("#s-city").value||"-"}\n${photos.length?`Tenho ${photos.length} foto(s) para enviar.`:""}`;
   window.open(wa(CFG.whatsapp.loja,msg),"_blank","noopener");
   toast("Abrindo o WhatsApp com a mensagem pronta.");
 });
