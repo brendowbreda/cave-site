@@ -6,7 +6,7 @@
    "group": "wahoo",
    "sub": "Cinta cardíaca",
    "cond": "novo",
-   "status": "vendido",
+   "status": "disponivel",
    "price": 825,
    "title": "Cinta Cardíaca Wahoo Trackr Heart Rate",
    "subtitle": "",
@@ -18,8 +18,7 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T20:38:40.151Z",
-   "createdAt": "2026-11-02T20:18:42.114Z",
-   "soldAt": "2026-11-02T20:47:27.693Z"
+   "createdAt": "2026-11-02T20:18:42.114Z"
   }
  ]
 }
