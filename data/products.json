@@ -7,7 +7,7 @@
    "sub": "Relógios",
    "cond": "novo",
    "status": "disponivel",
-   "price": 1700,
+   "price": 1900,
    "title": "CIRQA Pulseira Inteligente Garmin",
    "subtitle": "S / M (Small / Medium) - Black (PRETO)",
    "desc": "Tecnologia que acompanha você. Sem telas, sem distrações.\n\nA Garmin CIRQA™ combina design minimalista, conforto e monitoramento inteligente 24 horas por dia. Acompanhe sua frequência cardíaca, qualidade do sono, níveis de estresse, energia corporal e prontidão para treinar, com dados integrados ao Garmin Connect™.\n\nCom até 10 dias de bateria, resistência à água de 5 ATM e monitoramento automático de atividades, é a escolha ideal para quem busca desempenho, recuperação e bem-estar, sem abrir mão da discrição.\n\nMais dados. Menos distrações. Mais performance.",
@@ -18,8 +18,12 @@
     "img/products/p-mvztipuj-mvztoq103.jpg"
    ],
    "demo": false,
-   "updatedAt": "2026-11-02T22:20:46.348Z",
-   "createdAt": "2026-11-02T22:20:46.348Z"
+   "updatedAt": "2026-11-02T22:23:28.022Z",
+   "createdAt": "2026-11-02T22:20:46.348Z",
+   "discount": {
+    "type": "brl",
+    "value": 200
+   }
   },
   {
    "id": "p-mvzr0crc",
