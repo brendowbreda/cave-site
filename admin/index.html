@@ -38,7 +38,7 @@
 .theme-btn .i-moon{display:none}
 :root[data-theme="light"] .theme-btn .i-sun{display:none}
 :root[data-theme="light"] .theme-btn .i-moon{display:block}
-.hello{font-size:13px;color:var(--muted);padding-top:14px;margin-bottom:12px}
+#view-prods,#view-fit,#view-cfg{padding-top:16px}
 .sec-t{font-size:24px}
 .back{background:none;border:0;padding:0;color:var(--muted);font-size:15px;margin-bottom:10px}
 .cfg-block h3{font-size:18px;margin:0}
@@ -139,9 +139,15 @@ p{margin:0}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:none;height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13px;font-weight:500;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#afilter .chip[aria-pressed="true"]{background:var(--buy);border-color:var(--buy);color:var(--buy-ink)}
+.frow{display:flex;align-items:center;gap:10px}
+.flbl{font-size:13px;font-weight:600;flex:none}
+.frow .chips{flex:1;min-width:0}
+.frow #newBtn{flex:none;margin-left:auto}
+@media (max-width:560px){.frow{gap:6px}.frow .chips{gap:5px;overflow:visible}.frow .chip{padding:0 9px;height:32px;font-size:13px}.frow #newBtn{padding:0 12px}.frow .lg{display:none}}
 .banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 14px;border-radius:12px;background:var(--warn-soft);color:var(--warn);font-size:14px;margin-bottom:12px}
 .list{display:grid;border-top:1px solid var(--line)}
-.row{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.row{cursor:pointer;display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
 .thumb{width:64px;height:64px;border-radius:10px;background:var(--tile);overflow:hidden;display:grid;place-items:center;position:relative}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .thumb svg{width:70%;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
@@ -204,7 +210,6 @@ p{margin:0}
 <!-- LOGIN -->
 <main id="login" class="wrap login" hidden>
   <img src="../assets/logo.png" alt="Cave Floripa" width="180" height="59">
-  <h1 class="login-h">Entrar</h1>
   <form class="card form" id="loginForm" novalidate>
     <div class="field"><label for="l-email">E-mail</label><input id="l-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="nome@cave.floripa.com" required></div>
     <div class="field"><label for="l-pass">Senha</label><input id="l-pass" type="password" autocomplete="current-password" placeholder="Digite sua senha" required></div>
@@ -239,16 +244,19 @@ p{margin:0}
     </div>
   </div></header>
   <div class="wrap">
-    <p class="hello" id="hello"></p>
 
     <section id="view-prods" hidden>
       <div id="demoBanner" class="banner" hidden><span id="demoTxt"></span><button class="btn small danger" id="rmDemo">Remover exemplos</button></div>
       <div class="toolbar">
         <label class="search" for="aq"><input id="aq" type="search" placeholder="Buscar produto" autocomplete="off"></label>
-        <div class="chips" id="afilter">
-          <button class="chip" data-f="all" aria-pressed="true">Todos</button>
-          <button class="chip" data-f="disponivel" aria-pressed="false">À venda</button>
-          <button class="chip" data-f="vendido" aria-pressed="false">Vendidos</button>
+        <div class="frow">
+          <span class="flbl">Filtrar:</span>
+          <div class="chips" id="afilter">
+            <button class="chip" data-f="all" aria-pressed="true">Todos</button>
+            <button class="chip" data-f="disponivel" aria-pressed="false">Estoque</button>
+            <button class="chip" data-f="vendido" aria-pressed="false">Vendido</button>
+          </div>
+          <button class="btn buy small" id="newBtn" type="button">+ Novo<span class="lg">&nbsp;produto</span></button>
         </div>
         <p class="eyebrow" id="acount"></p>
       </div>
@@ -289,14 +297,13 @@ p{margin:0}
           <div class="field"><label for="co-razao">Razão social</label><input id="co-razao"></div>
           <div class="field"><label for="co-cnpj">CNPJ</label><input id="co-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></div>
           <div class="field"><label for="co-end">Endereço</label><input id="co-end" placeholder="Rua, número, bairro, Florianópolis/SC"></div>
-          <div class="field"><label for="co-tel">Telefone/WhatsApp Cave.&nbsp;Floripa</label><div class="tel"><span>+55</span><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
-          <div class="field"><label for="co-email">E-mail</label><input id="co-email" type="email" autocapitalize="off" placeholder="contato@cave.floripa.com"></div>
-          <span class="hint">O telefone é o WhatsApp que recebe as mensagens do site.</span>
+          <div class="field"><label for="co-tel">Telefone/WhatsApp</label><div class="tel"><span>+55</span><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div><span class="hint">O telefone é o WhatsApp que recebe as mensagens do site.</span></div>
           <button class="btn solid block" type="submit">Salvar dados da empresa</button>
         </form>
 
         <form class="cfg-block" id="usForm" novalidate>
           <h3>Usuários</h3>
+          <p class="hint">Só estas 3 pessoas têm acesso ao painel. Preencha e-mail e senha para liberar o acesso de cada uma.</p>
           <div id="us-list" class="form"></div>
           <span class="hint">Senha com no mínimo 10 caracteres. Deixe a senha vazia para manter a atual.</span>
           <button class="btn solid block" type="submit">Salvar usuários</button>
@@ -331,7 +338,6 @@ p{margin:0}
       <div style="height:30px"></div>
     </section>
   </div>
-  <button class="btn buy fab" id="newBtn" hidden>+ Novo produto</button>
 </div>
 
 <!-- AGENDAMENTO BIKE FIT -->
@@ -473,7 +479,7 @@ const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(
 const unhex=h=>Uint8Array.from(h.match(/../g)||[],x=>parseInt(x,16));
 const normEmail=e=>e.trim().toLowerCase();
 const okEmail=e=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e.trim());
-const ROLES={admin:"Admin",sistema:"Sistema",bikefit:"Bike Fit"};
+const ROLES={admin:"Sócio administrador",sistema:"Sistema",bikefit:"Bike Fit"};
 const SLOTS=[{role:"admin",name:"Marcelo Leal"},{role:"sistema",name:"Brendow Breda"},{role:"bikefit",name:"Guilherme Garcia Cunha"}];
 async function userId(email){return hex(await crypto.subtle.digest("SHA-256",te.encode("cave:"+normEmail(email))))}
 async function pwdKey(pass,salt,iter){const base=await crypto.subtle.importKey("raw",te.encode(pass),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt,iterations:iter},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
@@ -577,7 +583,6 @@ let VIEW="";
 function show(v){
   VIEW=v;
   $("#view-prods").hidden=v!=="prods";$("#view-fit").hidden=v!=="fit";$("#view-cfg").hidden=v!=="cfg";
-  $("#newBtn").hidden=v!=="prods";
   $("#cfgBtn").hidden=v==="cfg";
   window.scrollTo(0,0);
 }
@@ -593,7 +598,6 @@ async function start(){
   busy();
   if(!S.role)S.role="sistema";
   $("#login").hidden=true;$("#app").hidden=false;
-  $("#hello").textContent=`${S.name?S.name.split(" ")[0]:"Olá"} · ${ROLES[S.role]||""}`;
   document.querySelectorAll('[data-role="adm"]').forEach(x=>x.hidden=!isAdm());
   document.querySelectorAll('[data-role="bikefit"]').forEach(x=>x.hidden=isAdm());
   renderList();renderCfg();renderFit();
@@ -618,20 +622,20 @@ function renderList(){
   const nDemo=PRODS.filter(p=>p.demo).length;
   $("#demoBanner").hidden=!nDemo;$("#demoTxt").textContent=`${nDemo} produtos de exemplo ainda aparecem no site.`;
   const nSale=PRODS.filter(p=>p.status!=="vendido").length,nSold=PRODS.length-nSale;
-  $("#acount").textContent=`${nSale} à venda · ${nSold} vendidos`;
+  $("#acount").textContent=`${nSale} em estoque · ${nSold} vendido${nSold===1?"":"s"}`;
   $("#alist").innerHTML=l.length?l.map(p=>{const s=p.status==="vendido";return `<div class="row${s?" sold":""}" data-id="${esc(p.id)}">
     <div class="thumb">${thumb(p)}</div>
     <div class="info"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.subtitle)}</span>
       <div class="meta"><span class="price">${s?"R$ *****,**":brl(p.price)}</span><span class="pill ${s?"sold":"on"}">${s?"Vendido":"À venda"}</span>${p.demo?`<span class="pill">Exemplo</span>`:""}</div></div>
-    <div class="acts"><button data-act="edit">Editar</button><button data-act="toggle" class="${s?"":"sell"}">${s?"Voltar à venda":"Vendido"}</button></div>
+    <div class="acts"><button data-act="toggle" class="${s?"":"sell"}">${s?"Voltar à venda":"Vendido"}</button></div>
   </div>`}).join(""):`<p class="empty">Nenhum produto aqui. Toque em “Novo produto” para cadastrar.</p>`;
 }
 $("#aq").addEventListener("input",e=>{F.q=e.target.value;renderList()});
 $("#afilter").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;F.f=b.dataset.f;document.querySelectorAll("#afilter .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderList()});
 $("#alist").addEventListener("click",async e=>{
-  const b=e.target.closest("[data-act]");if(!b)return;
-  const id=b.closest(".row").dataset.id,p=PRODS.find(x=>x.id===id);
-  if(b.dataset.act==="edit")return openEditor(p);
+  const row=e.target.closest(".row");if(!row)return;
+  const id=row.dataset.id,p=PRODS.find(x=>x.id===id),b=e.target.closest("[data-act]");
+  if(!b)return openEditor(p);
   const toSold=p.status!=="vendido";
   busy(toSold?"Marcando como vendido…":"Voltando para a venda…");
   try{
@@ -788,7 +792,7 @@ async function updateConfig(mutate,msg){
 }
 function renderCfg(){
   const co=CFG.company||{};
-  $("#co-razao").value=co.razao||"";$("#co-cnpj").value=co.cnpj||"";$("#co-end").value=co.endereco||"";$("#co-email").value=co.email||"";
+  $("#co-razao").value=co.razao||"";$("#co-cnpj").value=co.cnpj||"";$("#co-end").value=co.endereco||"";
   $("#co-tel").value=fmtTel(CFG.whatsapp.loja);
   $("#c-wafit").value=fmtTel(CFG.whatsapp.fit);$("#me-wa").value=fmtTel(CFG.whatsapp.fit);
   $("#me-email").value=S.email||"";$("#me-pass").value="";$("#me-pass2").value="";
@@ -810,10 +814,8 @@ function renderCfg(){
 $("#co-cnpj").addEventListener("input",e=>{e.target.value=fmtCnpj(e.target.value)});
 $("#coForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const em=$("#co-email").value.trim();
-  if(em&&!okEmail(em))return toast("E-mail da empresa inválido.",true);
   busy("Salvando…");
-  try{await updateConfig(d=>{d.company={razao:$("#co-razao").value.trim(),cnpj:$("#co-cnpj").value.trim(),endereco:$("#co-end").value.trim(),email:em};const w=waDigits($("#co-tel").value);if(w)d.whatsapp.loja=w},"Dados da empresa");renderCfg();toast("Dados da empresa salvos.")}
+  try{await updateConfig(d=>{d.company={razao:$("#co-razao").value.trim(),cnpj:$("#co-cnpj").value.trim(),endereco:$("#co-end").value.trim(),email:(CFG.company||{}).email||""};const w=waDigits($("#co-tel").value);if(w)d.whatsapp.loja=w},"Dados da empresa");renderCfg();toast("Dados da empresa salvos.")}
   catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 $("#cfgForm").addEventListener("submit",async e=>{
