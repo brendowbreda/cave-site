@@ -71,6 +71,24 @@
 .cfg-item .tel{background:var(--bg)}
 .rent-g{display:grid;gap:10px;margin-top:6px}
 .rent-gt{font-size:15px}
+.accs{display:grid;gap:10px}
+#view-cfg .accs{margin-top:14px}
+#view-cfg .accs .accs{margin-top:0}
+.acc{border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.acc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary span{display:grid;gap:2px}
+.acc>summary b{font-size:16px}
+.acc>summary small{font-size:12px;color:var(--muted)}
+.acc .chev{width:20px;height:20px;flex:none;transition:transform .2s}
+.acc[open]>summary .chev{transform:rotate(180deg)}
+.acc[open]>summary{border-bottom:1px solid var(--line)}
+.acc-in{padding:16px}
+.acc .cfg-item{background:var(--bg)}
+.acc .acc.sub{background:var(--bg)}
+.acc .acc.sub .cfg-item{background:var(--surface)}
+.acc .acc.sub .cfg-item .field input{background:var(--bg)}
+.acc .field input:not(.cfg-item input),.acc .tel{background:var(--bg)}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -291,33 +309,46 @@ p{margin:0}
       <h2 class="sec-t" style="margin-bottom:6px">Configurações</h2>
 
       <!-- Admin / Sistema -->
-      <div data-role="adm">
-        <form class="cfg-block" id="coForm" novalidate>
-          <h3>Dados da empresa</h3>
-          <div class="field"><label for="co-razao">Razão social</label><input id="co-razao"></div>
-          <div class="field"><label for="co-cnpj">CNPJ</label><input id="co-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></div>
-          <div class="field"><label for="co-end">Endereço</label><input id="co-end" placeholder="Rua, número, bairro, Florianópolis/SC"></div>
-          <div class="field"><label for="co-tel">Telefone/WhatsApp</label><div class="tel"><span>+55</span><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div><span class="hint">O telefone é o WhatsApp que recebe as mensagens do site.</span></div>
-          <button class="btn solid block" type="submit">Salvar dados da empresa</button>
-        </form>
+      <div data-role="adm" class="accs">
+        <details class="acc" data-acc="cfg">
+          <summary><span><b>Dados da empresa</b><small>Razão social, CNPJ, endereço e WhatsApp</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <form class="acc-in form" id="coForm" novalidate>
+            <div class="field"><label for="co-razao">Razão social</label><input id="co-razao"></div>
+            <div class="field"><label for="co-cnpj">CNPJ</label><input id="co-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></div>
+            <div class="field"><label for="co-end">Endereço</label><input id="co-end" placeholder="Rua, número, bairro, Florianópolis/SC"></div>
+            <div class="field"><label for="co-tel">Telefone/WhatsApp</label><div class="tel"><span>+55</span><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div><span class="hint">O telefone é o WhatsApp que recebe as mensagens do site.</span></div>
+            <button class="btn solid block" type="submit">Salvar dados da empresa</button>
+          </form>
+        </details>
 
-        <form class="cfg-block" id="usForm" novalidate>
-          <h3>Usuários</h3>
-          <p class="hint">Só estas 3 pessoas têm acesso ao painel. Preencha e-mail e senha para liberar o acesso de cada uma.</p>
-          <div id="us-list" class="form"></div>
-          <span class="hint">Senha com no mínimo 10 caracteres. Deixe a senha vazia para manter a atual.</span>
-          <button class="btn solid block" type="submit">Salvar usuários</button>
-        </form>
+        <details class="acc" data-acc="cfg">
+          <summary><span><b>Usuários com acesso ao sistema</b><small>Quem pode entrar no painel administrativo</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <form class="acc-in form" id="usForm" novalidate>
+            <p class="hint">Só estas 3 pessoas têm acesso ao painel. Preencha e-mail e senha para liberar o acesso de cada uma.</p>
+            <div id="us-list" class="form"></div>
+            <span class="hint">Senha com no mínimo 10 caracteres. Deixe a senha vazia para manter a atual.</span>
+            <button class="btn solid block" type="submit">Salvar usuários</button>
+          </form>
+        </details>
 
-        <form class="cfg-block" id="cfgForm" novalidate>
-          <h3>Bike Fit</h3>
-          <div class="field"><label for="c-wafit">WhatsApp do Guilherme</label><div class="tel"><span>+55</span><input id="c-wafit" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
-          <div id="c-fit" class="form"></div>
-          <button class="btn small" id="openFit" type="button" style="justify-self:start">Ver agenda e painel do Bike Fit</button>
-          <h3 style="margin-top:10px">Locação</h3>
-          <p class="hint">Deixe o preço vazio para mostrar “Sob consulta”.</p>
-          <div id="c-rent" class="form"></div>
-          <button class="btn solid block" type="submit">Salvar site</button>
+        <form id="cfgForm" class="accs" novalidate>
+          <details class="acc" data-acc="cfg">
+            <summary><span><b>Bike Fit</b><small>WhatsApp do Guilherme, valores e agenda</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+            <div class="acc-in form">
+              <div class="field"><label for="c-wafit">WhatsApp do Guilherme</label><div class="tel"><span>+55</span><input id="c-wafit" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
+              <div id="c-fit" class="form"></div>
+              <button class="btn small" id="openFit" type="button" style="justify-self:start">Ver agenda e painel do Bike Fit</button>
+              <button class="btn solid block" type="submit">Salvar Bike Fit</button>
+            </div>
+          </details>
+          <details class="acc" data-acc="cfg">
+            <summary><span><b>Locação</b><small>Bicicletas, rodas e itens de viagem</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+            <div class="acc-in form">
+              <p class="hint">Deixe o preço vazio para mostrar “Sob consulta”.</p>
+              <div id="c-rent" class="accs"></div>
+              <button class="btn solid block" type="submit">Salvar locação</button>
+            </div>
+          </details>
         </form>
       </div>
 
@@ -761,20 +792,20 @@ $("#e-delete").addEventListener("click",async function(){
 // ---------- Configurações
 // Locação: itens agrupados como no site (Bicicletas, Rodas, Vamos viajar?)
 const RGROUPS=[{group:"Bicicletas",icon:"bike"},{group:"Rodas",icon:"spoke"},{group:"Viagem",title:"Vamos viajar?",icon:"bag"}];
-let RENT=[];
+let RENT=[],OPEN_RENT="";
 function syncRent(){RENT.forEach((r,i)=>{const n=$("#cr-n"+i);if(n){r.name=n.value.trim();r.desc=$("#cr-d"+i).value.trim();r.price=$("#cr-p"+i).value.trim()}})}
 function renderRent(){
   const groups=[...RGROUPS];RENT.forEach(r=>{if(!groups.some(g=>g.group===r.group))groups.push({group:r.group,title:r.title,icon:r.icon})});
-  $("#c-rent").innerHTML=groups.map(g=>`<div class="rent-g"><b class="rent-gt">${esc(g.title||g.group)}</b>`+RENT.map((r,i)=>r.group!==g.group?"":`<div class="cfg-item">
+  $("#c-rent").innerHTML=groups.map(g=>`<details class="acc sub" data-acc="rent" data-g="${esc(g.group)}"${OPEN_RENT===g.group?" open":""}><summary><span><b>${esc(g.title||g.group)}</b><small>${RENT.filter(r=>r.group===g.group).length} itens</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-in form">`+RENT.map((r,i)=>r.group!==g.group?"":`<div class="cfg-item">
     <div class="field"><label for="cr-n${i}">Item</label><input id="cr-n${i}" value="${esc(r.name)}" placeholder="Ex.: Canyon Speedmax"></div>
     <div class="field"><label for="cr-d${i}">Descrição</label><input id="cr-d${i}" value="${esc(r.desc)}"></div>
     <div class="field"><label for="cr-p${i}">Preço</label><input id="cr-p${i}" value="${esc(r.price)}" placeholder="Sob consulta"></div>
     <button class="btn small danger" type="button" data-rrm="${i}" style="justify-self:start">Remover</button></div>`).join("")+
-    `<button class="btn small" type="button" data-radd="${esc(g.group)}" style="justify-self:start">+ Adicionar em ${esc(g.title||g.group)}</button></div>`).join("");
+    `<button class="btn small" type="button" data-radd="${esc(g.group)}" style="justify-self:start">+ Adicionar em ${esc(g.title||g.group)}</button></div></details>`).join("");
 }
 $("#c-rent").addEventListener("click",e=>{
   const add=e.target.closest("[data-radd]"),rm=e.target.closest("[data-rrm]");
-  if(!add&&!rm)return;syncRent();
+  if(!add&&!rm)return;syncRent();OPEN_RENT=(e.target.closest("details.sub")||{}).dataset?.g||"";
   if(add){const g=RGROUPS.find(x=>x.group===add.dataset.radd)||{group:add.dataset.radd};const it={group:g.group,icon:g.icon||"box",name:"",desc:"",price:""};if(g.title)it.title=g.title;
     let at=-1;RENT.forEach((r,i)=>{if(r.group===g.group)at=i});RENT.splice(at+1||RENT.length,0,it);renderRent();
     const i=RENT.indexOf(it);$("#cr-n"+i).focus();}
@@ -880,6 +911,11 @@ $("#meForm").addEventListener("submit",async e=>{
     renderCfg();toast("Dados atualizados.");
   }catch(x){toast(errMsg(x),true)}finally{busy()}
 });
+
+// Configurações: só um tópico aberto por vez
+document.addEventListener("toggle",e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!d.dataset.acc)return;
+  document.querySelectorAll(`details[data-acc="${d.dataset.acc}"]`).forEach(x=>{if(x!==d)x.open=false});
+  if(d.dataset.acc==="rent")OPEN_RENT=d.dataset.g;},true);
 
 // ---------- Bike Fit (agenda criptografada em data/bikefit.json)
 let FIT=[];
