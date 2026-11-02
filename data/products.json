@@ -1,6 +1,30 @@
 {
  "products": [
   {
+   "id": "p-mvzx3p2x",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Pneus",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 975,
+   "title": "Continental Tour de France Limited Edition 700x30",
+   "subtitle": "700x30 Tubeless",
+   "desc": "Tecnologia de competição. Aerodinâmica e precisão. Performance digna do Tour de France.\n\nO Continental Tour de France Limited Edition combina exclusividade, tecnologia alemã e desempenho de alto nível para ciclistas que buscam superar seus limites em cada pedalada.\n\nCom grafismo exclusivo inspirado no Tour de France, celebra a tradição da maior competição de ciclismo do mundo, reunindo estilo e performance em um único produto.\n\nEquipado com tecnologia Tubeless Ready e composto BlackChili, oferece baixa resistência à rolagem, excelente aderência em curvas e eficiência na transferência de potência, proporcionando confiança tanto em condições secas quanto molhadas.\n\nSua largura de 30 mm favorece o conforto, a estabilidade e a absorção de vibrações, permitindo trabalhar com pressões mais baixas, conforme as especificações do conjunto de rodas.\n\nA tecnologia Vectran Breaker proporciona proteção adicional contra perfurações, contribuindo para a durabilidade e a confiabilidade durante treinos intensos e competições.\n\nEspecificações técnicas\n\nModelo: Continental Tour de France Limited Edition\n\nModalidade: Ciclismo de estrada e triathlon\n\nEdição: Especial Tour de France\n\nMedida: 700x30C\n\nTecnologia: Tubeless Ready (TLR)\n\nComposto: BlackChili\n\nProteção antifuro: Vectran Breaker\n\nAplicação: Treinos de alto rendimento e competições\n\nDiferencial: Grafismo exclusivo de edição limitada\n\nMais velocidade. Mais aderência. Uma edição especial para quem vive o ciclismo.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzx3p2x-mvzx648w1.jpg",
+    "img/products/p-mvzx3p2x-mvzx65me2.jpg"
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 150
+   },
+   "demo": false,
+   "updatedAt": "2026-11-02T23:58:15.224Z",
+   "createdAt": "2026-11-02T23:58:15.224Z"
+  },
+  {
    "id": "p-mvzx0g8f",
    "cat": "bike",
    "group": "componentes",
