@@ -173,6 +173,10 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .lg-f{background:var(--fit)}.lg-l{background:var(--buy)}
 .bk.f{border-left:4px solid var(--fit)}
 .bk.l{border-left:4px solid var(--buy);cursor:default}
+.pctrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px}
+.pctrow input{width:72px!important;min-height:44px!important;text-align:center;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:16px}
+.pctrow b{margin-left:auto;font-size:15px}
+.btn.del{background:var(--bad);border-color:var(--bad);color:#fff}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -424,7 +428,6 @@ p{margin:0}
         <details class="acc" data-acc="cfg">
           <summary><span><b>Usuários com acesso ao sistema</b><small>Quem pode entrar no painel administrativo</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
           <form class="acc-in form" id="usForm" novalidate>
-            <p class="hint">Só estas 3 pessoas têm acesso ao painel. Preencha e-mail e senha para liberar o acesso de cada uma.</p>
             <div id="us-list" class="form"></div>
             <span class="hint">Senha com no mínimo 10 caracteres. Deixe a senha vazia para manter a atual.</span>
             <button class="btn solid block" type="submit">Salvar usuários</button>
@@ -445,6 +448,7 @@ p{margin:0}
             <summary><span><b>Bike Fit</b><small>WhatsApp do Guilherme, valores e agenda</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
             <div class="acc-in form">
               <div class="field"><label for="c-wafit">WhatsApp do Guilherme</label><div class="tel"><span>+55</span><input id="c-wafit" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
+              <div class="field"><label for="c-fitpct">Divisão do valor</label><div class="pctrow"><span>Cave.&nbsp;Floripa</span><input id="c-fitpct" inputmode="numeric" aria-label="Parte da Cave em %"><span>%</span><b id="c-fitpct-o"></b></div></div>
               <div id="c-fit" class="form"></div>
               <button class="btn small" id="openFit" type="button" style="justify-self:start">Ver agenda e painel do Bike Fit</button>
               <button class="btn solid block" type="submit">Salvar Bike Fit</button>
@@ -453,6 +457,7 @@ p{margin:0}
           <details class="acc" data-acc="cfg">
             <summary><span><b>Locação</b><small>Bicicletas, rodas e itens de viagem</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
             <div class="acc-in form">
+              <div class="field"><label for="c-locpct">Divisão do valor</label><div class="pctrow"><span>Cave.&nbsp;Floripa</span><input id="c-locpct" inputmode="numeric" aria-label="Parte da Cave em %"><span>%</span><b id="c-locpct-o"></b></div><span class="hint">Padrão para bicicletas, rodas e mala bike de terceiros. Dá para mudar em cada locação.</span></div>
               <p class="hint">Deixe o preço vazio para mostrar “Sob consulta”.</p>
               <div id="c-rent" class="accs"></div>
               <button class="btn solid block" type="submit">Salvar locação</button>
@@ -517,6 +522,10 @@ p{margin:0}
   <div class="field"><label for="lc-item">Item alugado</label><select id="lc-item"></select></div>
   <div class="field" id="lc-otherw" hidden><label for="lc-other">Qual item?</label><input id="lc-other"></div>
   <div class="field"><label for="lc-client">Cliente</label><input id="lc-client" placeholder="Nome"></div>
+  <div class="row2">
+    <div class="field"><label for="lc-owner">Dono do equipamento</label><input id="lc-owner" placeholder="Nome (vazio se for da Cave)"></div>
+    <div class="field"><label for="lc-pct">Parte da Cave (%)</label><input id="lc-pct" inputmode="numeric"></div>
+  </div>
   <div class="row2">
     <div class="field"><label for="lc-start">Retirada</label><input id="lc-start" type="date"></div>
     <div class="field"><label for="lc-end">Devolução</label><input id="lc-end" type="date"></div>
@@ -970,6 +979,10 @@ $("#e-delete").addEventListener("click",async function(){
 });
 
 // ---------- Configurações
+function syncPct(){
+  [["c-fitpct","Guilherme"],["c-locpct","Dono"]].forEach(([id,who])=>{const el=$("#"+id),v=Math.min(100,digits(el.value));$("#"+id+"-o").textContent=`${who}: ${100-v}%`});
+}
+["#c-fitpct","#c-locpct"].forEach(sel=>document.addEventListener("input",e=>{if(e.target.matches&&e.target.matches(sel)){e.target.value=String(Math.min(100,digits(e.target.value)||0));syncPct()}}));
 // Locação: itens agrupados como no site (Bicicletas, Rodas, Vamos viajar?)
 const RGROUPS=[{group:"Bicicletas",icon:"bike"},{group:"Rodas",icon:"spoke"},{group:"Viagem",title:"Vamos viajar?",icon:"bag"}];
 let RENT=[],OPEN_RENT="";
@@ -1011,6 +1024,7 @@ function renderCfg(){
     <div class="field"><label for="cf-n${i}">Nome</label><input id="cf-n${i}" value="${esc(f.name)}"></div>
     <div class="field"><label for="cf-p${i}">Valor</label><input id="cf-p${i}" inputmode="numeric" value="${money00(f.price)}" data-money></div></div>`).join("");
   RENT=JSON.parse(JSON.stringify(CFG.rentals));
+  $("#c-fitpct").value=splitPct("fit");$("#c-locpct").value=splitPct("loc");syncPct();
   renderFees();
   document.querySelectorAll("[data-money]").forEach(el=>moneyField(el));
   renderRent();
@@ -1021,6 +1035,7 @@ function renderCfg(){
       <div class="field"><label for="us-n${i}">Nome</label><input id="us-n${i}" value="${esc(u?u.name:s.name)}"></div>
       <div class="field"><label for="us-e${i}">E-mail</label><input id="us-e${i}" type="email" autocapitalize="off" value="${esc(u?u.email:"")}" placeholder="nome@cave.floripa.com"></div>
       <div class="field"><label for="us-p${i}">${u?"Nova senha":"Senha"}</label><input id="us-p${i}" type="password" autocomplete="new-password" placeholder="${u?"Deixe vazio para manter":"Mínimo 10 caracteres"}"></div>
+      ${u&&id!==S.id?`<button class="btn small del" type="button" data-udel="${id}" style="justify-self:start">Excluir acesso</button>`:""}${u&&id===S.id?`<span class="hint">Este é o seu acesso.</span>`:""}
     </div>`}).join("");
 }
 $("#co-cnpj").addEventListener("input",e=>{e.target.value=fmtCnpj(e.target.value)});
@@ -1036,11 +1051,20 @@ $("#cfgForm").addEventListener("submit",async e=>{
   try{
     await updateConfig(data=>{
       const w=waDigits($("#c-wafit").value);if(w)data.whatsapp.fit=w;
+      data.split={fit:Math.min(100,digits($("#c-fitpct").value)),loc:Math.min(100,digits($("#c-locpct").value))};
       data.fit=data.fit.map((f,i)=>({...f,name:$("#cf-n"+i).value.trim(),price:parseMoney($("#cf-p"+i).value)}));
       syncRent();data.rentals=RENT.filter(r=>r.name);
     },"Atualiza configurações");
     renderCfg();toast("Salvo. O site atualiza em cerca de 1 minuto.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
+});
+$("#us-list").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-udel]");if(!b)return;
+  const u=DIR[b.dataset.udel];
+  if(b.dataset.armed!=="1"){b.dataset.armed="1";b.textContent=`Confirmar exclusão de ${u&&u.name?u.name.split(" ")[0]:"usuário"}`;setTimeout(()=>{if(b.isConnected){b.dataset.armed="";b.textContent="Excluir acesso"}},5000);return}
+  busy("Excluindo acesso…");
+  try{await saveAdmins(async(users,dir)=>{const i=users.findIndex(x=>x.id===b.dataset.udel);if(i>=0)users.splice(i,1);delete dir[b.dataset.udel]},"Admin: acesso excluído");renderCfg();toast("Acesso excluído. Em cerca de 1 minuto essa pessoa não consegue mais entrar.")}
+  catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 $("#usForm").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -1154,22 +1178,24 @@ function finExpenses(rg){
   });
   return out.sort((a,b)=>b.date.localeCompare(a.date));
 }
+const rentCaveOf=r=>r2(Number(r.value||0)*Number(r.pct??100)/100),rentOwnerOf=r=>r2(Number(r.value||0)-rentCaveOf(r));
 function finCalc(rg){
   const sales=finSales(rg),rents=FIN.rentals.filter(r=>inRange(r.start,rg)),exps=finExpenses(rg);
   const fit=FIT.filter(b=>{const d=atDate(b);return d>=rg[0]&&d<=rg[1]});
   const bruto=sales.reduce((s,x)=>s+Number(x.price||0),0);
   const vendasCave=sales.reduce((s,x)=>s+saleGross(x),0),custo=sales.reduce((s,x)=>s+(x.pct>=100?Number(x.cost||0):0),0);
-  const rentTot=rents.reduce((s,r)=>s+Number(r.value||0),0);
+  const rentTot=rents.reduce((s,r)=>s+Number(r.value||0),0),rentCave=r2(rents.reduce((s,r)=>s+rentCaveOf(r),0));
   const taxas=sales.reduce((s,x)=>s+Number(x.fee||0),0)+rents.reduce((s,r)=>s+Number(r.fee||0),0);
-  const fitTot=fit.reduce((s,b)=>s+Number(b.price||0),0),fitCave=r2(fitTot*CAVE_PCT);
+  const fitTot=fit.reduce((s,b)=>s+Number(b.price||0),0),fitCave=r2(fit.reduce((s,b)=>s+fitCaveOf(b),0));
   const gastos=exps.reduce((s,e)=>s+Number(e.value||0),0);
-  return {sales,rents,exps,fit,bruto,vendasCave,custo,rentTot,taxas,fitTot,fitCave,gastos,net:r2(vendasCave+rentTot+fitCave-taxas-gastos)};
+  return {sales,rents,exps,fit,bruto,vendasCave,custo,rentTot,rentCave,taxas,fitTot,fitCave,gastos,net:r2(vendasCave+rentCave+fitCave-taxas-gastos)};
 }
 function pendingRepasses(){
   const now=new Date(),list=[];
   FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Dono não informado",what:s.title,value:saleOwner(s),due,late:due<now})});
+  FIN.rentals.filter(r=>Number(r.pct??100)<100&&!r.paidAt).forEach(r=>{const due=new Date(new Date((r.end||r.start)+"T12:00").getTime()+REPASSE_DIAS*864e5);list.push({kind:"rent",id:r.id,who:r.owner||"Dono não informado",what:`Locação · ${r.item}`,value:rentOwnerOf(r),due,late:due<now})});
   const gf=FIT.filter(b=>atDate(b)<=now&&!FIN.fitPaid[b.id]);
-  if(gf.length)list.push({kind:"fit",who:"Guilherme · Bike Fit",what:`${gf.length} bike fit${gf.length>1?"s":""} (80%)`,value:r2(gf.reduce((s,b)=>s+Number(b.price||0)*(1-CAVE_PCT),0)),due:null,late:false});
+  if(gf.length)list.push({kind:"fit",who:"Guilherme · Bike Fit",what:`${gf.length} bike fit${gf.length>1?"s":""} (parte do Guilherme)`,value:r2(gf.reduce((s,b)=>s+Number(b.price||0)-fitCaveOf(b),0)),due:null,late:false});
   return list.sort((a,b)=>(a.due||Infinity)-(b.due||Infinity));
 }
 function renderFin(){
@@ -1186,24 +1212,24 @@ function renderFin(){
       <span class="k">Valor líquido ${lbl}</span><b class="v">${brl(c.net)}</b>
       <div class="lines">
         <div><span>Vendas · parte da Cave</span><span>+ ${brl(c.vendasCave)}</span></div>
-        <div><span>Locação</span><span>+ ${brl(c.rentTot)}</span></div>
-        <div><span>Bike Fit · 20% da Cave</span><span>+ ${brl(c.fitCave)}</span></div>
+        <div><span>Locação · parte da Cave</span><span>+ ${brl(c.rentCave)}</span></div>
+        <div><span>Bike Fit · parte da Cave</span><span>+ ${brl(c.fitCave)}</span></div>
         <div class="r"><span>Taxas de pagamento</span><span>− ${brl(c.taxas)}</span></div>
         <div class="r"><span>Gastos</span><span>− ${brl(c.gastos)}</span></div>
       </div>
     </div>
     <div class="fc rep${rep.some(x=>x.late)?" late":""}">
-      <div class="fc-h"><span class="k">A repassar</span><span class="s">Consignados em até ${REPASSE_DIAS} dias</span></div>
+      <div class="fc-h"><span class="k">A repassar</span><span class="s">Donos em até ${REPASSE_DIAS} dias</span></div>
       <b class="v">${brl(repTot)}</b>
       ${rep.length?`<div class="reps">${rep.map(x=>`<div class="rp${x.late?" late":""}"><span class="t"><b>${esc(x.who)}</b><span>${esc(x.what)}${x.due?` · ${x.late?"atrasado desde":"até"} ${fdate(ymd(x.due))}`:""}</span></span><span class="m">${brl(x.value)}</span><button class="btn small" type="button" data-pay="${x.kind}" data-id="${esc(x.id||"")}">Pago</button></div>`).join("")}</div>`:`<span class="s">Nenhum repasse pendente.</span>`}
     </div>
     <div class="fc-grid">
       <div class="fc"><span class="k">Caixa (parte da Cave nas vendas)</span><b class="v">${brl(c.vendasCave)}</b><span class="s">de ${brl(c.bruto)} vendidos${c.custo?` · custo ${brl(c.custo)}`:""}</span></div>
-      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${brl(c.fitTot)}</b><span class="s">Cave.&nbsp;Floripa (20%): <b>${brl(c.fitCave)}</b></span><span class="s">${plural(c.fit.length,"bike fit feito","bike fits feitos")}</span></div>
+      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${brl(c.fitTot)}</b><span class="s">Cave.&nbsp;Floripa (${splitPct("fit")}%): <b>${brl(c.fitCave)}</b></span><span class="s">${plural(c.fit.length,"bike fit feito","bike fits feitos")}</span></div>
     </div>
     <div class="fc">
       <div class="fc-h"><span class="k">Locação ${lbl}</span><button class="btn small" id="rentNew" type="button">+ Lançar locação</button></div>
-      <b class="v">${brl(c.rentTot)}</b><span class="s">${plural(c.rents.length,"locação","locações")}</span>
+      <b class="v">${brl(c.rentCave)}</b><span class="s">parte da Cave de ${brl(c.rentTot)} · ${plural(c.rents.length,"locação","locações")}</span>
       ${c.rents.length?`<div class="exps">${c.rents.slice().sort((a,b)=>b.start.localeCompare(a.start)).slice(0,6).map(r=>`<div class="exp"><span class="d">${fdate(r.start)}</span><span class="t">${esc(r.item)}${r.client?` · ${esc(r.client)}`:""}</span><span>${brl(r.value)}</span><button type="button" data-lrm="${esc(r.id)}" aria-label="Apagar locação">✕</button></div>`).join("")}</div>`:""}
     </div>
     <div class="fc">
@@ -1248,6 +1274,7 @@ $("#finBody").addEventListener("click",async e=>{
       if(!arm(pay,"Confirmar"))return;busy("Registrando repasse…");
       const when=new Date().toISOString();
       if(pay.dataset.pay==="fit"){const ids=FIT.filter(b=>atDate(b)<=new Date()).map(b=>b.id);await saveFin(d=>{ids.forEach(i=>{if(!d.fitPaid[i])d.fitPaid[i]=when})},"Financeiro: repasse Bike Fit pago")}
+      else if(pay.dataset.pay==="rent")await saveFin(d=>{const r=d.rentals.find(y=>y.id===pay.dataset.id);if(r)r.paidAt=when},"Financeiro: repasse de locação pago");
       else await saveFin(d=>{const s=d.sales.find(y=>y.pid===pay.dataset.id);if(s)s.paidAt=when},"Financeiro: repasse pago");
       toast("Repasse registrado como pago.");
     }else return;
@@ -1310,11 +1337,13 @@ $("#ex-ok").addEventListener("click",async()=>{
 // ----- Folha: lançar locação
 function openRentSh(day){
   $("#lc-item").innerHTML=(CFG.rentals||[]).map(r=>`<option>${esc(r.name)}</option>`).join("")+`<option value="__o">Outro…</option>`;
-  $("#lc-other").value="";$("#lc-otherw").hidden=true;$("#lc-client").value="";$("#lc-val").value="";
+  $("#lc-other").value="";$("#lc-otherw").hidden=true;$("#lc-client").value="";$("#lc-val").value="";$("#lc-owner").value="";$("#lc-pct").value=splitPct("loc");
   $("#lc-start").value=day||ymd(new Date());$("#lc-end").value="";$("#lc-pay").innerHTML=payOpts("pix");
   calcRent();$("#rentSh").hidden=false;
 }
-function calcRent(){const v=parseMoney($("#lc-val").value),f=feeOf($("#lc-pay").value,v);$("#lc-out").innerHTML=`<div><span>Locação</span><b>${brl(v)}</b></div>${f?`<div><span>Taxa ${payName($("#lc-pay").value)}</span><b>− ${brl(f)}</b></div>`:""}<div class="tot"><span>Fica para a Cave</span><b>${brl(v-f)}</b></div>`}
+function calcRent(){const v=parseMoney($("#lc-val").value),pc=Math.min(100,digits($("#lc-pct").value)),f=feeOf($("#lc-pay").value,v),cave=r2(v*pc/100);
+  $("#lc-out").innerHTML=`<div><span>Locação</span><b>${brl(v)}</b></div>${pc<100?`<div><span>Repasse ao dono (${100-pc}%)</span><b>− ${brl(v-cave)}</b></div>`:""}${f?`<div><span>Taxa ${payName($("#lc-pay").value)}</span><b>− ${brl(f)}</b></div>`:""}<div class="tot"><span>Fica para a Cave</span><b>${brl(cave-f)}</b></div>`}
+$("#lc-pct").addEventListener("input",e=>{e.target.value=String(Math.min(100,digits(e.target.value)||0));calcRent()});
 $("#lc-item").addEventListener("change",()=>{$("#lc-otherw").hidden=$("#lc-item").value!=="__o"});
 moneyField($("#lc-val"),calcRent);$("#lc-pay").addEventListener("change",calcRent);
 $("#lc-cancel").addEventListener("click",()=>{$("#rentSh").hidden=true});
@@ -1323,7 +1352,7 @@ $("#lc-ok").addEventListener("click",async()=>{
   if(!item)return toast("Escolha o item alugado.",true);
   if(!value)return toast("Coloque o valor da locação.",true);
   if(!start)return toast("Escolha a data de retirada.",true);
-  const r={id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
+  const r={id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),owner:$("#lc-owner").value.trim(),pct:Math.min(100,digits($("#lc-pct").value)),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
   busy("Salvando locação…");
   try{await saveFin(d=>{d.rentals.push(r)},"Financeiro: nova locação");$("#rentSh").hidden=true;renderFin();if(VIEW==="fit")renderFit();toast("Locação lançada.")}
   catch(x){toast(errMsg(x),true)}finally{busy()}
@@ -1335,8 +1364,8 @@ function exportCsv(){
   const q=v=>{v=String(v??"");return /[;"\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
   const rows=[["Data","Tipo","Descrição","Categoria","Forma de pagamento","Valor bruto","Taxa","Custo","Repasse a terceiros","Valor da Cave"]];
   c.sales.forEach(s=>rows.push([br(s.at),"Venda",s.title+(s.owner&&s.owner.name?` (consignado: ${s.owner.name})`:""),MODS[s.cat]||"Marcas",payName(s.pay),n(s.price),n(s.fee),n(s.pct>=100?s.cost:0),n(saleOwner(s)),n(saleNet(s))]));
-  c.rents.forEach(r=>rows.push([br(r.start),"Locação",r.item+(r.client?` · ${r.client}`:""),"Locação",payName(r.pay),n(r.value),n(r.fee),n(0),n(0),n(r.value-r.fee)]));
-  c.fit.forEach(b=>rows.push([br(b.at),"Bike Fit",`${b.name} · ${CATS[b.cat]||""}`,"Bike Fit","",n(b.price),n(0),n(0),n(b.price*(1-CAVE_PCT)),n(b.price*CAVE_PCT)]));
+  c.rents.forEach(r=>rows.push([br(r.start),"Locação",r.item+(r.client?` · ${r.client}`:"")+(r.owner?` (dono: ${r.owner})`:""),"Locação",payName(r.pay),n(r.value),n(r.fee),n(0),n(rentOwnerOf(r)),n(rentCaveOf(r)-r.fee)]));
+  c.fit.forEach(b=>rows.push([br(b.at),"Bike Fit",`${b.name} · ${CATS[b.cat]||""}`,"Bike Fit","",n(b.price),n(0),n(0),n(b.price-fitCaveOf(b)),n(fitCaveOf(b))]));
   c.exps.forEach(e=>rows.push([br(e.date),"Gasto",e.desc||e.cat,e.cat,"",n(e.value),n(0),n(0),n(0),"-"+n(e.value)]));
   rows.sort((a,b)=>a===rows[0]?-1:b===rows[0]?1:a[0].split("/").reverse().join("").localeCompare(b[0].split("/").reverse().join("")));
   rows.push([],["","Total","Valor líquido do período","","","","","","",n(c.net)]);
@@ -1358,7 +1387,9 @@ $("#feeForm").addEventListener("submit",async e=>{
 // ---------- Bike Fit (agenda criptografada em data/bikefit.json)
 let FIT=[];
 const CATS={road:"Road",mtb:"Mountain Bike",tri:"Triathlon"};
-const CAVE_PCT=.2;
+const splitPct=k=>Number(((CFG&&CFG.split)||{})[k]??20);
+const fitShare=b=>Number(b.cavePct??splitPct("fit"))/100;
+const fitCaveOf=b=>r2(Number(b.price||0)*fitShare(b));
 const fitPrice=c=>Number(((CFG.fit||[])[c==="tri"?1:0]||{}).price||0);
 const pad=n=>String(n).padStart(2,"0");
 const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -1420,7 +1451,11 @@ function renderRentStats(){
     <div class="st big"><span class="k">Locações ${lbl}</span><b>${RS.length}</b><span class="muted">${next} agendada${next===1?"":"s"} a partir de hoje</span></div>
     <div class="st-grid">
       <div class="st"><span class="k">Valor total</span><b>${brl(tot)}</b></div>
-      <div class="st"><span class="k">Líquido (sem taxas)</span><b>${brl(tot-fee)}</b></div>
+      <div class="st"><span class="k">Parte da Cave (sem taxas)</span><b>${brl(RS.reduce((s,r)=>s+rentCaveOf(r),0)-fee)}</b></div>
+    </div>
+    <div class="st-grid">
+      <div class="st"><span class="k">Repasse aos donos</span><b>${brl(RS.reduce((s,r)=>s+rentOwnerOf(r),0))}</b></div>
+      <div class="st"><span class="k">Taxas de pagamento</span><b>${brl(fee)}</b></div>
     </div>
     ${Object.keys(byItem).length?`<div class="st"><span class="k">Itens mais alugados</span><div class="lines">${Object.entries(byItem).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div><span>${esc(k)}</span><span>${v}×</span></div>`).join("")}</div></div>`:""}`;
 }
@@ -1430,7 +1465,7 @@ function renderStats(){
   const next=FIT.filter(b=>atDate(b)>now).length;
   const n=done.length,road=done.filter(b=>b.cat!=="tri").length,tri=n-road;
   const m=done.filter(b=>b.sex==="M").length,f=done.filter(b=>b.sex==="F").length,pct=x=>n?Math.round(x/n*100)+"%":"0%";
-  const tot=done.reduce((s,b)=>s+Number(b.price||0),0),cave=tot*CAVE_PCT;
+  const tot=done.reduce((s,b)=>s+Number(b.price||0),0),cave=r2(done.reduce((s,b)=>s+fitCaveOf(b),0)),fp=splitPct("fit");
   const lbl=CAL.p===1?"neste mês":`nos últimos ${CAL.p} meses`;
   $("#fitStats").innerHTML=`
     <div class="st big"><span class="k">1. Bike fits feitos ${lbl}</span><b>${n}</b><span class="muted">${next} agendado${next===1?"":"s"} a partir de hoje</span></div>
@@ -1442,8 +1477,8 @@ function renderStats(){
     </div>
     <div class="st"><span class="k">4.1. Valor total</span><b>${brl(tot)}</b></div>
     <div class="st-grid">
-      <div class="st"><span class="k">4.2. Cave.&nbsp;Floripa (20%)</span><b>${brl(cave)}</b></div>
-      <div class="st"><span class="k">4.3. Guilherme (80%)</span><b>${brl(tot-cave)}</b></div>
+      <div class="st"><span class="k">4.2. Cave.&nbsp;Floripa (${fp}%)</span><b>${brl(cave)}</b></div>
+      <div class="st"><span class="k">4.3. Guilherme (${100-fp}%)</span><b>${brl(tot-cave)}</b></div>
     </div>`;
 }
 $("#calPrev").addEventListener("click",()=>{CAL.m--;if(CAL.m<0){CAL.m=11;CAL.y--}renderFit()});
@@ -1468,7 +1503,8 @@ function closeFit(){$("#fitEd").hidden=true;document.body.style.overflow="";FB=n
 function renderSplit(){
   const c=(document.querySelector('[name="f-cat"]:checked')||{}).value;
   const v=c?(FB&&FB.cat===c?Number(FB.price):fitPrice(c)):0;
-  $("#f-split").innerHTML=c?`<div><span>Valor</span><b>${brl(v)}</b></div><div><span>Cave.&nbsp;Floripa (20%)</span><b>${brl(v*CAVE_PCT)}</b></div><div><span>Guilherme (80%)</span><b>${brl(v-v*CAVE_PCT)}</b></div>`:`<p class="muted" style="font-size:14px">Escolha a categoria para ver o valor.</p>`;
+  const fp=Number(FB&&FB.cavePct!=null?FB.cavePct:splitPct("fit"));
+  $("#f-split").innerHTML=c?`<div><span>Valor</span><b>${brl(v)}</b></div><div><span>Cave.&nbsp;Floripa (${fp}%)</span><b>${brl(v*fp/100)}</b></div><div><span>Guilherme (${100-fp}%)</span><b>${brl(v-v*fp/100)}</b></div>`:`<p class="muted" style="font-size:14px">Escolha a categoria para ver o valor.</p>`;
 }
 document.querySelectorAll('[name="f-cat"]').forEach(r=>r.addEventListener("change",renderSplit));
 $("#f-year").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,4)});
@@ -1481,7 +1517,7 @@ $("#fitSave").addEventListener("click",async()=>{
   if(!cat)return toast("Escolha a categoria.",true);
   if(!date||!time)return toast("Escolha data e horário.",true);
   const price=FB&&FB.cat===cat?Number(FB.price):fitPrice(cat);
-  const bk={id:FB?FB.id:"bf-"+Date.now().toString(36),name,sex,brand:$("#f-brand").value.trim(),model:$("#f-model").value.trim(),year:$("#f-year").value.trim(),cat,at:`${date}T${time}`,price,
+  const bk={id:FB?FB.id:"bf-"+Date.now().toString(36),name,sex,brand:$("#f-brand").value.trim(),model:$("#f-model").value.trim(),year:$("#f-year").value.trim(),cat,at:`${date}T${time}`,price,cavePct:FB&&FB.cavePct!=null?FB.cavePct:splitPct("fit"),
     by:S.name||S.email,createdAt:FB?FB.createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
   busy("Salvando agendamento…");
   try{
