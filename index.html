@@ -212,6 +212,9 @@ section,#loja{scroll-margin-top:68px}
 .badge{position:absolute;top:10px;left:10px;font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.72);color:#fff;z-index:2}
 .badge.novo{background:var(--buy);color:var(--buy-ink)}
 .badge.hl{left:auto;right:10px;background:var(--ink);color:var(--bg)}
+.sortbar{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.sort{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);border:0!important;background:none!important;padding:0!important;height:auto!important;box-shadow:none!important}
+.sort select{appearance:none;-webkit-appearance:none;border:1px solid var(--line);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/14px;color:var(--ink);border-radius:999px;height:36px;padding:0 32px 0 14px;font:600 13px var(--body)}
 .badge.off{left:auto;right:10px;background:var(--bad);color:#fff}
 .was{color:var(--muted);font-weight:400;font-size:.85em;text-decoration:line-through}
 .off-tag{font:600 12px/1 var(--mono);color:#fff;background:var(--bad);padding:5px 7px;border-radius:6px;vertical-align:middle;letter-spacing:0}
@@ -509,6 +512,8 @@ footer .flogo{width:min(200px,55vw);height:auto}
           <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="qClear" hidden aria-label="Limpar busca">×</button></label>
           <div class="secs" id="secs" role="group" aria-label="Seções" hidden></div>
           <div class="qf" id="qf" hidden></div>
+          <div class="sortbar"><span id="count"></span><label class="sort" for="sort">Ordenar por:
+            <select id="sort"><option value="desc">Maior preço</option><option value="asc">Menor preço</option></select></label></div>
         </div>
       </div>
       <div class="latest-head" id="latestTitle"><h3 class="latest-title">Últimos anúncios</h3><span class="live"><i aria-hidden="true"></i>Atualizado</span></div>
@@ -651,7 +656,7 @@ function pic(p,i=0,extra=""){
 // ---------- Loja
 // Modalidade (natação, bicicleta, corrida) ou marca (Garmin, Wahoo, CeramicSpeed) -> seção -> tipo.
 const MODE_IMG={natacao:"assets/modes/natacao.jpg?v=4",bike:"assets/modes/bike.jpg?v=4",corrida:"assets/modes/corrida.jpg?v=4"};
-const st={cat:null,sec:null,sub:null,q:"",limit:12,open:null}; // sec = seção (Neoprene, Vestuário...), sub = tipo
+const st={cat:null,sec:null,sub:null,q:"",limit:12,open:null,sort:"desc"}; // sec = seção (Neoprene, Vestuário...), sub = tipo
 const curCat=()=>CFG.categories.find(c=>c.id===st.cat);
 const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 // Desconto: p.was guarda o valor cheio e p.price passa a ser o preço final.
@@ -718,7 +723,10 @@ function filtered(){
   const q=norm(st.q);
   const here=p=>{const pl=p.places.filter(x=>x.cat===st.cat);return pl.length?pl:[p.places[0]]};
   const l=P.filter(p=>inView(p)&&(!st.sec&&!st.sub||here(p).some(x=>(!st.sec||x.group===st.sec)&&(!st.sub||x.sub===st.sub)))&&(!q||norm(p.title+" "+p.subtitle+" "+p.places.map(x=>x.sub).join(" ")).includes(q)));
-  return [...l.filter(p=>!sold(p)),...l.filter(sold)]; // vendidos sempre no fim
+  const by=(a,b)=>st.sort==="asc"?a.price-b.price:b.price-a.price; // padrão: do mais caro para o mais barato
+  const av=l.filter(p=>!sold(p)).sort(by),sd=l.filter(sold);
+  $("#count").textContent=`${av.length} ${av.length===1?"produto":"produtos"}`;
+  return [...av,...sd]; // vendidos sempre no fim
 }
 function card(p){
   const s=sold(p);
@@ -754,6 +762,7 @@ const showQuick=()=>{const c=curCat();qf.hidden=!!(c&&c.groups.length>1)||!!qi.v
 qi.addEventListener("focus",showQuick);
 qi.addEventListener("click",showQuick);
 qi.addEventListener("input",()=>{st.sub=null;st.q=qi.value;st.limit=12;$("#qClear").hidden=!qi.value;showQuick();renderGrid()});
+$("#sort").addEventListener("change",e=>{st.sort=e.target.value;st.limit=12;renderGrid()});
 qi.addEventListener("keydown",e=>{if(e.key==="Enter"){qi.blur();qf.hidden=true}});
 qf.addEventListener("mousedown",e=>e.preventDefault()); // não fecha o teclado/painel antes do toque
 qf.addEventListener("click",e=>{const b=e.target.closest("[data-sub]");if(!b)return;
