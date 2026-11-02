@@ -52,7 +52,6 @@
 .day{position:relative;aspect-ratio:1;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;font-weight:500;display:grid;place-items:center;padding:0}
 .day.today{border-color:var(--ink)}
 .day.sel{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.day i{position:absolute;right:3px;top:3px;min-width:16px;height:16px;border-radius:8px;background:var(--buy);color:var(--buy-ink);font:700 10px/16px var(--mono);font-style:normal;padding:0 3px}
 .bk{width:100%;display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;text-align:left;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:8px}
 .bk-t{font-weight:700}
 .bk-i{display:grid;min-width:0}
@@ -140,6 +139,40 @@ body.wide .wrap{max-width:1240px}
 .rp.late .t span{color:var(--bad)}
 .fc.rep.late{border-color:var(--bad)}
 .exp button.armed,.rp button.armed{color:var(--bad);border-color:var(--bad)}
+
+:root{--fit:#F5C518;--fit-soft:#2F2805;--loc-soft:#0D2416}
+:root[data-theme="light"]{--fit:#B98900;--fit-soft:#FFF3C4;--loc-soft:#E2F4E8}
+.top .wrap{gap:14px}
+.anav{display:none;gap:4px;margin:0 auto}
+.anav button{background:none;border:0;padding:8px 12px;border-radius:999px;font-size:14px;font-weight:600;color:var(--muted)}
+.anav button:hover{color:var(--ink)}
+.anav button[aria-current="page"]{color:var(--ink);background:var(--surface)}
+.btn.gasto{background:var(--bad);border-color:var(--bad);color:#fff}
+.cfg-i{display:none}
+.cfg-i svg{width:18px;height:18px}
+.atab{position:fixed;left:0;right:0;bottom:0;z-index:45;display:grid;grid-template-columns:repeat(4,1fr);height:calc(64px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+.atab button{background:none;border:0;display:grid;place-items:center;align-content:center;gap:3px;font-size:11px;font-weight:600;color:var(--muted)}
+.atab button svg{width:22px;height:22px}
+.atab button[aria-current="page"]{color:var(--ink)}
+body.has-tab{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+@media (max-width:999px){.cfg-t{display:none}.cfg-i{display:block}#cfgBtn{width:36px;padding:0;min-height:36px;height:36px}.top .actions{gap:6px}}
+@media (min-width:1000px){.anav:not([hidden]){display:flex}.atab{display:none}body.has-tab{padding-bottom:0}}
+.day.f{background:var(--fit-soft);border-color:var(--fit)}
+.day.l{background:var(--loc-soft);border-color:var(--buy)}
+.day.f.l{background:linear-gradient(135deg,var(--fit-soft) 50%,var(--loc-soft) 50%);border-color:var(--ink)}
+.day.sel{background:var(--ink)!important;color:var(--bg);border-color:var(--ink)!important}
+.day .cnt{position:absolute;right:3px;top:3px;display:flex;gap:2px}
+.day .cnt i{position:static;min-width:16px;height:16px;border-radius:8px;font:700 10px/16px var(--mono);font-style:normal;padding:0 3px}
+.day .cnt .cf{background:var(--fit);color:#1A1500}
+.day .cnt .cl{background:var(--buy);color:var(--buy-ink)}
+@media (min-width:700px){.day{aspect-ratio:auto;height:68px}}
+.legend{display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:4px}
+.lg-f{background:var(--fit)}.lg-l{background:var(--buy)}
+.bk.f{border-left:4px solid var(--fit)}
+.bk.l{border-left:4px solid var(--buy);cursor:default}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -306,12 +339,15 @@ p{margin:0}
 <div id="app" hidden>
   <header class="top"><div class="wrap">
     <img class="logo" src="../assets/logo.png" alt="Cave Floripa" width="80" height="26">
+    <nav class="anav adm-only" aria-label="Seções"><button type="button" data-nav="fin">Financeiro</button><button type="button" data-nav="prods">Produtos</button><button type="button" data-nav="fit">Bike Fit</button><button type="button" data-nav="loc">Locação</button></nav>
     <div class="actions">
+      <button class="btn small gasto adm-only" id="gastoBtn" type="button" aria-label="Adicionar gasto">+ Gastos</button>
       <button class="theme-btn" type="button" id="themeBtn" aria-label="Mudar cor"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
-      <button class="btn small" id="cfgBtn" type="button">Configurações</button>
+      <button class="btn small" id="cfgBtn" type="button" aria-label="Configurações"><span class="cfg-t">Configurações</span><span class="cfg-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span></button>
       <button class="btn small" id="logout" type="button">Sair</button>
     </div>
   </div></header>
+  <nav class="atab adm-only" aria-label="Seções"><button type="button" data-nav="fin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/></svg><span>Financeiro</span></button><button type="button" data-nav="prods"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><span>Produtos</span></button><button type="button" data-nav="fit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5 9 9h6l3.5 7.5M9 9 12 16.5h1.5M14 6h2.5"/></svg><span>Bike Fit</span></button><button type="button" data-nav="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Locação</span></button></nav>
   <div class="wrap">
 
     <section id="view-prods" hidden><div class="dash">
@@ -345,17 +381,19 @@ p{margin:0}
     </div><div style="height:40px"></div></section>
 
     <section id="view-fit" hidden>
+      <h2 class="sec-t" id="calViewTitle" style="margin-bottom:12px">Bike Fit</h2>
       <div class="cal-head">
         <button class="icon-btn" id="calPrev" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
         <b id="calTitle"></b>
         <button class="icon-btn" id="calNext" type="button" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
       </div>
       <div class="cal" id="cal"></div>
+      <div class="legend adm-only"><span><i class="lg-f"></i>Bike Fit</span><span><i class="lg-l"></i>Locação</span></div>
       <button class="btn buy block" id="fitNew" type="button" style="margin-top:14px">+ Agendar bike fit</button>
       <div class="day-list" id="dayList"></div>
 
       <div class="stats">
-        <h2 class="sec-t">Painel Bike Fit</h2>
+        <h2 class="sec-t" id="statsTitle">Painel Bike Fit</h2>
         <div class="chips" id="fitPeriod">
           <button class="chip" data-p="1" aria-pressed="true">Mês</button>
           <button class="chip" data-p="6" aria-pressed="false">6 meses</button>
@@ -732,8 +770,9 @@ $("#logout").addEventListener("click",()=>{clearSession();location.reload()});
 
 const isAdm=()=>S&&S.role!=="bikefit";
 let VIEW="";
-function show(v){
+function show(v,nav){
   VIEW=v;
+  document.querySelectorAll("[data-nav]").forEach(b=>b.setAttribute("aria-current",b.dataset.nav===(nav||"")?"page":"false"));
   $("#view-prods").hidden=v!=="prods";$("#view-fit").hidden=v!=="fit";$("#view-cfg").hidden=v!=="cfg";
   $("#cfgBtn").hidden=v==="cfg";
   document.body.classList.toggle("wide",v==="prods");
@@ -755,12 +794,21 @@ async function start(){
   document.querySelectorAll('[data-role="adm"]').forEach(x=>x.hidden=!isAdm());
   document.querySelectorAll('[data-role="bikefit"]').forEach(x=>x.hidden=isAdm());
   renderList();renderCfg();renderFit();renderFin();
-  show(home());
+  document.querySelectorAll(".adm-only").forEach(x=>x.hidden=!isAdm());document.body.classList.toggle("has-tab",isAdm());
+  isAdm()?go("fin"):show("fit");
 }
 function showLogin(msg){$("#app").hidden=true;$("#setup").hidden=true;$("#login").hidden=false;if(msg){$("#loginErr").textContent=msg;$("#loginErr").hidden=false}}
 $("#cfgBtn").addEventListener("click",()=>{renderCfg();show("cfg")});
-$("#cfgBack").addEventListener("click",()=>show(home()));
-$("#openFit").addEventListener("click",()=>{renderFit();show("fit")});
+$("#cfgBack").addEventListener("click",()=>isAdm()?go("fin"):show("fit"));
+function go(n){
+  if(n==="fit"||n==="loc"){CAL.mode=n;renderFit();show("fit",n);return}
+  show("prods",n);
+  const el=n==="prods"?document.querySelector(".prods"):null;
+  if(el&&getComputedStyle(document.querySelector(".dash")).gridTemplateColumns.split(" ").length<2)window.scrollTo(0,el.getBoundingClientRect().top+scrollY-70);
+}
+document.querySelectorAll("[data-nav]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.nav)));
+$("#gastoBtn").addEventListener("click",()=>openExp());
+$("#openFit").addEventListener("click",()=>go("fit"));
 
 // Tema claro/escuro (mesma escolha do site)
 function syncTheme(){const l=document.documentElement.dataset.theme==="light";document.querySelector('meta[name="theme-color"]').content=l?"#FFFFFF":"#000000";$("#themeBtn").setAttribute("aria-label",l?"Mudar para fundo preto":"Mudar para fundo branco")}
@@ -1260,10 +1308,10 @@ $("#ex-ok").addEventListener("click",async()=>{
 });
 
 // ----- Folha: lançar locação
-function openRentSh(){
+function openRentSh(day){
   $("#lc-item").innerHTML=(CFG.rentals||[]).map(r=>`<option>${esc(r.name)}</option>`).join("")+`<option value="__o">Outro…</option>`;
   $("#lc-other").value="";$("#lc-otherw").hidden=true;$("#lc-client").value="";$("#lc-val").value="";
-  $("#lc-start").value=ymd(new Date());$("#lc-end").value="";$("#lc-pay").innerHTML=payOpts("pix");
+  $("#lc-start").value=day||ymd(new Date());$("#lc-end").value="";$("#lc-pay").innerHTML=payOpts("pix");
   calcRent();$("#rentSh").hidden=false;
 }
 function calcRent(){const v=parseMoney($("#lc-val").value),f=feeOf($("#lc-pay").value,v);$("#lc-out").innerHTML=`<div><span>Locação</span><b>${brl(v)}</b></div>${f?`<div><span>Taxa ${payName($("#lc-pay").value)}</span><b>− ${brl(f)}</b></div>`:""}<div class="tot"><span>Fica para a Cave</span><b>${brl(v-f)}</b></div>`}
@@ -1277,7 +1325,7 @@ $("#lc-ok").addEventListener("click",async()=>{
   if(!start)return toast("Escolha a data de retirada.",true);
   const r={id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
   busy("Salvando locação…");
-  try{await saveFin(d=>{d.rentals.push(r)},"Financeiro: nova locação");$("#rentSh").hidden=true;renderFin();toast("Locação lançada.")}
+  try{await saveFin(d=>{d.rentals.push(r)},"Financeiro: nova locação");$("#rentSh").hidden=true;renderFin();if(VIEW==="fit")renderFit();toast("Locação lançada.")}
   catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 
@@ -1332,23 +1380,49 @@ async function saveFit(mutate,msg){
   }
 }
 const now0=new Date();
-const CAL={y:now0.getFullYear(),m:now0.getMonth(),day:ymd(now0),p:1};
+const CAL={y:now0.getFullYear(),m:now0.getMonth(),day:ymd(now0),p:1,mode:"fit"};
+function rentDays(r){const out=[],end=r.end&&r.end>=r.start?r.end:r.start;let d=new Date(r.start+"T12:00");for(let k=0;k<120;k++){const y=ymd(d);out.push(y);if(y>=end)break;d.setDate(d.getDate()+1)}return out}
 function renderFit(){
+  const loc=CAL.mode==="loc"&&isAdm(),RS=isAdm()?((FIN&&FIN.rentals)||[]):[];
+  $("#calViewTitle").textContent=loc?"Locação":"Bike Fit";
+  $("#fitNew").textContent=loc?"+ Lançar locação":"+ Agendar bike fit";
+  $("#statsTitle").textContent=loc?"Painel Locação":"Painel Bike Fit";
   $("#calTitle").textContent=`${MONTHS[CAL.m]} ${CAL.y}`;
   const first=new Date(CAL.y,CAL.m,1),days=new Date(CAL.y,CAL.m+1,0).getDate(),today=ymd(new Date());
-  const count={};FIT.forEach(b=>{const k=b.at.slice(0,10);count[k]=(count[k]||0)+1});
+  const cf={},cl={};FIT.forEach(b=>{const k=b.at.slice(0,10);cf[k]=(cf[k]||0)+1});RS.forEach(r=>rentDays(r).forEach(k=>cl[k]=(cl[k]||0)+1));
   let h=["D","S","T","Q","Q","S","S"].map(d=>`<span class="dow">${d}</span>`).join("");
   for(let i=0;i<first.getDay();i++)h+=`<span></span>`;
-  for(let d=1;d<=days;d++){const k=`${CAL.y}-${pad(CAL.m+1)}-${pad(d)}`,n=count[k]||0;
-    h+=`<button type="button" class="day${k===today?" today":""}${k===CAL.day?" sel":""}" data-day="${k}" aria-label="${d} de ${MONTHS[CAL.m]}${n?`, ${n} agendamento${n>1?"s":""}`:""}">${d}${n?`<i>${n}</i>`:""}</button>`}
+  for(let d=1;d<=days;d++){const k=`${CAL.y}-${pad(CAL.m+1)}-${pad(d)}`,f=cf[k]||0,l=cl[k]||0;
+    h+=`<button type="button" class="day${k===today?" today":""}${k===CAL.day?" sel":""}${f?" f":""}${l?" l":""}" data-day="${k}" aria-label="${d} de ${MONTHS[CAL.m]}${f?`, ${f} bike fit`:""}${l?`, ${l} locação`:""}">${d}${f||l?`<span class="cnt">${f?`<i class="cf">${f}</i>`:""}${l?`<i class="cl">${l}</i>`:""}</span>`:""}</button>`}
   $("#cal").innerHTML=h;
-  const list=FIT.filter(b=>b.at.slice(0,10)===CAL.day).sort((a,b)=>a.at.localeCompare(b.at));
-  const [yy,mm,dd]=CAL.day.split("-");
-  $("#dayList").innerHTML=`<p class="eyebrow" style="margin:18px 0 8px">${+dd} de ${MONTHS[+mm-1].toLowerCase()}</p>`+(list.length?list.map(b=>`<button type="button" class="bk" data-bk="${esc(b.id)}">
+  const fits=FIT.filter(b=>b.at.slice(0,10)===CAL.day).sort((a,b)=>a.at.localeCompare(b.at));
+  const rents=RS.filter(r=>rentDays(r).includes(CAL.day));
+  const [yy,mm,dd]=CAL.day.split("-"),fd=s=>s?s.split("-").reverse().slice(0,2).join("/"):"";
+  const fitRows=fits.map(b=>`<button type="button" class="bk f" data-bk="${esc(b.id)}">
       <span class="bk-t">${b.at.slice(11,16)}</span>
-      <span class="bk-i"><b>${esc(b.name)}</b><span>${esc([b.brand,b.model,b.year].filter(Boolean).join(" "))} · ${CATS[b.cat]||""}</span></span>
-      <span class="price">${brl(b.price)}</span></button>`).join(""):`<p class="muted" style="font-size:14px">Nenhum bike fit neste dia.</p>`);
-  renderStats();
+      <span class="bk-i"><b>${esc(b.name)}</b><span>${["Bike Fit",esc([b.brand,b.model,b.year].filter(Boolean).join(" ")),CATS[b.cat]||""].filter(Boolean).join(" · ")}</span></span>
+      <span class="price">${brl(b.price)}</span></button>`).join("");
+  const rentRows=rents.map(r=>`<div class="bk l">
+      <span class="bk-t">${fd(r.start)}</span>
+      <span class="bk-i"><b>${esc(r.item)}</b><span>Locação${r.client?` · ${esc(r.client)}`:""}${r.end?` · até ${fd(r.end)}`:""}</span></span>
+      <span class="price">${brl(r.value)}</span></div>`).join("");
+  const rowsHtml=loc?rentRows+fitRows:fitRows+rentRows;
+  $("#dayList").innerHTML=`<p class="eyebrow" style="margin:18px 0 8px">${+dd} de ${MONTHS[+mm-1].toLowerCase()}</p>`+(rowsHtml||`<p class="muted" style="font-size:14px">Nada marcado neste dia.</p>`);
+  loc?renderRentStats():renderStats();
+}
+function renderRentStats(){
+  const now=new Date(),start=new Date(now.getFullYear(),now.getMonth()-(CAL.p-1),1),lbl=CAL.p===1?"neste mês":`nos últimos ${CAL.p} meses`;
+  const RS=(FIN.rentals||[]).filter(r=>{const d=new Date(r.start+"T12:00");return d>=start&&d<=now});
+  const next=(FIN.rentals||[]).filter(r=>new Date(r.start+"T12:00")>now).length;
+  const tot=RS.reduce((s,r)=>s+Number(r.value||0),0),fee=RS.reduce((s,r)=>s+Number(r.fee||0),0);
+  const byItem={};RS.forEach(r=>byItem[r.item]=(byItem[r.item]||0)+1);
+  $("#fitStats").innerHTML=`
+    <div class="st big"><span class="k">Locações ${lbl}</span><b>${RS.length}</b><span class="muted">${next} agendada${next===1?"":"s"} a partir de hoje</span></div>
+    <div class="st-grid">
+      <div class="st"><span class="k">Valor total</span><b>${brl(tot)}</b></div>
+      <div class="st"><span class="k">Líquido (sem taxas)</span><b>${brl(tot-fee)}</b></div>
+    </div>
+    ${Object.keys(byItem).length?`<div class="st"><span class="k">Itens mais alugados</span><div class="lines">${Object.entries(byItem).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div><span>${esc(k)}</span><span>${v}×</span></div>`).join("")}</div></div>`:""}`;
 }
 function renderStats(){
   const now=new Date(),start=new Date(now.getFullYear(),now.getMonth()-(CAL.p-1),1);
@@ -1375,9 +1449,9 @@ function renderStats(){
 $("#calPrev").addEventListener("click",()=>{CAL.m--;if(CAL.m<0){CAL.m=11;CAL.y--}renderFit()});
 $("#calNext").addEventListener("click",()=>{CAL.m++;if(CAL.m>11){CAL.m=0;CAL.y++}renderFit()});
 $("#cal").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(!b)return;CAL.day=b.dataset.day;renderFit()});
-$("#fitPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;CAL.p=+b.dataset.p;document.querySelectorAll("#fitPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderStats()});
+$("#fitPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;CAL.p=+b.dataset.p;document.querySelectorAll("#fitPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));CAL.mode==="loc"&&isAdm()?renderRentStats():renderStats()});
 $("#dayList").addEventListener("click",e=>{const b=e.target.closest("[data-bk]");if(b)openFit(FIT.find(x=>x.id===b.dataset.bk))});
-$("#fitNew").addEventListener("click",()=>openFit(null));
+$("#fitNew").addEventListener("click",()=>CAL.mode==="loc"&&isAdm()?openRentSh(CAL.day):openFit(null));
 
 let FB=null;
 function openFit(b){
