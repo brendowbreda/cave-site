@@ -1,6 +1,29 @@
 {
  "products": [
   {
+   "id": "p-mvzr0crc",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Relógios",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 3500,
+   "title": "Relógio Garmin Forerunner 265 - Music",
+   "subtitle": "46mm - Black (PRETO)",
+   "desc": "GPS multiesporte com tela AMOLED 1,3\"\nMúsica integrada (armazena até 1.000 músicas)\nPagamentos Garmin Pay\nMapas topográficos\nPulse Ox\nNotificações inteligentes",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzr0crc-mvzr7fvm1.jpg",
+    "img/products/p-mvzr0crc-mvzr7he22.jpg",
+    "img/products/p-mvzr0crc-mvzr7iq43.jpg",
+    "img/products/p-mvzr0crc-mvzr7k074.jpg",
+    "img/products/p-mvzr0crc-mvzr7l4x5.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T21:11:24.022Z",
+   "createdAt": "2026-11-02T21:11:24.022Z"
+  },
+  {
    "id": "p-mvzp6duu",
    "cat": "wahoo",
    "group": "wahoo",
