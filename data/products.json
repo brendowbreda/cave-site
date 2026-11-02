@@ -1,6 +1,32 @@
 {
  "products": [
   {
+   "id": "p-mvzuttrd",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Ciclocomputadores",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 3800,
+   "title": "Garmin Edge 550",
+   "subtitle": "54.6 x 92.2 x 16.8 mm | Peso: 110 g",
+   "desc": "Mais tecnologia. Mais controle. Performance em cada pedalada.\n\nO Garmin Edge® 550 combina tecnologia avançada, precisão e praticidade para ciclistas que buscam elevar seu desempenho e conquistar novos desafios.\n\nCom GPS integrado e recursos inteligentes para acompanhamento de atividades, proporciona uma experiência de pedal mais conectada, permitindo acompanhar seus treinos e explorar novos percursos com confiança.\n\nIdeal para ciclismo de estrada, mountain bike e preparação para o triathlon, oferece uma solução moderna para quem valoriza desempenho, navegação e evolução constante.\n\nMais estratégia. Mais liberdade. Sua próxima conquista começa sobre duas rodas.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzuttrd-mvzuw18g1.jpg",
+    "img/products/p-mvzuttrd-mvzuw2ip2.jpg",
+    "img/products/p-mvzuttrd-mvzuw3oy3.jpg",
+    "img/products/p-mvzuttrd-mvzuw4uf4.jpg"
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 400
+   },
+   "demo": false,
+   "updatedAt": "2026-11-02T22:54:28.383Z",
+   "createdAt": "2026-11-02T22:54:28.383Z"
+  },
+  {
    "id": "p-mvzumuuj",
    "cat": "garmin",
    "group": "garmin",
