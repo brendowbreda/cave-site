@@ -25,6 +25,7 @@ h2{font-size:clamp(22px,3.5vw,28px);font-weight:600;letter-spacing:-.03em;margin
 h2+.sub{margin-top:0}
 .sub{color:var(--muted);margin:0 0 18px}
 h3{font-size:17px;font-weight:600;margin:0 0 4px}
+h3.crit{font-size:19px;font-weight:700;letter-spacing:-.02em;margin-bottom:14px}
 p,li{color:var(--muted)}
 ul{padding-left:20px}
 a{color:var(--ink)}
@@ -34,10 +35,10 @@ a{color:var(--ink)}
 .card p{margin:6px 0 0;font-size:15px}
 .grid2{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .cmp{width:100%;border-collapse:collapse;font-size:15px}
-.cmp th{text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 12px 10px 0}
+.cmp th{text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 10px 0}
+.cmp th:last-child{color:var(--ink);font-weight:700}
 .cmp td{padding:12px 12px 12px 0;border-top:1px solid var(--line);vertical-align:top;color:var(--muted)}
-.cmp td:last-child{color:var(--ink);font-weight:500}
-.cmp td:last-child::before{content:"✓ ";color:var(--buy)}
+.cmp td:last-child{color:var(--buy);font-weight:600}
 .ok,.no{list-style:none;padding:0;margin:0;display:grid;gap:10px}
 .ok li,.no li{position:relative;padding-left:28px}
 .ok li::before{content:"✓";position:absolute;left:0;color:var(--buy);font-weight:700}
@@ -51,24 +52,23 @@ a{color:var(--ink)}
 <div class="wrap">
 <header><a href="./"><img src="assets/logo.png" alt="Cave Floripa"></a><a href="./">← Voltar ao site</a></header>
 <h1>Termos de venda</h1>
-<p class="upd">Última atualização: novembro de 2026</p>
-<p class="lead">Você entrega o equipamento e a Cave cuida do resto: avaliação, fotos, anúncio, divulgação na comunidade, atendimento e repasse.</p>
-<p>Veja abaixo como funciona e as condições.</p>
+<p class="lead">Você entrega o equipamento e a <b>Cave. Floripa</b> cuida do resto.</p>
+<p>Fazemos a avaliação, as fotos, a divulgação nas comunidades de venda, o atendimento aos interessados e a finalização da venda.</p>
 
-<h2>Quatro passos do começo ao repasse</h2>
+<h2>Como funciona e as condições</h2>
 <div class="steps">
   <div class="card"><span class="k">01</span><h3>Avaliação</h3><p>Você manda fotos e informações pelo WhatsApp. A Cave avalia o equipamento.</p></div>
-  <div class="card"><span class="k">02</span><h3>Acordo</h3><p>Combinamos preço, comissão e regras antes de qualquer publicação.</p></div>
-  <div class="card"><span class="k">03</span><h3>Anúncio</h3><p>A Cave cuida das fotos, do anúncio e da divulgação na comunidade.</p></div>
-  <div class="card"><span class="k">04</span><h3>Repasse</h3><p>Vendeu e o comprador confirmou: repasse em até 8 dias corridos.</p></div>
+  <div class="card"><span class="k">02</span><h3>Acordo</h3><p>Ajustamos preço, comissão e regras antes de qualquer publicação.</p></div>
+  <div class="card"><span class="k">03</span><h3>Anúncio</h3><p>A Cave cuida das fotografias, do anúncio e da divulgação.</p></div>
+  <div class="card"><span class="k">04</span><h3>Repasse</h3><p>Vendeu e o comprador confirmou: repasse em até 7 dias.</p></div>
 </div>
 
-<h2>Sem letras miúdas</h2>
+<h2>Condições claras</h2>
 <div class="grid2">
-  <div class="card"><h3>Exclusividade de 3 meses</h3><p>Enquanto o equipamento está com a gente, a venda é conduzida só pela Cave.</p></div>
-  <div class="card"><h3>Comissão de 10% a 15% em bikes</h3><p>Conforme o valor. 15% nos demais equipamentos. Preço final combinado antes de publicar.</p></div>
-  <div class="card"><h3>Bike revisada e limpa</h3><p>A bike precisa chegar nesse estado. Se não estiver, fazemos a higienização e a revisão básica por R$ 200,00.</p></div>
-  <div class="card"><h3>Coleta em Floripa e região por R$ 70,00</h3><p>Se precisar que a gente busque o equipamento, resolvemos.</p></div>
+  <div class="card"><h3>Exclusividade de 3 meses</h3><p>Enquanto o equipamento estiver com a gente, a venda é conduzida exclusivamente pela Cave.</p></div>
+  <div class="card"><h3>Comissão de 10% a 15% em bikes</h3><p>Preço final combinado antes de qualquer publicação.</p></div>
+  <div class="card"><h3>Bike revisada e limpa</h3><p>A bike precisa chegar revisada e limpa. Se não estiver, cuidamos da higienização e da revisão básica por R$&nbsp;200,00.</p></div>
+  <div class="card"><h3>Coleta em Florianópolis e região por R$&nbsp;70,00</h3><p>Não consegue trazer? A gente busca o equipamento para você.</p></div>
 </div>
 
 <h2>A diferença na prática</h2>
@@ -87,7 +87,7 @@ a{color:var(--ink)}
 <h2>Critérios diretos</h2>
 <p class="sub">Curadoria simples para proteger vendedor, comprador e a comunidade.</p>
 <div class="grid2">
-  <div class="card"><h3>Trabalhamos com</h3>
+  <div class="card"><h3 class="crit">Trabalhamos com</h3>
     <ul class="ok">
       <li>Bikes de estrada (road / speed), time trial (TT / contrarrelógio) e gravel, de 2015 em diante</li>
       <li>Equipamentos e acessórios de natação, ciclismo, corrida e triathlon</li>
@@ -97,7 +97,7 @@ a{color:var(--ink)}
       <li>Itens de desgaste em bom estado</li>
     </ul>
   </div>
-  <div class="card"><h3>Não trabalhamos com</h3>
+  <div class="card"><h3 class="crit">Não trabalhamos com</h3>
     <ul class="no">
       <li>Quadros com dano estrutural ou reparo</li>
       <li>Quadros ou rodas réplicas</li>

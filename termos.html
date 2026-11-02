@@ -25,6 +25,7 @@ h2{font-size:clamp(22px,3.5vw,28px);font-weight:600;letter-spacing:-.03em;margin
 h2+.sub{margin-top:0}
 .sub{color:var(--muted);margin:0 0 18px}
 h3{font-size:17px;font-weight:600;margin:0 0 4px}
+h3.crit{font-size:19px;font-weight:700;letter-spacing:-.02em;margin-bottom:14px}
 p,li{color:var(--muted)}
 ul{padding-left:20px}
 a{color:var(--ink)}
@@ -34,10 +35,10 @@ a{color:var(--ink)}
 .card p{margin:6px 0 0;font-size:15px}
 .grid2{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .cmp{width:100%;border-collapse:collapse;font-size:15px}
-.cmp th{text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 12px 10px 0}
+.cmp th{text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 10px 0}
+.cmp th:last-child{color:var(--ink);font-weight:700}
 .cmp td{padding:12px 12px 12px 0;border-top:1px solid var(--line);vertical-align:top;color:var(--muted)}
-.cmp td:last-child{color:var(--ink);font-weight:500}
-.cmp td:last-child::before{content:"✓ ";color:var(--buy)}
+.cmp td:last-child{color:var(--buy);font-weight:600}
 .ok,.no{list-style:none;padding:0;margin:0;display:grid;gap:10px}
 .ok li,.no li{position:relative;padding-left:28px}
 .ok li::before{content:"✓";position:absolute;left:0;color:var(--buy);font-weight:700}
