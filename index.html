@@ -528,7 +528,6 @@ footer .flogo{width:min(200px,55vw);height:auto}
           <div><span class="k">03</span><b>Anúncio</b><span class="d">Fotos, anúncio e divulgação por nossa conta.</span></div>
           <div><span class="k">04</span><b>Repasse</b><span class="d">Vendeu: repasse em até 7 dias.</span></div>
         </div>
-        <a class="terms-link" href="termos-venda.html">Ver condições e termos de venda →</a>
       </div>
       <form class="form" id="sellForm" novalidate>
         <div class="field"><label for="s-item">O que você quer vender?</label><input id="s-item" placeholder="Ex.: Specialized Tarmac SL7, tam. 54" required></div>
@@ -815,7 +814,7 @@ function openProduct(id){
         <div><span>Envio</span><b>Todo o Brasil</b></div>
       </div>
       <div class="trust-mini">
-        <div>${SHIELD}<span>${p.cond==="usado"?"Usado conferido pela equipe Cave antes de ir para a loja.":`Produto novo com nota fiscal e <a href="garantia.html" style="color:inherit">garantia</a>.`}</span></div>
+        <div>${SHIELD}<span>${p.cond==="usado"?"Usado conferido pela equipe Cave antes de ir para a loja.":"Produto novo com nota fiscal e garantia."}</span></div>
         <div>${SHIELD}<span>Faça uma oferta: se o vendedor não aceitar, nada é cobrado.</span></div>
       </div>
       <div class="pd-actions"><button class="btn" id="offerBtn">Fazer oferta</button><button class="btn buy" id="buyBtn">Comprar</button></div>
