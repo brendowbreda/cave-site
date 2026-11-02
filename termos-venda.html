@@ -21,6 +21,7 @@ h1{font-size:clamp(32px,7vw,48px);font-weight:600;letter-spacing:-.035em;line-he
 .upd{color:var(--muted);font-size:14px;margin:0 0 28px}
 p b{color:var(--ink);font-weight:600}
 .lead{font-size:clamp(18px,2.2vw,21px);color:var(--ink);line-height:1.5;margin:0 0 8px}
+@media (max-width:719px){.lead.split span{display:block}}
 h2{font-size:clamp(22px,3.5vw,28px);font-weight:600;letter-spacing:-.03em;margin:48px 0 6px;line-height:1.15}
 h2+.sub{margin-top:0}
 .sub{color:var(--muted);margin:0 0 18px}
@@ -53,7 +54,7 @@ a{color:var(--ink)}
 <div class="wrap">
 <header><a href="./"><img src="assets/logo.png" alt="Cave Floripa"></a><a href="./">← Voltar ao site</a></header>
 <h1>Termos de venda</h1>
-<p class="lead">Você entrega o equipamento e a <b>Cave. Floripa</b> cuida do resto.</p>
+<p class="lead split"><span>Você entrega o equipamento e a</span> <span><b style="white-space:nowrap">Cave. Floripa</b> cuida do resto.</span></p>
 
 <h2>Como funciona e as condições</h2>
 <div class="steps">
