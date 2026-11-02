@@ -1,6 +1,28 @@
 {
  "products": [
   {
+   "id": "p-mvzvaiye",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Relógios",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 4600,
+   "title": "Garmin Forerunner 570",
+   "subtitle": "47 mm - Slate Gray Black",
+   "desc": "Tecnologia que acompanha seu ritmo. Performance que supera seus limites.\n\nO Garmin Forerunner® 570 combina inovação, precisão e sofisticação para atletas que buscam alcançar novos níveis de desempenho.\n\nCom tela AMOLED de 1,4”, GPS multibanda e monitoramento cardíaco de pulso, oferece métricas avançadas de treinamento, análise de recuperação e prontidão para treinar.\n\nDesenvolvido para corrida, ciclismo, natação e triathlon, conta com Garmin Coach, música integrada, microfone, alto-falante e até 11 dias de bateria no modo smartwatch.\n\nMais tecnologia. Mais precisão. Sua próxima conquista começa aqui.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzvaiye-mvzvcsks1.jpg",
+    "img/products/p-mvzvaiye-mvzvcu0f2.jpg",
+    "img/products/p-mvzvaiye-mvzvcve23.jpg",
+    "img/products/p-mvzvaiye-mvzvcwla4.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:07:30.539Z",
+   "createdAt": "2026-11-02T23:07:30.539Z"
+  },
+  {
    "id": "p-mvzv7qgu",
    "cat": "garmin",
    "group": "garmin",
