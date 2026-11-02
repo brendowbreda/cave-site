@@ -89,6 +89,43 @@
 .acc .acc.sub .cfg-item{background:var(--surface)}
 .acc .acc.sub .cfg-item .field input{background:var(--bg)}
 .acc .field input:not(.cfg-item input),.acc .tel{background:var(--bg)}
+#newBtn{gap:0}
+body.wide .wrap{max-width:1240px}
+.dash{display:grid;gap:28px}
+.dash .sec-t{margin-bottom:12px}
+@media (min-width:1000px){.dash{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:36px;align-items:start}.fin{position:sticky;top:76px}}
+.fin-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.fin-head .sec-t{margin:0}
+#finBody{display:grid;gap:10px}
+.fc{display:grid;gap:6px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);min-width:0}
+.fc .k{font-size:12px;color:var(--muted)}
+.fc .v{font-size:26px;letter-spacing:-.02em;line-height:1.1}
+.fc .s{font-size:12px;color:var(--muted)}
+.fc .s b{color:var(--ink)}
+.fc.net .v{font-size:34px;color:var(--buy)}
+.fc.net.neg .v{color:var(--bad)}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.fc-grid{grid-template-columns:1fr}}
+.lines{display:grid;gap:4px;margin-top:4px;padding-top:8px;border-top:1px solid var(--line)}
+.lines div{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.lines .r{color:var(--bad)}
+.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-top:4px}
+.mods div{display:grid;gap:2px;padding:10px;border-radius:10px;background:var(--bg)}
+.mods span{font-size:12px;color:var(--muted)}
+.mods b{font-size:18px}
+.fc.bad{border-color:color-mix(in srgb,var(--bad) 45%,var(--line));background:var(--bad-soft)}
+.fc.bad .v,.fc.bad .k{color:var(--bad)}
+.fc.bad .lines{border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+.fc-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.exps{display:grid;gap:4px;margin-top:6px}
+.exp{display:grid;grid-template-columns:44px 1fr auto auto;gap:8px;align-items:center;font-size:13px}
+.exp .d{color:var(--muted)}
+.exp .t{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exp button{border:0;background:none;color:var(--bad);padding:4px 6px;font-size:12px;font-weight:600}
+.sheet{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.6);display:grid;align-items:end;justify-items:center}
+.sheet-in{width:100%;max-width:520px;background:var(--bg);border:1px solid var(--line);border-radius:18px 18px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+.sheet-in>b,.sheet-in>div>b{font-size:18px}
+@media (min-width:700px){.sheet{align-items:center}.sheet-in{border-radius:18px}}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -263,7 +300,18 @@ p{margin:0}
   </div></header>
   <div class="wrap">
 
-    <section id="view-prods" hidden>
+    <section id="view-prods" hidden><div class="dash">
+      <div class="fin">
+        <div class="fin-head"><h2 class="sec-t">Financeiro</h2>
+          <div class="chips" id="finPeriod">
+            <button class="chip" data-p="1" aria-pressed="true">Mês</button>
+            <button class="chip" data-p="6" aria-pressed="false">6 meses</button>
+            <button class="chip" data-p="12" aria-pressed="false">12 meses</button>
+          </div></div>
+        <div id="finBody"></div>
+      </div>
+      <div class="prods">
+      <h2 class="sec-t">Produtos</h2>
       <div id="demoBanner" class="banner" hidden><span id="demoTxt"></span><button class="btn small danger" id="rmDemo">Remover exemplos</button></div>
       <div class="toolbar">
         <label class="search" for="aq"><input id="aq" type="search" placeholder="Buscar produto" autocomplete="off"></label>
@@ -279,8 +327,8 @@ p{margin:0}
         <p class="eyebrow" id="acount"></p>
       </div>
       <div class="list" id="alist"></div>
-      <div style="height:90px"></div>
-    </section>
+      </div>
+    </div><div style="height:40px"></div></section>
 
     <section id="view-fit" hidden>
       <div class="cal-head">
@@ -370,6 +418,30 @@ p{margin:0}
     </section>
   </div>
 </div>
+
+<!-- CONFIRMAR VENDA -->
+<div class="sheet" id="saleSh" hidden role="dialog" aria-modal="true" aria-labelledby="sl-h"><div class="sheet-in form">
+  <div><b id="sl-h">Confirmar venda</b><p class="muted" id="sl-title" style="font-size:14px"></p></div>
+  <div class="row2">
+    <div class="field"><label for="sl-price">Valor da venda</label><input id="sl-price" inputmode="numeric" placeholder="R$ 0,00"></div>
+    <div class="field"><label for="sl-pct">Parte da Cave (%)</label><input id="sl-pct" inputmode="numeric"></div>
+  </div>
+  <span class="hint">Produto da loja: 100%. Consignado: a comissão combinada (ex.: 10%).</span>
+  <div class="split"><div id="sl-out"></div></div>
+  <div class="row2"><button class="btn" id="sl-cancel" type="button">Cancelar</button><button class="btn buy" id="sl-ok" type="button">Confirmar venda</button></div>
+</div></div>
+
+<!-- NOVO GASTO -->
+<div class="sheet" id="expSh" hidden role="dialog" aria-modal="true" aria-labelledby="ex-h"><div class="sheet-in form">
+  <b id="ex-h">Adicionar gasto</b>
+  <div class="field"><label for="ex-cat">Tipo</label><select id="ex-cat"></select></div>
+  <div class="row2">
+    <div class="field"><label for="ex-val">Valor</label><input id="ex-val" inputmode="numeric" placeholder="R$ 0,00"></div>
+    <div class="field"><label for="ex-date">Data</label><input id="ex-date" type="date"></div>
+  </div>
+  <div class="field"><label for="ex-desc">Descrição (opcional)</label><input id="ex-desc" placeholder="Ex.: conta de outubro"></div>
+  <div class="row2"><button class="btn" id="ex-cancel" type="button">Cancelar</button><button class="btn danger" id="ex-ok" type="button" style="background:var(--bad);color:#fff">Salvar gasto</button></div>
+</div></div>
 
 <!-- AGENDAMENTO BIKE FIT -->
 <div class="editor" id="fitEd" hidden role="dialog" aria-modal="true" aria-labelledby="fitEdTitle">
@@ -615,6 +687,7 @@ function show(v){
   VIEW=v;
   $("#view-prods").hidden=v!=="prods";$("#view-fit").hidden=v!=="fit";$("#view-cfg").hidden=v!=="cfg";
   $("#cfgBtn").hidden=v==="cfg";
+  document.body.classList.toggle("wide",v==="prods");
   window.scrollTo(0,0);
 }
 const home=()=>isAdm()?"prods":"fit";
@@ -625,13 +698,14 @@ async function start(){
     PRODS=p.data.products||[];CFG=c.data;
     if(!Object.keys(DIR).length){try{const a=(await getJSON("data/admins.json")).data;if(a.v===2)DIR=JSON.parse(await dec(await dkKey(S.dk),a.dir))}catch(_){}}
     await loadFit();
+    if(S.role!=="bikefit")await loadFin();
   }catch(e){busy();if(e.status===401)clearSession();showLogin(errMsg(e));return}
   busy();
   if(!S.role)S.role="sistema";
   $("#login").hidden=true;$("#app").hidden=false;
   document.querySelectorAll('[data-role="adm"]').forEach(x=>x.hidden=!isAdm());
   document.querySelectorAll('[data-role="bikefit"]').forEach(x=>x.hidden=isAdm());
-  renderList();renderCfg();renderFit();
+  renderList();renderCfg();renderFit();renderFin();
   show(home());
 }
 function showLogin(msg){$("#app").hidden=true;$("#setup").hidden=true;$("#login").hidden=false;if(msg){$("#loginErr").textContent=msg;$("#loginErr").hidden=false}}
@@ -668,10 +742,13 @@ $("#alist").addEventListener("click",async e=>{
   const id=row.dataset.id,p=PRODS.find(x=>x.id===id),b=e.target.closest("[data-act]");
   if(!b)return openEditor(p);
   const toSold=p.status!=="vendido";
+  const sale=toSold?await askSale(p):null;
+  if(toSold&&!sale)return;
   busy(toSold?"Marcando como vendido…":"Voltando para a venda…");
   try{
+    if(toSold)await recordSale(p,sale);else await unrecordSale(p);
     await updateProducts(list=>{const x=list.find(y=>y.id===id);if(x){x.status=toSold?"vendido":"disponivel";x.soldAt=toSold?new Date().toISOString():undefined}},`${toSold?"Vendido":"De volta à venda"}: ${p.title}`);
-    renderList();toast(toSold?"Marcado como vendido. O site atualiza em cerca de 1 minuto.":"De volta à venda. O site atualiza em cerca de 1 minuto.");
+    renderList();renderFin();toast(toSold?"Marcado como vendido. O site atualiza em cerca de 1 minuto.":"De volta à venda. O site atualiza em cerca de 1 minuto.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
 });
 $("#rmDemo").addEventListener("click",async function(){
@@ -758,6 +835,9 @@ $("#edSave").addEventListener("click",async()=>{
   if(!f.title){toast("Coloque o nome do produto.",true);$("#e-title").focus();return}
   if(!f.price){toast("Coloque o valor do produto.",true);$("#e-price").focus();return}
   if(!f.sub){toast("Escolha ou escreva o tipo do produto.",true);return}
+  const nowSold=f.status==="vendido"&&!(orig&&orig.status==="vendido"),unSold=f.status!=="vendido"&&orig&&orig.status==="vendido";
+  const sale=nowSold?await askSale(f):null;
+  if(nowSold&&!sale)return;
   try{
     const paths=[];let k=0;
     for(const ph of D.photos){
@@ -776,7 +856,8 @@ $("#edSave").addEventListener("click",async()=>{
     busy("Salvando produto…");
     await updateProducts(list=>{const i=list.findIndex(x=>x.id===prod.id);if(i>=0)list[i]=prod;else list.unshift(prod)},`${orig?"Edita":"Novo produto"}: ${prod.title}`);
     for(const p of removed){busy("Limpando fotos antigas…");await delFile(p,`Remove foto: ${prod.title}`)}
-    closeEditor();renderList();toast("Salvo. O site atualiza em cerca de 1 minuto.");
+    if(nowSold){busy("Registrando venda…");await recordSale(prod,sale)}else if(unSold)await unrecordSale(prod);
+    closeEditor();renderList();renderFin();toast("Salvo. O site atualiza em cerca de 1 minuto.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
 });
 $("#e-delete").addEventListener("click",async function(){
@@ -785,7 +866,7 @@ $("#e-delete").addEventListener("click",async function(){
   try{
     await updateProducts(list=>{const i=list.findIndex(x=>x.id===p.id);if(i>=0)list.splice(i,1)},`Apaga: ${p.title}`);
     for(const ph of p.photos||[])await delFile(ph,`Remove foto: ${p.title}`);
-    closeEditor();renderList();toast("Produto apagado.");
+    closeEditor();renderList();renderFin();toast("Produto apagado.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
 });
 
@@ -916,6 +997,124 @@ $("#meForm").addEventListener("submit",async e=>{
 document.addEventListener("toggle",e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!d.dataset.acc)return;
   document.querySelectorAll(`details[data-acc="${d.dataset.acc}"]`).forEach(x=>{if(x!==d)x.open=false});
   if(d.dataset.acc==="rent")OPEN_RENT=d.dataset.g;},true);
+
+// ---------- Financeiro (vendas e gastos criptografados em data/financeiro.json)
+let FIN={sales:[],expenses:[]};
+const MODS={natacao:"Natação",bike:"Bicicleta",corrida:"Corrida"};
+const modOf=p=>MODS[p.cat]?p.cat:"outros";
+const EXP_CATS=["Aluguel","Água","Energia solar","Limpeza","Manutenção do espaço","Outros"];
+const FS={p:1,mod:"all"};
+const defPct=p=>p.cond==="novo"?100:10;
+async function loadFin(){
+  try{const {data}=await getJSON("data/financeiro.json");FIN=JSON.parse(await dec(await dkKey(S.dk),data))}
+  catch(x){if(x.status===404)FIN={sales:[],expenses:[]};else throw x}
+  FIN.sales=FIN.sales||[];FIN.expenses=FIN.expenses||[];
+}
+async function saveFin(mutate,msg){
+  const key=await dkKey(S.dk);
+  for(let t=0;t<2;t++){
+    let d={sales:[],expenses:[]},sha;
+    try{const r=await getJSON("data/financeiro.json");sha=r.sha;d=JSON.parse(await dec(key,r.data))}catch(x){if(x.status!==404)throw x}
+    d.sales=d.sales||[];d.expenses=d.expenses||[];mutate(d);
+    const box=await enc(key,JSON.stringify(d));
+    try{await putFile("data/financeiro.json",b64enc(JSON.stringify({v:1,...box})+"\n"),msg,sha);FIN=d;return}
+    catch(x){if(x.status!==409||t)throw x}
+  }
+}
+function finStart(){const n=new Date();return new Date(n.getFullYear(),n.getMonth()-(FS.p-1),1)}
+function finSales(){
+  const st=finStart(),now=new Date();
+  const recs=FIN.sales.filter(s=>{const d=new Date(s.at);return d>=st&&d<=now});
+  // vendidos antes do financeiro existir: usa o preço do anúncio e a parte padrão
+  const known=new Set(FIN.sales.map(s=>s.pid));
+  PRODS.filter(p=>p.status==="vendido"&&p.soldAt&&!known.has(p.id)&&new Date(p.soldAt)>=st).forEach(p=>recs.push({pid:p.id,title:p.title,cat:p.cat,price:p.price,pct:defPct(p),at:p.soldAt}));
+  return recs;
+}
+function renderFin(){
+  if(!isAdm())return;
+  const st=finStart(),now=new Date(),lbl=FS.p===1?"neste mês":`nos últimos ${FS.p} meses`;
+  const sales=finSales(),bruto=sales.reduce((s,x)=>s+Number(x.price||0),0),caixa=sales.reduce((s,x)=>s+Number(x.price||0)*Number(x.pct||0)/100,0);
+  const byMod={natacao:0,bike:0,corrida:0,outros:0};sales.forEach(x=>byMod[MODS[x.cat]?x.cat:"outros"]++);
+  const fit=FIT.filter(b=>{const d=atDate(b);return d>=st&&d<=now}),fitTot=fit.reduce((s,b)=>s+Number(b.price||0),0),fitCave=fitTot*CAVE_PCT;
+  const exps=FIN.expenses.filter(e=>{const d=new Date(e.date+"T12:00");return d>=st&&d<=now}).sort((a,b)=>b.date.localeCompare(a.date));
+  const gastos=exps.reduce((s,e)=>s+Number(e.value||0),0),net=caixa+fitCave-gastos;
+  const cad=PRODS.filter(p=>FS.mod==="all"||modOf(p)===FS.mod),cadSold=cad.filter(p=>p.status==="vendido").length;
+  const byCat={};exps.forEach(e=>byCat[e.cat]=(byCat[e.cat]||0)+Number(e.value||0));
+  const fdate=s=>s.split("-").reverse().slice(0,2).join("/");
+  $("#finBody").innerHTML=`
+    <div class="fc net${net<0?" neg":""}">
+      <span class="k">Valor líquido ${lbl}</span><b class="v">${brl(net)}</b>
+      <div class="lines">
+        <div><span>Vendas · parte da Cave</span><span>+ ${brl(caixa)}</span></div>
+        <div><span>Bike Fit · 20% da Cave</span><span>+ ${brl(fitCave)}</span></div>
+        <div class="r"><span>Gastos</span><span>− ${brl(gastos)}</span></div>
+      </div>
+    </div>
+    <div class="fc-grid">
+      <div class="fc"><span class="k">Caixa (parte da Cave nas vendas)</span><b class="v">${brl(caixa)}</b><span class="s">de ${brl(bruto)} vendidos</span></div>
+      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${brl(fitTot)}</b><span class="s">Cave.&nbsp;Floripa (20%): <b>${brl(fitCave)}</b></span><span class="s">${fit.length} bike fit${fit.length===1?"":"s"} feito${fit.length===1?"":"s"}</span></div>
+    </div>
+    <div class="fc">
+      <span class="k">Produtos vendidos ${lbl}</span><b class="v">${sales.length}</b>
+      <div class="mods">${["natacao","bike","corrida"].map(m=>`<div><span>${MODS[m]}</span><b>${byMod[m]}</b></div>`).join("")}${byMod.outros?`<div><span>Marcas</span><b>${byMod.outros}</b></div>`:""}</div>
+    </div>
+    <div class="fc">
+      <span class="k">Produtos cadastrados</span>
+      <div class="chips" id="finMod">${[["all","Todos"],["natacao","Natação"],["bike","Bicicleta"],["corrida","Corrida"]].map(([k,t])=>`<button class="chip" data-m="${k}" aria-pressed="${FS.mod===k}">${t}</button>`).join("")}</div>
+      <b class="v">${cad.length}</b><span class="s">${cad.length-cadSold} em estoque · ${cadSold} vendido${cadSold===1?"":"s"}</span>
+    </div>
+    <div class="fc bad">
+      <div class="fc-h"><span class="k">Gastos ${lbl}</span><button class="btn small danger" id="expNew" type="button">+ Adicionar gasto</button></div>
+      <b class="v">${brl(gastos)}</b>
+      ${Object.keys(byCat).length?`<div class="lines">${Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<div><span>${esc(c)}</span><span>${brl(v)}</span></div>`).join("")}</div>`:""}
+      ${exps.length?`<div class="exps">${exps.slice(0,8).map(e=>`<div class="exp"><span class="d">${fdate(e.date)}</span><span class="t">${esc(e.cat)}${e.desc?` · ${esc(e.desc)}`:""}</span><span>${brl(e.value)}</span><button type="button" data-xrm="${esc(e.id)}" aria-label="Apagar gasto">✕</button></div>`).join("")}</div>`:`<span class="s">Nenhum gasto lançado no período.</span>`}
+    </div>`;
+}
+$("#finPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;FS.p=+b.dataset.p;document.querySelectorAll("#finPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderFin()});
+$("#finBody").addEventListener("click",async e=>{
+  const m=e.target.closest("[data-m]");if(m){FS.mod=m.dataset.m;return renderFin()}
+  if(e.target.closest("#expNew"))return openExp();
+  const x=e.target.closest("[data-xrm]");if(!x)return;
+  if(x.dataset.armed!=="1"){x.dataset.armed="1";x.textContent="Apagar?";x.classList.add("armed");return}
+  busy("Apagando gasto…");
+  try{await saveFin(d=>{d.expenses=d.expenses.filter(y=>y.id!==x.dataset.xrm)},"Financeiro: gasto apagado");renderFin();toast("Gasto apagado.")}
+  catch(err){toast(errMsg(err),true)}finally{busy()}
+});
+
+// Folha: confirmar venda (valor real e parte da Cave)
+let saleResolve=null;
+function askSale(p){
+  $("#sl-title").textContent=p.title;
+  $("#sl-price").value=money00(p.price);$("#sl-pct").value=defPct(p);
+  calcSale();$("#saleSh").hidden=false;
+  return new Promise(r=>{saleResolve=r});
+}
+function calcSale(){const v=parseMoney($("#sl-price").value),pc=Math.min(100,digits($("#sl-pct").value));$("#sl-out").innerHTML=`A Cave recebe <b>${brl(v*pc/100)}</b>${pc<100?` · dono recebe ${brl(v-v*pc/100)}`:""}`}
+function closeSale(val){$("#saleSh").hidden=true;if(saleResolve){saleResolve(val);saleResolve=null}}
+moneyField($("#sl-price"),calcSale);
+$("#sl-pct").addEventListener("input",e=>{e.target.value=String(Math.min(100,digits(e.target.value)||0));calcSale()});
+$("#sl-cancel").addEventListener("click",()=>closeSale(null));
+$("#sl-ok").addEventListener("click",()=>{const v=parseMoney($("#sl-price").value);if(!v)return toast("Coloque o valor da venda.",true);closeSale({price:v,pct:Math.min(100,digits($("#sl-pct").value))})});
+async function recordSale(p,sale){await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id);d.sales.push({pid:p.id,title:p.title,cat:p.cat,price:sale.price,pct:sale.pct,at:new Date().toISOString()})},"Financeiro: venda registrada")}
+async function unrecordSale(p){if(FIN.sales.some(s=>s.pid===p.id))await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id)},"Financeiro: venda desfeita")}
+
+// Folha: novo gasto
+function openExp(){
+  $("#ex-cat").innerHTML=EXP_CATS.map(c=>`<option>${c}</option>`).join("");
+  $("#ex-val").value="";$("#ex-desc").value="";$("#ex-date").value=ymd(new Date());
+  $("#expSh").hidden=false;setTimeout(()=>$("#ex-val").focus(),50);
+}
+moneyField($("#ex-val"));
+$("#ex-cancel").addEventListener("click",()=>{$("#expSh").hidden=true});
+$("#ex-ok").addEventListener("click",async()=>{
+  const value=parseMoney($("#ex-val").value),date=$("#ex-date").value;
+  if(!value)return toast("Coloque o valor do gasto.",true);
+  if(!date)return toast("Escolha a data.",true);
+  const e={id:"g-"+Date.now().toString(36),cat:$("#ex-cat").value,desc:$("#ex-desc").value.trim(),value,date,by:S.name||S.email};
+  busy("Salvando gasto…");
+  try{await saveFin(d=>{d.expenses.push(e)},"Financeiro: novo gasto");$("#expSh").hidden=true;renderFin();toast("Gasto lançado.")}
+  catch(x){toast(errMsg(x),true)}finally{busy()}
+});
 
 // ---------- Bike Fit (agenda criptografada em data/bikefit.json)
 let FIT=[];
