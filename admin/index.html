@@ -9,7 +9,7 @@
 <link rel="icon" href="../assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&display=swap">
 <style>
 /* Layout: painel mobile-first, lista de produtos em linhas, editor em tela cheia. Mesmas cores do site. */
 :root{
@@ -17,9 +17,9 @@
   --ink:#FFF; --muted:#9B9B9B; --line:#262626;
   --buy:#22C55E; --buy-ink:#03140A; --buy-soft:#0D2416;
   --bad:#FF7A6E; --bad-soft:#2E1412; --warn:#F0B35A; --warn-soft:#2A1F0E;
-  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
-  --body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --display:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:var(--display);
+  --mono:var(--display);
   color-scheme:dark;padding-top:env(safe-area-inset-top,0px);
 }
 *{box-sizing:border-box}
@@ -33,7 +33,7 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
 .wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-h1,h2{font-family:var(--display);font-stretch:72%;text-transform:uppercase;margin:0;line-height:.95}
+h1,h2{font-family:var(--display);font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.05}
 h1{font-size:44px;font-weight:900}
 h2{font-size:30px;font-weight:800}
 p{margin:0}
