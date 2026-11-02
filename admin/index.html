@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
+<script>try{if(localStorage.getItem("cave-theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <meta name="robots" content="noindex, nofollow">
 <title>Cave Admin</title>
 <link rel="icon" href="../assets/favicon.png">
@@ -20,8 +21,54 @@
   --display:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
   --body:var(--display);
   --mono:var(--display);
+  --logo-filter:none;
   color-scheme:dark;padding-top:env(safe-area-inset-top,0px);
 }
+:root[data-theme="light"]{
+  --bg:#FFFFFF; --surface:#F4F4F3; --tile:#EEEEED; --tile-2:#E2E2E0;
+  --ink:#0A0A0A; --muted:#5E5E5E; --line:#E0E0DE;
+  --buy:#169C46; --buy-ink:#FFFFFF; --buy-soft:#E2F4E8;
+  --warn:#8A5200; --warn-soft:#F6EBD8; --bad:#B42318; --bad-soft:#F8E1DE;
+  --logo-filter:invert(1);
+  color-scheme:light;
+}
+.login img,.top img.logo{filter:var(--logo-filter,none)}
+.theme-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;flex:none}
+.theme-btn svg{width:18px;height:18px}
+.theme-btn .i-moon{display:none}
+:root[data-theme="light"] .theme-btn .i-sun{display:none}
+:root[data-theme="light"] .theme-btn .i-moon{display:block}
+.hello{font-size:13px;color:var(--muted);padding-top:14px;margin-bottom:12px}
+.sec-t{font-size:24px}
+.back{background:none;border:0;padding:0;color:var(--muted);font-size:15px;margin-bottom:10px}
+.cfg-block h3{font-size:18px;margin:0}
+.cfg-item b{font-size:15px}
+.row3{display:grid;grid-template-columns:1fr 1fr 84px;gap:8px}
+.row3 input{width:100%;min-width:0;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:11px 12px;font-size:16px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.cal-head b{font-size:18px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .dow{font-size:12px;color:var(--muted);text-align:center;padding:4px 0}
+.day{position:relative;aspect-ratio:1;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;font-weight:500;display:grid;place-items:center;padding:0}
+.day.today{border-color:var(--ink)}
+.day.sel{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.day i{position:absolute;right:3px;top:3px;min-width:16px;height:16px;border-radius:8px;background:var(--buy);color:var(--buy-ink);font:700 10px/16px var(--mono);font-style:normal;padding:0 3px}
+.bk{width:100%;display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;text-align:left;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:8px}
+.bk-t{font-weight:700}
+.bk-i{display:grid;min-width:0}
+.bk-i span{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats{display:grid;gap:12px;margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+#fitStats{display:grid;gap:10px}
+.st-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st{display:grid;gap:4px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.st .k{font-size:12px;color:var(--muted)}
+.st b{font-size:22px;letter-spacing:-.01em}
+.st.big b{font-size:36px}
+.st .muted{font-size:12px}
+.split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.split div:first-child{font-size:16px}
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom,0px)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
@@ -72,10 +119,10 @@ p{margin:0}
 .ok{padding:12px 14px;border-radius:12px;background:var(--buy-soft);color:var(--buy);font-size:14px}
 
 /* App */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(0,0,0,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;height:58px}
 .top img{height:26px;width:auto}
-.top .actions{display:flex;gap:8px}
+.top .actions{display:flex;gap:8px;align-items:center}
 .tabs{display:flex;gap:6px;padding-block:14px}
 .tab{height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px}
 .tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -178,16 +225,17 @@ p{margin:0}
 <!-- APP -->
 <div id="app" hidden>
   <header class="top"><div class="wrap">
-    <img src="../assets/logo.png" alt="Cave Floripa" width="80" height="26">
-    <div class="actions"><a class="btn small" href="../" target="_blank" rel="noopener">Ver site</a><button class="btn small" id="logout">Sair</button></div>
+    <img class="logo" src="../assets/logo.png" alt="Cave Floripa" width="80" height="26">
+    <div class="actions">
+      <button class="theme-btn" type="button" id="themeBtn" aria-label="Mudar cor"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <button class="btn small" id="cfgBtn" type="button">Configurações</button>
+      <button class="btn small" id="logout" type="button">Sair</button>
+    </div>
   </div></header>
   <div class="wrap">
-    <div class="tabs" role="tablist">
-      <button class="tab" role="tab" aria-selected="true" data-tab="prods">Produtos</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="cfg">Configurações</button>
-    </div>
+    <p class="hello" id="hello"></p>
 
-    <section id="tab-prods">
+    <section id="view-prods" hidden>
       <div id="demoBanner" class="banner" hidden><span id="demoTxt"></span><button class="btn small danger" id="rmDemo">Remover exemplos</button></div>
       <div class="toolbar">
         <label class="search" for="aq"><input id="aq" type="search" placeholder="Buscar produto" autocomplete="off"></label>
@@ -195,7 +243,6 @@ p{margin:0}
           <button class="chip" data-f="all" aria-pressed="true">Todos</button>
           <button class="chip" data-f="disponivel" aria-pressed="false">À venda</button>
           <button class="chip" data-f="vendido" aria-pressed="false">Vendidos</button>
-          <button class="chip" data-f="demo" aria-pressed="false">Exemplos</button>
         </div>
         <p class="eyebrow" id="acount"></p>
       </div>
@@ -203,28 +250,112 @@ p{margin:0}
       <div style="height:90px"></div>
     </section>
 
-    <section id="tab-cfg" hidden>
-      <form class="form" id="cfgForm" novalidate>
-        <div class="cfg-block" style="border-top:0;padding-top:0">
-          <h2>WhatsApp</h2>
-          <p class="hint">Só números, com 55 e DDD. Ex.: 5548999998888. Por enquanto são números de teste.</p>
-          <div class="row2">
-            <div class="field"><label for="c-wa">Loja</label><input id="c-wa" inputmode="numeric"></div>
-            <div class="field"><label for="c-wafit">Bike Fit (Guilherme)</label><input id="c-wafit" inputmode="numeric"></div>
-          </div>
+    <section id="view-fit" hidden>
+      <div class="cal-head">
+        <button class="icon-btn" id="calPrev" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <b id="calTitle"></b>
+        <button class="icon-btn" id="calNext" type="button" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="cal" id="cal"></div>
+      <button class="btn buy block" id="fitNew" type="button" style="margin-top:14px">+ Agendar bike fit</button>
+      <div class="day-list" id="dayList"></div>
+
+      <div class="stats">
+        <h2 class="sec-t">Painel Bike Fit</h2>
+        <div class="chips" id="fitPeriod">
+          <button class="chip" data-p="1" aria-pressed="true">Mês</button>
+          <button class="chip" data-p="6" aria-pressed="false">6 meses</button>
+          <button class="chip" data-p="12" aria-pressed="false">12 meses</button>
         </div>
-        <div class="cfg-block">
-          <h2>Ofertas</h2>
+        <div id="fitStats"></div>
+      </div>
+      <div style="height:30px"></div>
+    </section>
+
+    <section id="view-cfg" hidden>
+      <button class="back" id="cfgBack" type="button">← Voltar</button>
+      <h2 class="sec-t" style="margin-bottom:6px">Configurações</h2>
+
+      <!-- Admin / Sistema -->
+      <div data-role="adm">
+        <form class="cfg-block" id="coForm" novalidate>
+          <h3>Dados da empresa</h3>
+          <div class="field"><label for="co-razao">Razão social</label><input id="co-razao"></div>
+          <div class="field"><label for="co-cnpj">CNPJ</label><input id="co-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></div>
+          <div class="field"><label for="co-end">Endereço</label><input id="co-end" placeholder="Rua, número, bairro, Florianópolis/SC"></div>
+          <div class="field"><label for="co-tel">Telefone/WhatsApp Cave.&nbsp;Floripa</label><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999"></div>
+          <div class="field"><label for="co-email">E-mail</label><input id="co-email" type="email" autocapitalize="off" placeholder="contato@cave.floripa.com"></div>
+          <span class="hint">O telefone é o WhatsApp que recebe as mensagens do site.</span>
+          <button class="btn solid block" type="submit">Salvar dados da empresa</button>
+        </form>
+
+        <form class="cfg-block" id="usForm" novalidate>
+          <h3>Usuários</h3>
+          <div id="us-list" class="form"></div>
+          <span class="hint">Senha com no mínimo 10 caracteres. Deixe a senha vazia para manter a atual.</span>
+          <button class="btn solid block" type="submit">Salvar usuários</button>
+        </form>
+
+        <form class="cfg-block" id="cfgForm" novalidate>
+          <h3>Bike Fit</h3>
+          <div class="field"><label for="c-wafit">WhatsApp do Guilherme</label><input id="c-wafit" inputmode="tel"></div>
+          <div id="c-fit" class="form"></div>
+          <button class="btn small" id="openFit" type="button" style="justify-self:start">Ver agenda e painel do Bike Fit</button>
+          <h3 style="margin-top:10px">Ofertas</h3>
           <div class="field"><label for="c-floor">Oferta mínima aceita (% do preço)</label><input id="c-floor" inputmode="numeric" style="max-width:160px"><span class="hint">Abaixo disso o site recusa a oferta antes de pedir o cartão.</span></div>
-        </div>
-        <div class="cfg-block"><h2>Bike Fit</h2><div id="c-fit" class="form"></div></div>
-        <div class="cfg-block"><h2>Locação</h2><p class="hint">Deixe o preço vazio para mostrar “Sob consulta”. Ex.: R$ 350,00 por prova.</p><div id="c-rent" class="form"></div></div>
-        <button class="btn buy block" type="submit">Salvar configurações</button>
-        <div style="height:24px"></div>
-      </form>
+          <h3 style="margin-top:10px">Aluguel</h3>
+          <p class="hint">Deixe o preço vazio para mostrar “Sob consulta”. Ex.: R$ 350,00 por prova.</p>
+          <div id="c-rent" class="form"></div>
+          <button class="btn solid block" type="submit">Salvar site</button>
+        </form>
+      </div>
+
+      <!-- Bike Fit -->
+      <div data-role="bikefit">
+        <form class="cfg-block" id="meForm" novalidate>
+          <h3>Meus dados</h3>
+          <div class="field"><label for="me-wa">WhatsApp</label><input id="me-wa" inputmode="tel"><span class="hint">Número que recebe os pedidos de Bike Fit do site.</span></div>
+          <div class="field"><label for="me-email">E-mail</label><input id="me-email" type="email" autocapitalize="off"></div>
+          <div class="row2">
+            <div class="field"><label for="me-pass">Nova senha</label><input id="me-pass" type="password" autocomplete="new-password"></div>
+            <div class="field"><label for="me-pass2">Repita a senha</label><input id="me-pass2" type="password" autocomplete="new-password"></div>
+          </div>
+          <span class="hint">Deixe a senha vazia para manter a atual. Mínimo 10 caracteres.</span>
+          <button class="btn solid block" type="submit">Atualizar</button>
+        </form>
+      </div>
+      <div style="height:30px"></div>
     </section>
   </div>
-  <button class="btn buy fab" id="newBtn">+ Novo produto</button>
+  <button class="btn buy fab" id="newBtn" hidden>+ Novo produto</button>
+</div>
+
+<!-- AGENDAMENTO BIKE FIT -->
+<div class="editor" id="fitEd" hidden role="dialog" aria-modal="true" aria-labelledby="fitEdTitle">
+  <div class="ed-head"><b id="fitEdTitle">Agendar bike fit</b><button class="icon-btn" id="fitClose" aria-label="Fechar sem salvar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="ed-body"><div class="wrap form">
+    <div class="field"><label for="f-name">Nome do atleta</label><input id="f-name" autocomplete="off"></div>
+    <div class="field"><span class="lbl">Sexo</span><div class="pillset">
+      <label><input type="radio" name="f-sex" value="M"><span>Masculino</span></label>
+      <label><input type="radio" name="f-sex" value="F"><span>Feminino</span></label></div></div>
+    <div class="field"><span class="lbl">Bicicleta</span>
+      <div class="row3">
+        <input id="f-brand" placeholder="Marca" aria-label="Marca">
+        <input id="f-model" placeholder="Modelo" aria-label="Modelo">
+        <input id="f-year" placeholder="Ano" inputmode="numeric" maxlength="4" aria-label="Ano">
+      </div></div>
+    <div class="field"><span class="lbl">Categoria</span><div class="pillset">
+      <label><input type="radio" name="f-cat" value="road"><span>Road</span></label>
+      <label><input type="radio" name="f-cat" value="mtb"><span>Mountain Bike</span></label>
+      <label><input type="radio" name="f-cat" value="tri"><span>Triathlon</span></label></div></div>
+    <div class="row2">
+      <div class="field"><label for="f-date">Data</label><input id="f-date" type="date"></div>
+      <div class="field"><label for="f-time">Horário</label><input id="f-time" type="time" step="900"></div>
+    </div>
+    <div class="split" id="f-split"></div>
+    <button class="btn danger" id="f-delete" type="button">Apagar agendamento</button>
+  </div></div>
+  <div class="ed-foot"><button class="btn" id="fitCancel" type="button">Cancelar</button><button class="btn buy" id="fitSave" type="button">Salvar</button></div>
 </div>
 
 <!-- EDITOR -->
@@ -320,22 +451,45 @@ async function updateProducts(mutate,message){
   }
 }
 
-// ---------- Acesso (e-mail + senha protegem a chave do GitHub, criptografada em data/admins.json)
-const te=new TextEncoder(),ITER=600000;
+// ---------- Acesso
+// data/admins.json guarda, para cada usuário, uma chave de dados (DK) criptografada com a senha dele.
+// Com a DK abrimos a chave do GitHub (vault) e a lista de usuários (dir). Agendamentos do Bike Fit também usam a DK.
+const te=new TextEncoder(),td=new TextDecoder(),ITER=600000;
 const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
-const unhex=h=>Uint8Array.from(h.match(/../g),x=>parseInt(x,16));
+const unhex=h=>Uint8Array.from(h.match(/../g)||[],x=>parseInt(x,16));
 const normEmail=e=>e.trim().toLowerCase();
+const okEmail=e=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e.trim());
+const ROLES={admin:"Admin",sistema:"Sistema",bikefit:"Bike Fit"};
+const SLOTS=[{role:"admin",name:"Marcelo Leal"},{role:"sistema",name:"Brendow Breda"},{role:"bikefit",name:"Guilherme Garcia Cunha"}];
 async function userId(email){return hex(await crypto.subtle.digest("SHA-256",te.encode("cave:"+normEmail(email))))}
-async function deriveKey(pass,salt,iter){const base=await crypto.subtle.importKey("raw",te.encode(pass),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt,iterations:iter},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
-async function sealToken(email,pass,token){const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));const key=await deriveKey(pass,salt,ITER);const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,te.encode(token));return {id:await userId(email),salt:hex(salt),iv:hex(iv),iter:ITER,ct:hex(ct)}}
-async function openToken(u,pass){const key=await deriveKey(pass,unhex(u.salt),u.iter);return new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unhex(u.iv)},key,unhex(u.ct)))}
-async function loadUsers(){
+async function pwdKey(pass,salt,iter){const base=await crypto.subtle.importKey("raw",te.encode(pass),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt,iterations:iter},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+const dkKey=dk=>crypto.subtle.importKey("raw",unhex(dk),"AES-GCM",false,["encrypt","decrypt"]);
+async function enc(key,text){const iv=crypto.getRandomValues(new Uint8Array(12));return {iv:hex(iv),ct:hex(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,te.encode(text)))}}
+async function dec(key,box){return td.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unhex(box.iv)},key,unhex(box.ct)))}
+async function wrapUser(email,pass,dk){const salt=crypto.getRandomValues(new Uint8Array(16));const b=await enc(await pwdKey(pass,salt,ITER),dk);return {id:await userId(email),salt:hex(salt),iter:ITER,...b}}
+async function unwrapUser(u,pass){return dec(await pwdKey(pass,unhex(u.salt),u.iter),u)}
+async function fetchAdmins(){
+  const out=[];
   for(const url of ["../data/admins.json?t="+Date.now(),"https://raw.githubusercontent.com/"+REPO+"/main/data/admins.json?t="+Date.now()]){
-    try{const r=await fetch(url,{cache:"no-store"});if(r.ok)return (await r.json()).users||[]}catch(e){}
+    try{const r=await fetch(url,{cache:"no-store"});if(r.ok)out.push(await r.json())}catch(e){}
   }
-  return [];
+  return out;
 }
 async function checkRepo(){const r=await gh(`/repos/${REPO}`);if(r.permissions&&!r.permissions.push)throw Object.assign(new Error("403"),{status:403});return r.default_branch||"main"}
+// Lê admins.json pela API, aplica a mudança na lista de usuários e grava (com a DK da sessão).
+let DIR={};
+async function saveAdmins(mutate,msg){
+  for(let t=0;t<2;t++){
+    let data=null,sha;
+    try{const r=await getJSON("data/admins.json");data=r.data;sha=r.sha}catch(x){if(x.status!==404)throw x}
+    const key=await dkKey(S.dk);
+    let users=data&&data.v===2?data.users:[],dir=data&&data.v===2?JSON.parse(await dec(key,data.dir)):{};
+    await mutate(users,dir);
+    const out={v:2,users,vault:await enc(key,S.token),dir:await enc(key,JSON.stringify(dir))};
+    try{await putFile("data/admins.json",b64enc(JSON.stringify(out,null,1)+"\n"),msg,sha);DIR=dir;return}
+    catch(x){if(x.status!==409||t)throw x}
+  }
+}
 
 $("#loginForm").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -344,58 +498,102 @@ $("#loginForm").addEventListener("submit",async e=>{
   if(!email.trim()||!pass){err.textContent="Preencha e-mail e senha.";err.hidden=false;return}
   $("#loginBtn").disabled=true;$("#loginBtn").textContent="Entrando…";
   try{
-    const id=await userId(email),u=(await loadUsers()).find(x=>x.id===id);
-    let token=null;
-    if(u){try{token=await openToken(u,pass)}catch(_){}}
-    if(!token)throw Object.assign(new Error("auth"),{auth:true});
-    S={token,repo:REPO,branch:"main",exp:endOfDay()};
+    const id=await userId(email);let sess=null,legacy=false;
+    for(const file of await fetchAdmins()){
+      const u=(file.users||[]).find(x=>x.id===id);if(!u)continue;
+      try{
+        if(file.v===2){
+          const dk=await unwrapUser(u,pass),key=await dkKey(dk);
+          const dir=JSON.parse(await dec(key,file.dir)),me=dir[id]||{};
+          sess={token:await dec(key,file.vault),dk,id,email:normEmail(email),name:me.name||"",role:me.role||"admin"};DIR=dir;
+        }else{ // formato antigo: a senha abria direto a chave do GitHub
+          const token=await dec(await pwdKey(pass,unhex(u.salt),u.iter),u);
+          sess={token,dk:hex(crypto.getRandomValues(new Uint8Array(32))),id,email:normEmail(email),name:"Brendow Breda",role:"sistema"};legacy=true;
+        }
+        break;
+      }catch(_){}
+    }
+    if(!sess)throw Object.assign(new Error("auth"),{auth:true});
+    S={...sess,repo:REPO,branch:"main",exp:endOfDay()};
     S.branch=await checkRepo();
+    if(legacy){busy("Atualizando acesso…");await saveAdmins(async(users,dir)=>{users.push(await wrapUser(email,pass,S.dk));dir[S.id]={name:S.name,email:S.email,role:S.role}},"Admin: novo formato de acesso");busy()}
     saveSession(S);$("#l-pass").value="";
     await start();
-  }catch(x){S=null;err.textContent=x.auth?"E-mail ou senha incorretos.":x.status===401?"O acesso expirou. Peça para recriar o acesso.":errMsg(x);err.hidden=false}
+  }catch(x){busy();S=null;err.textContent=x.auth?"E-mail ou senha incorretos.":x.status===401?"A chave do GitHub expirou. Crie uma nova e atualize em admin/#configurar.":errMsg(x);err.hidden=false}
   finally{$("#loginBtn").disabled=false;$("#loginBtn").textContent="Entrar"}
 });
 
+// admin/#configurar: cria o primeiro acesso ou troca a chave do GitHub (quando ela vence).
 $("#setupForm").addEventListener("submit",async e=>{
   e.preventDefault();
   const email=$("#u-email").value,pass=$("#u-pass").value,token=$("#u-token").value.trim(),err=$("#setupErr");
   err.hidden=true;const fail=m=>{err.textContent=m;err.hidden=false};
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim()))return fail("Digite um e-mail válido.");
+  if(!okEmail(email))return fail("Digite um e-mail válido.");
   if(pass.length<10)return fail("A senha precisa ter pelo menos 10 caracteres.");
   if(pass!==$("#u-pass2").value)return fail("As senhas não são iguais.");
   if(!token)return fail("Cole a chave do GitHub.");
-  $("#setupBtn").disabled=true;$("#setupBtn").textContent="Criando…";
+  $("#setupBtn").disabled=true;$("#setupBtn").textContent="Salvando…";
   try{
     S={token,repo:REPO,branch:"main",exp:endOfDay()};
     S.branch=await checkRepo();
-    const entry=await sealToken(email,pass,token);
-    for(let t=0;t<2;t++){
-      let data={users:[]},sha;
-      try{const r=await getJSON("data/admins.json");data=r.data;sha=r.sha}catch(x){if(x.status!==404)throw x}
-      data.users=(data.users||[]).filter(u=>u.id!==entry.id).concat(entry);
-      try{await putFile("data/admins.json",b64enc(JSON.stringify(data,null,1)+"\n"),"Admin: acesso atualizado",sha);break}
-      catch(x){if(x.status!==409||t)throw x}
+    let data=null;try{data=(await getJSON("data/admins.json")).data}catch(x){if(x.status!==404)throw x}
+    const id=await userId(email);
+    if(data&&data.v===2&&data.users.length){
+      const u=data.users.find(x=>x.id===id);
+      if(!u)return fail("Este e-mail não tem acesso. Peça ao administrador para cadastrar você em Configurações › Usuários.");
+      try{S.dk=await unwrapUser(u,pass)}catch(_){return fail("Senha incorreta para este e-mail.")}
+      const dir=JSON.parse(await dec(await dkKey(S.dk),data.dir)),me=dir[id]||{};
+      Object.assign(S,{id,email:normEmail(email),name:me.name||"",role:me.role||"admin"});
+      await saveAdmins(()=>{},"Admin: chave do GitHub atualizada");
+    }else{
+      Object.assign(S,{dk:hex(crypto.getRandomValues(new Uint8Array(32))),id,email:normEmail(email),name:"Brendow Breda",role:"sistema"});
+      await saveAdmins(async(users,dir)=>{users.length=0;for(const k in dir)delete dir[k];users.push(await wrapUser(email,pass,S.dk));dir[id]={name:S.name,email:S.email,role:S.role}},"Admin: primeiro acesso");
     }
     saveSession(S);
     history.replaceState(null,"",location.pathname);
-    $("#setup").hidden=true;toast("Acesso criado. Use e-mail e senha para entrar.");
+    $("#setup").hidden=true;toast("Acesso salvo.");
     await start();
   }catch(x){S=null;fail(errMsg(x))}
   finally{$("#setupBtn").disabled=false;$("#setupBtn").textContent="Criar acesso"}
 });
 $("#logout").addEventListener("click",()=>{clearSession();location.reload()});
 
+const isAdm=()=>S&&S.role!=="bikefit";
+let VIEW="";
+function show(v){
+  VIEW=v;
+  $("#view-prods").hidden=v!=="prods";$("#view-fit").hidden=v!=="fit";$("#view-cfg").hidden=v!=="cfg";
+  $("#newBtn").hidden=v!=="prods";
+  $("#cfgBtn").hidden=v==="cfg";
+  window.scrollTo(0,0);
+}
+const home=()=>isAdm()?"prods":"fit";
 async function start(){
-  busy("Carregando produtos…");
+  busy("Carregando…");
   try{
     const [p,c]=await Promise.all([getJSON("data/products.json"),getJSON("data/config.json")]);
     PRODS=p.data.products||[];CFG=c.data;
+    if(!Object.keys(DIR).length){try{const a=(await getJSON("data/admins.json")).data;if(a.v===2)DIR=JSON.parse(await dec(await dkKey(S.dk),a.dir))}catch(_){}}
+    await loadFit();
   }catch(e){busy();if(e.status===401)clearSession();showLogin(errMsg(e));return}
   busy();
+  if(!S.role)S.role="sistema";
   $("#login").hidden=true;$("#app").hidden=false;
-  renderList();renderCfg();
+  $("#hello").textContent=`${S.name?S.name.split(" ")[0]:"Olá"} · ${ROLES[S.role]||""}`;
+  document.querySelectorAll('[data-role="adm"]').forEach(x=>x.hidden=!isAdm());
+  document.querySelectorAll('[data-role="bikefit"]').forEach(x=>x.hidden=isAdm());
+  renderList();renderCfg();renderFit();
+  show(home());
 }
 function showLogin(msg){$("#app").hidden=true;$("#setup").hidden=true;$("#login").hidden=false;if(msg){$("#loginErr").textContent=msg;$("#loginErr").hidden=false}}
+$("#cfgBtn").addEventListener("click",()=>{renderCfg();show("cfg")});
+$("#cfgBack").addEventListener("click",()=>show(home()));
+$("#openFit").addEventListener("click",()=>{renderFit();show("fit")});
+
+// Tema claro/escuro (mesma escolha do site)
+function syncTheme(){const l=document.documentElement.dataset.theme==="light";document.querySelector('meta[name="theme-color"]').content=l?"#FFFFFF":"#000000";$("#themeBtn").setAttribute("aria-label",l?"Mudar para fundo preto":"Mudar para fundo branco")}
+$("#themeBtn").addEventListener("click",()=>{const l=document.documentElement.dataset.theme!=="light";if(l)document.documentElement.dataset.theme="light";else delete document.documentElement.dataset.theme;try{localStorage.setItem("cave-theme",l?"light":"dark")}catch(e){}syncTheme()});
+syncTheme();
 
 // ---------- Lista
 const F={f:"all",q:""};
@@ -433,10 +631,7 @@ $("#rmDemo").addEventListener("click",async function(){
   try{await updateProducts(list=>{for(let i=list.length-1;i>=0;i--)if(list[i].demo)list.splice(i,1)},"Remove produtos de exemplo");renderList();toast("Exemplos removidos.")}
   catch(err){toast(errMsg(err),true)}finally{busy();this.dataset.armed="";this.textContent="Remover exemplos"}
 });
-document.querySelectorAll("[data-tab]").forEach(t=>t.addEventListener("click",()=>{
-  document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",x===t));
-  $("#tab-prods").hidden=t.dataset.tab!=="prods";$("#tab-cfg").hidden=t.dataset.tab!=="cfg";$("#newBtn").hidden=t.dataset.tab!=="prods";
-}));
+
 
 // ---------- Editor
 let D=null,orig=null; // rascunho e produto original
@@ -546,33 +741,230 @@ $("#e-delete").addEventListener("click",async function(){
 });
 
 // ---------- Configurações
+const waDigits=v=>{let d=String(v||"").replace(/\D/g,"");if(d&&d.length<=11)d="55"+d;return d};
+const fmtTel=w=>{let d=String(w||"").replace(/\D/g,"");if(d.startsWith("55")&&d.length>11)d=d.slice(2);return d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length===10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d};
+const fmtCnpj=v=>{const d=String(v||"").replace(/\D/g,"").slice(0,14);return d.replace(/^(\d{2})(\d)/,"$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d)/,".$1/$2").replace(/(\d{4})(\d)/,"$1-$2")};
+async function updateConfig(mutate,msg){
+  for(let t=0;t<2;t++){
+    const {data,sha}=await getJSON("data/config.json");mutate(data);
+    try{await putFile("data/config.json",b64enc(JSON.stringify(data,null,1)+"\n"),msg,sha);CFG=data;return}catch(x){if(x.status!==409||t)throw x}
+  }
+}
 function renderCfg(){
-  $("#c-wa").value=CFG.whatsapp.loja||"";$("#c-wafit").value=CFG.whatsapp.fit||"";
+  const co=CFG.company||{};
+  $("#co-razao").value=co.razao||"";$("#co-cnpj").value=co.cnpj||"";$("#co-end").value=co.endereco||"";$("#co-email").value=co.email||"";
+  $("#co-tel").value=fmtTel(CFG.whatsapp.loja);
+  $("#c-wafit").value=fmtTel(CFG.whatsapp.fit);$("#me-wa").value=fmtTel(CFG.whatsapp.fit);
+  $("#me-email").value=S.email||"";$("#me-pass").value="";$("#me-pass2").value="";
   $("#c-floor").value=Math.round((CFG.offerFloor||.75)*100);
   $("#c-fit").innerHTML=CFG.fit.map((f,i)=>`<div class="cfg-item">
     <div class="field"><label for="cf-n${i}">Nome</label><input id="cf-n${i}" value="${esc(f.name)}"></div>
-    <div class="field"><label for="cf-p${i}">Valor</label><input id="cf-p${i}" inputmode="numeric" value="${money(f.price)}" data-money></div>
-    <div class="field"><label for="cf-d${i}">Descrição</label><input id="cf-d${i}" value="${esc(f.desc)}"></div></div>`).join("");
+    <div class="field"><label for="cf-p${i}">Valor</label><input id="cf-p${i}" inputmode="numeric" value="${money(f.price)}" data-money></div></div>`).join("");
   $("#c-rent").innerHTML=CFG.rentals.map((r,i)=>`<div class="cfg-item">
     <div class="field"><label for="cr-n${i}">Item</label><input id="cr-n${i}" value="${esc(r.name)}"></div>
     <div class="field"><label for="cr-d${i}">Descrição</label><input id="cr-d${i}" value="${esc(r.desc)}"></div>
     <div class="field"><label for="cr-p${i}">Preço</label><input id="cr-p${i}" value="${esc(r.price)}" placeholder="Sob consulta"></div></div>`).join("");
   document.querySelectorAll("[data-money]").forEach(el=>el.addEventListener("input",()=>{el.value=money(digits(el.value))}));
+  $("#us-list").innerHTML=SLOTS.map((s,i)=>{
+    const [id,u]=Object.entries(DIR).find(([,x])=>x.role===s.role)||[];
+    return `<div class="cfg-item" data-slot="${i}" data-id="${id||""}">
+      <b>${ROLES[s.role]}</b>
+      <div class="field"><label for="us-n${i}">Nome</label><input id="us-n${i}" value="${esc(u?u.name:s.name)}"></div>
+      <div class="field"><label for="us-e${i}">E-mail</label><input id="us-e${i}" type="email" autocapitalize="off" value="${esc(u?u.email:"")}" placeholder="nome@cave.floripa.com"></div>
+      <div class="field"><label for="us-p${i}">${u?"Nova senha":"Senha"}</label><input id="us-p${i}" type="password" autocomplete="new-password" placeholder="${u?"Deixe vazio para manter":"Mínimo 10 caracteres"}"></div>
+    </div>`}).join("");
 }
+$("#co-cnpj").addEventListener("input",e=>{e.target.value=fmtCnpj(e.target.value)});
+$("#coForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const em=$("#co-email").value.trim();
+  if(em&&!okEmail(em))return toast("E-mail da empresa inválido.",true);
+  busy("Salvando…");
+  try{await updateConfig(d=>{d.company={razao:$("#co-razao").value.trim(),cnpj:$("#co-cnpj").value.trim(),endereco:$("#co-end").value.trim(),email:em};const w=waDigits($("#co-tel").value);if(w)d.whatsapp.loja=w},"Dados da empresa");renderCfg();toast("Dados da empresa salvos.")}
+  catch(x){toast(errMsg(x),true)}finally{busy()}
+});
 $("#cfgForm").addEventListener("submit",async e=>{
   e.preventDefault();
   const floor=Math.min(100,Math.max(1,digits($("#c-floor").value)||75))/100;
-  busy("Salvando configurações…");
+  busy("Salvando…");
   try{
-    const {data,sha}=await getJSON("data/config.json");
-    data.whatsapp={loja:$("#c-wa").value.replace(/\D/g,""),fit:$("#c-wafit").value.replace(/\D/g,"")};
-    data.offerFloor=floor;
-    data.fit=data.fit.map((f,i)=>({...f,name:$("#cf-n"+i).value.trim(),price:digits($("#cf-p"+i).value),desc:$("#cf-d"+i).value.trim()}));
-    data.rentals=data.rentals.map((r,i)=>({...r,name:$("#cr-n"+i).value.trim(),desc:$("#cr-d"+i).value.trim(),price:$("#cr-p"+i).value.trim()}));
-    await putFile("data/config.json",b64enc(JSON.stringify(data,null,1)+"\n"),"Atualiza configurações",sha);
-    CFG=data;renderCfg();toast("Configurações salvas. O site atualiza em cerca de 1 minuto.");
+    await updateConfig(data=>{
+      const w=waDigits($("#c-wafit").value);if(w)data.whatsapp.fit=w;
+      data.offerFloor=floor;
+      data.fit=data.fit.map((f,i)=>({...f,name:$("#cf-n"+i).value.trim(),price:digits($("#cf-p"+i).value)}));
+      data.rentals=data.rentals.map((r,i)=>({...r,name:$("#cr-n"+i).value.trim(),desc:$("#cr-d"+i).value.trim(),price:$("#cr-p"+i).value.trim()}));
+    },"Atualiza configurações");
+    renderCfg();toast("Salvo. O site atualiza em cerca de 1 minuto.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
 });
+$("#usForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const rows=[...document.querySelectorAll("#us-list [data-slot]")].map(el=>{const i=el.dataset.slot;return {slot:SLOTS[i],oldId:el.dataset.id,name:$("#us-n"+i).value.trim(),email:$("#us-e"+i).value.trim(),pass:$("#us-p"+i).value}});
+  for(const r of rows){
+    if(!r.email&&!r.oldId)continue;
+    if(!okEmail(r.email))return toast(`E-mail inválido em ${ROLES[r.slot.role]}.`,true);
+    if(r.pass&&r.pass.length<10)return toast(`A senha de ${ROLES[r.slot.role]} precisa ter pelo menos 10 caracteres.`,true);
+    if(!r.oldId&&!r.pass)return toast(`Crie uma senha para ${ROLES[r.slot.role]}.`,true);
+    r.newId=await userId(r.email);
+  }
+  const ids=rows.filter(r=>r.newId).map(r=>r.newId);
+  if(new Set(ids).size!==ids.length)return toast("Cada usuário precisa de um e-mail diferente.",true);
+  busy("Salvando usuários…");
+  try{
+    await saveAdmins(async(users,dir)=>{
+      for(const r of rows){
+        if(!r.newId)continue;
+        let u=users.find(x=>x.id===r.oldId);
+        if(r.pass){const w=await wrapUser(r.email,r.pass,S.dk);if(u)Object.assign(u,w);else users.push(u=w)}
+        u.id=r.newId;
+        if(r.oldId&&r.oldId!==r.newId)delete dir[r.oldId];
+        dir[r.newId]={name:r.name,email:normEmail(r.email),role:r.slot.role};
+        if(r.oldId===S.id){S.id=r.newId;S.email=normEmail(r.email);S.name=r.name;saveSession(S)}
+      }
+    },"Admin: usuários atualizados");
+    renderCfg();toast("Usuários salvos. Os novos acessos valem em cerca de 1 minuto.");
+  }catch(x){toast(errMsg(x),true)}finally{busy()}
+});
+$("#meForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const email=$("#me-email").value.trim(),p1=$("#me-pass").value,p2=$("#me-pass2").value;
+  if(!okEmail(email))return toast("Digite um e-mail válido.",true);
+  if(p1&&p1.length<10)return toast("A senha precisa ter pelo menos 10 caracteres.",true);
+  if(p1!==p2)return toast("As senhas não são iguais.",true);
+  busy("Salvando…");
+  try{
+    const w=waDigits($("#me-wa").value);
+    if(w&&w!==CFG.whatsapp.fit)await updateConfig(d=>{d.whatsapp.fit=w},"Bike Fit: WhatsApp atualizado");
+    const newId=await userId(email);
+    if(newId!==S.id||p1){
+      await saveAdmins(async(users,dir)=>{
+        const u=users.find(x=>x.id===S.id);if(!u)throw Object.assign(new Error("404"),{status:404});
+        if(p1)Object.assign(u,await wrapUser(email,p1,S.dk));
+        u.id=newId;const me=dir[S.id]||{name:S.name,role:S.role};delete dir[S.id];dir[newId]={...me,email:normEmail(email)};
+      },"Bike Fit: dados de acesso atualizados");
+      S.id=newId;S.email=normEmail(email);saveSession(S);
+    }
+    renderCfg();toast("Dados atualizados.");
+  }catch(x){toast(errMsg(x),true)}finally{busy()}
+});
+
+// ---------- Bike Fit (agenda criptografada em data/bikefit.json)
+let FIT=[];
+const CATS={road:"Road",mtb:"Mountain Bike",tri:"Triathlon"};
+const CAVE_PCT=.2;
+const fitPrice=c=>Number(((CFG.fit||[])[c==="tri"?1:0]||{}).price||0);
+const pad=n=>String(n).padStart(2,"0");
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const atDate=b=>new Date(b.at);
+const MONTHS=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+async function loadFit(){
+  try{const {data}=await getJSON("data/bikefit.json");FIT=JSON.parse(await dec(await dkKey(S.dk),data)).bookings||[]}
+  catch(x){if(x.status===404)FIT=[];else throw x}
+}
+async function saveFit(mutate,msg){
+  const key=await dkKey(S.dk);
+  for(let t=0;t<2;t++){
+    let list=[],sha;
+    try{const r=await getJSON("data/bikefit.json");sha=r.sha;list=JSON.parse(await dec(key,r.data)).bookings||[]}catch(x){if(x.status!==404)throw x}
+    mutate(list);
+    const box=await enc(key,JSON.stringify({bookings:list}));
+    try{await putFile("data/bikefit.json",b64enc(JSON.stringify({v:1,...box})+"\n"),msg,sha);FIT=list;return}
+    catch(x){if(x.status!==409||t)throw x}
+  }
+}
+const now0=new Date();
+const CAL={y:now0.getFullYear(),m:now0.getMonth(),day:ymd(now0),p:1};
+function renderFit(){
+  $("#calTitle").textContent=`${MONTHS[CAL.m]} ${CAL.y}`;
+  const first=new Date(CAL.y,CAL.m,1),days=new Date(CAL.y,CAL.m+1,0).getDate(),today=ymd(new Date());
+  const count={};FIT.forEach(b=>{const k=b.at.slice(0,10);count[k]=(count[k]||0)+1});
+  let h=["D","S","T","Q","Q","S","S"].map(d=>`<span class="dow">${d}</span>`).join("");
+  for(let i=0;i<first.getDay();i++)h+=`<span></span>`;
+  for(let d=1;d<=days;d++){const k=`${CAL.y}-${pad(CAL.m+1)}-${pad(d)}`,n=count[k]||0;
+    h+=`<button type="button" class="day${k===today?" today":""}${k===CAL.day?" sel":""}" data-day="${k}" aria-label="${d} de ${MONTHS[CAL.m]}${n?`, ${n} agendamento${n>1?"s":""}`:""}">${d}${n?`<i>${n}</i>`:""}</button>`}
+  $("#cal").innerHTML=h;
+  const list=FIT.filter(b=>b.at.slice(0,10)===CAL.day).sort((a,b)=>a.at.localeCompare(b.at));
+  const [yy,mm,dd]=CAL.day.split("-");
+  $("#dayList").innerHTML=`<p class="eyebrow" style="margin:18px 0 8px">${+dd} de ${MONTHS[+mm-1].toLowerCase()}</p>`+(list.length?list.map(b=>`<button type="button" class="bk" data-bk="${esc(b.id)}">
+      <span class="bk-t">${b.at.slice(11,16)}</span>
+      <span class="bk-i"><b>${esc(b.name)}</b><span>${esc([b.brand,b.model,b.year].filter(Boolean).join(" "))} · ${CATS[b.cat]||""}</span></span>
+      <span class="price">${brl(b.price)}</span></button>`).join(""):`<p class="muted" style="font-size:14px">Nenhum bike fit neste dia.</p>`);
+  renderStats();
+}
+function renderStats(){
+  const now=new Date(),start=new Date(now.getFullYear(),now.getMonth()-(CAL.p-1),1);
+  const done=FIT.filter(b=>{const d=atDate(b);return d>=start&&d<=now});
+  const next=FIT.filter(b=>atDate(b)>now).length;
+  const n=done.length,road=done.filter(b=>b.cat!=="tri").length,tri=n-road;
+  const m=done.filter(b=>b.sex==="M").length,f=done.filter(b=>b.sex==="F").length,pct=x=>n?Math.round(x/n*100)+"%":"0%";
+  const tot=done.reduce((s,b)=>s+Number(b.price||0),0),cave=tot*CAVE_PCT;
+  const lbl=CAL.p===1?"neste mês":`nos últimos ${CAL.p} meses`;
+  $("#fitStats").innerHTML=`
+    <div class="st big"><span class="k">1. Bike fits feitos ${lbl}</span><b>${n}</b><span class="muted">${next} agendado${next===1?"":"s"} a partir de hoje</span></div>
+    <div class="st-grid">
+      <div class="st"><span class="k">2.1. Estrada & Mountain Bike</span><b>${road}</b></div>
+      <div class="st"><span class="k">2.2. Triathlon / TT</span><b>${tri}</b></div>
+      <div class="st"><span class="k">3. Masculino</span><b>${pct(m)}</b></div>
+      <div class="st"><span class="k">3. Feminino</span><b>${pct(f)}</b></div>
+    </div>
+    <div class="st"><span class="k">4.1. Valor total</span><b>${brl(tot)}</b></div>
+    <div class="st-grid">
+      <div class="st"><span class="k">4.2. Cave.&nbsp;Floripa (20%)</span><b>${brl(cave)}</b></div>
+      <div class="st"><span class="k">4.3. Guilherme (80%)</span><b>${brl(tot-cave)}</b></div>
+    </div>`;
+}
+$("#calPrev").addEventListener("click",()=>{CAL.m--;if(CAL.m<0){CAL.m=11;CAL.y--}renderFit()});
+$("#calNext").addEventListener("click",()=>{CAL.m++;if(CAL.m>11){CAL.m=0;CAL.y++}renderFit()});
+$("#cal").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(!b)return;CAL.day=b.dataset.day;renderFit()});
+$("#fitPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;CAL.p=+b.dataset.p;document.querySelectorAll("#fitPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderStats()});
+$("#dayList").addEventListener("click",e=>{const b=e.target.closest("[data-bk]");if(b)openFit(FIT.find(x=>x.id===b.dataset.bk))});
+$("#fitNew").addEventListener("click",()=>openFit(null));
+
+let FB=null;
+function openFit(b){
+  FB=b||null;
+  $("#fitEdTitle").textContent=b?"Editar agendamento":"Agendar bike fit";
+  $("#f-name").value=b?b.name:"";$("#f-brand").value=b?b.brand:"";$("#f-model").value=b?b.model:"";$("#f-year").value=b?b.year:"";
+  document.querySelectorAll('[name="f-sex"],[name="f-cat"]').forEach(r=>r.checked=!!b&&(r.value===b.sex||r.value===b.cat));
+  $("#f-date").value=b?b.at.slice(0,10):CAL.day;$("#f-time").value=b?b.at.slice(11,16):"";
+  $("#f-delete").hidden=!b;$("#f-delete").dataset.armed="";$("#f-delete").textContent="Apagar agendamento";
+  renderSplit();
+  $("#fitEd").hidden=false;document.body.style.overflow="hidden";$("#fitEd .ed-body").scrollTop=0;
+}
+function closeFit(){$("#fitEd").hidden=true;document.body.style.overflow="";FB=null}
+function renderSplit(){
+  const c=(document.querySelector('[name="f-cat"]:checked')||{}).value;
+  const v=c?(FB&&FB.cat===c?Number(FB.price):fitPrice(c)):0;
+  $("#f-split").innerHTML=c?`<div><span>Valor</span><b>${brl(v)}</b></div><div><span>Cave.&nbsp;Floripa (20%)</span><b>${brl(v*CAVE_PCT)}</b></div><div><span>Guilherme (80%)</span><b>${brl(v-v*CAVE_PCT)}</b></div>`:`<p class="muted" style="font-size:14px">Escolha a categoria para ver o valor.</p>`;
+}
+document.querySelectorAll('[name="f-cat"]').forEach(r=>r.addEventListener("change",renderSplit));
+$("#f-year").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,4)});
+$("#fitClose").addEventListener("click",closeFit);$("#fitCancel").addEventListener("click",closeFit);
+$("#fitSave").addEventListener("click",async()=>{
+  const sex=(document.querySelector('[name="f-sex"]:checked')||{}).value,cat=(document.querySelector('[name="f-cat"]:checked')||{}).value;
+  const name=$("#f-name").value.trim(),date=$("#f-date").value,time=$("#f-time").value;
+  if(!name){toast("Coloque o nome do atleta.",true);return $("#f-name").focus()}
+  if(!sex)return toast("Escolha o sexo do atleta.",true);
+  if(!cat)return toast("Escolha a categoria.",true);
+  if(!date||!time)return toast("Escolha data e horário.",true);
+  const price=FB&&FB.cat===cat?Number(FB.price):fitPrice(cat);
+  const bk={id:FB?FB.id:"bf-"+Date.now().toString(36),name,sex,brand:$("#f-brand").value.trim(),model:$("#f-model").value.trim(),year:$("#f-year").value.trim(),cat,at:`${date}T${time}`,price,
+    by:S.name||S.email,createdAt:FB?FB.createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  busy("Salvando agendamento…");
+  try{
+    await saveFit(l=>{const i=l.findIndex(x=>x.id===bk.id);if(i>=0)l[i]=bk;else l.push(bk)},FB?"Bike Fit: agendamento editado":"Bike Fit: novo agendamento");
+    CAL.day=date;CAL.y=+date.slice(0,4);CAL.m=+date.slice(5,7)-1;
+    closeFit();renderFit();toast("Agendamento salvo.");
+  }catch(x){toast(errMsg(x),true)}finally{busy()}
+});
+$("#f-delete").addEventListener("click",async function(){
+  if(this.dataset.armed!=="1"){this.dataset.armed="1";this.textContent="Toque de novo para apagar";return}
+  const id=FB.id;busy("Apagando…");
+  try{await saveFit(l=>{const i=l.findIndex(x=>x.id===id);if(i>=0)l.splice(i,1)},"Bike Fit: agendamento apagado");closeFit();renderFit();toast("Agendamento apagado.")}
+  catch(x){toast(errMsg(x),true)}finally{busy()}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#fitEd").hidden)closeFit()});
+
 $("#newBtn").addEventListener("click",()=>openEditor(null));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#editor").hidden)closeEditor()});
 
