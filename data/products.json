@@ -1,3 +1,24 @@
 {
- "products": []
+ "products": [
+  {
+   "id": "p-mvzp6duu",
+   "cat": "wahoo",
+   "group": "wahoo",
+   "sub": "Cinta cardíaca",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 825,
+   "title": "Cinta Cardíaca Wahoo Trackr Heart Rate",
+   "subtitle": "",
+   "desc": "Cinta Cardíaca Wahoo TRACKR Heart Rate (Recarregável)\nA nova geração da Wahoo: esqueça as pilhas! Monitor peitoral de altíssima precisão com bateria recarregável para mais de 100 horas.\n- OPENBOX: Nova - SEM USO | Caixa aberta\n- Modelo: Wahoo TRACKR Heart Rate (Última Geração)\n- Bateria: Recarregável via cabo magnético USB-C (+100h de duração)\n- Conectividade: ANT+ e Bluetooth (conecta até 3 aparelhos ao mesmo tempo)\n- Métricas: Frequência cardíaca instantânea (BPM) e suporte a HRV (variabilidade)\n- Cinta Ergonômica: Novo fecho lateral por gancho metálico (mais confortável e não solta)\n- Compatibilidade: Garmin, Wahoo, Apple Watch, Zwift, Rouvy, Strava e smartphones\n- Incluso: Sensor TRACKR, cinta original e cabo de carregamento magnético",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzp6duu-mvzpbrsb1.jpg",
+    "img/products/p-mvzp6duu-mvzpbtba2.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T20:18:42.114Z",
+   "createdAt": "2026-11-02T20:18:42.114Z"
+  }
+ ]
 }
