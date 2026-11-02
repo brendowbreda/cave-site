@@ -909,10 +909,13 @@ $("#e-disc").addEventListener("focus",()=>{if(DT==="brl")$("#e-disc").value=$("#
 $("#e-disc").addEventListener("input",()=>{const el=$("#e-disc");el.value=DT==="pct"?String(Math.min(90,digits(el.value))||""):money(parseMoney(el.value));renderFinal();renderPreview()});
 $("#e-disc").addEventListener("blur",()=>{if(DT==="brl"){const el=$("#e-disc");el.value=money00(parseMoney(el.value))}});
 // Outras seções onde o produto também aparece
-const secOpts=sel=>CFG.categories.flatMap(c=>c.groups.map(g=>`<option value="${c.id}|${g.id}"${sel===c.id+"|"+g.id?" selected":""}>${esc(c.groups.length>1?c.name+" › "+g.name:c.name)}</option>`)).join("");
-const subsOf=v=>{const [cid,gid]=v.split("|");return ((CFG.categories.find(c=>c.id===cid)||{groups:[]}).groups.find(g=>g.id===gid)||{subs:[]}).subs};
+// Seções: modalidades com suas seções e todas as marcas (marca sem seção usa a lista geral de tipos)
+const secList=()=>{const mods=[],brands=[];CFG.categories.forEach(c=>{if(c.groups.length)(c.brand?brands:mods).push(...c.groups.map(g=>({v:`${c.id}|${g.id}`,t:c.groups.length>1?c.name+" › "+g.name:c.name,brand:c.brand})));else brands.push({v:`${c.id}|`,t:c.name,brand:true})});return {mods,brands:brands.sort((a,b)=>a.t.localeCompare(b.t,"pt-BR"))}};
+const secOpts=sel=>{const {mods,brands}=secList();const o=x=>`<option value="${x.v}"${sel===x.v?" selected":""}>${esc(x.t)}</option>`;return `<optgroup label="Esporte">${mods.map(o).join("")}</optgroup><optgroup label="Marcas">${brands.map(o).join("")}</optgroup>`};
+const ALL_SUBS=()=>[...new Set(CFG.categories.flatMap(c=>c.groups.flatMap(g=>g.subs)))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+const subsOf=v=>{const [cid,gid]=v.split("|");const c=CFG.categories.find(x=>x.id===cid);if(!c)return [];const g=c.groups.find(x=>x.id===gid);return g?g.subs:ALL_SUBS()};
 function renderAlso(){
-  $("#e-also").innerHTML=D.also.map((a,i)=>{const v=`${a.cat}|${a.group}`,subs=subsOf(v);return `<div class="also" data-i="${i}">
+  $("#e-also").innerHTML=D.also.map((a,i)=>{const v=`${a.cat}|${a.group||""}`,subs=subsOf(v);return `<div class="also" data-i="${i}">
     <div class="field"><label for="ea-c${i}">Também em</label><select id="ea-c${i}" data-ac>${secOpts(v)}</select></div>
     <div class="field"><label for="ea-s${i}">Tipo</label><select id="ea-s${i}" data-as>${subs.map(x=>`<option${x===a.sub?" selected":""}>${esc(x)}</option>`).join("")}</select></div>
     <button type="button" class="icon-btn" data-arm="${i}" aria-label="Remover esta seção">✕</button></div>`}).join("");
@@ -932,8 +935,8 @@ function openEditor(p){
   $("#e-price").value=money00(D.price);DT=(D.discount&&D.discount.type)||"pct";$("#e-disc").value=D.discount&&D.discount.value?(DT==="brl"?money00(D.discount.value):D.discount.value):"";syncDT();D.also=(D.also||[]).map(x=>({...x}));renderAlso();$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
   $("#e-"+D.cond).checked=true;$(D.status==="vendido"?"#e-vend":"#e-disp").checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
-  $("#e-cat").innerHTML=CFG.categories.flatMap(c=>c.groups.map(g=>`<option value="${c.id}|${g.id}">${esc(c.groups.length>1?c.name+" › "+g.name:c.name)}</option>`)).join("");
-  $("#e-cat").value=`${D.cat}|${D.group}`;if(!$("#e-cat").value)$("#e-cat").selectedIndex=0;fillSubs(D.sub);
+  $("#e-cat").innerHTML=secOpts("");
+  $("#e-cat").value=`${D.cat}|${D.group||""}`;if(!$("#e-cat").value)$("#e-cat").selectedIndex=0;fillSubs(D.sub);
   $("#e-delete").hidden=!p;$("#e-delete").dataset.armed="";$("#e-delete").textContent="Apagar produto";
   renderPhotos();renderFinal();renderPreview();
   $("#editor").hidden=false;document.body.style.overflow="hidden";$("#editor .ed-body").scrollTop=0;
@@ -941,7 +944,7 @@ function openEditor(p){
 function closeEditor(){$("#editor").hidden=true;document.body.style.overflow="";D=null}
 function fillSubs(sel){
   const [cid,gid]=$("#e-cat").value.split("|");
-  const subs=((CFG.categories.find(c=>c.id===cid)||{groups:[]}).groups.find(g=>g.id===gid)||{subs:[]}).subs;
+  const subs=subsOf($("#e-cat").value);
   const custom=sel&&!subs.includes(sel);
   $("#e-subcat").innerHTML=subs.map(s=>`<option>${esc(s)}</option>`).join("")+`<option value="__other">Outro…</option>`;
   $("#e-subcat").value=custom?"__other":(sel&&subs.includes(sel)?sel:subs[0]);
