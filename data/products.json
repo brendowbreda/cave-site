@@ -1,6 +1,27 @@
 {
  "products": [
   {
+   "id": "p-mvzuyt8x",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Varia",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 2350,
+   "title": "Garmin Varia - RearVue 820 – Luz Traseira de Radar",
+   "subtitle": "98.9 x 25.9 x 43.2 mm",
+   "desc": "Mais visibilidade. Mais tecnologia. Mais confiança em cada pedalada.\n\nO Garmin Varia™ RearVue 820 combina radar de última geração e iluminação inteligente para proporcionar maior percepção do trânsito e tranquilidade durante seus treinos.\n\nCom detecção de veículos a até 175 metros, identifica a aproximação, o tamanho e a posição lateral dos veículos, emitindo alertas em dispositivos Garmin compatíveis ou pelo aplicativo Varia™.\n\nEquipado com lanterna traseira de alta visibilidade, luz de freio inteligente e bateria de até 24 horas no modo de flash diurno, é ideal para ciclismo de estrada, treinos de triathlon e pedaladas de longa distância.\n\nMais percepção. Mais confiança. Porque cada pedalada importa.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzuyt8x-mvzv1cjy1.jpg",
+    "img/products/p-mvzuyt8x-mvzv1dwe2.jpg",
+    "img/products/p-mvzuyt8x-mvzv1f2q3.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T22:58:34.435Z",
+   "createdAt": "2026-11-02T22:58:34.435Z"
+  },
+  {
    "id": "p-mvzuttrd",
    "cat": "garmin",
    "group": "garmin",
