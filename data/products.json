@@ -1,6 +1,26 @@
 {
  "products": [
   {
+   "id": "p-mvzwvm21",
+   "cat": "bike",
+   "group": "vestuario",
+   "sub": "Sapatilha",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 125,
+   "title": "SHIMANO - Taco SM-SH11 SPD-SL",
+   "subtitle": "",
+   "desc": "Os tacos Shimano SPD-SL foram desenvolvidos para ciclistas e triatletas que buscam estabilidade, conforto e máxima eficiência na transferência de potência durante a pedalada.\n\nCom 6° de flutuação angular, permitem uma movimentação controlada dos pés, proporcionando maior liberdade de ajuste e conforto durante treinos e competições.\n\nEquipados com apoios emborrachados antiderrapantes e estrutura em composto termoplástico resistente, oferecem encaixe seguro nos pedais e maior aderência ao caminhar.\n\nEspecificações técnicas\n\nModelo: Shimano SPD-SL Cleat — Amarelo\n\nModalidade: Ciclismo de estrada e triathlon\n\nCompatibilidade: Pedais Shimano SPD-SL\n\nFixação: Padrão de 3 furos\n\nMaterial: Composto termoplástico com apoios emborrachados\n\nFlutuação angular: 6° (amarelo)\n\nItens inclusos: 1 par de tacos, 6 parafusos e 6 arruelas de fixação",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzwvm21-mvzwxuyk1.jpg",
+    "img/products/p-mvzwvm21-mvzwxww62.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:51:50.606Z",
+   "createdAt": "2026-11-02T23:51:50.606Z"
+  },
+  {
    "id": "p-mvzwrmt2",
    "cat": "bike",
    "group": "vestuario",
