@@ -1,0 +1,11 @@
+{
+ "users": [
+  {
+   "id": "7cf22f778c6286a74aa8b9eac9309b5681e5ad6b1dfe2f788cfcfc730cca0083",
+   "salt": "b01f4566d32739d05de0f9ece1356aff",
+   "iv": "9290e5de40d97376f37e70d7",
+   "iter": 600000,
+   "ct": "07060740fd990755f520ba5754f13accb70bdbbd041ad8fadb2d7b52137fdd8e52e59bfa0de204df551efe74796ce5eeea6c64a851d242d4e6573b686a517b8baacf8a8fd952de8e625e1d509cfe0f3821aad74dfbb4fdbab98844bde9fe4295096debb67d218fe0df5223825f"
+  }
+ ]
+}
