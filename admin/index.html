@@ -126,6 +126,20 @@ body.wide .wrap{max-width:1240px}
 .sheet-in{width:100%;max-width:520px;background:var(--bg);border:1px solid var(--line);border-radius:18px 18px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
 .sheet-in>b,.sheet-in>div>b{font-size:18px}
 @media (min-width:700px){.sheet{align-items:center}.sheet-in{border-radius:18px}}
+.split .tot{border-top:1px solid var(--line);padding-top:6px;margin-top:2px;font-size:16px}
+.split .tot b{color:var(--buy)}
+.check{display:flex;gap:10px;align-items:center;font-size:14px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--buy)}
+.rec{font-style:normal;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 5px;margin-left:4px}
+.reps{display:grid;gap:8px;margin-top:6px}
+.rp{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px;border-radius:10px;background:var(--bg)}
+.rp .t{display:grid;min-width:0}
+.rp .t b{font-size:14px}
+.rp .t span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rp .m{font-weight:700;font-size:14px}
+.rp.late .t span{color:var(--bad)}
+.fc.rep.late{border-color:var(--bad)}
+.exp button.armed,.rp button.armed{color:var(--bad);border-color:var(--bad)}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -379,6 +393,15 @@ p{margin:0}
           </form>
         </details>
 
+        <details class="acc" data-acc="cfg">
+          <summary><span><b>Taxas de pagamento</b><small>Débito e crédito da maquininha</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <form class="acc-in form" id="feeForm" novalidate>
+            <p class="hint">Porcentagem cobrada pela maquininha. Pix e dinheiro não têm taxa. O Financeiro desconta a taxa de cada venda e locação.</p>
+            <div id="fees" class="form"></div>
+            <button class="btn solid block" type="submit">Salvar taxas</button>
+          </form>
+        </details>
+
         <form id="cfgForm" class="accs" novalidate>
           <details class="acc" data-acc="cfg">
             <summary><span><b>Bike Fit</b><small>WhatsApp do Guilherme, valores e agenda</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
@@ -427,7 +450,13 @@ p{margin:0}
     <div class="field"><label for="sl-pct">Parte da Cave (%)</label><input id="sl-pct" inputmode="numeric"></div>
   </div>
   <span class="hint">Produto da loja: 100%. Consignado: a comissão combinada (ex.: 10%).</span>
-  <div class="split"><div id="sl-out"></div></div>
+  <div class="field" id="sl-costw"><label for="sl-cost">Custo do produto</label><input id="sl-cost" inputmode="numeric" placeholder="R$ 0,00"><span class="hint">Quanto a loja pagou. Só aparece no painel.</span></div>
+  <div class="row2" id="sl-ownw" hidden>
+    <div class="field"><label for="sl-owner">Dono do produto</label><input id="sl-owner" placeholder="Nome"></div>
+    <div class="field"><label for="sl-ophone">Telefone</label><input id="sl-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
+  </div>
+  <div class="field"><label for="sl-pay">Forma de pagamento</label><select id="sl-pay"></select></div>
+  <div class="split" id="sl-out"></div>
   <div class="row2"><button class="btn" id="sl-cancel" type="button">Cancelar</button><button class="btn buy" id="sl-ok" type="button">Confirmar venda</button></div>
 </div></div>
 
@@ -440,7 +469,26 @@ p{margin:0}
     <div class="field"><label for="ex-date">Data</label><input id="ex-date" type="date"></div>
   </div>
   <div class="field"><label for="ex-desc">Descrição (opcional)</label><input id="ex-desc" placeholder="Ex.: conta de outubro"></div>
+  <label class="check"><input type="checkbox" id="ex-rec"><span>Repete todo mês (gasto fixo)</span></label>
   <div class="row2"><button class="btn" id="ex-cancel" type="button">Cancelar</button><button class="btn danger" id="ex-ok" type="button" style="background:var(--bad);color:#fff">Salvar gasto</button></div>
+</div></div>
+
+<!-- LANÇAR LOCAÇÃO -->
+<div class="sheet" id="rentSh" hidden role="dialog" aria-modal="true" aria-labelledby="lc-h"><div class="sheet-in form">
+  <b id="lc-h">Lançar locação</b>
+  <div class="field"><label for="lc-item">Item alugado</label><select id="lc-item"></select></div>
+  <div class="field" id="lc-otherw" hidden><label for="lc-other">Qual item?</label><input id="lc-other"></div>
+  <div class="field"><label for="lc-client">Cliente</label><input id="lc-client" placeholder="Nome"></div>
+  <div class="row2">
+    <div class="field"><label for="lc-start">Retirada</label><input id="lc-start" type="date"></div>
+    <div class="field"><label for="lc-end">Devolução</label><input id="lc-end" type="date"></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label for="lc-val">Valor</label><input id="lc-val" inputmode="numeric" placeholder="R$ 0,00"></div>
+    <div class="field"><label for="lc-pay">Pagamento</label><select id="lc-pay"></select></div>
+  </div>
+  <div class="split" id="lc-out"></div>
+  <div class="row2"><button class="btn" id="lc-cancel" type="button">Cancelar</button><button class="btn buy" id="lc-ok" type="button">Salvar locação</button></div>
 </div></div>
 
 <!-- AGENDAMENTO BIKE FIT -->
@@ -488,6 +536,7 @@ p{margin:0}
         <label><input type="radio" name="e-cond" id="e-novo" value="novo"><span>Novo</span></label>
         <label><input type="radio" name="e-cond" id="e-usado" value="usado"><span>Usado</span></label></div></div>
     </div>
+    <div class="field"><label for="e-cost">Custo do produto (só aparece no painel)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"><span class="hint">Quanto a loja pagou. Deixe vazio em produto consignado.</span></div>
     <div class="row2">
       <div class="field"><label for="e-cat">Seção</label><select id="e-cat"></select></div>
       <div class="field"><label for="e-subcat">Tipo</label><select id="e-subcat"></select></div>
@@ -768,7 +817,7 @@ function openEditor(p){
   D.photos=(D.photos||[]).map(path=>({path}));
   $("#edTitle").textContent=p?"Editar produto":"Novo produto";
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";$("#e-tag").value=D.tag||"";
-  $("#e-price").value=money00(D.price);
+  $("#e-price").value=money00(D.price);$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
   $("#e-"+D.cond).checked=true;$(D.status==="vendido"?"#e-vend":"#e-disp").checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
   $("#e-cat").innerHTML=CFG.categories.flatMap(c=>c.groups.map(g=>`<option value="${c.id}|${g.id}">${esc(c.groups.length>1?c.name+" › "+g.name:c.name)}</option>`)).join("");
@@ -790,7 +839,7 @@ $("#e-cat").addEventListener("change",()=>{fillSubs();renderPreview()});
 $("#e-subcat").addEventListener("change",()=>{$("#e-other-wrap").hidden=$("#e-subcat").value!=="__other";renderPreview()});
 ["#e-title","#e-sub","#e-other","#e-tag"].forEach(s=>$(s).addEventListener("input",renderPreview));
 document.querySelectorAll('[name="e-cond"],[name="e-status"]').forEach(r=>r.addEventListener("change",renderPreview));
-moneyField($("#e-price"),()=>renderPreview());
+moneyField($("#e-price"),()=>renderPreview());moneyField($("#e-cost"));
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
   return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:$("#e-tag").value.trim(),
@@ -836,7 +885,8 @@ $("#edSave").addEventListener("click",async()=>{
   if(!f.price){toast("Coloque o valor do produto.",true);$("#e-price").focus();return}
   if(!f.sub){toast("Escolha ou escreva o tipo do produto.",true);return}
   const nowSold=f.status==="vendido"&&!(orig&&orig.status==="vendido"),unSold=f.status!=="vendido"&&orig&&orig.status==="vendido";
-  const sale=nowSold?await askSale(f):null;
+  const cost=parseMoney($("#e-cost").value);
+  const sale=nowSold?await askSale({...f,_cost:cost}):null;
   if(nowSold&&!sale)return;
   try{
     const paths=[];let k=0;
@@ -856,6 +906,7 @@ $("#edSave").addEventListener("click",async()=>{
     busy("Salvando produto…");
     await updateProducts(list=>{const i=list.findIndex(x=>x.id===prod.id);if(i>=0)list[i]=prod;else list.unshift(prod)},`${orig?"Edita":"Novo produto"}: ${prod.title}`);
     for(const p of removed){busy("Limpando fotos antigas…");await delFile(p,`Remove foto: ${prod.title}`)}
+    await saveCost(prod.id,cost);
     if(nowSold){busy("Registrando venda…");await recordSale(prod,sale)}else if(unSold)await unrecordSale(prod);
     closeEditor();renderList();renderFin();toast("Salvo. O site atualiza em cerca de 1 minuto.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
@@ -912,6 +963,7 @@ function renderCfg(){
     <div class="field"><label for="cf-n${i}">Nome</label><input id="cf-n${i}" value="${esc(f.name)}"></div>
     <div class="field"><label for="cf-p${i}">Valor</label><input id="cf-p${i}" inputmode="numeric" value="${money00(f.price)}" data-money></div></div>`).join("");
   RENT=JSON.parse(JSON.stringify(CFG.rentals));
+  renderFees();
   document.querySelectorAll("[data-money]").forEach(el=>moneyField(el));
   renderRent();
   $("#us-list").innerHTML=SLOTS.map((s,i)=>{
@@ -998,122 +1050,261 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!(d instanceof HTMLDe
   document.querySelectorAll(`details[data-acc="${d.dataset.acc}"]`).forEach(x=>{if(x!==d)x.open=false});
   if(d.dataset.acc==="rent")OPEN_RENT=d.dataset.g;},true);
 
-// ---------- Financeiro (vendas e gastos criptografados em data/financeiro.json)
-let FIN={sales:[],expenses:[]};
+// ---------- Financeiro (vendas, locações, gastos, custos e repasses criptografados em data/financeiro.json)
+let FIN={};
 const MODS={natacao:"Natação",bike:"Bicicleta",corrida:"Corrida"};
 const modOf=p=>MODS[p.cat]?p.cat:"outros";
 const EXP_CATS=["Aluguel","Água","Energia solar","Limpeza","Manutenção do espaço","Outros"];
+const PAYS=[["pix","Pix"],["dinheiro","Dinheiro"],["debito","Débito"],["credito","Crédito à vista"],["parcelado","Crédito parcelado"]];
+const payName=k=>(PAYS.find(x=>x[0]===k)||[,"—"])[1];
+const DEF_FEES={pix:0,dinheiro:0,debito:1.5,credito:3.5,parcelado:6};
+const REPASSE_DIAS=7;
 const FS={p:1,mod:"all"};
 const defPct=p=>p.cond==="novo"?100:10;
+const r2=v=>Math.round(v*100)/100;
+const feeOf=(pay,v)=>r2(Number(v||0)*Number((FIN.fees||DEF_FEES)[pay]||0)/100);
+const pctTxt=v=>String(v).replace(".",",");
+function finFix(d){d=d||{};d.sales=d.sales||[];d.expenses=d.expenses||[];d.rentals=d.rentals||[];d.costs=d.costs||{};d.fitPaid=d.fitPaid||{};d.fees={...DEF_FEES,...(d.fees||{})};return d}
 async function loadFin(){
-  try{const {data}=await getJSON("data/financeiro.json");FIN=JSON.parse(await dec(await dkKey(S.dk),data))}
-  catch(x){if(x.status===404)FIN={sales:[],expenses:[]};else throw x}
-  FIN.sales=FIN.sales||[];FIN.expenses=FIN.expenses||[];
+  try{const {data}=await getJSON("data/financeiro.json");FIN=finFix(JSON.parse(await dec(await dkKey(S.dk),data)))}
+  catch(x){if(x.status===404)FIN=finFix();else throw x}
 }
 async function saveFin(mutate,msg){
   const key=await dkKey(S.dk);
   for(let t=0;t<2;t++){
-    let d={sales:[],expenses:[]},sha;
-    try{const r=await getJSON("data/financeiro.json");sha=r.sha;d=JSON.parse(await dec(key,r.data))}catch(x){if(x.status!==404)throw x}
-    d.sales=d.sales||[];d.expenses=d.expenses||[];mutate(d);
+    let d=finFix(),sha;
+    try{const r=await getJSON("data/financeiro.json");sha=r.sha;d=finFix(JSON.parse(await dec(key,r.data)))}catch(x){if(x.status!==404)throw x}
+    mutate(d);
     const box=await enc(key,JSON.stringify(d));
     try{await putFile("data/financeiro.json",b64enc(JSON.stringify({v:1,...box})+"\n"),msg,sha);FIN=d;return}
     catch(x){if(x.status!==409||t)throw x}
   }
 }
-function finStart(){const n=new Date();return new Date(n.getFullYear(),n.getMonth()-(FS.p-1),1)}
-function finSales(){
-  const st=finStart(),now=new Date();
-  const recs=FIN.sales.filter(s=>{const d=new Date(s.at);return d>=st&&d<=now});
-  // vendidos antes do financeiro existir: usa o preço do anúncio e a parte padrão
-  const known=new Set(FIN.sales.map(s=>s.pid));
-  PRODS.filter(p=>p.status==="vendido"&&p.soldAt&&!known.has(p.id)&&new Date(p.soldAt)>=st).forEach(p=>recs.push({pid:p.id,title:p.title,cat:p.cat,price:p.price,pct:defPct(p),at:p.soldAt}));
+// Venda: o que é da Cave (produto próprio: preço − custo; consignado: comissão), já sem a taxa
+const saleOwner=s=>s.pct<100?r2(s.price-s.price*s.pct/100):0;
+const saleGross=s=>s.pct>=100?r2(s.price-Number(s.cost||0)):r2(s.price*s.pct/100);
+const saleNet=s=>r2(saleGross(s)-Number(s.fee||0));
+function finRange(){const n=new Date();return [new Date(n.getFullYear(),n.getMonth()-(FS.p-1),1),n]}
+const inRange=(iso,[a,b])=>{const d=new Date(iso.length===10?iso+"T12:00":iso);return d>=a&&d<=b};
+function finSales(rg){
+  const recs=FIN.sales.filter(s=>inRange(s.at,rg));
+  const known=new Set(FIN.sales.map(s=>s.pid)); // vendidos antes do financeiro: preço do anúncio e parte padrão
+  PRODS.filter(p=>p.status==="vendido"&&p.soldAt&&!known.has(p.id)&&inRange(p.soldAt,rg)).forEach(p=>recs.push({pid:p.id,title:p.title,cat:p.cat,price:p.price,pct:defPct(p),cost:FIN.costs[p.id]||0,pay:"pix",fee:0,at:p.soldAt,legacy:true}));
   return recs;
+}
+// Gastos fixos: repetem todo mês no mesmo dia, desde a data do 1º lançamento até "until"
+function finExpenses(rg){
+  const out=[];
+  FIN.expenses.forEach(e=>{
+    if(!e.recurring){if(inRange(e.date,rg))out.push(e);return}
+    const [y,m,d]=e.date.split("-").map(Number);
+    for(let k=0;k<600;k++){
+      const last=new Date(y,m-1+k+1,0).getDate(),dt=new Date(y,m-1+k,Math.min(d,last),12);
+      if(dt>rg[1]||(e.until&&ymd(dt)>e.until))break;
+      if(dt>=rg[0])out.push({...e,date:ymd(dt),occ:true});
+    }
+  });
+  return out.sort((a,b)=>b.date.localeCompare(a.date));
+}
+function finCalc(rg){
+  const sales=finSales(rg),rents=FIN.rentals.filter(r=>inRange(r.start,rg)),exps=finExpenses(rg);
+  const fit=FIT.filter(b=>{const d=atDate(b);return d>=rg[0]&&d<=rg[1]});
+  const bruto=sales.reduce((s,x)=>s+Number(x.price||0),0);
+  const vendasCave=sales.reduce((s,x)=>s+saleGross(x),0),custo=sales.reduce((s,x)=>s+(x.pct>=100?Number(x.cost||0):0),0);
+  const rentTot=rents.reduce((s,r)=>s+Number(r.value||0),0);
+  const taxas=sales.reduce((s,x)=>s+Number(x.fee||0),0)+rents.reduce((s,r)=>s+Number(r.fee||0),0);
+  const fitTot=fit.reduce((s,b)=>s+Number(b.price||0),0),fitCave=r2(fitTot*CAVE_PCT);
+  const gastos=exps.reduce((s,e)=>s+Number(e.value||0),0);
+  return {sales,rents,exps,fit,bruto,vendasCave,custo,rentTot,taxas,fitTot,fitCave,gastos,net:r2(vendasCave+rentTot+fitCave-taxas-gastos)};
+}
+function pendingRepasses(){
+  const now=new Date(),list=[];
+  FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Dono não informado",what:s.title,value:saleOwner(s),due,late:due<now})});
+  const gf=FIT.filter(b=>atDate(b)<=now&&!FIN.fitPaid[b.id]);
+  if(gf.length)list.push({kind:"fit",who:"Guilherme · Bike Fit",what:`${gf.length} bike fit${gf.length>1?"s":""} (80%)`,value:r2(gf.reduce((s,b)=>s+Number(b.price||0)*(1-CAVE_PCT),0)),due:null,late:false});
+  return list.sort((a,b)=>(a.due||Infinity)-(b.due||Infinity));
 }
 function renderFin(){
   if(!isAdm())return;
-  const st=finStart(),now=new Date(),lbl=FS.p===1?"neste mês":`nos últimos ${FS.p} meses`;
-  const sales=finSales(),bruto=sales.reduce((s,x)=>s+Number(x.price||0),0),caixa=sales.reduce((s,x)=>s+Number(x.price||0)*Number(x.pct||0)/100,0);
-  const byMod={natacao:0,bike:0,corrida:0,outros:0};sales.forEach(x=>byMod[MODS[x.cat]?x.cat:"outros"]++);
-  const fit=FIT.filter(b=>{const d=atDate(b);return d>=st&&d<=now}),fitTot=fit.reduce((s,b)=>s+Number(b.price||0),0),fitCave=fitTot*CAVE_PCT;
-  const exps=FIN.expenses.filter(e=>{const d=new Date(e.date+"T12:00");return d>=st&&d<=now}).sort((a,b)=>b.date.localeCompare(a.date));
-  const gastos=exps.reduce((s,e)=>s+Number(e.value||0),0),net=caixa+fitCave-gastos;
+  const rg=finRange(),c=finCalc(rg),lbl=FS.p===1?"neste mês":`nos últimos ${FS.p} meses`;
+  const byMod={natacao:0,bike:0,corrida:0,outros:0};c.sales.forEach(x=>byMod[MODS[x.cat]?x.cat:"outros"]++);
   const cad=PRODS.filter(p=>FS.mod==="all"||modOf(p)===FS.mod),cadSold=cad.filter(p=>p.status==="vendido").length;
-  const byCat={};exps.forEach(e=>byCat[e.cat]=(byCat[e.cat]||0)+Number(e.value||0));
-  const fdate=s=>s.split("-").reverse().slice(0,2).join("/");
+  const byCat={};c.exps.forEach(e=>byCat[e.cat]=(byCat[e.cat]||0)+Number(e.value||0));
+  const fdate=s=>s.slice(0,10).split("-").reverse().slice(0,2).join("/");
+  const rep=pendingRepasses(),repTot=rep.reduce((s,x)=>s+x.value,0);
+  const plural=(n,a,b)=>`${n} ${n===1?a:b}`;
   $("#finBody").innerHTML=`
-    <div class="fc net${net<0?" neg":""}">
-      <span class="k">Valor líquido ${lbl}</span><b class="v">${brl(net)}</b>
+    <div class="fc net${c.net<0?" neg":""}">
+      <span class="k">Valor líquido ${lbl}</span><b class="v">${brl(c.net)}</b>
       <div class="lines">
-        <div><span>Vendas · parte da Cave</span><span>+ ${brl(caixa)}</span></div>
-        <div><span>Bike Fit · 20% da Cave</span><span>+ ${brl(fitCave)}</span></div>
-        <div class="r"><span>Gastos</span><span>− ${brl(gastos)}</span></div>
+        <div><span>Vendas · parte da Cave</span><span>+ ${brl(c.vendasCave)}</span></div>
+        <div><span>Locação</span><span>+ ${brl(c.rentTot)}</span></div>
+        <div><span>Bike Fit · 20% da Cave</span><span>+ ${brl(c.fitCave)}</span></div>
+        <div class="r"><span>Taxas de pagamento</span><span>− ${brl(c.taxas)}</span></div>
+        <div class="r"><span>Gastos</span><span>− ${brl(c.gastos)}</span></div>
       </div>
     </div>
+    <div class="fc rep${rep.some(x=>x.late)?" late":""}">
+      <div class="fc-h"><span class="k">A repassar</span><span class="s">Consignados em até ${REPASSE_DIAS} dias</span></div>
+      <b class="v">${brl(repTot)}</b>
+      ${rep.length?`<div class="reps">${rep.map(x=>`<div class="rp${x.late?" late":""}"><span class="t"><b>${esc(x.who)}</b><span>${esc(x.what)}${x.due?` · ${x.late?"atrasado desde":"até"} ${fdate(ymd(x.due))}`:""}</span></span><span class="m">${brl(x.value)}</span><button class="btn small" type="button" data-pay="${x.kind}" data-id="${esc(x.id||"")}">Pago</button></div>`).join("")}</div>`:`<span class="s">Nenhum repasse pendente.</span>`}
+    </div>
     <div class="fc-grid">
-      <div class="fc"><span class="k">Caixa (parte da Cave nas vendas)</span><b class="v">${brl(caixa)}</b><span class="s">de ${brl(bruto)} vendidos</span></div>
-      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${brl(fitTot)}</b><span class="s">Cave.&nbsp;Floripa (20%): <b>${brl(fitCave)}</b></span><span class="s">${fit.length} bike fit${fit.length===1?"":"s"} feito${fit.length===1?"":"s"}</span></div>
+      <div class="fc"><span class="k">Caixa (parte da Cave nas vendas)</span><b class="v">${brl(c.vendasCave)}</b><span class="s">de ${brl(c.bruto)} vendidos${c.custo?` · custo ${brl(c.custo)}`:""}</span></div>
+      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${brl(c.fitTot)}</b><span class="s">Cave.&nbsp;Floripa (20%): <b>${brl(c.fitCave)}</b></span><span class="s">${plural(c.fit.length,"bike fit feito","bike fits feitos")}</span></div>
     </div>
     <div class="fc">
-      <span class="k">Produtos vendidos ${lbl}</span><b class="v">${sales.length}</b>
+      <div class="fc-h"><span class="k">Locação ${lbl}</span><button class="btn small" id="rentNew" type="button">+ Lançar locação</button></div>
+      <b class="v">${brl(c.rentTot)}</b><span class="s">${plural(c.rents.length,"locação","locações")}</span>
+      ${c.rents.length?`<div class="exps">${c.rents.slice().sort((a,b)=>b.start.localeCompare(a.start)).slice(0,6).map(r=>`<div class="exp"><span class="d">${fdate(r.start)}</span><span class="t">${esc(r.item)}${r.client?` · ${esc(r.client)}`:""}</span><span>${brl(r.value)}</span><button type="button" data-lrm="${esc(r.id)}" aria-label="Apagar locação">✕</button></div>`).join("")}</div>`:""}
+    </div>
+    <div class="fc">
+      <span class="k">Produtos vendidos ${lbl}</span><b class="v">${c.sales.length}</b>
       <div class="mods">${["natacao","bike","corrida"].map(m=>`<div><span>${MODS[m]}</span><b>${byMod[m]}</b></div>`).join("")}${byMod.outros?`<div><span>Marcas</span><b>${byMod.outros}</b></div>`:""}</div>
     </div>
     <div class="fc">
       <span class="k">Produtos cadastrados</span>
       <div class="chips" id="finMod">${[["all","Todos"],["natacao","Natação"],["bike","Bicicleta"],["corrida","Corrida"]].map(([k,t])=>`<button class="chip" data-m="${k}" aria-pressed="${FS.mod===k}">${t}</button>`).join("")}</div>
-      <b class="v">${cad.length}</b><span class="s">${cad.length-cadSold} em estoque · ${cadSold} vendido${cadSold===1?"":"s"}</span>
+      <b class="v">${cad.length}</b><span class="s">${cad.length-cadSold} em estoque · ${plural(cadSold,"vendido","vendidos")}</span>
     </div>
     <div class="fc bad">
       <div class="fc-h"><span class="k">Gastos ${lbl}</span><button class="btn small danger" id="expNew" type="button">+ Adicionar gasto</button></div>
-      <b class="v">${brl(gastos)}</b>
-      ${Object.keys(byCat).length?`<div class="lines">${Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<div><span>${esc(c)}</span><span>${brl(v)}</span></div>`).join("")}</div>`:""}
-      ${exps.length?`<div class="exps">${exps.slice(0,8).map(e=>`<div class="exp"><span class="d">${fdate(e.date)}</span><span class="t">${esc(e.cat)}${e.desc?` · ${esc(e.desc)}`:""}</span><span>${brl(e.value)}</span><button type="button" data-xrm="${esc(e.id)}" aria-label="Apagar gasto">✕</button></div>`).join("")}</div>`:`<span class="s">Nenhum gasto lançado no período.</span>`}
-    </div>`;
+      <b class="v">${brl(c.gastos)}</b>
+      ${Object.keys(byCat).length?`<div class="lines">${Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div><span>${esc(k)}</span><span>${brl(v)}</span></div>`).join("")}</div>`:""}
+      ${c.exps.length?`<div class="exps">${c.exps.slice(0,8).map(e=>`<div class="exp"><span class="d">${fdate(e.date)}</span><span class="t">${esc(e.cat)}${e.desc?` · ${esc(e.desc)}`:""}${e.recurring?` <i class="rec">todo mês</i>`:""}</span><span>${brl(e.value)}</span><button type="button" data-xrm="${esc(e.id)}" aria-label="${e.recurring?"Parar de repetir":"Apagar gasto"}">✕</button></div>`).join("")}</div>`:`<span class="s">Nenhum gasto lançado no período.</span>`}
+    </div>
+    <button class="btn block" id="finCsv" type="button">Exportar para o contador (planilha)</button>`;
 }
 $("#finPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;FS.p=+b.dataset.p;document.querySelectorAll("#finPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderFin()});
+const arm=(el,txt)=>{if(el.dataset.armed==="1")return true;el.dataset.armed="1";el.textContent=txt;el.classList.add("armed");return false};
 $("#finBody").addEventListener("click",async e=>{
   const m=e.target.closest("[data-m]");if(m){FS.mod=m.dataset.m;return renderFin()}
   if(e.target.closest("#expNew"))return openExp();
-  const x=e.target.closest("[data-xrm]");if(!x)return;
-  if(x.dataset.armed!=="1"){x.dataset.armed="1";x.textContent="Apagar?";x.classList.add("armed");return}
-  busy("Apagando gasto…");
-  try{await saveFin(d=>{d.expenses=d.expenses.filter(y=>y.id!==x.dataset.xrm)},"Financeiro: gasto apagado");renderFin();toast("Gasto apagado.")}
-  catch(err){toast(errMsg(err),true)}finally{busy()}
+  if(e.target.closest("#rentNew"))return openRentSh();
+  if(e.target.closest("#finCsv"))return exportCsv();
+  const x=e.target.closest("[data-xrm]"),l=e.target.closest("[data-lrm]"),pay=e.target.closest("[data-pay]");
+  try{
+    if(x){
+      const base=FIN.expenses.find(y=>y.id===x.dataset.xrm);if(!base)return;
+      if(!arm(x,base.recurring?"Parar?":"Apagar?"))return;
+      busy("Salvando…");
+      const thisMonth=ymd(new Date()).slice(0,7);
+      if(base.recurring&&base.date.slice(0,7)<thisMonth){
+        const n=new Date(),lastPrev=ymd(new Date(n.getFullYear(),n.getMonth(),0));
+        await saveFin(d=>{const y=d.expenses.find(z=>z.id===base.id);if(y)y.until=lastPrev},"Financeiro: gasto fixo encerrado");toast("Gasto fixo encerrado. Os meses anteriores continuam no histórico.");
+      }else{await saveFin(d=>{d.expenses=d.expenses.filter(y=>y.id!==base.id)},"Financeiro: gasto apagado");toast("Gasto apagado.")}
+    }else if(l){
+      if(!arm(l,"Apagar?"))return;busy("Apagando…");
+      await saveFin(d=>{d.rentals=d.rentals.filter(y=>y.id!==l.dataset.lrm)},"Financeiro: locação apagada");toast("Locação apagada.");
+    }else if(pay){
+      if(!arm(pay,"Confirmar"))return;busy("Registrando repasse…");
+      const when=new Date().toISOString();
+      if(pay.dataset.pay==="fit"){const ids=FIT.filter(b=>atDate(b)<=new Date()).map(b=>b.id);await saveFin(d=>{ids.forEach(i=>{if(!d.fitPaid[i])d.fitPaid[i]=when})},"Financeiro: repasse Bike Fit pago")}
+      else await saveFin(d=>{const s=d.sales.find(y=>y.pid===pay.dataset.id);if(s)s.paidAt=when},"Financeiro: repasse pago");
+      toast("Repasse registrado como pago.");
+    }else return;
+    renderFin();
+  }catch(err){toast(errMsg(err),true)}finally{busy()}
 });
 
-// Folha: confirmar venda (valor real e parte da Cave)
-let saleResolve=null;
+// ----- Folha: confirmar venda
+let saleResolve=null,saleP=null;
+const payOpts=sel=>PAYS.map(([k,t])=>`<option value="${k}"${k===sel?" selected":""}>${t}${(FIN.fees||{})[k]?` (${pctTxt(FIN.fees[k])}%)`:""}</option>`).join("");
 function askSale(p){
+  saleP=p;
   $("#sl-title").textContent=p.title;
   $("#sl-price").value=money00(p.price);$("#sl-pct").value=defPct(p);
+  $("#sl-pay").innerHTML=payOpts("pix");
+  $("#sl-cost").value=money00(p._cost??FIN.costs[p.id]??0);
+  $("#sl-owner").value="";$("#sl-ophone").value="";
   calcSale();$("#saleSh").hidden=false;
   return new Promise(r=>{saleResolve=r});
 }
-function calcSale(){const v=parseMoney($("#sl-price").value),pc=Math.min(100,digits($("#sl-pct").value));$("#sl-out").innerHTML=`A Cave recebe <b>${brl(v*pc/100)}</b>${pc<100?` · dono recebe ${brl(v-v*pc/100)}`:""}`}
+function saleForm(){const price=parseMoney($("#sl-price").value),pct=Math.min(100,digits($("#sl-pct").value)),pay=$("#sl-pay").value;
+  return {price,pct,pay,fee:feeOf(pay,price),cost:pct>=100?parseMoney($("#sl-cost").value):0,owner:pct<100?{name:$("#sl-owner").value.trim(),phone:$("#sl-ophone").value.trim()}:null}}
+function calcSale(){
+  const s=saleForm(),own=s.pct>=100;
+  $("#sl-costw").hidden=!own;$("#sl-ownw").hidden=own;
+  $("#sl-out").innerHTML=`<div><span>Venda</span><b>${brl(s.price)}</b></div>`+
+    (own?`<div><span>Custo do produto</span><b>− ${brl(s.cost)}</b></div>`:`<div><span>Repasse ao dono (${100-s.pct}%)</span><b>− ${brl(saleOwner(s))}</b></div>`)+
+    (s.fee?`<div><span>Taxa ${payName(s.pay)}</span><b>− ${brl(s.fee)}</b></div>`:"")+
+    `<div class="tot"><span>Fica para a Cave</span><b>${brl(saleNet(s))}</b></div>`;
+}
 function closeSale(val){$("#saleSh").hidden=true;if(saleResolve){saleResolve(val);saleResolve=null}}
-moneyField($("#sl-price"),calcSale);
+moneyField($("#sl-price"),calcSale);moneyField($("#sl-cost"),calcSale);
 $("#sl-pct").addEventListener("input",e=>{e.target.value=String(Math.min(100,digits(e.target.value)||0));calcSale()});
+$("#sl-pay").addEventListener("change",calcSale);
 $("#sl-cancel").addEventListener("click",()=>closeSale(null));
-$("#sl-ok").addEventListener("click",()=>{const v=parseMoney($("#sl-price").value);if(!v)return toast("Coloque o valor da venda.",true);closeSale({price:v,pct:Math.min(100,digits($("#sl-pct").value))})});
-async function recordSale(p,sale){await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id);d.sales.push({pid:p.id,title:p.title,cat:p.cat,price:sale.price,pct:sale.pct,at:new Date().toISOString()})},"Financeiro: venda registrada")}
+$("#sl-ok").addEventListener("click",()=>{const s=saleForm();if(!s.price)return toast("Coloque o valor da venda.",true);closeSale(s)});
+async function recordSale(p,sale){await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id);d.sales.push({pid:p.id,title:p.title,cat:p.cat,...sale,at:new Date().toISOString()});if(sale.pct>=100&&sale.cost)d.costs[p.id]=sale.cost},"Financeiro: venda registrada")}
 async function unrecordSale(p){if(FIN.sales.some(s=>s.pid===p.id))await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id)},"Financeiro: venda desfeita")}
+async function saveCost(id,cost){if(Number(FIN.costs[id]||0)!==cost)await saveFin(d=>{if(cost)d.costs[id]=cost;else delete d.costs[id]},"Financeiro: custo do produto")}
 
-// Folha: novo gasto
+// ----- Folha: novo gasto
 function openExp(){
   $("#ex-cat").innerHTML=EXP_CATS.map(c=>`<option>${c}</option>`).join("");
-  $("#ex-val").value="";$("#ex-desc").value="";$("#ex-date").value=ymd(new Date());
-  $("#expSh").hidden=false;setTimeout(()=>$("#ex-val").focus(),50);
+  $("#ex-val").value="";$("#ex-desc").value="";$("#ex-date").value=ymd(new Date());$("#ex-rec").checked=false;
+  $("#expSh").hidden=false;
 }
+$("#ex-cat").addEventListener("change",()=>{$("#ex-rec").checked=["Aluguel","Água","Energia solar"].includes($("#ex-cat").value)});
 moneyField($("#ex-val"));
 $("#ex-cancel").addEventListener("click",()=>{$("#expSh").hidden=true});
 $("#ex-ok").addEventListener("click",async()=>{
   const value=parseMoney($("#ex-val").value),date=$("#ex-date").value;
   if(!value)return toast("Coloque o valor do gasto.",true);
   if(!date)return toast("Escolha a data.",true);
-  const e={id:"g-"+Date.now().toString(36),cat:$("#ex-cat").value,desc:$("#ex-desc").value.trim(),value,date,by:S.name||S.email};
+  const e={id:"g-"+Date.now().toString(36),cat:$("#ex-cat").value,desc:$("#ex-desc").value.trim(),value,date,recurring:$("#ex-rec").checked,by:S.name||S.email};
   busy("Salvando gasto…");
-  try{await saveFin(d=>{d.expenses.push(e)},"Financeiro: novo gasto");$("#expSh").hidden=true;renderFin();toast("Gasto lançado.")}
+  try{await saveFin(d=>{d.expenses.push(e)},"Financeiro: novo gasto");$("#expSh").hidden=true;renderFin();toast(e.recurring?"Gasto fixo lançado. Ele se repete todo mês.":"Gasto lançado.")}
   catch(x){toast(errMsg(x),true)}finally{busy()}
+});
+
+// ----- Folha: lançar locação
+function openRentSh(){
+  $("#lc-item").innerHTML=(CFG.rentals||[]).map(r=>`<option>${esc(r.name)}</option>`).join("")+`<option value="__o">Outro…</option>`;
+  $("#lc-other").value="";$("#lc-otherw").hidden=true;$("#lc-client").value="";$("#lc-val").value="";
+  $("#lc-start").value=ymd(new Date());$("#lc-end").value="";$("#lc-pay").innerHTML=payOpts("pix");
+  calcRent();$("#rentSh").hidden=false;
+}
+function calcRent(){const v=parseMoney($("#lc-val").value),f=feeOf($("#lc-pay").value,v);$("#lc-out").innerHTML=`<div><span>Locação</span><b>${brl(v)}</b></div>${f?`<div><span>Taxa ${payName($("#lc-pay").value)}</span><b>− ${brl(f)}</b></div>`:""}<div class="tot"><span>Fica para a Cave</span><b>${brl(v-f)}</b></div>`}
+$("#lc-item").addEventListener("change",()=>{$("#lc-otherw").hidden=$("#lc-item").value!=="__o"});
+moneyField($("#lc-val"),calcRent);$("#lc-pay").addEventListener("change",calcRent);
+$("#lc-cancel").addEventListener("click",()=>{$("#rentSh").hidden=true});
+$("#lc-ok").addEventListener("click",async()=>{
+  const item=$("#lc-item").value==="__o"?$("#lc-other").value.trim():$("#lc-item").value,value=parseMoney($("#lc-val").value),start=$("#lc-start").value,pay=$("#lc-pay").value;
+  if(!item)return toast("Escolha o item alugado.",true);
+  if(!value)return toast("Coloque o valor da locação.",true);
+  if(!start)return toast("Escolha a data de retirada.",true);
+  const r={id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
+  busy("Salvando locação…");
+  try{await saveFin(d=>{d.rentals.push(r)},"Financeiro: nova locação");$("#rentSh").hidden=true;renderFin();toast("Locação lançada.")}
+  catch(x){toast(errMsg(x),true)}finally{busy()}
+});
+
+// ----- Exportar para o contador (CSV que abre no Excel)
+function exportCsv(){
+  const rg=finRange(),c=finCalc(rg),n=v=>r2(Number(v||0)).toFixed(2).replace(".",","),br=s=>s.slice(0,10).split("-").reverse().join("/");
+  const q=v=>{v=String(v??"");return /[;"\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
+  const rows=[["Data","Tipo","Descrição","Categoria","Forma de pagamento","Valor bruto","Taxa","Custo","Repasse a terceiros","Valor da Cave"]];
+  c.sales.forEach(s=>rows.push([br(s.at),"Venda",s.title+(s.owner&&s.owner.name?` (consignado: ${s.owner.name})`:""),MODS[s.cat]||"Marcas",payName(s.pay),n(s.price),n(s.fee),n(s.pct>=100?s.cost:0),n(saleOwner(s)),n(saleNet(s))]));
+  c.rents.forEach(r=>rows.push([br(r.start),"Locação",r.item+(r.client?` · ${r.client}`:""),"Locação",payName(r.pay),n(r.value),n(r.fee),n(0),n(0),n(r.value-r.fee)]));
+  c.fit.forEach(b=>rows.push([br(b.at),"Bike Fit",`${b.name} · ${CATS[b.cat]||""}`,"Bike Fit","",n(b.price),n(0),n(0),n(b.price*(1-CAVE_PCT)),n(b.price*CAVE_PCT)]));
+  c.exps.forEach(e=>rows.push([br(e.date),"Gasto",e.desc||e.cat,e.cat,"",n(e.value),n(0),n(0),n(0),"-"+n(e.value)]));
+  rows.sort((a,b)=>a===rows[0]?-1:b===rows[0]?1:a[0].split("/").reverse().join("").localeCompare(b[0].split("/").reverse().join("")));
+  rows.push([],["","Total","Valor líquido do período","","","","","","",n(c.net)]);
+  const csv="﻿"+rows.map(r=>r.map(q).join(";")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download=`cave-financeiro_${ymd(rg[0])}_a_${ymd(rg[1])}.csv`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
+  toast("Planilha baixada.");
+}
+
+// ----- Configurações: taxas de pagamento
+function renderFees(){$("#fees").innerHTML=PAYS.filter(([k])=>k!=="pix"&&k!=="dinheiro").map(([k,t])=>`<div class="field"><label for="fee-${k}">${t} (%)</label><input id="fee-${k}" inputmode="decimal" value="${pctTxt((FIN.fees||DEF_FEES)[k]??0)}"></div>`).join("")}
+$("#feeForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const f={};for(const [k] of PAYS){const el=$("#fee-"+k);f[k]=el?Math.max(0,Math.min(30,parseFloat(el.value.replace(",","."))||0)):0}
+  busy("Salvando taxas…");
+  try{await saveFin(d=>{d.fees=f},"Financeiro: taxas de pagamento");renderFees();toast("Taxas salvas.")}catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 
 // ---------- Bike Fit (agenda criptografada em data/bikefit.json)
