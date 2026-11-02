@@ -330,9 +330,14 @@ body.on-sell footer{display:none}
 .flag{display:inline-block;font:600 10px/1 var(--mono);padding:4px 6px;border:1px solid currentColor;border-radius:4px;vertical-align:2px;margin-left:4px}
 
 footer{padding-block:48px 24px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
-footer .wrap{display:grid;gap:18px}
-footer .flogo{width:min(320px,70%);height:auto}
-footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoration:none;justify-self:start}
+.foot{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px}
+.foot-brand{display:grid;gap:12px}
+footer .flogo{width:min(200px,55vw);height:auto}
+.foot-links{display:flex;align-items:center;gap:20px}
+.foot-links a{color:var(--muted);text-decoration:none;font-weight:500}
+.foot-links a:hover{color:var(--ink)}
+.foot-links .ig{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink)}
+.foot-links .ig svg{width:20px;height:20px}
 
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:55;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:0 max(8px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(8px,env(safe-area-inset-left,0px))}
 .tabbar ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(4,1fr);max-width:560px;height:var(--tabbar)}
@@ -584,12 +589,16 @@ footer .admin-link{font:500 11px/1 var(--mono);color:var(--muted);text-decoratio
 </main>
 
 <footer>
-  <div class="wrap">
-    <img class="flogo" src="assets/logo.png" alt="Cave Floripa" width="320" height="104" loading="lazy">
-    <p>Equipamento de endurance · Florianópolis, SC</p>
-    <p>Natação · Bike · Corrida · Garmin · Wahoo · CeramicSpeed</p>
-    <a class="btn wa" id="footWa" target="_blank" rel="noopener" style="justify-self:start">Falar com a Cave</a>
-    <a class="admin-link" href="admin/">Área do administrador</a>
+  <div class="wrap foot">
+    <div class="foot-brand">
+      <img class="flogo" src="assets/logo.png" alt="Cave Floripa" width="240" height="78" loading="lazy">
+      <p>© <span id="year">2026</span> Cave. Floripa. Todos os direitos reservados.</p>
+    </div>
+    <div class="foot-links">
+      <a class="ig" id="igLink" href="https://www.instagram.com/cavefloripa/" target="_blank" rel="noopener" aria-label="Instagram da Cave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      <a href="termos.html">Termos</a>
+      <a href="privacidade.html">Privacidade</a>
+    </div>
   </div>
 </footer>
 
@@ -975,7 +984,8 @@ function renderConfig(){
   const groups=[...new Set(CFG.rentals.map(r=>r.group||"Outros"))];
   $("#rent").innerHTML=groups.map(g=>`<div class="rent-group"><h3>${esc((CFG.rentals.find(r=>(r.group||"Outros")===g)||{}).title||"Aluga-se "+g.toLowerCase())}</h3>${CFG.rentals.filter(r=>(r.group||"Outros")===g).map(rentItem).join("")}</div>`).join("");
   const waHome=wa(CFG.whatsapp.loja,"Olá, Cave! Vim pelo site.");
-  $("#footWa").href=$("#topWa").href=$("#heroWa").href=waHome;
+  $("#topWa").href=$("#heroWa").href=waHome;
+  $("#year").textContent=new Date().getFullYear();
 }
 
 // ---------- Tema claro / escuro
