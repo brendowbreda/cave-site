@@ -1,6 +1,28 @@
 {
  "products": [
   {
+   "id": "p-mvzvltje",
+   "cat": "garmin",
+   "group": "garmin",
+   "sub": "Relógios",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 4400,
+   "title": "Garmin Forerunner 965",
+   "subtitle": "47 mm - Black (PRETO)",
+   "desc": "Tecnologia de elite. Precisão em cada movimento. Performance sem limites.\n\nO Garmin Forerunner® 965 combina tecnologia avançada, leveza e sofisticação para atletas que buscam superar seus limites e alcançar resultados extraordinários.\n\nCom tela AMOLED de 1,4”, aro em titânio, GPS multibanda e monitoramento cardíaco de pulso, oferece mapas integrados, métricas avançadas de desempenho, análise de recuperação e prontidão para treinar.\n\nDesenvolvido para corrida, ciclismo, natação e triathlon, conta com música integrada, Garmin Coach, Garmin Pay e até 23 dias de bateria no modo smartwatch, proporcionando autonomia para acompanhar seus maiores desafios.\n\nMais precisão. Mais resistência. Sua próxima conquista começa aqui.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzvltje-mvzvnxu61.jpg",
+    "img/products/p-mvzvltje-mvzvnze42.jpg",
+    "img/products/p-mvzvltje-mvzvo0y63.jpg",
+    "img/products/p-mvzvltje-mvzvo29k4.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-02T23:16:11.026Z",
+   "createdAt": "2026-11-02T23:16:11.026Z"
+  },
+  {
    "id": "p-mvzvgczg",
    "cat": "garmin",
    "group": "garmin",
