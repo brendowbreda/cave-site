@@ -439,6 +439,7 @@ footer .flogo{width:min(200px,55vw);height:auto}
 @media (min-width:720px){
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 18px}
   .sell-flow{grid-template-columns:repeat(2,1fr)}
+  .sell-flow div:last-child:nth-child(odd){grid-column:1/-1}
   .process{grid-template-columns:repeat(4,1fr)}
   .sell-cols{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start}
   .fit-grid{grid-template-columns:1fr 1fr;grid-template-areas:"head who" "prices who";column-gap:64px;align-items:start}
@@ -518,14 +519,15 @@ footer .flogo{width:min(200px,55vw);height:auto}
       <div>
         <a class="back" href="#inicio">← Voltar</a>
         <div class="sec-head">
-          <h2><span style="display:block">Não está usando?</span><em>A gente vende.</em></h2>
-          <p>Você entrega o equipamento e nós cuidamos de todo o resto.</p>
+          <h2>Quero vender</h2>
+          <p>Você decide vender. Nós cuidamos de todo o resto.</p>
         </div>
         <div class="sell-flow">
-          <div><span class="k">01</span><b>Avaliação</b><span class="d">Envie fotos e informações do seu equipamento. Nossa equipe faz uma avaliação especializada.</span></div>
-          <div><span class="k">02</span><b>Acordo</b><span class="d">Definimos juntos o valor de venda, a comissão e as condições, com total transparência.</span></div>
-          <div><span class="k">03</span><b>Divulgação</b><span class="d">Cuidamos das fotos, do anúncio e da divulgação para alcançar os compradores certos.</span></div>
-          <div><span class="k">04</span><b>Repasse</b><span class="d">Venda concluída, repasse em até 7 dias, conforme as condições acordadas.</span></div>
+          <div><span class="k">01</span><b>Fale com a equipe</b><span class="d">Envie fotos e informações do seu equipamento. Nossa equipe faz uma avaliação especializada.</span></div>
+          <div><span class="k">02</span><b>Entrega ou retirada</b><span class="d">Traga seu equipamento até a Cave.&nbsp;Floripa ou agende a retirada na sua casa, sob consulta.</span></div>
+          <div><span class="k">03</span><b>Avaliação e preparação</b><span class="d">Revisamos o equipamento e definimos juntos o valor de venda, a comissão e as condições, com total transparência.</span></div>
+          <div><span class="k">04</span><b>Divulgação e venda</b><span class="d">Produzimos as fotos, anunciamos para alcançar os compradores certos e atendemos todos os interessados.</span></div>
+          <div><span class="k">05</span><b>Venda concluída</b><span class="d">Repasse em até 7 dias, conforme as condições acordadas.</span></div>
         </div>
       </div>
       <form class="form" id="sellForm" novalidate>
