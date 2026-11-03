@@ -1,6 +1,33 @@
 {
  "products": [
   {
+   "id": "p-mw01jxy3",
+   "cat": "bike",
+   "group": "bikes",
+   "sub": "Road (estrada)",
+   "cond": "usado",
+   "status": "disponivel",
+   "price": 36000,
+   "title": "LOOK 795 Blade RS Carbon - DISC",
+   "subtitle": "56",
+   "desc": "Aerodinâmica de elite. Engenharia de precisão. Cada segundo importa.\n\nA Cervélo P-Series 105 Disc foi desenvolvida para triatletas que buscam máxima eficiência aerodinâmica, velocidade e desempenho em provas de média e longa distância.\n\nCom quadro de carbono, geometria específica para triathlon e garfo Cervélo All-Carbon, oferece uma plataforma rígida, eficiente e projetada para reduzir a resistência ao vento, favorecendo uma posição aerodinâmica consistente durante o pedal.\n\nEquipada com transmissão Shimano 105 R7000 de 11 velocidades, cockpit aerodinâmico Zipp Vuka Alumina e freios a disco hidráulicos, combina precisão nas trocas de marcha, controle nas frenagens e ergonomia para enfrentar os desafios do ciclismo de alto rendimento.\n\nO conjunto é complementado por rodas HEAD de carbono com perfil de 50 mm, canote Cervélo SP23 Carbon Tri Post e selim específico para triathlon, proporcionando uma configuração voltada à velocidade e à eficiência.\n\nEspecificações técnicas\n\nModelo: Cervélo P-Series 105 Disc\n\nModalidade: Triathlon e contrarrelógio (TT)\n\nQuadro: Cervélo P-Series em carbono\n\nGarfo: Cervélo All-Carbon, Tapered P Fork Disc\n\nCaixa de direção: FSA IS2, 1-1/8” x 1-3/8”\n\nEixos: Cervélo Indexed/Aero Thru-Axles, 12x100 mm dianteiro e 12x142 mm traseiro\n\nPedivela: Shimano FC-RS510, 52/36 dentes\n\nMovimento central: JY-BB 24\n\nCorrente: Shimano CN-HG601, 11 velocidades\n\nCâmbio dianteiro: Shimano 105 R7000\n\nCâmbio traseiro: Shimano 105 R7000\n\nCassete: Shimano 105 R7000, 11-30 dentes\n\nTrocadores: Microshift Alloy BS-A11, 11 velocidades\n\nAerobar: Zipp Vuka Alumina Basebar e extensões\n\nMesa: Cervélo Alloy\n\nSistema de freios: Hidráulico Riderever\n\nManetes de freio: Riderever hidráulicos\n\nDiscos de freio: TRP TR160-25, 160 mm\n\nRodas: HEAD Carbono 50 mm OEM\n\nPneus: Goodyear Eagle Tubeless 700x25\n\nSelim: Cervélo Tri Saddle\n\nCanote: Cervélo SP23 Carbon Tri Post\n\nMenos resistência. Mais velocidade. Sua próxima conquista começa aqui.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw01jxy3-mw01oarh1.jpg",
+    "img/products/p-mw01jxy3-mw01oc8n2.jpg",
+    "img/products/p-mw01jxy3-mw01odes3.jpg",
+    "img/products/p-mw01jxy3-mw01oeob4.jpg",
+    "img/products/p-mw01jxy3-mw01ofqn5.jpg",
+    "img/products/p-mw01jxy3-mw01ogu06.jpg",
+    "img/products/p-mw01jxy3-mw01ohw17.jpg",
+    "img/products/p-mw01jxy3-mw01ojau8.jpg",
+    "img/products/p-mw01jxy3-mw01okis9.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-03T02:04:32.385Z",
+   "createdAt": "2026-11-03T02:04:32.385Z"
+  },
+  {
    "id": "p-mvzxqzuf",
    "cat": "bike",
    "group": "componentes",
