@@ -409,6 +409,8 @@ footer .flogo{width:min(200px,55vw);height:auto}
 .offer-sum .ph svg{width:70%}
 .offer-sum b{display:block;font-size:15px;line-height:1.2}
 .offer-sum span{font:500 13px/1 var(--mono);color:var(--muted)}
+.note.hl{background:var(--buy-soft);border-color:var(--buy)}
+.note.hl b{color:var(--ink)}
 .big-input{display:flex;align-items:baseline;gap:6px;border-bottom:2px solid var(--ink);padding-bottom:6px}
 .big-input span{font:600 24px/1 var(--mono);color:var(--muted)}
 .big-input input{border:0;outline:0;background:transparent;font:600 44px/1.1 var(--mono);letter-spacing:0;width:1ch;min-width:0;padding:0}
@@ -924,8 +926,12 @@ function offerFlow(step){
   if(step===2){
     const c=offer.card;
     setSheet("Fazer oferta",`${stepper(2)}${summary(p,offer.value)}
-      <div class="note" style="margin-bottom:16px">${SHIELD}<span><b>Pré-autorização de ${brl(offer.value)}.</b> O valor fica reservado no limite do cartão por até 24h. Se a oferta for recusada ou expirar, a reserva é cancelada sozinha.</span></div>
+      <div class="note hl" style="margin-bottom:16px">${SHIELD}<span><b>Pré-autorização de ${brl(offer.value)}.</b><br>O valor fica reservado no limite do cartão por até 24h.<br>Se a oferta for recusada ou expirar, a reserva é cancelada sozinha.</span></div>
       <div class="form">
+        <p class="lbl" style="margin:0">Seus dados</p>
+        <div class="field"><label for="oname">Nome completo</label><input id="oname" autocomplete="name" value="${esc(offer.contact?.name||"")}"></div>
+        <div class="field"><label for="ophone">WhatsApp</label><input id="ophone" inputmode="tel" autocomplete="tel" placeholder="(48) 99999-9999" value="${esc(offer.contact?.phone||"")}"></div>
+        <p class="lbl" style="margin:6px 0 0">Cartão</p>
         <div class="field"><label for="cn">Número do cartão</label><input id="cn" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" value="${c.cn||""}"></div>
         <div class="field"><label for="cname">Nome impresso no cartão</label><input id="cname" autocomplete="cc-name" value="${esc(c.cname||"")}"></div>
         <div class="row2">
@@ -937,7 +943,11 @@ function offerFlow(step){
       </div>`,
       `<button class="btn" id="back">Voltar</button><button class="btn solid" id="next" disabled>Revisar oferta</button>`);
     const fmt={cn:v=>v.replace(/\D/g,"").slice(0,16).replace(/(\d{4})(?=\d)/g,"$1 "),cexp:v=>v.replace(/\D/g,"").slice(0,4).replace(/(\d{2})(?=\d)/,"$1/"),ccv:v=>v.replace(/\D/g,"").slice(0,4),cpf:v=>{const d=v.replace(/\D/g,"").slice(0,11);return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2")},cname:v=>v};
-    const check=()=>{const d=offer.card;$("#next").disabled=!(d.cn?.replace(/\D/g,"").length>=15&&d.cname?.trim().length>2&&/^\d{2}\/\d{2}$/.test(d.cexp||"")&&(d.ccv||"").length>=3&&(d.cpf||"").replace(/\D/g,"").length===11)};
+    offer.contact=offer.contact||{};
+    const ph=v=>{const d=v.replace(/\D/g,"").slice(0,11);return d.length>10?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length>6?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d.length>2?`(${d.slice(0,2)}) ${d.slice(2)}`:d};
+    $("#oname").addEventListener("input",e=>{offer.contact.name=e.target.value;check()});
+    $("#ophone").addEventListener("input",e=>{e.target.value=ph(e.target.value);offer.contact.phone=e.target.value;check()});
+    const check=()=>{const d=offer.card;$("#next").disabled=!((offer.contact.name||"").trim().split(/\s+/).length>=2&&(offer.contact.phone||"").replace(/\D/g,"").length>=10&&d.cn?.replace(/\D/g,"").length>=15&&d.cname?.trim().length>2&&/^\d{2}\/\d{2}$/.test(d.cexp||"")&&(d.ccv||"").length>=3&&(d.cpf||"").replace(/\D/g,"").length===11)};
     Object.keys(fmt).forEach(k=>{const el=$("#"+k);el.addEventListener("input",()=>{el.value=fmt[k](el.value);offer.card[k]=el.value;check()})});
     check();
     $("#back").onclick=()=>offerFlow(1);
@@ -950,25 +960,25 @@ function offerFlow(step){
       <div class="kv">
         <div><span>Preço anunciado</span><b class="mono">${brl(p.price)}</b></div>
         <div><span>Sua oferta</span><b class="mono">${brl(offer.value)} <span style="color:var(--muted);font-weight:400">(−${disc}%)</span></b></div>
-        <div><span>Cartão</span><b class="mono">•••• ${last}</b></div>
-        <div><span>Prazo de resposta</span><b>24 horas</b></div>
       </div>
       <div class="timeline" style="margin:22px 0">
-        <div class="tl now"><b>Agora</b><span>${brl(offer.value)} reservado no cartão. Não é cobrança.</span></div>
-        <div class="tl"><b>Se o vendedor aceitar</b><span>A cobrança é confirmada e a compra está feita.</span></div>
-        <div class="tl"><b>Se recusar ou não responder em 24h</b><span>A reserva é cancelada e o limite volta para você.</span></div>
-      </div>
-      <label class="check"><input type="checkbox" id="agree"><span>Entendo que, se o vendedor aceitar, a compra é concluída automaticamente por ${brl(offer.value)}.</span></label>`,
-      `<button class="btn" id="back">Voltar</button><button class="btn buy" id="send" disabled>Enviar oferta</button>`);
-    $("#agree").onchange=e=>$("#send").disabled=!e.target.checked;
+        <div class="tl now"><b>Agora</b><span><strong style="color:var(--ink)">${brl(offer.value)}</strong> reservado no cartão.<br><strong style="color:var(--ink)">Não é cobrança.</strong></span></div>
+        <div class="tl"><b>Se o vendedor aceitar a oferta</b><span>A cobrança é confirmada e a compra está feita.</span></div>
+        <div class="tl"><b>Se recusar a oferta ou não responder em 24h</b><span>A reserva é cancelada e o limite volta para você.</span></div>
+      </div>`,
+      `<button class="btn" id="back">Voltar</button><button class="btn buy" id="send">Enviar oferta</button>`);
     $("#back").onclick=()=>offerFlow(2);
-    $("#send").onclick=()=>offerFlow(4);
+    $("#send").onclick=()=>{
+      // a oferta chega na loja pelo WhatsApp
+      window.open(wa(CFG.whatsapp.loja,`Nova oferta pelo site\nProduto: ${p.title}${p.subtitle?` (${p.subtitle})`:""}\nPreço anunciado: ${brl(p.price)}\nOferta: ${brl(offer.value)} (−${disc}%)\nNome: ${offer.contact.name}\nWhatsApp: ${offer.contact.phone}`),"_blank","noopener");
+      offerFlow(4);
+    };
   }
   if(step===4){
     const t=new Date(),exp=new Date(t.getTime()+864e5);
     const hh=d=>d.toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
     setSheet("Oferta enviada",`${stepper(4)}
-      <div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta enviada</h3><p>${brl(offer.value)} por ${esc(p.title)}. Avisamos você assim que o vendedor responder.</p></div>
+      <div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta enviada</h3><p>Valor ofertado <b style="color:var(--ink)">${brl(offer.value)}</b><br>${esc(p.title)}<br>Avisamos você pelo WhatsApp assim que o vendedor responder.</p></div>
       <div class="timeline" style="margin:18px 0 22px">
         <div class="tl done"><b>Oferta enviada</b><span>${hh(t)}</span></div>
         <div class="tl done"><b>Valor reservado no cartão</b><span>Pré-autorização, sem cobrança</span></div>
@@ -978,8 +988,8 @@ function offerFlow(step){
       <div class="demo"><span class="demo-flag">Teste: simular a resposta do vendedor</span><div class="row"><button id="simY">Aceita</button><button id="simN">Recusa</button></div></div>`,
       `<button class="btn block" id="done">Voltar para a loja</button>`);
     $("#done").onclick=closeSheet;
-    $("#simY").onclick=()=>setSheet("Oferta aceita",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Compra feita</h3><p>O vendedor aceitou ${brl(offer.value)}. A cobrança foi confirmada no cartão final ${(offer.card.cn||"").replace(/\D/g,"").slice(-4)}. Vamos combinar a entrega pelo WhatsApp.</p></div>`,`<a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Minha oferta de ${brl(offer.value)} pelo ${p.title} foi aceita. Vamos combinar a entrega?`)}">Combinar entrega</a>`);
-    $("#simN").onclick=()=>{setSheet("Oferta recusada",`<div class="big-ok"><div class="circ r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div><h3>Oferta recusada</h3><p>Nada foi cobrado. A reserva de ${brl(offer.value)} foi cancelada e o limite volta para o seu cartão.</p></div>`,`<button class="btn" id="again">Nova oferta</button><button class="btn buy" id="buyNow">Comprar por ${brl(p.price)}</button>`);$("#again").onclick=()=>offerFlow(1);$("#buyNow").onclick=buyFlow};
+    $("#simY").onclick=()=>setSheet("Oferta aceita",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta aceita</h3><p>O vendedor aceitou ${brl(offer.value)}.<br>Vamos chamar você no WhatsApp ${esc(offer.contact?.phone||"")} para confirmar o pagamento e combinar a entrega.</p></div>`,`<a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Minha oferta de ${brl(offer.value)} pelo ${p.title} foi aceita. Vamos combinar a entrega?`)}">Combinar entrega</a>`);
+    $("#simN").onclick=()=>{setSheet("Oferta recusada",`<div class="big-ok"><div class="circ r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div><h3>Oferta recusada</h3><p>Nada foi cobrado e a reserva de ${brl(offer.value)} foi cancelada.<br>Vamos chamar você no WhatsApp com o valor do produto, caso ainda tenha interesse.</p></div>`,`<button class="btn" id="again">Nova oferta</button><button class="btn buy" id="buyNow">Comprar por ${brl(p.price)}</button>`);$("#again").onclick=()=>offerFlow(1);$("#buyNow").onclick=buyFlow};
   }
 }
 
