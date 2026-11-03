@@ -1592,8 +1592,7 @@ function renderStats(){
   const tot=done.reduce((s,b)=>s+Number(b.price||0),0),cave=r2(done.reduce((s,b)=>s+fitCaveOf(b),0)),fp=splitPct("fit");
   const lbl=CAL.p===1?"neste mês":`nos últimos ${CAL.p} meses`;
   $("#fitStats").innerHTML=`<div class="fs-grid fs3">
-    <div class="st wide"><span class="k">Valor total recebido ${lbl} <button type="button" class="qm" id="fitHelp" aria-expanded="false" aria-label="O que é o valor total?">?</button></span><b class="big-n money">${brl(tot)}</b>
-      <p class="qtip" id="fitTip" hidden>Valor total recebido a título de bike fit no período selecionado.</p>
+    <div class="st wide"><span class="k">Valor total recebido ${lbl}</span><b class="big-n money">${brl(tot)}</b>
       <div class="kv2"><span>Parte: Guilherme Garcia Cunha (${100-fp}%)</span><b>${brl(tot-cave)}</b></div>
       <div class="kv2"><span>Parte: Cave.&nbsp;Floripa (${fp}%)</span><b>${brl(cave)}</b></div></div>
     <div class="st"><span class="k">Bike fits feitos ${lbl}</span><b class="big-n">${n}</b>
