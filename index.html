@@ -411,8 +411,10 @@ footer .flogo{width:min(200px,55vw);height:auto}
 .offer-sum span{font:500 13px/1 var(--mono);color:var(--muted)}
 .big-input{display:flex;align-items:baseline;gap:6px;border-bottom:2px solid var(--ink);padding-bottom:6px}
 .big-input span{font:600 24px/1 var(--mono);color:var(--muted)}
-.big-input input{border:0;outline:0;background:transparent;font:600 44px/1.1 var(--mono);letter-spacing:-.04em;width:100%;min-width:0}
-.quick{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.big-input input{border:0;outline:0;background:transparent;font:600 44px/1.1 var(--mono);letter-spacing:0;width:1ch;min-width:0;padding:0}
+.big-input span:last-child{color:var(--ink);font:600 44px/1.1 var(--mono);margin-left:-6px}
+.quick-t{text-align:center;font-size:13px;font-weight:600;color:var(--muted);margin:16px 0 0}
+.quick{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:center}
 .quick button{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font:500 13px/1 var(--mono)}
 .meter{margin-top:18px;display:grid;gap:8px}
 .meter-bar{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--bad) 0 16.7%,var(--warn) 16.7% 50%,var(--info) 50% 76.7%,var(--buy) 76.7%)}
@@ -880,13 +882,15 @@ function buyFlow(){
 // ---------- Fazer oferta
 const offer={value:0,card:{}};
 function stepper(n){return `<div class="stepper" aria-label="Etapa ${n} de 4">${[1,2,3,4].map(i=>`<i class="${i<=n?"on":""}"></i>`).join("")}</div>`}
+// o campo cresce com o número, para o ",00" ficar colado no valor
+function fitInput(inp){const c=fitInput.c||(fitInput.c=document.createElement("canvas").getContext("2d"));c.font=getComputedStyle(inp).font;inp.style.width=Math.ceil(c.measureText(inp.value||inp.placeholder).width+1)+"px"}
 function judge(v,price){
   const r=v/price,floor=CFG.offerFloor||.75;
   if(!v) return {k:"",t:"",d:"",ok:false,r:0};
   if(v>=price) return {k:"v-good",t:"Esse é o preço cheio",d:"Use o botão Comprar e feche na hora.",ok:false,r};
-  if(r<floor) return {k:"v-bad",t:"Abaixo do mínimo",d:`Ofertas abaixo de ${brl(Math.ceil(price*floor))} não são enviadas. Seu cartão não é usado.`,ok:false,r};
-  if(r<0.85) return {k:"v-warn",t:"Chance baixa",d:"O vendedor pode recusar. Se recusar, nada é cobrado.",ok:true,r};
-  if(r<0.93) return {k:"v-ok",t:"Chance razoável",d:"Ofertas nessa faixa costumam abrir negociação.",ok:true,r};
+  if(r<floor) return {k:"v-bad",t:"Pouca chance",d:"Ofertas nessa faixa raramente são aceitas. Mesmo assim, vamos passar a sua proposta para o vendedor.",ok:true,r};
+  if(r<0.85) return {k:"v-warn",t:"Chance moderada",d:"O vendedor pode aceitar ou responder com uma contraproposta. Vamos enviar a sua oferta para avaliação.",ok:true,r};
+  if(r<0.93) return {k:"v-ok",t:"Chance razoável",d:"Ofertas nessa faixa costumam abrir negociação. Vamos passar para o vendedor.",ok:true,r};
   return {k:"v-good",t:"Boa chance",d:"Ofertas perto do preço costumam ser aceitas rápido.",ok:true,r};
 }
 function offerFlow(step){
@@ -895,15 +899,16 @@ function offerFlow(step){
     setSheet("Fazer oferta",`${stepper(1)}${summary(p)}
       <label class="lbl" for="ov">Sua oferta</label>
       <div class="big-input"><span>R$</span><input id="ov" inputmode="numeric" autocomplete="off" placeholder="0" value="${offer.value&&offer.pid===p.id?offer.value.toLocaleString("pt-BR"):""}"><span>,00</span></div>
-      <div class="quick">${[5,10,15].map(d=>`<button type="button" data-d="${d}">−${d}%</button>`).join("")}</div>
+      <p class="quick-t">Oferta rápida</p>
+      <div class="quick">${[5,10,15,20].map(d=>`<button type="button" data-d="${d}">−${d}%</button>`).join("")}</div>
       <div class="meter"><div class="meter-bar"><i id="mk" style="left:0%"></i></div><div class="meter-scale"><span>${brl(Math.ceil(p.price*.7))}</span><span>${brl(p.price)}</span></div></div>
-      <div id="verdict" style="margin-top:14px"></div>
-      <div class="note" style="margin-top:14px">${SHIELD}<span><b>Nada é cobrado agora.</b> Na próxima etapa o valor fica só reservado no seu cartão até o vendedor responder.</span></div>`,
+      <div id="verdict" style="margin-top:14px"></div>`,
       `<button class="btn" id="back">Voltar</button><button class="btn solid" id="next" disabled>Continuar</button>`);
     const inp=$("#ov");
     const upd=()=>{
       const v=parseInt(inp.value.replace(/\D/g,""))||0;
       inp.value=v?v.toLocaleString("pt-BR"):"";
+      fitInput(inp);
       offer.value=v;offer.pid=p.id;
       const j=judge(v,p.price);
       $("#verdict").innerHTML=j.t?`<div class="verdict ${j.k}"><b>${j.t}</b>${j.d}</div>`:"";
