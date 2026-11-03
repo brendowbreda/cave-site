@@ -331,5 +331,9 @@
   "cnpj": "",
   "endereco": "Rua Evaldo Schaeffer, nº 293 — Jardim Atlântico — Florianópolis/SC — CEP: 88095-350",
   "email": ""
+ },
+ "supabase": {
+  "url": "https://pdvwvvopprlpxlilcytb.supabase.co",
+  "anon": "sb_publishable_LY0Z2A4sHp18eXvj_WAPmA_x4VpP5jw"
  }
 }
