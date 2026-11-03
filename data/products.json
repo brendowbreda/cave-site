@@ -1,6 +1,41 @@
 {
  "products": [
   {
+   "id": "p-mw01pwi7",
+   "cat": "bike",
+   "group": "bikes",
+   "sub": "Triathlon (TT)",
+   "cond": "usado",
+   "status": "disponivel",
+   "price": 56000,
+   "title": "Bicicleta de Triathlon S-Works Shiv Disc",
+   "subtitle": "54 (M) - 2021",
+   "desc": "A Specialized S-Works Shiv Disc 2021 representa o mais alto nível de tecnologia e inovação para o triathlon, desenvolvida para atletas que buscam velocidade, eficiência e desempenho em provas de média e longa distância.\n\nCom quadro e garfo em carbono S-Works FACT 11r, apresenta uma construção aerodinâmica projetada para reduzir a resistência ao vento, otimizar a transferência de potência e proporcionar uma posição eficiente durante o pedal.\n\nEquipada com transmissão eletrônica Shimano Dura-Ace Di2 de 11 velocidades, oferece trocas de marcha rápidas, precisas e consistentes, garantindo controle e eficiência durante treinos e competições.\n\nSeu cockpit aerodinâmico Shiv Aero com componentes 51 SpeedShop e originais Specialized proporciona possibilidades de ajuste para uma posição de pilotagem personalizada, favorecendo conforto e desempenho em longas distâncias.\n\nUm dos grandes diferenciais da Shiv é a integração dos sistemas de hidratação Fuelselage e armazenamento Fuelcell, desenvolvidos para facilitar o acesso à hidratação e à nutrição sem comprometer a proposta aerodinâmica da bicicleta.\n\nO conjunto é complementado por freios a disco hidráulicos, rodas DT Swiss R470 Tubeless Ready e pneus Vittoria Corsa Pro, oferecendo controle, aderência e confiabilidade para enfrentar os desafios do triathlon.\n\nEspecificações técnicas\n\nModelo: Specialized S-Works Shiv Disc\n\nAno: 2021\n\nModalidade: Triathlon e contrarrelógio (TT)\n\nTamanho: S\n\nReferência de altura: 1,62 m a 1,76 m, conforme informado\n\nCor: Verde/Azul Espectral\n\nQuadro: S-Works FACT 11r Carbon\n\nGarfo: S-Works FACT 11r Carbon\n\nTransmissão: Shimano Dura-Ace Di2 eletrônico\n\nVelocidades: 11\n\nCockpit: Shiv Aero / 51 SpeedShop + componentes originais\n\nHidratação: Sistema Fuelselage integrado\n\nArmazenamento: Fuelcell integrado ao quadro\n\nSelim: Bontrager Hilo\n\nFreios: Disco hidráulico\n\nRodas: DT Swiss R470\n\nTecnologia das rodas: Tubeless Ready\n\nPneus: Vittoria Corsa Pro\n\nMenos resistência. Mais velocidade. Uma superbike construída para superar limites.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw01pwi7-mw01srxu1.jpg",
+    "img/products/p-mw01pwi7-mw01swng2.jpg",
+    "img/products/p-mw01pwi7-mw01sxu13.jpg",
+    "img/products/p-mw01pwi7-mw01sz3j4.jpg",
+    "img/products/p-mw01pwi7-mw01t0b75.jpg",
+    "img/products/p-mw01pwi7-mw01t1js6.jpg"
+   ],
+   "also": [
+    {
+     "cat": "specialized",
+     "group": "",
+     "sub": "Triathlon (TT)"
+    }
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 11000
+   },
+   "demo": false,
+   "updatedAt": "2026-11-03T02:08:00.992Z",
+   "createdAt": "2026-11-03T02:08:00.992Z"
+  },
+  {
    "id": "p-mw01jxy3",
    "cat": "bike",
    "group": "bikes",
