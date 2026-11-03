@@ -292,7 +292,8 @@ p{margin:0}
 /* Editor */
 .editor{position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 .ed-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line)}
-.ed-head b{font-size:16px}
+.ed-head b{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.ed-head{padding-left:max(16px,calc((100% - 860px)/2 + 16px))!important;padding-right:max(16px,calc((100% - 860px)/2 + 16px))!important;min-height:64px}
 .ed-body{flex:1;overflow-y:auto;overscroll-behavior:contain}
 .ed-body .wrap{padding-block:18px 28px}
 .ed-foot{display:flex;gap:10px;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--line);background:var(--surface)}
