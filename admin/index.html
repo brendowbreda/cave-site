@@ -205,6 +205,7 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .kv2 b{font-size:22px}
 @media (min-width:640px){.fs3{grid-template-columns:2fr 1fr}.fs3 .wide{grid-column:1/-1}}
 .money{color:var(--buy)}
+.st .k.kt{font-size:16px;font-weight:700;color:var(--ink)}
 .st.sm .kv2 b{font-size:20px}
 .male{color:#3B82F6}.female{color:#EC4899}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
@@ -1592,10 +1593,10 @@ function renderStats(){
   const tot=done.reduce((s,b)=>s+Number(b.price||0),0),cave=r2(done.reduce((s,b)=>s+fitCaveOf(b),0)),fp=splitPct("fit");
   const lbl=CAL.p===1?"neste mês":`nos últimos ${CAL.p} meses`;
   $("#fitStats").innerHTML=`<div class="fs-grid fs3">
-    <div class="st wide"><span class="k">Valor total recebido ${lbl}</span><b class="big-n money">${brl(tot)}</b>
+    <div class="st wide"><span class="k kt">Valor total recebido ${lbl}</span><b class="big-n money">${brl(tot)}</b>
       <div class="kv2"><span>Parte: Guilherme Garcia Cunha (${100-fp}%)</span><b>${brl(tot-cave)}</b></div>
       <div class="kv2"><span>Parte: Cave.&nbsp;Floripa (${fp}%)</span><b>${brl(cave)}</b></div></div>
-    <div class="st"><span class="k">Bike fits feitos ${lbl}</span><b class="big-n">${n}</b>
+    <div class="st"><span class="k kt">Bike fits feitos ${lbl}</span><b class="big-n">${n}</b>
       <div class="kv2"><span>Estrada & Mountain Bike</span><b>${road}</b></div>
       <div class="kv2"><span>Triathlon / TT</span><b>${tri}</b></div></div>
     <div class="st sm"><div class="kv2"><span>Masculino</span><b class="male">${pct(m)}</b></div><div class="kv2"><span>Feminino</span><b class="female">${pct(f)}</b></div></div>
