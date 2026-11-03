@@ -105,7 +105,7 @@ body[data-home="fin"] .dash>.prods,body[data-home="prods"] .dash>.fin{display:no
 .fc.net .v{font-size:34px;color:var(--buy)}
 .fc.net.neg .v{color:var(--bad)}
 .fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media (max-width:420px){.fc-grid{grid-template-columns:1fr}}
+@media (max-width:420px){.fc-grid .fc .v{font-size:22px}.fc-grid .fc{padding:14px}}
 .lines{display:grid;gap:4px;margin-top:4px;padding-top:8px;border-top:1px solid var(--line)}
 .lines div{display:flex;justify-content:space-between;gap:10px;font-size:13px}
 .lines .r{color:var(--bad)}
@@ -114,7 +114,10 @@ body[data-home="fin"] .dash>.prods,body[data-home="prods"] .dash>.fin{display:no
 .mods span{font-size:12px;color:var(--muted)}
 .mods b{font-size:18px}
 .fc.bad{border-color:color-mix(in srgb,var(--bad) 45%,var(--line));background:var(--bad-soft)}
-.fc.bad .v,.fc.bad .k{color:var(--bad)}
+.fc.bad .k{color:var(--bad)}
+.fc.bad .v{color:#8E1B12}
+:root:not([data-theme="light"]) .fc.bad .v{color:#FF6B5E}
+.fc.bad .more{justify-self:start;border-color:var(--bad);color:var(--bad)}
 .fc.bad .lines{border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
 .fc-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .exps{display:grid;gap:4px;margin-top:6px}
@@ -1376,31 +1379,16 @@ function renderFin(){
         </div></div>`).join("")}</div>`:""}
     </div>
     <div class="fc-grid">
-      <div class="fc"><span class="k">Caixa (parte da Cave nas vendas)</span><b class="v">${brl(c.vendasCave)}</b><span class="s">de ${brl(c.bruto)} vendidos${c.custo?` · custo ${brl(c.custo)}`:""}</span></div>
       <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${plural(c.fit.length,"bike fit","bike fits")}</b><span class="s">Total cobrado pelo Guilherme: <b>${brl(c.fitTot)}</b></span><span class="s">Aluguel do espaço (${splitPct("fit")}%): <b>${brl(c.fitCave)}</b></span>
         ${fitDue.n?`<div class="rp"><span class="t"><b>A receber do Guilherme</b><span>${plural(fitDue.n,"bike fit","bike fits")} · ${splitPct("fit")}% de aluguel</span></span><span class="m">${brl(fitDue.v)}</span><button class="btn small" type="button" data-pay="fit">Recebido</button></div>`:""}</div>
-    </div>
-    <div class="fc">
-      <div class="fc-h"><span class="k">Locação ${lbl}</span><button class="btn small" id="rentNew" type="button">+ Lançar locação</button></div>
-      <b class="v">${brl(c.rentCave)}</b><span class="s">parte da Cave de ${brl(c.rentTot)} · ${plural(c.rents.length,"locação","locações")}</span>
-      ${c.rents.length?`<div class="exps">${c.rents.slice().sort((a,b)=>b.start.localeCompare(a.start)).slice(0,6).map(r=>`<div class="exp" data-lr="${esc(r.id)}" style="cursor:pointer"><span class="d">${fdate(r.start)}</span><span class="t">${esc(r.item)}${r.client?` · ${esc(r.client)}`:""}</span><span>${brl(r.value)}</span><button type="button" data-lrm="${esc(r.id)}" aria-label="Apagar locação">✕</button></div>`).join("")}</div>`:""}
-    </div>
-    <div class="fc">
-      <span class="k">Produtos vendidos ${lbl}</span><b class="v">${c.sales.length}</b>
-      <div class="mods">${["natacao","bike","corrida"].map(m=>`<div><span>${MODS[m]}</span><b>${byMod[m]}</b></div>`).join("")}${byMod.outros?`<div><span>Marcas</span><b>${byMod.outros}</b></div>`:""}</div>
-    </div>
-    <div class="fc">
-      <span class="k">Produtos cadastrados</span>
-      <div class="chips" id="finMod">${[["all","Todos"],["natacao","Natação"],["bike","Bicicleta"],["corrida","Corrida"]].map(([k,t])=>`<button class="chip" data-m="${k}" aria-pressed="${FS.mod===k}">${t}</button>`).join("")}</div>
-      <b class="v">${cad.length}</b><span class="s">${cad.length-cadSold} em estoque · ${plural(cadSold,"vendido","vendidos")}</span>
+      <div class="fc"><span class="k">Locação ${lbl}</span><b class="v">${brl(c.rentCave)}</b><span class="s">parte da Cave de ${brl(c.rentTot)} · ${plural(c.rents.length,"locação","locações")}</span></div>
     </div>
     <div class="fc bad">
       <div class="fc-h"><span class="k">Gastos ${lbl}</span><button class="btn small danger" id="expNew" type="button">+ Adicionar gasto</button></div>
       <b class="v">${brl(c.gastos)}</b>
-      ${Object.keys(byCat).length?`<div class="lines">${Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div><span>${esc(k)}</span><span>${brl(v)}</span></div>`).join("")}</div>`:""}
-      ${c.exps.length?`<div class="exps">${c.exps.slice(0,8).map(e=>`<div class="exp"><span class="d">${fdate(e.date)}</span><span class="t">${esc(e.cat)}${e.desc?` · ${esc(e.desc)}`:""}${e.recurring?` <i class="rec">todo mês</i>`:""}</span><span>${brl(e.value)}</span><button type="button" data-xrm="${esc(e.id)}" aria-label="${e.recurring?"Parar de repetir":"Apagar gasto"}">✕</button></div>`).join("")}</div>`:`<span class="s">Nenhum gasto lançado no período.</span>`}
-    </div>
-    <button class="btn block" id="finCsv" type="button">Exportar para o contador (planilha)</button>`;
+      ${c.exps.length?`<div class="exps">${c.exps.map((e,i)=>`<div class="exp"${i>=5&&!FS.allExp?" hidden":""}><span class="d">${fdate(e.date)}</span><span class="t">${esc(e.cat)}${e.desc?` · ${esc(e.desc)}`:""}${e.recurring?` <i class="rec">todo mês</i>`:""}</span><span>${brl(e.value)}</span><button type="button" data-xrm="${esc(e.id)}" aria-label="${e.recurring?"Parar de repetir":"Apagar gasto"}">✕</button></div>`).join("")}</div>
+        ${c.exps.length>5?`<button class="btn small more" id="expMore" type="button">${FS.allExp?"Ver menos":`Ver mais (${c.exps.length-5})`}</button>`:""}`:`<span class="s">Nenhum gasto lançado no período.</span>`}
+    </div>`;
 }
 $("#finPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;FS.p=+b.dataset.p;document.querySelectorAll("#finPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderFin()});
 const arm=(el,txt)=>{if(el.dataset.armed==="1")return true;el.dataset.armed="1";el.textContent=txt;el.classList.add("armed");return false};
@@ -1409,6 +1397,7 @@ $("#finBody").addEventListener("click",async e=>{
   const cp=e.target.closest("[data-copy]");if(cp){try{await navigator.clipboard.writeText(cp.dataset.copy);toast("Chave PIX copiada.")}catch(_){toast("Não foi possível copiar.",true)}return}
   const rpd=e.target.closest("[data-rpd]");if(rpd&&!e.target.closest("[data-pay]")){const d=rpd.querySelector(".rp-d");d.hidden=!d.hidden;rpd.classList.toggle("open",!d.hidden);return}
   const qh=e.target.closest("#repHelp");if(qh){const t=$("#repTip");t.hidden=!t.hidden;qh.setAttribute("aria-expanded",!t.hidden);return}
+  if(e.target.closest("#expMore")){FS.allExp=!FS.allExp;return renderFin()}
   if(e.target.closest("#expNew"))return openExp();
   if(e.target.closest("#rentNew"))return openRentSh();
   if(e.target.closest("#finCsv"))return exportCsv();
