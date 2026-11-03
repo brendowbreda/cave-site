@@ -1074,6 +1074,9 @@ async function load(){
     CFG=c;P=(p.products||[]).filter(x=>!x.hidden).map(prep);
   }catch(e){$("#grid").innerHTML=`<p class="empty">Não foi possível carregar os produtos. Atualize a página.</p>`;return}
   renderConfig();renderNav();renderGrid();
+  // link direto para um produto: ?produto=<id>
+  const pid=new URLSearchParams(location.search).get("produto");
+  if(pid&&P.some(x=>x.id===pid))openProduct(pid);
 }
 load();
 </script>
