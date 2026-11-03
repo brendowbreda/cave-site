@@ -1,6 +1,34 @@
 {
  "products": [
   {
+   "id": "p-mvzxl3s5",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Manetes",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 8500,
+   "title": "Shimano Dura-Ace R9270 STI + Pinça de Freio Hidráulico",
+   "subtitle": "",
+   "desc": "Precisão absoluta. Frenagem superior. Performance em cada movimento.\n\nO Shimano Dura-Ace R9270 Di2 combina tecnologia de competição, ergonomia e eficiência para ciclistas que exigem o máximo desempenho em cada pedalada.\n\nCom trocas eletrônicas Di2 de 12 velocidades e cockpit sem fio, proporciona mudanças de marcha rápidas e precisas, oferecendo uma experiência de pilotagem mais intuitiva e eficiente.\n\nEquipado com freios a disco hidráulicos e tecnologia Servo Wave Action, proporciona resposta progressiva, excelente modulação e controle nas frenagens, mesmo em descidas técnicas e condições exigentes.\n\nSua construção premium, com alavancas em fibra de carbono e pinças de alumínio, combina leveza, resistência e ergonomia para proporcionar conforto e confiança durante treinos e competições.\n\nEspecificações técnicas\n\nModelo: Shimano Dura-Ace ST-R9270 + BR-R9270\n\nModalidade: Ciclismo de estrada\n\nItens: Par de alavancas STI e par de pinças hidráulicas\n\nTransmissão: Shimano Di2 2x12 velocidades\n\nConectividade: Comunicação sem fio com a transmissão Di2 e conexão por cabo EW-SD300, conforme configuração\n\nSistema de frenagem: Disco hidráulico Flat Mount\n\nTecnologia de frenagem: Servo Wave Action\n\nFluido hidráulico: Óleo mineral Shimano\n\nMaterial das alavancas: Fibra de carbono (CFRP)\n\nConstrução das pinças: Alumínio, com pistões de resina\n\nAplicação: Treinamentos e competições de alto rendimento\n\nMais precisão. Mais controle. Cada segundo faz a diferença.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzxl3s5-mvzxnpdk1.jpg",
+    "img/products/p-mvzxl3s5-mvzxnqs82.jpg",
+    "img/products/p-mvzxl3s5-mvzxnrzx3.jpg"
+   ],
+   "also": [
+    {
+     "cat": "bike",
+     "group": "componentes",
+     "sub": "Freios"
+    }
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-03T00:11:57.100Z",
+   "createdAt": "2026-11-03T00:11:57.100Z"
+  },
+  {
    "id": "p-mvzxfagw",
    "cat": "bike",
    "group": "componentes",
