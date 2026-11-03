@@ -339,6 +339,7 @@
  "cardFees": {
   "debito": 1.5,
   "credito": 3.5,
-  "parcelado": 6
+  "parcelado": 6,
+  "juros": 2.99
  }
 }

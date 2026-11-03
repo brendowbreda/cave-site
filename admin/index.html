@@ -501,6 +501,7 @@ p{margin:0}
           <summary><span><b>Taxas de pagamento</b><small>Débito e crédito da maquininha</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
           <form class="acc-in form" id="feeForm" novalidate>
             <div id="fees" class="form"></div>
+            <div class="field"><label for="fee-juros">Juros do parcelamento para o cliente (% ao mês)</label><input id="fee-juros" inputmode="decimal"><span class="hint">Juros compostos (Tabela Price), de 2x a 10x. 1x é à vista, sem juros.</span></div>
             <button class="btn solid block" type="submit">Salvar taxas</button>
           </form>
         </details>
@@ -1529,12 +1530,12 @@ function exportCsv(){
 }
 
 // ----- Configurações: taxas de pagamento
-function renderFees(){$("#fees").innerHTML=PAYS.filter(([k])=>k!=="pix"&&k!=="dinheiro").map(([k,t])=>`<div class="field"><label for="fee-${k}">${t} (%)</label><input id="fee-${k}" inputmode="decimal" value="${pctTxt((FIN.fees||DEF_FEES)[k]??0)}"></div>`).join("")}
+function renderFees(){$("#fee-juros").value=pctTxt(((CFG&&CFG.cardFees)||{}).juros??2.99);$("#fees").innerHTML=PAYS.filter(([k])=>k!=="pix"&&k!=="dinheiro").map(([k,t])=>`<div class="field"><label for="fee-${k}">${t} (%)</label><input id="fee-${k}" inputmode="decimal" value="${pctTxt((FIN.fees||DEF_FEES)[k]??0)}"></div>`).join("")}
 $("#feeForm").addEventListener("submit",async e=>{
   e.preventDefault();
   const f={};for(const [k] of PAYS){const el=$("#fee-"+k);f[k]=el?Math.max(0,Math.min(30,parseFloat(el.value.replace(",","."))||0)):0}
   busy("Salvando taxas…");
-  try{await saveFin(d=>{d.fees=f},"Financeiro: taxas de pagamento");await updateConfig(d=>{d.cardFees={debito:f.debito,credito:f.credito,parcelado:f.parcelado}},"Taxas do cartão no site");renderFees();toast("Taxas salvas. O site atualiza em cerca de 1 minuto.")}catch(x){toast(errMsg(x),true)}finally{busy()}
+  try{await saveFin(d=>{d.fees=f},"Financeiro: taxas de pagamento");const jr=Math.max(0,Math.min(15,parseFloat($("#fee-juros").value.replace(",","."))||0));await updateConfig(d=>{d.cardFees={debito:f.debito,credito:f.credito,parcelado:f.parcelado,juros:jr}},"Taxas do cartão no site");renderFees();toast("Taxas salvas. O site atualiza em cerca de 1 minuto.")}catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 
 // ---------- Ofertas recebidas (Supabase)
