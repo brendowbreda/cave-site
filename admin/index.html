@@ -1547,21 +1547,23 @@ async function sbToken(){
   if(SBT&&SBT.exp>Date.now()+60e3)return SBT.t;
   const c=sbCfg(),a=FIN.sbAuth;
   const r=await fetch(c.url.replace(/\/$/,"")+"/auth/v1/token?grant_type=password",{method:"POST",headers:{...sbH(c.anon),"Content-Type":"application/json"},body:JSON.stringify({email:a.email,password:a.pass})});
-  if(!r.ok)throw Object.assign(new Error("sbauth"),{status:r.status,auth:true});
+  if(!r.ok){let m="";try{const j=await r.json();m=j.error_description||j.msg||j.message||j.error_code||""}catch(_){}throw Object.assign(new Error("sbauth"),{status:r.status,auth:true,detail:m})}
   const j=await r.json();SBT={t:j.access_token,exp:Date.now()+(j.expires_in||3600)*1000};return SBT.t;
 }
 async function sbReq(path,opts={}){
   const c=sbCfg();
   const auth=FIN.sbAuth?{apikey:c.anon,Authorization:"Bearer "+await sbToken()}:{apikey:FIN.sbKey,Authorization:"Bearer "+FIN.sbKey};
   const r=await fetch(c.url.replace(/\/$/,"")+"/rest/v1/"+path,{...opts,headers:{...auth,"Content-Type":"application/json",Prefer:"return=minimal",...(opts.headers||{})}});
-  if(!r.ok)throw Object.assign(new Error("sb"),{status:r.status});
+  if(!r.ok){let m="";try{const j=await r.json();m=j.message||j.msg||j.hint||""}catch(_){}throw Object.assign(new Error("sb"),{status:r.status,detail:m})}
   return r.status===204||opts.method==="PATCH"?null:r.json();
 }
 const sbReady=()=>!!(sbCfg().url&&(FIN.sbAuth||FIN.sbKey));
 async function loadOffers(){
   OFF_ERR="";
   if(!sbReady()){OFFERS=[];return}
-  try{OFFERS=await sbReq("offers?status=eq.pendente&order=created_at.desc&limit=50")}catch(e){OFFERS=[];OFF_ERR=e.auth?"O usuário do painel não conseguiu entrar no Supabase. Confira e-mail e senha em Configurações.":"Não foi possível carregar as ofertas. Confira o Supabase em Configurações."}
+  try{OFFERS=await sbReq("offers?status=eq.pendente&order=created_at.desc&limit=50")}catch(e){OFFERS=[];
+    const why={"Invalid login credentials":"e-mail ou senha não conferem com o usuário criado no Supabase","Email not confirmed":"o usuário ainda não foi confirmado (marque Auto Confirm ao criar, ou confirme em Authentication → Users)","Invalid API key":"a Publishable key não confere"}[e.detail]||e.detail||("erro "+(e.status||"de conexão — confira a Project URL"));
+    OFF_ERR=(e.auth?"O usuário do painel não conseguiu entrar no Supabase: ":"Não foi possível carregar as ofertas: ")+why+".";}
 }
 const waTo=(phone,msg)=>`https://wa.me/${waDigits(phone)}?text=${encodeURIComponent(msg)}`;
 function renderOffers(){
