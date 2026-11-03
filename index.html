@@ -976,7 +976,7 @@ function offerFlow(step){
       let ok=false;
       if(sb.url&&sb.anon){
         $("#send").disabled=true;$("#send").textContent="Enviando…";
-        try{const r=await fetch(sb.url.replace(/\/$/,"")+"/rest/v1/offers",{method:"POST",headers:{apikey:sb.anon,Authorization:"Bearer "+sb.anon,"Content-Type":"application/json",Prefer:"return=minimal"},
+        try{const r=await fetch(sb.url.replace(/\/$/,"")+"/rest/v1/offers",{method:"POST",headers:{apikey:sb.anon,...(sb.anon.startsWith("sb_")?{}:{Authorization:"Bearer "+sb.anon}),"Content-Type":"application/json",Prefer:"return=minimal"},
           body:JSON.stringify({product_id:p.id,product_title:p.title+(p.subtitle?` (${p.subtitle})`:""),product_price:p.price,offer_value:offer.value,buyer_name:offer.contact.name.trim(),buyer_phone:offer.contact.phone.replace(/\D/g,"")})});ok=r.ok}catch(e){}
       }
       if(!ok){const w=win||window.open("about:blank","_blank");if(w)w.location=wa(CFG.whatsapp.loja,msg)}else if(win)win.close();

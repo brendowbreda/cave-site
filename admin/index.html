@@ -487,8 +487,12 @@ p{margin:0}
           <summary><span><b>Ofertas (Supabase)</b><small>Onde as ofertas do site ficam guardadas</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
           <form class="acc-in form" id="sbForm" novalidate>
             <div class="field"><label for="sb-url">Project URL</label><input id="sb-url" autocapitalize="off" spellcheck="false" placeholder="https://xxxx.supabase.co"></div>
-            <div class="field"><label for="sb-anon">Chave anon public</label><input id="sb-anon" autocapitalize="off" spellcheck="false" placeholder="eyJ..."></div>
-            <div class="field"><label for="sb-svc">Chave service_role (secreta)</label><input id="sb-svc" type="password" autocomplete="off" placeholder="Cole aqui para salvar ou trocar"><span class="hint" id="sb-svc-st"></span></div>
+            <div class="field"><label for="sb-anon">Publishable key</label><input id="sb-anon" autocapitalize="off" spellcheck="false" placeholder="sb_publishable_..."></div>
+            <div class="row2">
+              <div class="field"><label for="sb-email">Usuário do painel (e-mail)</label><input id="sb-email" type="email" autocapitalize="off" autocomplete="off"></div>
+              <div class="field"><label for="sb-pass">Senha desse usuário</label><input id="sb-pass" type="password" autocomplete="new-password" placeholder="Cole para salvar ou trocar"></div>
+            </div>
+            <span class="hint" id="sb-svc-st"></span>
             <button class="btn solid block" type="submit">Salvar Supabase</button>
           </form>
         </details>
@@ -1536,21 +1540,33 @@ $("#feeForm").addEventListener("submit",async e=>{
 // ---------- Ofertas recebidas (Supabase)
 let OFFERS=[],OFF_ERR="";
 const sbCfg=()=>CFG.supabase||{};
+// O painel entra no Supabase com um usuário próprio (e-mail e senha guardados criptografados no Financeiro)
+let SBT=null;
+const sbH=k=>k.startsWith("sb_")?{apikey:k}:{apikey:k,Authorization:"Bearer "+k};
+async function sbToken(){
+  if(SBT&&SBT.exp>Date.now()+60e3)return SBT.t;
+  const c=sbCfg(),a=FIN.sbAuth;
+  const r=await fetch(c.url.replace(/\/$/,"")+"/auth/v1/token?grant_type=password",{method:"POST",headers:{...sbH(c.anon),"Content-Type":"application/json"},body:JSON.stringify({email:a.email,password:a.pass})});
+  if(!r.ok)throw Object.assign(new Error("sbauth"),{status:r.status,auth:true});
+  const j=await r.json();SBT={t:j.access_token,exp:Date.now()+(j.expires_in||3600)*1000};return SBT.t;
+}
 async function sbReq(path,opts={}){
-  const c=sbCfg(),key=FIN.sbKey;
-  const r=await fetch(c.url.replace(/\/$/,"")+"/rest/v1/"+path,{...opts,headers:{apikey:key,Authorization:"Bearer "+key,"Content-Type":"application/json",Prefer:"return=minimal",...(opts.headers||{})}});
+  const c=sbCfg();
+  const auth=FIN.sbAuth?{apikey:c.anon,Authorization:"Bearer "+await sbToken()}:{apikey:FIN.sbKey,Authorization:"Bearer "+FIN.sbKey};
+  const r=await fetch(c.url.replace(/\/$/,"")+"/rest/v1/"+path,{...opts,headers:{...auth,"Content-Type":"application/json",Prefer:"return=minimal",...(opts.headers||{})}});
   if(!r.ok)throw Object.assign(new Error("sb"),{status:r.status});
   return r.status===204||opts.method==="PATCH"?null:r.json();
 }
+const sbReady=()=>!!(sbCfg().url&&(FIN.sbAuth||FIN.sbKey));
 async function loadOffers(){
   OFF_ERR="";
-  if(!sbCfg().url||!FIN.sbKey){OFFERS=[];return}
-  try{OFFERS=await sbReq("offers?status=eq.pendente&order=created_at.desc&limit=50")}catch(e){OFFERS=[];OFF_ERR="Não foi possível carregar as ofertas. Confira o Supabase em Configurações."}
+  if(!sbReady()){OFFERS=[];return}
+  try{OFFERS=await sbReq("offers?status=eq.pendente&order=created_at.desc&limit=50")}catch(e){OFFERS=[];OFF_ERR=e.auth?"O usuário do painel não conseguiu entrar no Supabase. Confira e-mail e senha em Configurações.":"Não foi possível carregar as ofertas. Confira o Supabase em Configurações."}
 }
 const waTo=(phone,msg)=>`https://wa.me/${waDigits(phone)}?text=${encodeURIComponent(msg)}`;
 function renderOffers(){
   const box=$("#offersBox");if(!box||!isAdm())return;
-  if(!sbCfg().url||!FIN.sbKey){box.innerHTML="";return}
+  if(!sbReady()){box.innerHTML="";return}
   const dt=s=>new Date(s).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
   box.innerHTML=`<div class="fc offers"><div class="fc-h"><span class="k">Ofertas recebidas</span><span class="s">${OFFERS.length} aguardando resposta</span></div>
     ${OFF_ERR?`<span class="s" style="color:var(--bad)">${OFF_ERR}</span>`:OFFERS.length?OFFERS.map(o=>{const d=Math.round((1-o.offer_value/o.product_price)*100);return `<div class="of" data-of="${esc(o.id)}">
@@ -1587,15 +1603,15 @@ $("#offersBox").addEventListener("click",async e=>{
     OFFERS=OFFERS.filter(x=>x.id!==o.id);renderOffers();renderList();renderFin();toast("Oferta aceita e produto marcado como vendido.");
   }catch(x){if(w)w.close();toast(errMsg(x),true)}finally{busy()}
 });
-function renderSb(){const c=sbCfg();$("#sb-url").value=c.url||"";$("#sb-anon").value=c.anon||"";$("#sb-svc").value="";$("#sb-svc-st").textContent=FIN.sbKey?"Chave salva e criptografada. Cole outra só se quiser trocar.":"Ainda não salva. Ela fica criptografada e só o painel usa."}
+function renderSb(){const c=sbCfg();$("#sb-url").value=c.url||"";$("#sb-anon").value=c.anon||"";$("#sb-email").value=(FIN.sbAuth||{}).email||"";$("#sb-pass").value="";$("#sb-svc-st").textContent=FIN.sbAuth?"Usuário salvo e criptografado. Cole outra senha só se quiser trocar.":"O e-mail e a senha ficam criptografados e só o painel usa."}
 $("#sbForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const url=$("#sb-url").value.trim().replace(/\/$/,""),anon=$("#sb-anon").value.trim(),svc=$("#sb-svc").value.trim();
+  const url=$("#sb-url").value.trim().replace(/\/$/,""),anon=$("#sb-anon").value.trim(),em=$("#sb-email").value.trim(),pw=$("#sb-pass").value;
   if(url&&!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url))return toast("A Project URL deve ser parecida com https://xxxx.supabase.co",true);
   busy("Salvando Supabase…");
   try{
     await updateConfig(d=>{d.supabase={url,anon}},"Supabase: endereço e chave pública");
-    if(svc)await saveFin(d=>{d.sbKey=svc},"Supabase: chave do painel");
+    if(em&&(pw||FIN.sbAuth))await saveFin(d=>{d.sbAuth={email:em,pass:pw||d.sbAuth.pass};delete d.sbKey},"Supabase: usuário do painel");SBT=null;
     await loadOffers();renderSb();renderOffers();
     toast(OFF_ERR?OFF_ERR:"Supabase ligado. As ofertas do site já aparecem no Financeiro.",!!OFF_ERR);
   }catch(x){toast(errMsg(x),true)}finally{busy()}
