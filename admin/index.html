@@ -387,13 +387,11 @@ p{margin:0}
         <div class="frow">
           <span class="flbl">Filtrar:</span>
           <div class="chips" id="afilter">
-            <button class="chip" data-f="all" aria-pressed="true">Todos</button>
-            <button class="chip" data-f="disponivel" aria-pressed="false">Estoque</button>
+            <button class="chip" data-f="disponivel" aria-pressed="true">Estoque</button>
             <button class="chip" data-f="vendido" aria-pressed="false">Vendido</button>
           </div>
           <button class="btn buy small" id="newBtn" type="button">+ Novo<span class="lg">&nbsp;produto</span></button>
         </div>
-        <p class="eyebrow" id="acount"></p>
       </div>
       <div class="list" id="alist"></div>
       </div>
@@ -852,7 +850,7 @@ $("#themeBtn").addEventListener("click",()=>{const l=document.documentElement.da
 syncTheme();
 
 // ---------- Lista
-const F={f:"all",q:""};
+const F={f:"disponivel",q:""};
 function thumb(p){return p.photos?.length?`<img src="${esc(picURL(p.photos[0]))}" alt="" loading="lazy">`:icon(caveIcon(p))}
 function renderList(){
   const q=F.q.toLowerCase();
@@ -860,7 +858,6 @@ function renderList(){
   const nDemo=PRODS.filter(p=>p.demo).length;
   $("#demoBanner").hidden=!nDemo;$("#demoTxt").textContent=`${nDemo} produtos de exemplo ainda aparecem no site.`;
   const nSale=PRODS.filter(p=>p.status!=="vendido").length,nSold=PRODS.length-nSale;
-  $("#acount").textContent=`${nSale} em estoque · ${nSold} vendido${nSold===1?"":"s"}`;
   $("#alist").innerHTML=l.length?l.map(p=>{const s=p.status==="vendido";return `<div class="row${s?" sold":""}" data-id="${esc(p.id)}">
     <div class="thumb">${thumb(p)}</div>
     <div class="info"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.subtitle)}</span>
