@@ -209,6 +209,13 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .st .k.kt{font-size:16px;font-weight:700;color:var(--ink)}
 .st.sm .kv2 b{font-size:20px}
 .male{color:#3B82F6}.female{color:#EC4899}
+.offers{margin-bottom:10px;border-color:var(--fit)}
+.of{display:grid;gap:10px;padding:12px;border-radius:12px;background:var(--bg)}
+.of-i{display:grid;gap:2px;min-width:0}
+.of-i b{font-size:15px}
+.of-i span{font-size:13px;color:var(--muted)}
+.of-v strong{color:var(--ink)}
+.of-a{display:flex;gap:8px;flex-wrap:wrap}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -406,6 +413,7 @@ p{margin:0}
             <button class="chip" data-p="6" aria-pressed="false">6 meses</button>
             <button class="chip" data-p="12" aria-pressed="false">12 meses</button>
           </div></div>
+        <div id="offersBox"></div>
         <div id="finBody"></div>
       </div>
       <div class="prods">
@@ -472,6 +480,16 @@ p{margin:0}
           <form class="acc-in form" id="usForm" novalidate>
             <div id="us-list" class="form"></div>
             <button class="btn solid block" type="submit">Salvar usuários</button>
+          </form>
+        </details>
+
+        <details class="acc" data-acc="cfg">
+          <summary><span><b>Ofertas (Supabase)</b><small>Onde as ofertas do site ficam guardadas</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <form class="acc-in form" id="sbForm" novalidate>
+            <div class="field"><label for="sb-url">Project URL</label><input id="sb-url" autocapitalize="off" spellcheck="false" placeholder="https://xxxx.supabase.co"></div>
+            <div class="field"><label for="sb-anon">Chave anon public</label><input id="sb-anon" autocapitalize="off" spellcheck="false" placeholder="eyJ..."></div>
+            <div class="field"><label for="sb-svc">Chave service_role (secreta)</label><input id="sb-svc" type="password" autocomplete="off" placeholder="Cole aqui para salvar ou trocar"><span class="hint" id="sb-svc-st"></span></div>
+            <button class="btn solid block" type="submit">Salvar Supabase</button>
           </form>
         </details>
 
@@ -850,7 +868,7 @@ async function start(){
     PRODS=p.data.products||[];CFG=c.data;
     if(!Object.keys(DIR).length){try{const a=(await getJSON("data/admins.json")).data;if(a.v===2)DIR=JSON.parse(await dec(await dkKey(S.dk),a.dir))}catch(_){}}
     await loadFit();
-    if(S.role!=="bikefit")await loadFin();
+    if(S.role!=="bikefit"){await loadFin();await loadOffers()}
   }catch(e){busy();if(e.status===401)clearSession();showLogin(errMsg(e));return}
   busy();
   if(!S.role)S.role="sistema";
@@ -867,7 +885,7 @@ $("#cfgBack").addEventListener("click",()=>isAdm()?go("fin"):show("fit"));
 function go(n){
   if(n==="fit"||n==="loc"){CAL.mode=n;renderFit();show("fit",n);return}
   document.body.dataset.home=n==="prods"?"prods":"fin";
-  n==="prods"?renderList():renderFin();
+  if(n==="prods")renderList();else{renderFin();renderOffers();loadOffers().then(renderOffers)}
   show("prods",n);
 }
 document.querySelectorAll("[data-nav]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.nav)));
@@ -1130,6 +1148,7 @@ function renderCfg(){
     <div class="field"><label for="cf-n${i}">Nome</label><input id="cf-n${i}" value="${esc(f.name)}"></div>
     <div class="field"><label for="cf-p${i}">Valor</label><input id="cf-p${i}" inputmode="numeric" value="${money00(f.price)}" data-money></div></div>`).join("");
   RENT=JSON.parse(JSON.stringify(CFG.rentals));
+  if(isAdm())renderSb();
   $("#c-fitpct").value=splitPct("fit");$("#c-locpct").value=splitPct("loc");syncPct();
   renderFees();
   document.querySelectorAll("[data-money]").forEach(el=>moneyField(el));
@@ -1512,6 +1531,74 @@ $("#feeForm").addEventListener("submit",async e=>{
   const f={};for(const [k] of PAYS){const el=$("#fee-"+k);f[k]=el?Math.max(0,Math.min(30,parseFloat(el.value.replace(",","."))||0)):0}
   busy("Salvando taxas…");
   try{await saveFin(d=>{d.fees=f},"Financeiro: taxas de pagamento");renderFees();toast("Taxas salvas.")}catch(x){toast(errMsg(x),true)}finally{busy()}
+});
+
+// ---------- Ofertas recebidas (Supabase)
+let OFFERS=[],OFF_ERR="";
+const sbCfg=()=>CFG.supabase||{};
+async function sbReq(path,opts={}){
+  const c=sbCfg(),key=FIN.sbKey;
+  const r=await fetch(c.url.replace(/\/$/,"")+"/rest/v1/"+path,{...opts,headers:{apikey:key,Authorization:"Bearer "+key,"Content-Type":"application/json",Prefer:"return=minimal",...(opts.headers||{})}});
+  if(!r.ok)throw Object.assign(new Error("sb"),{status:r.status});
+  return r.status===204||opts.method==="PATCH"?null:r.json();
+}
+async function loadOffers(){
+  OFF_ERR="";
+  if(!sbCfg().url||!FIN.sbKey){OFFERS=[];return}
+  try{OFFERS=await sbReq("offers?status=eq.pendente&order=created_at.desc&limit=50")}catch(e){OFFERS=[];OFF_ERR="Não foi possível carregar as ofertas. Confira o Supabase em Configurações."}
+}
+const waTo=(phone,msg)=>`https://wa.me/${waDigits(phone)}?text=${encodeURIComponent(msg)}`;
+function renderOffers(){
+  const box=$("#offersBox");if(!box||!isAdm())return;
+  if(!sbCfg().url||!FIN.sbKey){box.innerHTML="";return}
+  const dt=s=>new Date(s).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+  box.innerHTML=`<div class="fc offers"><div class="fc-h"><span class="k">Ofertas recebidas</span><span class="s">${OFFERS.length} aguardando resposta</span></div>
+    ${OFF_ERR?`<span class="s" style="color:var(--bad)">${OFF_ERR}</span>`:OFFERS.length?OFFERS.map(o=>{const d=Math.round((1-o.offer_value/o.product_price)*100);return `<div class="of" data-of="${esc(o.id)}">
+      <div class="of-i"><b>${esc(o.product_title)}</b><span>${esc(o.buyer_name)} · ${dt(o.created_at)}</span>
+        <span class="of-v">Anunciado ${brl(o.product_price)} · <strong>Oferta ${brl(o.offer_value)}</strong> (−${d}%)</span></div>
+      <div class="of-a"><button class="btn small buy" type="button" data-oa="ok">Aceitar</button><button class="btn small danger" type="button" data-oa="no">Recusar</button><a class="btn small" target="_blank" rel="noopener" href="${waTo(o.buyer_phone,`Olá, ${o.buyer_name.split(" ")[0]}! Aqui é da Cave. Floripa, sobre a sua oferta de ${brl(o.offer_value)} pelo ${o.product_title}.`)}">WhatsApp</a></div>
+    </div>`}).join(""):`<span class="s">Nenhuma oferta aguardando resposta.</span>`}</div>`;
+}
+$("#offersBox").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-oa]");if(!b)return;
+  const o=OFFERS.find(x=>x.id===b.closest("[data-of]").dataset.of);if(!o)return;
+  const first=o.buyer_name.split(" ")[0];
+  if(b.dataset.oa==="no"){
+    if(!arm(b,"Confirmar recusa"))return;
+    const w=window.open("about:blank","_blank");
+    busy("Recusando oferta…");
+    try{await sbReq(`offers?id=eq.${o.id}`,{method:"PATCH",body:JSON.stringify({status:"recusada"})});
+      if(w)w.location=waTo(o.buyer_phone,`Olá, ${first}! Obrigado pela oferta de ${brl(o.offer_value)} pelo ${o.product_title}. Infelizmente não conseguimos aceitar esse valor, mas o produto continua disponível por ${brl(o.product_price)}. Se tiver interesse, é só responder aqui que fechamos para você.`);
+      OFFERS=OFFERS.filter(x=>x.id!==o.id);renderOffers();toast("Oferta recusada.")}
+    catch(x){if(w)w.close();toast("Não foi possível atualizar a oferta.",true)}finally{busy()}
+    return;
+  }
+  const p=PRODS.find(x=>x.id===o.product_id);
+  if(!p)return toast("O produto dessa oferta não existe mais.",true);
+  const sale=await askSale({...p,price:o.offer_value,discount:null});
+  if(!sale)return;
+  const w=window.open("about:blank","_blank");
+  busy("Aceitando oferta…");
+  try{
+    await sbReq(`offers?id=eq.${o.id}`,{method:"PATCH",body:JSON.stringify({status:"aceita"})});
+    await recordSale(p,sale);
+    await updateProducts(list=>{const x=list.find(y=>y.id===p.id);if(x){x.status="vendido";x.soldAt=new Date().toISOString()}},`Vendido (oferta aceita): ${p.title}`);
+    if(w)w.location=waTo(o.buyer_phone,`Olá, ${first}! Boa notícia: a sua oferta de ${brl(o.offer_value)} pelo ${o.product_title} foi aceita. Vamos combinar o pagamento e a entrega?`);
+    OFFERS=OFFERS.filter(x=>x.id!==o.id);renderOffers();renderList();renderFin();toast("Oferta aceita e produto marcado como vendido.");
+  }catch(x){if(w)w.close();toast(errMsg(x),true)}finally{busy()}
+});
+function renderSb(){const c=sbCfg();$("#sb-url").value=c.url||"";$("#sb-anon").value=c.anon||"";$("#sb-svc").value="";$("#sb-svc-st").textContent=FIN.sbKey?"Chave salva e criptografada. Cole outra só se quiser trocar.":"Ainda não salva. Ela fica criptografada e só o painel usa."}
+$("#sbForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const url=$("#sb-url").value.trim().replace(/\/$/,""),anon=$("#sb-anon").value.trim(),svc=$("#sb-svc").value.trim();
+  if(url&&!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url))return toast("A Project URL deve ser parecida com https://xxxx.supabase.co",true);
+  busy("Salvando Supabase…");
+  try{
+    await updateConfig(d=>{d.supabase={url,anon}},"Supabase: endereço e chave pública");
+    if(svc)await saveFin(d=>{d.sbKey=svc},"Supabase: chave do painel");
+    await loadOffers();renderSb();renderOffers();
+    toast(OFF_ERR?OFF_ERR:"Supabase ligado. As ofertas do site já aparecem no Financeiro.",!!OFF_ERR);
+  }catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 
 // ---------- Bike Fit (agenda criptografada em data/bikefit.json)

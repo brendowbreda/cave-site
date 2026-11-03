@@ -968,9 +968,18 @@ function offerFlow(step){
       </div>`,
       `<button class="btn" id="back">Voltar</button><button class="btn buy" id="send">Enviar oferta</button>`);
     $("#back").onclick=()=>offerFlow(2);
-    $("#send").onclick=()=>{
-      // a oferta chega na loja pelo WhatsApp
-      window.open(wa(CFG.whatsapp.loja,`Nova oferta pelo site\nProduto: ${p.title}${p.subtitle?` (${p.subtitle})`:""}\nPreço anunciado: ${brl(p.price)}\nOferta: ${brl(offer.value)} (−${disc}%)\nNome: ${offer.contact.name}\nWhatsApp: ${offer.contact.phone}`),"_blank","noopener");
+    $("#send").onclick=async()=>{
+      const msg=`Nova oferta pelo site\nProduto: ${p.title}${p.subtitle?` (${p.subtitle})`:""}\nPreço anunciado: ${brl(p.price)}\nOferta: ${brl(offer.value)} (−${disc}%)\nNome: ${offer.contact.name}\nWhatsApp: ${offer.contact.phone}`;
+      const sb=CFG.supabase||{};
+      // com o Supabase ligado a oferta cai no painel; sem ele (ou se falhar) vai pelo WhatsApp da loja
+      const win=sb.url&&sb.anon?null:window.open("about:blank","_blank");
+      let ok=false;
+      if(sb.url&&sb.anon){
+        $("#send").disabled=true;$("#send").textContent="Enviando…";
+        try{const r=await fetch(sb.url.replace(/\/$/,"")+"/rest/v1/offers",{method:"POST",headers:{apikey:sb.anon,Authorization:"Bearer "+sb.anon,"Content-Type":"application/json",Prefer:"return=minimal"},
+          body:JSON.stringify({product_id:p.id,product_title:p.title+(p.subtitle?` (${p.subtitle})`:""),product_price:p.price,offer_value:offer.value,buyer_name:offer.contact.name.trim(),buyer_phone:offer.contact.phone.replace(/\D/g,"")})});ok=r.ok}catch(e){}
+      }
+      if(!ok){const w=win||window.open("about:blank","_blank");if(w)w.location=wa(CFG.whatsapp.loja,msg)}else if(win)win.close();
       offerFlow(4);
     };
   }
