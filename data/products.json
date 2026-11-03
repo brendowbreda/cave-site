@@ -1,6 +1,30 @@
 {
  "products": [
   {
+   "id": "p-mvzxqzuf",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Pedais",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 4600,
+   "title": "Favero Assioma PRO RS-1 | Shimano",
+   "subtitle": "",
+   "desc": "",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzxqzuf-mvzxsbyd1.jpg",
+    "img/products/p-mvzxqzuf-mvzxsd5u2.jpg"
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 500
+   },
+   "demo": false,
+   "updatedAt": "2026-11-03T00:15:31.021Z",
+   "createdAt": "2026-11-03T00:15:31.021Z"
+  },
+  {
    "id": "p-mvzxoqd2",
    "cat": "bike",
    "group": "componentes",
