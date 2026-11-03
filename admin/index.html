@@ -97,7 +97,8 @@ body[data-home="fin"] .dash>.prods,body[data-home="prods"] .dash>.fin{display:no
 .fin-head .sec-t{margin:0}
 #finBody{display:grid;gap:10px}
 .fc{display:grid;gap:6px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);min-width:0}
-.fc .k{font-size:12px;color:var(--muted)}
+.fc .k{font-size:15px;font-weight:700;color:var(--ink)}
+.fc.rep .v{color:var(--fit)}
 .fc .v{font-size:26px;letter-spacing:-.02em;line-height:1.1}
 .fc .s{font-size:12px;color:var(--muted)}
 .fc .s b{color:var(--ink)}
@@ -1332,7 +1333,7 @@ function renderFin(){
     <div class="fc-grid">
       <div class="fc"><span class="k">Caixa (parte da Cave nas vendas)</span><b class="v">${brl(c.vendasCave)}</b><span class="s">de ${brl(c.bruto)} vendidos${c.custo?` · custo ${brl(c.custo)}`:""}</span></div>
       <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${plural(c.fit.length,"bike fit","bike fits")}</b><span class="s">Total cobrado pelo Guilherme: <b>${brl(c.fitTot)}</b></span><span class="s">Aluguel do espaço (${splitPct("fit")}%): <b>${brl(c.fitCave)}</b></span>
-        ${fitDue.n?`<div class="rp"><span class="t"><b>A receber do Guilherme</b><span>${plural(fitDue.n,"bike fit","bike fits")} · ${splitPct("fit")}% de aluguel</span></span><span class="m">${brl(fitDue.v)}</span><button class="btn small" type="button" data-pay="fit">Recebido</button></div>`:`<span class="s">Aluguel do espaço em dia.</span>`}</div>
+        ${fitDue.n?`<div class="rp"><span class="t"><b>A receber do Guilherme</b><span>${plural(fitDue.n,"bike fit","bike fits")} · ${splitPct("fit")}% de aluguel</span></span><span class="m">${brl(fitDue.v)}</span><button class="btn small" type="button" data-pay="fit">Recebido</button></div>`:""}</div>
     </div>
     <div class="fc">
       <div class="fc-h"><span class="k">Locação ${lbl}</span><button class="btn small" id="rentNew" type="button">+ Lançar locação</button></div>
