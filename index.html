@@ -415,8 +415,9 @@ footer .flogo{width:min(200px,55vw);height:auto}
 .big-input span{font:600 24px/1 var(--mono);color:var(--muted)}
 .big-input input{border:0;outline:0;background:transparent;font:600 44px/1.1 var(--mono);letter-spacing:0;width:1ch;min-width:0;padding:0}
 .big-input span:last-child{color:var(--ink);font:600 44px/1.1 var(--mono);margin-left:-6px}
-.quick-t{text-align:center;font-size:13px;font-weight:600;color:var(--muted);margin:16px 0 0}
-.quick{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+.quick-t{text-align:center;font-size:17px;font-weight:700;color:var(--ink);margin:22px 0 4px}
+.quick{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+.quick button{min-height:48px!important;padding:0 22px!important;font-size:17px!important;font-weight:600!important}
 .quick button{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font:500 13px/1 var(--mono)}
 .meter{margin-top:18px;display:grid;gap:8px}
 .meter-bar{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--bad) 0 16.7%,var(--warn) 16.7% 50%,var(--info) 50% 76.7%,var(--buy) 76.7%)}
@@ -903,8 +904,7 @@ function offerFlow(step){
       <div class="big-input"><span>R$</span><input id="ov" inputmode="numeric" autocomplete="off" placeholder="0" value="${offer.value&&offer.pid===p.id?offer.value.toLocaleString("pt-BR"):""}"><span>,00</span></div>
       <p class="quick-t">Oferta rápida</p>
       <div class="quick">${[5,10,15,20].map(d=>`<button type="button" data-d="${d}">−${d}%</button>`).join("")}</div>
-      <div class="meter"><div class="meter-bar"><i id="mk" style="left:0%"></i></div><div class="meter-scale"><span>${brl(Math.ceil(p.price*.7))}</span><span>${brl(p.price)}</span></div></div>
-      <div id="verdict" style="margin-top:14px"></div>`,
+`,
       `<button class="btn" id="back">Voltar</button><button class="btn solid" id="next" disabled>Continuar</button>`);
     const inp=$("#ov");
     const upd=()=>{
@@ -913,8 +913,7 @@ function offerFlow(step){
       fitInput(inp);
       offer.value=v;offer.pid=p.id;
       const j=judge(v,p.price);
-      $("#verdict").innerHTML=j.t?`<div class="verdict ${j.k}"><b>${j.t}</b>${j.d}</div>`:"";
-      $("#mk").style.left=(v?Math.max(0,Math.min(1,(j.r-.7)/.3))*100:0)+"%";
+
       $("#next").disabled=!j.ok;
     };
     inp.addEventListener("input",upd);
