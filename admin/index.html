@@ -132,7 +132,7 @@ body[data-home="fin"] .dash>.prods,body[data-home="prods"] .dash>.fin{display:no
 .check input{width:20px;height:20px;accent-color:var(--buy)}
 .rec{font-style:normal;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 5px;margin-left:4px}
 .reps{display:grid;gap:8px;margin-top:6px}
-.rp{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px;border-radius:10px;background:var(--bg)}
+.rp{cursor:pointer;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px;border-radius:10px;background:var(--bg)}
 .rp .t{display:grid;min-width:0}
 .rp .t b{font-size:14px}
 .rp .t span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -221,6 +221,11 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .of-i span{font-size:13px;color:var(--muted)}
 .of-v strong{color:var(--ink)}
 .of-a{display:flex;gap:8px;flex-wrap:wrap}
+.rp-d{grid-column:1/-1;display:grid;gap:6px;padding-top:10px;margin-top:4px;border-top:1px solid var(--line);font-size:13px;cursor:default}
+.rp-d div{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.rp-d span{color:var(--muted)}
+.rp-d b{text-align:right;word-break:break-all}
+.cp{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:600;margin-left:6px}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -569,6 +574,7 @@ p{margin:0}
     <div class="field"><label for="sl-owner">Proprietário</label><input id="sl-owner" placeholder="Nome"></div>
     <div class="field"><label for="sl-ophone">Telefone</label><input id="sl-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
   </div>
+  <div class="field" id="sl-pixw" hidden><label for="sl-opix">Chave PIX do proprietário</label><input id="sl-opix" autocapitalize="off" placeholder="Para fazer o repasse"></div>
   <div class="field"><label for="sl-pay">Forma de pagamento</label><select id="sl-pay"></select></div>
   <div class="split" id="sl-out"></div>
   <div class="row2"><button class="btn" id="sl-cancel" type="button">Cancelar</button><button class="btn buy" id="sl-ok" type="button">Confirmar venda</button></div>
@@ -597,6 +603,7 @@ p{margin:0}
     <div class="field"><label for="lc-owner">Proprietário</label><input id="lc-owner" placeholder="Nome (vazio se for da Cave)"></div>
     <div class="field"><label for="lc-pct">Parte da Cave (%)</label><input id="lc-pct" inputmode="numeric"></div>
   </div>
+  <div class="field"><label for="lc-pix">Chave PIX do proprietário</label><input id="lc-pix" autocapitalize="off" placeholder="Para fazer o repasse"></div>
   <div class="row2">
     <div class="field"><label for="lc-start">Retirada</label><input id="lc-start" type="date"></div>
     <div class="field"><label for="lc-end">Devolução</label><input id="lc-end" type="date"></div>
@@ -664,6 +671,7 @@ p{margin:0}
       <div class="field"><label for="e-owner">Proprietário</label><input id="e-owner" placeholder="Nome de quem é o produto"></div>
       <div class="field"><label for="e-ophone">Telefone do proprietário</label><input id="e-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
     </div>
+    <div class="field" id="e-pixw"><label for="e-opix">Chave PIX do proprietário</label><input id="e-opix" autocapitalize="off" placeholder="CPF, e-mail, telefone ou chave aleatória"></div>
     <p class="final" id="e-comm" hidden></p>
     <div class="row2">
       <div class="field" id="e-costw"><label for="e-cost">Valor do custo do produto (oculto)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"></div>
@@ -956,9 +964,9 @@ $("#rmDemo").addEventListener("click",async function(){
 
 // ---------- Editor
 // Produto da loja (100% da Cave, tem custo) ou de terceiro (comissão de 10, 15, 20%...)
-function readOwn(){const terc=$("#e-own-terc").checked;return terc?{pct:Math.min(99,digits($("#e-pct").value)||0),owner:$("#e-owner").value.trim(),phone:$("#e-ophone").value.trim()}:{pct:100}}
+function readOwn(){const terc=$("#e-own-terc").checked;return terc?{pct:Math.min(99,digits($("#e-pct").value)||0),owner:$("#e-owner").value.trim(),phone:$("#e-ophone").value.trim(),pix:$("#e-opix").value.trim()}:{pct:100}}
 function syncOwn(){
-  const terc=$("#e-own-terc").checked;$("#e-pctw").hidden=!terc;$("#e-ownerw").hidden=!terc;$("#e-costw").hidden=terc;
+  const terc=$("#e-own-terc").checked;$("#e-pctw").hidden=!terc;$("#e-ownerw").hidden=!terc;$("#e-pixw").hidden=!terc;$("#e-costw").hidden=terc;
   document.querySelectorAll(".quick [data-qp]").forEach(b=>b.setAttribute("aria-pressed",String($("#e-pct").value===b.dataset.qp)));
   const pr=finalPrice({price:parseMoney($("#e-price").value),discount:readDisc()}),o=readOwn(),el=$("#e-comm");
   if(!terc||!pr||!o.pct){el.hidden=true;return}
@@ -1003,7 +1011,7 @@ function openEditor(p){
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";
   const cg=(p&&(FIN.consign||{})[p.id])||null;
   const terc=cg?cg.pct<100:!p?false:defPct(D)<100&&!(FIN.costs||{})[p.id];
-  $(terc?"#e-own-terc":"#e-own-loja").checked=true;$("#e-pct").value=cg&&cg.pct<100?cg.pct:(terc?defPct(D):"");$("#e-owner").value=cg?cg.owner||"":"";$("#e-ophone").value=cg?cg.phone||"":"";syncOwn();
+  $(terc?"#e-own-terc":"#e-own-loja").checked=true;$("#e-pct").value=cg&&cg.pct<100?cg.pct:(terc?defPct(D):"");$("#e-owner").value=cg?cg.owner||"":"";$("#e-ophone").value=cg?cg.phone||"":"";$("#e-opix").value=cg?cg.pix||"":"";syncOwn();
   $("#e-price").value=money00(D.price);DT=(D.discount&&D.discount.type)||"pct";$("#e-disc").value=D.discount&&D.discount.value?(DT==="brl"?money00(D.discount.value):D.discount.value):"";syncDT();D.also=(D.also||[]).map(x=>({...x}));renderAlso();$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
   $("#e-"+D.cond).checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
@@ -1328,8 +1336,8 @@ function finCalc(rg){
 }
 function pendingRepasses(){
   const now=new Date(),list=[];
-  FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Proprietário não informado",what:s.title,value:saleOwner(s),due,late:due<now})});
-  FIN.rentals.filter(r=>Number(r.pct??100)<100&&!r.paidAt).forEach(r=>{const due=new Date(new Date((r.end||r.start)+"T12:00").getTime()+REPASSE_DIAS*864e5);list.push({kind:"rent",id:r.id,who:r.owner||"Proprietário não informado",what:`Locação · ${r.item}`,value:rentOwnerOf(r),due,late:due<now})});
+  FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Proprietário não informado",what:s.title,value:saleOwner(s),gross:s.price,pct:s.pct,pix:(s.owner&&s.owner.pix)||(FIN.consign[s.pid]||{}).pix||"",phone:(s.owner&&s.owner.phone)||"",due,late:due<now})});
+  FIN.rentals.filter(r=>Number(r.pct??100)<100&&!r.paidAt).forEach(r=>{const due=new Date(new Date((r.end||r.start)+"T12:00").getTime()+REPASSE_DIAS*864e5);list.push({kind:"rent",id:r.id,gross:Number(r.value||0),pct:Number(r.pct??100),pix:r.ownerPix||"",phone:"",who:r.owner||"Proprietário não informado",what:`Locação · ${r.item}`,value:rentOwnerOf(r),due,late:due<now})});
   return list.sort((a,b)=>(a.due||Infinity)-(b.due||Infinity));
 }
 function renderFin(){
@@ -1354,10 +1362,18 @@ function renderFin(){
       </div>
     </div>
     <div class="fc rep${rep.some(x=>x.late)?" late":""}">
-      <div class="fc-h"><span class="k">Valor a repassar <button type="button" class="qm" id="repHelp" aria-expanded="false" aria-label="O que é o valor a repassar?">?</button></span></div>
+      <div class="fc-h"><span class="k">Valor total para repassar <button type="button" class="qm" id="repHelp" aria-expanded="false" aria-label="O que é o valor total para repassar?">?</button></span></div>
       <b class="v">${brl(repTot)}</b>
-      <p class="qtip" id="repTip" hidden>É o dinheiro que pertence a outras pessoas: o proprietário de um produto consignado ou de um equipamento alugado. Depois da venda, a Cave espera até ${REPASSE_DIAS} dias para confirmar que deu tudo certo (sem devolução ou problema) e então repassa o valor. Toque em <b>Pago</b> quando fizer a transferência.</p>
-      ${rep.length?`<div class="reps">${rep.map(x=>`<div class="rp${x.late?" late":""}"><span class="t"><b>${esc(x.who)}</b><span>${esc(x.what)}${x.due?` · ${x.late?"atrasado desde":"até"} ${fdate(ymd(x.due))}`:""}</span></span><span class="m">${brl(x.value)}</span><button class="btn small" type="button" data-pay="${x.kind}" data-id="${esc(x.id||"")}">Pago</button></div>`).join("")}</div>`:""}
+      <p class="qtip" id="repTip" hidden>É o dinheiro que pertence a outras pessoas: o proprietário de um produto consignado ou de um equipamento alugado. Depois da venda, a Cave espera até ${REPASSE_DIAS} dias para confirmar que deu tudo certo (sem devolução ou problema) e então repassa o valor.</p>
+      ${rep.length?`<div class="reps">${rep.map(x=>`<div class="rp${x.late?" late":""}" data-rpd="${esc(x.kind+":"+x.id)}" role="button" tabindex="0"><span class="t"><b>${esc(x.who)}</b><span>${esc(x.what)}${x.due?` · ${x.late?"atrasado desde":"até"} ${fdate(ymd(x.due))}`:""}</span></span><span class="m">${brl(x.value)}</span><button class="btn small" type="button" data-pay="${x.kind}" data-id="${esc(x.id||"")}">Pago</button>
+        <div class="rp-d" hidden>
+          <div><span>${x.kind==="rent"?"Locação":"Produto vendido"}</span><b>${esc(x.what.replace(/^Locação · /,""))}</b></div>
+          <div><span>Valor da ${x.kind==="rent"?"locação":"venda"}</span><b>${brl(x.gross)}</b></div>
+          <div><span>Proprietário</span><b>${esc(x.who)}</b></div>
+          <div><span>Chave PIX</span><b>${x.pix?`${esc(x.pix)} <button type="button" class="cp" data-copy="${esc(x.pix)}">Copiar</button>`:"não informada"}</b></div>
+          <div><span>Proprietário (${100-x.pct}%)</span><b>${brl(x.value)}</b></div>
+          <div><span>Cave.&nbsp;Floripa (${x.pct}%)</span><b>${brl(x.gross-x.value)}</b></div>
+        </div></div>`).join("")}</div>`:""}
     </div>
     <div class="fc-grid">
       <div class="fc"><span class="k">Caixa (parte da Cave nas vendas)</span><b class="v">${brl(c.vendasCave)}</b><span class="s">de ${brl(c.bruto)} vendidos${c.custo?` · custo ${brl(c.custo)}`:""}</span></div>
@@ -1390,6 +1406,8 @@ $("#finPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]"
 const arm=(el,txt)=>{if(el.dataset.armed==="1")return true;el.dataset.armed="1";el.textContent=txt;el.classList.add("armed");return false};
 $("#finBody").addEventListener("click",async e=>{
   const m=e.target.closest("[data-m]");if(m){FS.mod=m.dataset.m;return renderFin()}
+  const cp=e.target.closest("[data-copy]");if(cp){try{await navigator.clipboard.writeText(cp.dataset.copy);toast("Chave PIX copiada.")}catch(_){toast("Não foi possível copiar.",true)}return}
+  const rpd=e.target.closest("[data-rpd]");if(rpd&&!e.target.closest("[data-pay]")){const d=rpd.querySelector(".rp-d");d.hidden=!d.hidden;rpd.classList.toggle("open",!d.hidden);return}
   const qh=e.target.closest("#repHelp");if(qh){const t=$("#repTip");t.hidden=!t.hidden;qh.setAttribute("aria-expanded",!t.hidden);return}
   if(e.target.closest("#expNew"))return openExp();
   if(e.target.closest("#rentNew"))return openRentSh();
@@ -1430,15 +1448,15 @@ function askSale(p){
   const cg=FIN.consign[p.id];$("#sl-price").value=money00(finalPrice(p));$("#sl-pct").value=cg?cg.pct:(FIN.costs[p.id]?100:defPct(p));
   $("#sl-pay").innerHTML=payOpts("pix");
   $("#sl-cost").value=money00(p._cost??FIN.costs[p.id]??0);
-  $("#sl-owner").value=cg?cg.owner||"":"";$("#sl-ophone").value=cg?cg.phone||"":"";
+  $("#sl-owner").value=cg?cg.owner||"":"";$("#sl-ophone").value=cg?cg.phone||"":"";$("#sl-opix").value=cg?cg.pix||"":"";
   calcSale();$("#saleSh").hidden=false;
   return new Promise(r=>{saleResolve=r});
 }
 function saleForm(){const price=parseMoney($("#sl-price").value),pct=Math.min(100,digits($("#sl-pct").value)),pay=$("#sl-pay").value;
-  return {price,pct,pay,fee:feeOf(pay,price),cost:pct>=100?parseMoney($("#sl-cost").value):0,owner:pct<100?{name:$("#sl-owner").value.trim(),phone:$("#sl-ophone").value.trim()}:null}}
+  return {price,pct,pay,fee:feeOf(pay,price),cost:pct>=100?parseMoney($("#sl-cost").value):0,owner:pct<100?{name:$("#sl-owner").value.trim(),phone:$("#sl-ophone").value.trim(),pix:$("#sl-opix").value.trim()}:null}}
 function calcSale(){
   const s=saleForm(),own=s.pct>=100;
-  $("#sl-costw").hidden=!own;$("#sl-ownw").hidden=own;
+  $("#sl-costw").hidden=!own;$("#sl-ownw").hidden=own;$("#sl-pixw").hidden=own;
   $("#sl-out").innerHTML=`<div><span>Venda</span><b>${brl(s.price)}</b></div>`+
     (own?`<div><span>Custo do produto</span><b>− ${brl(s.cost)}</b></div>`:`<div><span>Repasse ao proprietário (${100-s.pct}%)</span><b>− ${brl(saleOwner(s))}</b></div>`)+
     (s.fee?`<div><span>Taxa ${payName(s.pay)}</span><b>− ${brl(s.fee)}</b></div>`:"")+
@@ -1483,7 +1501,7 @@ function openRentSh(day,r){
   $("#lc-item").innerHTML=names.map(n=>`<option>${esc(n)}</option>`).join("")+`<option value="__o">Outro…</option>`;
   $("#lc-item").value=r?(custom?"__o":r.item):names[0]||"__o";
   $("#lc-other").value=custom?r.item:"";$("#lc-otherw").hidden=!custom;
-  $("#lc-client").value=r?r.client||"":"";$("#lc-owner").value=r?r.owner||"":"";
+  $("#lc-client").value=r?r.client||"":"";$("#lc-owner").value=r?r.owner||"":"";$("#lc-pix").value=r?r.ownerPix||"":"";
   $("#lc-pct").value=r?(r.pct??100):splitPct("loc");
   $("#lc-val").value=r?money00(r.value):"";
   $("#lc-start").value=r?r.start:(day||ymd(new Date()));$("#lc-end").value=r?r.end||"":"";
@@ -1510,7 +1528,7 @@ $("#lc-ok").addEventListener("click",async()=>{
   if(!value)return toast("Coloque o valor da locação.",true);
   if(!start)return toast("Escolha a data de retirada.",true);
   const end=$("#lc-end").value;if(end&&end<start)return toast("A devolução não pode ser antes da retirada.",true);
-  const r={...(LR||{}),id:LR?LR.id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),owner:$("#lc-owner").value.trim(),pct:Math.min(100,digits($("#lc-pct").value)),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
+  const r={...(LR||{}),id:LR?LR.id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),owner:$("#lc-owner").value.trim(),ownerPix:$("#lc-pix").value.trim(),pct:Math.min(100,digits($("#lc-pct").value)),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
   busy("Salvando locação…");
   const editing=!!LR;
   try{await saveFin(d=>{const i=d.rentals.findIndex(y=>y.id===r.id);if(i>=0)d.rentals[i]=r;else d.rentals.push(r)},editing?"Financeiro: locação editada":"Financeiro: nova locação");$("#rentSh").hidden=true;LR=null;renderFin();if(VIEW==="fit")renderFit();toast(editing?"Locação atualizada.":"Locação lançada.")}

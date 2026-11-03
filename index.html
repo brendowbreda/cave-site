@@ -232,7 +232,7 @@ section,#loja{scroll-margin-top:68px}
 .card .p{font:600 15px/1 var(--mono);letter-spacing:-.02em}
 .card .meta{display:grid;gap:4px;min-width:0}
 /* Vendido: foto borrada em preto e branco, preço escondido */
-.is-sold .ph img,.is-sold .ph svg{filter:grayscale(1) blur(7px);transform:scale(1.08);opacity:.55}
+.gallery.is-sold img,.gallery.is-sold svg,.is-sold .ph img,.is-sold .ph svg{filter:grayscale(1) blur(7px);transform:scale(1.08);opacity:.55}
 .is-sold .p{color:var(--muted);letter-spacing:.06em}
 .empty{padding:40px 0;text-align:center;color:var(--muted);grid-column:1/-1}
 .more{margin-top:24px;display:flex;justify-content:center}
@@ -744,7 +744,7 @@ function card(p){
   const s=sold(p);
   return `<button class="card${s?" is-sold":""}" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${s?"vendido":brl(p.price)}">
     <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>${p.off?`<span class="badge off">${esc(p.off)}</span>`:p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&p.photos?.length>1?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
-    <div class="meta"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.subtitle)}</span><span class="p">${s?HIDDEN_PRICE:priceHtml(p)}</span></div>
+    <div class="meta"><span class="t">${esc(p.title)}</span>${s?`<span class="s">Vendido</span>`:`<span class="s">${esc(p.subtitle)}</span><span class="p">${priceHtml(p)}</span>`}</div>
   </button>`;
 }
 function renderGrid(){
@@ -830,9 +830,8 @@ function openProduct(id){
     <div class="pd">
       <div class="cond">${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>`}</div>
       <h3>${esc(p.title)}</h3>
-      <p class="sub">${esc(p.subtitle)}</p>
-      ${s?`<p class="price" style="color:var(--muted)">${HIDDEN_PRICE}</p>
-      <div class="sold-note"><b>Este item já foi vendido.</b> Quer algo parecido? Avisamos quando chegar.</div>`:`
+      ${s?"":`<p class="sub">${esc(p.subtitle)}</p>`}
+      ${s?"":`
       <p class="price">${priceHtml(p)}${p.off?` <span class="off-tag">${esc(p.off)}</span>`:""}</p>
       <div class="pd-actions${p.cond==="usado"?"":" one"}">${p.cond==="usado"?`<button class="btn" id="offerBtn">Fazer oferta</button>`:""}<button class="btn buy" id="buyBtn">Comprar</button></div>
       ${p.desc?`<details class="desc-acc"><summary>Descrição<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p class="desc">${esc(p.desc)}</p></details>`:""}
