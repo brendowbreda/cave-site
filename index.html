@@ -986,12 +986,10 @@ function offerFlow(step){
     const t=new Date(),exp=new Date(t.getTime()+864e5);
     const hh=d=>d.toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
     setSheet("Oferta enviada",`${stepper(4)}
-      <div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta enviada</h3><p>Valor ofertado <b style="color:var(--ink)">${brl(offer.value)}</b><br>${esc(p.title)}<br>Avisamos você pelo WhatsApp assim que o vendedor responder.</p></div>
+      <div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta enviada</h3><p>Valor ofertado <b style="color:var(--ink)">${brl(offer.value)}</b><br>${esc(p.title)}<br>Assim que o vendedor responder, entramos em contato pelo WhatsApp.</p></div>
       <div class="timeline" style="margin:18px 0 22px">
-        <div class="tl done"><b>Oferta enviada</b><span>${hh(t)}</span></div>
+        <div class="tl done"><b>Oferta enviada</b><span>${t.toLocaleDateString("pt-BR")} - horário: ${t.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</span></div>
         <div class="tl done"><b>Valor reservado no cartão</b><span>Pré-autorização, sem cobrança</span></div>
-        <div class="tl now"><b>Aguardando o vendedor</b><span>Responde até ${hh(exp)}</span></div>
-        <div class="tl"><b>Compra concluída ou valor liberado</b><span>Depende da resposta</span></div>
       </div>
       <div class="demo"><span class="demo-flag">Teste: simular a resposta do vendedor</span><div class="row"><button id="simY">Aceita</button><button id="simN">Recusa</button></div></div>`,
       `<button class="btn block" id="done">Voltar para a loja</button>`);
