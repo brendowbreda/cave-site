@@ -177,7 +177,7 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .pcts{display:grid;gap:8px}
 .pctrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px;padding:8px 8px 8px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);cursor:text}
 .pin{display:flex;align-items:center;gap:6px;font-weight:600}
-.fitbtn{background:var(--fit);border-color:var(--fit);color:#1A1500}
+.fitbtn,.btn.buy.fitbtn{background:var(--fit);border-color:var(--fit);color:#1A1500}
 .pctrow input{width:64px!important;min-height:40px!important;text-align:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:16px;font-weight:600}
 .btn.del{background:var(--bad);border-color:var(--bad);color:#fff}
 .disc{display:flex;gap:8px}
@@ -314,7 +314,11 @@ p{margin:0}
 .ed-body{flex:1;overflow-y:auto;overscroll-behavior:contain}
 .ed-body .wrap{padding-block:18px 28px}
 .ed-foot{display:flex;gap:10px;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--line);background:var(--surface)}
-.ed-foot .btn{flex:1}
+.ed-foot .btn{flex:1;min-height:44px}
+.ed-foot{padding-left:max(16px,calc((100% - 860px)/2 + 16px))!important;padding-right:max(16px,calc((100% - 860px)/2 + 16px))!important}
+.sx-m input:checked + span{background:#3B82F6!important;border-color:#3B82F6!important;color:#fff!important}
+.sx-f input:checked + span{background:#EC4899!important;border-color:#EC4899!important;color:#fff!important}
+#fitNew{min-height:52px;letter-spacing:.04em}
 .icon-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
 .icon-btn svg{width:20px;height:20px}
 .photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -579,8 +583,8 @@ p{margin:0}
   <div class="ed-body"><div class="wrap form">
     <div class="field"><label for="f-name">Nome do atleta</label><input id="f-name" autocomplete="off"></div>
     <div class="field"><span class="lbl">Sexo</span><div class="pillset">
-      <label><input type="radio" name="f-sex" value="M"><span>Masculino</span></label>
-      <label><input type="radio" name="f-sex" value="F"><span>Feminino</span></label></div></div>
+      <label class="sx-m"><input type="radio" name="f-sex" value="M"><span>Masculino</span></label>
+      <label class="sx-f"><input type="radio" name="f-sex" value="F"><span>Feminino</span></label></div></div>
     <div class="field"><span class="lbl">Bicicleta</span>
       <div class="row3">
         <input id="f-brand" placeholder="Marca" aria-label="Marca">
@@ -593,7 +597,7 @@ p{margin:0}
       <label><input type="radio" name="f-cat" value="tri"><span>Triathlon</span></label></div></div>
     <div class="row2">
       <div class="field"><label for="f-date">Data</label><input id="f-date" type="date"></div>
-      <div class="field"><label for="f-time">Horário</label><input id="f-time" type="time" step="900"></div>
+      <div class="field"><label for="f-time">Horário</label><select id="f-time"></select></div>
     </div>
     <div class="split" id="f-split"></div>
     <button class="btn danger" id="f-delete" type="button">Apagar agendamento</button>
@@ -1537,7 +1541,7 @@ function rentDays(r){const out=[],end=r.end&&r.end>=r.start?r.end:r.start;let d=
 function renderFit(){
   const loc=CAL.mode==="loc"&&isAdm(),RS=isAdm()?((FIN&&FIN.rentals)||[]):[];
   $("#calViewTitle").textContent=loc?"Locação":"Bike Fit";
-  $("#fitNew").textContent=loc?"+ Lançar locação":"+ Agendar bike fit";
+  $("#fitNew").textContent=loc?"AGENDAR LOCAÇÃO":"AGENDAR BIKE FIT";$("#fitNew").classList.toggle("fitbtn",!loc);
   $("#statsTitle").textContent=loc?"Painel Locação":"Painel Bike Fit";
   $("#calTitle").textContent=`${MONTHS[CAL.m]} ${CAL.y}`;
   const first=new Date(CAL.y,CAL.m,1),days=new Date(CAL.y,CAL.m+1,0).getDate(),today=ymd(new Date());
@@ -1568,17 +1572,13 @@ function renderRentStats(){
   const next=(FIN.rentals||[]).filter(r=>new Date(r.start+"T12:00")>now).length;
   const tot=RS.reduce((s,r)=>s+Number(r.value||0),0),fee=RS.reduce((s,r)=>s+Number(r.fee||0),0);
   const byItem={};RS.forEach(r=>byItem[r.item]=(byItem[r.item]||0)+1);
-  $("#fitStats").innerHTML=`
-    <div class="st big"><span class="k">Locações ${lbl}</span><b>${RS.length}</b><span class="muted">${next} agendada${next===1?"":"s"} a partir de hoje</span></div>
-    <div class="st-grid">
-      <div class="st"><span class="k">Valor total</span><b>${brl(tot)}</b></div>
-      <div class="st"><span class="k">Parte da Cave (sem taxas)</span><b>${brl(RS.reduce((s,r)=>s+rentCaveOf(r),0)-fee)}</b></div>
-    </div>
-    <div class="st-grid">
-      <div class="st"><span class="k">Repasse aos proprietários</span><b>${brl(RS.reduce((s,r)=>s+rentOwnerOf(r),0))}</b></div>
-      <div class="st"><span class="k">Taxas de pagamento</span><b>${brl(fee)}</b></div>
-    </div>
-    ${Object.keys(byItem).length?`<div class="st"><span class="k">Itens mais alugados</span><div class="lines">${Object.entries(byItem).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div><span>${esc(k)}</span><span>${v}×</span></div>`).join("")}</div></div>`:""}`;
+  $("#fitStats").innerHTML=`<div class="fs-grid">
+    <div class="st"><span class="k">Locações ${lbl}</span><b class="big-n">${RS.length}</b></div>
+    <div class="st"><span class="k">Valor total arrecadado com locação ${lbl}</span><b class="big-n">${brl(tot)}</b>
+      <div class="kv2"><span>Parte da Cave.&nbsp;Floripa</span><b>${brl(RS.reduce((s,r)=>s+rentCaveOf(r),0))}</b></div>
+      <div class="kv2"><span>Repasse aos proprietários</span><b>${brl(RS.reduce((s,r)=>s+rentOwnerOf(r),0))}</b></div></div>
+    ${Object.keys(byItem).length?`<div class="st"><span class="k">Itens mais alugados</span>${Object.entries(byItem).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="kv2"><span>${esc(k)}</span><b>${v}×</b></div>`).join("")}</div>`:""}
+  </div>`;
 }
 function renderStats(){
   const now=new Date(),start=new Date(now.getFullYear(),now.getMonth()-(CAL.p-1),1);
@@ -1612,7 +1612,10 @@ function openFit(b){
   $("#fitEdTitle").textContent=b?"Editar agendamento":"Agendar bike fit";
   $("#f-name").value=b?b.name:"";$("#f-brand").value=b?b.brand:"";$("#f-model").value=b?b.model:"";$("#f-year").value=b?b.year:"";
   document.querySelectorAll('[name="f-sex"],[name="f-cat"]').forEach(r=>r.checked=!!b&&(r.value===b.sex||r.value===b.cat));
-  $("#f-date").value=b?b.at.slice(0,10):CAL.day;$("#f-time").value=b?b.at.slice(11,16):"";
+  $("#f-date").value=b?b.at.slice(0,10):CAL.day;
+  const hrs=[9,10,11,12,14,15,16,17,18,19,20].map(h=>pad(h)+":00"),cur=b?b.at.slice(11,16):"";
+  if(cur&&!hrs.includes(cur))hrs.push(cur);hrs.sort();
+  $("#f-time").innerHTML=`<option value="">Escolha o horário</option>`+hrs.map(h=>`<option${h===cur?" selected":""}>${h}</option>`).join("");
   $("#f-delete").hidden=!b;$("#f-delete").dataset.armed="";$("#f-delete").textContent="Apagar agendamento";
   renderSplit();
   $("#fitEd").hidden=false;document.body.style.overflow="hidden";$("#fitEd .ed-body").scrollTop=0;
