@@ -1,6 +1,26 @@
 {
  "products": [
   {
+   "id": "p-mvzx6h1j",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Pneus",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 950,
+   "title": "Pneu Continental Grand Prix 5000 S TR - Black",
+   "subtitle": "700x28 - Pneu Tubeless Ready | BlackChili",
+   "desc": "Mais velocidade. Mais aderência. Performance em cada pedalada.\n\nDesenvolvido para ciclistas que buscam alto rendimento, o pneu Continental 700x28 combina tecnologia alemã, eficiência e confiabilidade para treinos intensos e competições.\n\nCom tecnologia Tubeless Ready e composto BlackChili, proporciona baixa resistência à rolagem, excelente aderência e maior controle em diferentes condições de asfalto.\n\nA proteção Vectran Breaker contribui para reduzir o risco de perfurações, enquanto a tecnologia Lazer Star favorece a eficiência da rolagem e o desempenho em altas velocidades.\n\nSua largura de 28 mm oferece equilíbrio entre velocidade, conforto e estabilidade, sendo uma escolha versátil para ciclismo de estrada e preparação para o triathlon.\n\nEspecificações técnicas\n\nMarca: Continental\n\nModalidade: Ciclismo de estrada e triathlon\n\nMedida: 700x28C\n\nTecnologia: Tubeless Ready (TLR)\n\nComposto: BlackChili\n\nProteção antifuro: Vectran Breaker\n\nTecnologia adicional: Lazer Star\n\nAplicação: Treinamentos e competições\n\nMenos resistência. Mais eficiência. Cada watt faz a diferença.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzx6h1j-mvzxbyay1.jpg",
+    "img/products/p-mvzx6h1j-mvzxbzo52.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-03T00:02:47.144Z",
+   "createdAt": "2026-11-03T00:02:47.144Z"
+  },
+  {
    "id": "p-mvzx3p2x",
    "cat": "bike",
    "group": "componentes",
