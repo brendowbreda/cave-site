@@ -173,9 +173,11 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .lg-f{background:var(--fit)}.lg-l{background:var(--buy)}
 .bk.f{border-left:4px solid var(--fit)}
 .bk.l{border-left:4px solid var(--buy)}
-.pctrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px}
-.pctrow input{width:72px!important;min-height:44px!important;text-align:center;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:16px}
-.pctrow b{margin-left:auto;font-size:15px}
+.pcts{display:grid;gap:8px}
+.pctrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px;padding:8px 8px 8px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);cursor:text}
+.pin{display:flex;align-items:center;gap:6px;font-weight:600}
+.fitbtn{background:var(--fit);border-color:var(--fit);color:#1A1500}
+.pctrow input{width:64px!important;min-height:40px!important;text-align:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:16px;font-weight:600}
 .btn.del{background:var(--bad);border-color:var(--bad);color:#fff}
 .disc{display:flex;gap:8px}
 .disc input{flex:1;min-width:0;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:11px 14px;font-size:16px}
@@ -433,7 +435,7 @@ p{margin:0}
             <div class="field"><label for="co-razao">Razão social</label><input id="co-razao"></div>
             <div class="field"><label for="co-cnpj">CNPJ</label><input id="co-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></div>
             <div class="field"><label for="co-end">Endereço</label><input id="co-end" placeholder="Rua, número, bairro, Florianópolis/SC"></div>
-            <div class="field"><label for="co-tel">Telefone/WhatsApp</label><div class="tel"><span>+55</span><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div><span class="hint">O telefone é o WhatsApp que recebe as mensagens do site.</span></div>
+            <div class="field"><label for="co-tel">Telefone/WhatsApp</label><div class="tel"><span>+55</span><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
             <button class="btn solid block" type="submit">Salvar dados da empresa</button>
           </form>
         </details>
@@ -442,7 +444,6 @@ p{margin:0}
           <summary><span><b>Usuários com acesso ao sistema</b><small>Quem pode entrar no painel administrativo</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
           <form class="acc-in form" id="usForm" novalidate>
             <div id="us-list" class="form"></div>
-            <span class="hint">Senha com no mínimo 10 caracteres. Deixe a senha vazia para manter a atual.</span>
             <button class="btn solid block" type="submit">Salvar usuários</button>
           </form>
         </details>
@@ -450,7 +451,6 @@ p{margin:0}
         <details class="acc" data-acc="cfg">
           <summary><span><b>Taxas de pagamento</b><small>Débito e crédito da maquininha</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
           <form class="acc-in form" id="feeForm" novalidate>
-            <p class="hint">Porcentagem cobrada pela maquininha. Pix e dinheiro não têm taxa. O Financeiro desconta a taxa de cada venda e locação.</p>
             <div id="fees" class="form"></div>
             <button class="btn solid block" type="submit">Salvar taxas</button>
           </form>
@@ -461,17 +461,20 @@ p{margin:0}
             <summary><span><b>Bike Fit</b><small>WhatsApp do Guilherme, valores e agenda</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
             <div class="acc-in form">
               <div class="field"><label for="c-wafit">WhatsApp do Guilherme</label><div class="tel"><span>+55</span><input id="c-wafit" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
-              <div class="field"><label for="c-fitpct">Divisão do valor</label><div class="pctrow"><span>Cave.&nbsp;Floripa</span><input id="c-fitpct" inputmode="numeric" aria-label="Parte da Cave em %"><span>%</span><b id="c-fitpct-o"></b></div></div>
+              <div class="field"><span class="lbl">Divisão do valor</span><div class="pcts">
+                <label class="pctrow" for="c-fitpct"><span>Cave.&nbsp;Floripa</span><span class="pin"><input id="c-fitpct" inputmode="numeric" data-pct="c-fitpct-o">%</span></label>
+                <label class="pctrow" for="c-fitpct-o"><span>Guilherme Garcia Cunha</span><span class="pin"><input id="c-fitpct-o" inputmode="numeric" data-pct="c-fitpct">%</span></label></div></div>
               <div id="c-fit" class="form"></div>
-              <button class="btn small" id="openFit" type="button" style="justify-self:start">Ver agenda e painel do Bike Fit</button>
+              <button class="btn block fitbtn" id="openFit" type="button">Ver agenda e painel do Bike Fit</button>
               <button class="btn solid block" type="submit">Salvar Bike Fit</button>
             </div>
           </details>
           <details class="acc" data-acc="cfg">
             <summary><span><b>Locação</b><small>Bicicletas, rodas e itens de viagem</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
             <div class="acc-in form">
-              <div class="field"><label for="c-locpct">Divisão do valor</label><div class="pctrow"><span>Cave.&nbsp;Floripa</span><input id="c-locpct" inputmode="numeric" aria-label="Parte da Cave em %"><span>%</span><b id="c-locpct-o"></b></div><span class="hint">Padrão para bicicletas, rodas e mala bike de terceiros. Dá para mudar em cada locação.</span></div>
-              <p class="hint">Deixe o preço vazio para mostrar “Sob consulta”.</p>
+              <div class="field"><span class="lbl">Divisão do valor</span><div class="pcts">
+                <label class="pctrow" for="c-locpct"><span>Cave.&nbsp;Floripa</span><span class="pin"><input id="c-locpct" inputmode="numeric" data-pct="c-locpct-o">%</span></label>
+                <label class="pctrow" for="c-locpct-o"><span>Proprietário</span><span class="pin"><input id="c-locpct-o" inputmode="numeric" data-pct="c-locpct">%</span></label></div></div>
               <div id="c-rent" class="accs"></div>
               <button class="btn solid block" type="submit">Salvar locação</button>
             </div>
@@ -536,7 +539,7 @@ p{margin:0}
   <div class="field" id="lc-otherw" hidden><label for="lc-other">Qual item?</label><input id="lc-other"></div>
   <div class="field"><label for="lc-client">Cliente</label><input id="lc-client" placeholder="Nome"></div>
   <div class="row2">
-    <div class="field"><label for="lc-owner">Dono do equipamento</label><input id="lc-owner" placeholder="Nome (vazio se for da Cave)"></div>
+    <div class="field"><label for="lc-owner">Proprietário</label><input id="lc-owner" placeholder="Nome (vazio se for da Cave)"></div>
     <div class="field"><label for="lc-pct">Parte da Cave (%)</label><input id="lc-pct" inputmode="numeric"></div>
   </div>
   <div class="row2">
@@ -1037,9 +1040,10 @@ $("#e-delete").addEventListener("click",async function(){
 
 // ---------- Configurações
 function syncPct(){
-  [["c-fitpct","Guilherme"],["c-locpct","Dono"]].forEach(([id,who])=>{const el=$("#"+id),v=Math.min(100,digits(el.value));$("#"+id+"-o").textContent=`${who}: ${100-v}%`});
+  ["c-fitpct","c-locpct"].forEach(id=>{$("#"+id+"-o").value=100-Math.min(100,digits($("#"+id).value))});
 }
-["#c-fitpct","#c-locpct"].forEach(sel=>document.addEventListener("input",e=>{if(e.target.matches&&e.target.matches(sel)){e.target.value=String(Math.min(100,digits(e.target.value)||0));syncPct()}}));
+// os dois campos somam sempre 100%
+document.addEventListener("input",e=>{const t=e.target;if(!t.dataset||!t.dataset.pct)return;const v=Math.min(100,digits(t.value)||0);t.value=String(v);$("#"+t.dataset.pct).value=100-v});
 // Locação: itens agrupados como no site (Bicicletas, Rodas, Vamos viajar?)
 const RGROUPS=[{group:"Bicicletas",icon:"bike"},{group:"Rodas",icon:"spoke"},{group:"Viagem",title:"Vamos viajar?",icon:"bag"}];
 let RENT=[],OPEN_RENT="";
@@ -1092,7 +1096,7 @@ function renderCfg(){
       <div class="field"><label for="us-n${i}">Nome</label><input id="us-n${i}" value="${esc(u?u.name:s.name)}"></div>
       <div class="field"><label for="us-e${i}">E-mail</label><input id="us-e${i}" type="email" autocapitalize="off" value="${esc(u?u.email:"")}" placeholder="nome@cave.floripa.com"></div>
       <div class="field"><label for="us-p${i}">${u?"Nova senha":"Senha"}</label><input id="us-p${i}" type="password" autocomplete="new-password" placeholder="${u?"Deixe vazio para manter":"Mínimo 10 caracteres"}"></div>
-      ${u&&id!==S.id?`<button class="btn small del" type="button" data-udel="${id}" style="justify-self:start">Excluir acesso</button>`:""}${u&&id===S.id?`<span class="hint">Este é o seu acesso.</span>`:""}
+      ${id===S.id?`<span class="hint">Este é o seu acesso.</span>`:`<button class="btn small del" type="button" data-udel="${id||""}" data-slot="${i}" style="justify-self:start">Excluir acesso</button>`}
     </div>`}).join("");
 }
 $("#co-cnpj").addEventListener("input",e=>{e.target.value=fmtCnpj(e.target.value)});
@@ -1117,6 +1121,7 @@ $("#cfgForm").addEventListener("submit",async e=>{
 });
 $("#us-list").addEventListener("click",async e=>{
   const b=e.target.closest("[data-udel]");if(!b)return;
+  if(!b.dataset.udel){const i=b.dataset.slot;["us-e","us-p"].forEach(k=>$("#"+k+i).value="");return toast("Esta pessoa ainda não tem acesso ao sistema.")}
   const u=DIR[b.dataset.udel];
   if(b.dataset.armed!=="1"){b.dataset.armed="1";b.textContent=`Confirmar exclusão de ${u&&u.name?u.name.split(" ")[0]:"usuário"}`;setTimeout(()=>{if(b.isConnected){b.dataset.armed="";b.textContent="Excluir acesso"}},5000);return}
   busy("Excluindo acesso…");
@@ -1250,7 +1255,7 @@ function finCalc(rg){
 function pendingRepasses(){
   const now=new Date(),list=[];
   FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Dono não informado",what:s.title,value:saleOwner(s),due,late:due<now})});
-  FIN.rentals.filter(r=>Number(r.pct??100)<100&&!r.paidAt).forEach(r=>{const due=new Date(new Date((r.end||r.start)+"T12:00").getTime()+REPASSE_DIAS*864e5);list.push({kind:"rent",id:r.id,who:r.owner||"Dono não informado",what:`Locação · ${r.item}`,value:rentOwnerOf(r),due,late:due<now})});
+  FIN.rentals.filter(r=>Number(r.pct??100)<100&&!r.paidAt).forEach(r=>{const due=new Date(new Date((r.end||r.start)+"T12:00").getTime()+REPASSE_DIAS*864e5);list.push({kind:"rent",id:r.id,who:r.owner||"Proprietário não informado",what:`Locação · ${r.item}`,value:rentOwnerOf(r),due,late:due<now})});
   const gf=FIT.filter(b=>atDate(b)<=now&&!FIN.fitPaid[b.id]);
   if(gf.length)list.push({kind:"fit",who:"Guilherme · Bike Fit",what:`${gf.length} bike fit${gf.length>1?"s":""} (parte do Guilherme)`,value:r2(gf.reduce((s,b)=>s+Number(b.price||0)-fitCaveOf(b),0)),due:null,late:false});
   return list.sort((a,b)=>(a.due||Infinity)-(b.due||Infinity));
@@ -1417,7 +1422,7 @@ $("#lc-del").addEventListener("click",async function(){
   catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 function calcRent(){const v=parseMoney($("#lc-val").value),pc=Math.min(100,digits($("#lc-pct").value)),f=feeOf($("#lc-pay").value,v),cave=r2(v*pc/100);
-  $("#lc-out").innerHTML=`<div><span>Locação</span><b>${brl(v)}</b></div>${pc<100?`<div><span>Repasse ao dono (${100-pc}%)</span><b>− ${brl(v-cave)}</b></div>`:""}${f?`<div><span>Taxa ${payName($("#lc-pay").value)}</span><b>− ${brl(f)}</b></div>`:""}<div class="tot"><span>Fica para a Cave</span><b>${brl(cave-f)}</b></div>`}
+  $("#lc-out").innerHTML=`<div><span>Locação</span><b>${brl(v)}</b></div>${pc<100?`<div><span>Repasse ao proprietário (${100-pc}%)</span><b>− ${brl(v-cave)}</b></div>`:""}${f?`<div><span>Taxa ${payName($("#lc-pay").value)}</span><b>− ${brl(f)}</b></div>`:""}<div class="tot"><span>Fica para a Cave</span><b>${brl(cave-f)}</b></div>`}
 $("#lc-pct").addEventListener("input",e=>{e.target.value=String(Math.min(100,digits(e.target.value)||0));calcRent()});
 $("#lc-item").addEventListener("change",()=>{$("#lc-otherw").hidden=$("#lc-item").value!=="__o"});
 moneyField($("#lc-val"),calcRent);$("#lc-pay").addEventListener("change",calcRent);
@@ -1441,7 +1446,7 @@ function exportCsv(){
   const q=v=>{v=String(v??"");return /[;"\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
   const rows=[["Data","Tipo","Descrição","Categoria","Forma de pagamento","Valor bruto","Taxa","Custo","Repasse a terceiros","Valor da Cave"]];
   c.sales.forEach(s=>rows.push([br(s.at),"Venda",s.title+(s.owner&&s.owner.name?` (consignado: ${s.owner.name})`:""),MODS[s.cat]||"Marcas",payName(s.pay),n(s.price),n(s.fee),n(s.pct>=100?s.cost:0),n(saleOwner(s)),n(saleNet(s))]));
-  c.rents.forEach(r=>rows.push([br(r.start),"Locação",r.item+(r.client?` · ${r.client}`:"")+(r.owner?` (dono: ${r.owner})`:""),"Locação",payName(r.pay),n(r.value),n(r.fee),n(0),n(rentOwnerOf(r)),n(rentCaveOf(r)-r.fee)]));
+  c.rents.forEach(r=>rows.push([br(r.start),"Locação",r.item+(r.client?` · ${r.client}`:"")+(r.owner?` (proprietário: ${r.owner})`:""),"Locação",payName(r.pay),n(r.value),n(r.fee),n(0),n(rentOwnerOf(r)),n(rentCaveOf(r)-r.fee)]));
   c.fit.forEach(b=>rows.push([br(b.at),"Bike Fit",`${b.name} · ${CATS[b.cat]||""}`,"Bike Fit","",n(b.price),n(0),n(0),n(b.price-fitCaveOf(b)),n(fitCaveOf(b))]));
   c.exps.forEach(e=>rows.push([br(e.date),"Gasto",e.desc||e.cat,e.cat,"",n(e.value),n(0),n(0),n(0),"-"+n(e.value)]));
   rows.sort((a,b)=>a===rows[0]?-1:b===rows[0]?1:a[0].split("/").reverse().join("").localeCompare(b[0].split("/").reverse().join("")));
@@ -1531,7 +1536,7 @@ function renderRentStats(){
       <div class="st"><span class="k">Parte da Cave (sem taxas)</span><b>${brl(RS.reduce((s,r)=>s+rentCaveOf(r),0)-fee)}</b></div>
     </div>
     <div class="st-grid">
-      <div class="st"><span class="k">Repasse aos donos</span><b>${brl(RS.reduce((s,r)=>s+rentOwnerOf(r),0))}</b></div>
+      <div class="st"><span class="k">Repasse aos proprietários</span><b>${brl(RS.reduce((s,r)=>s+rentOwnerOf(r),0))}</b></div>
       <div class="st"><span class="k">Taxas de pagamento</span><b>${brl(fee)}</b></div>
     </div>
     ${Object.keys(byItem).length?`<div class="st"><span class="k">Itens mais alugados</span><div class="lines">${Object.entries(byItem).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div><span>${esc(k)}</span><span>${v}×</span></div>`).join("")}</div></div>`:""}`;
