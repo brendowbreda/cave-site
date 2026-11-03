@@ -1,6 +1,25 @@
 {
  "products": [
   {
+   "id": "p-mvzxoqd2",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Correntes",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 190,
+   "title": "Corrente Shimano 12v",
+   "subtitle": "CN-M6100",
+   "desc": "Precisão em cada troca. Eficiência em cada pedalada. Desempenho em qualquer terreno.\n\nA corrente Shimano CN-M6100 foi desenvolvida para ciclistas que buscam durabilidade, confiabilidade e máxima eficiência nas transmissões de 12 velocidades.\n\nCom tecnologia Hyperglide+ e design de placas internas otimizado, proporciona trocas de marcha rápidas, suaves e precisas, mesmo sob carga, garantindo uma pedalada mais fluida e consistente.\n\nProjetada para transmissões Shimano MTB de 12 velocidades, oferece excelente integração com os componentes das linhas Deore, SLX e Deore XT, contribuindo para maior retenção da corrente e eficiência da transmissão.\n\nEspecificações técnicas\n\nModelo: Shimano CN-M6100\n\nModalidade: Mountain Bike (MTB)\n\nVelocidades: 12\n\nQuantidade de elos: 126\n\nTecnologia: Hyperglide+\n\nCompatibilidade: Transmissões Shimano MTB de 12 velocidades, incluindo Deore, SLX e Deore XT\n\nConstrução: Placas internas com geometria otimizada\n\nAplicação: Treinamentos, trilhas e competições\n\nMais precisão. Mais durabilidade. Cada troca de marcha faz a diferença.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mvzxoqd2-mvzxq47i1.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-03T00:13:48.771Z",
+   "createdAt": "2026-11-03T00:13:48.771Z"
+  },
+  {
    "id": "p-mvzxl3s5",
    "cat": "bike",
    "group": "componentes",
