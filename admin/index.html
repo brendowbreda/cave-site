@@ -193,6 +193,9 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .qm[aria-expanded="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .qtip{font-size:13px;color:var(--muted);line-height:1.5;padding:10px 12px;border-radius:10px;background:var(--bg);margin:2px 0}
 .qtip b{color:var(--ink)}
+.pctin{display:flex;gap:8px}
+.pctin input{width:76px!important;flex:none;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:11px 12px;font-size:16px;text-align:center}
+.seg.quick{flex:1}.seg.quick button{flex:1}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -518,7 +521,7 @@ p{margin:0}
   <span class="hint">Produto da loja: 100%. Consignado: a comissão combinada (ex.: 10%).</span>
   <div class="field" id="sl-costw"><label for="sl-cost">Custo do produto</label><input id="sl-cost" inputmode="numeric" placeholder="R$ 0,00"><span class="hint">Quanto a loja pagou. Só aparece no painel.</span></div>
   <div class="row2" id="sl-ownw" hidden>
-    <div class="field"><label for="sl-owner">Dono do produto</label><input id="sl-owner" placeholder="Nome"></div>
+    <div class="field"><label for="sl-owner">Proprietário</label><input id="sl-owner" placeholder="Nome"></div>
     <div class="field"><label for="sl-ophone">Telefone</label><input id="sl-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
   </div>
   <div class="field"><label for="sl-pay">Forma de pagamento</label><select id="sl-pay"></select></div>
@@ -607,7 +610,18 @@ p{margin:0}
     </div>
     <p class="final" id="e-final" hidden></p>
     <div class="row2">
-      <div class="field"><label for="e-cost">Valor do custo do produto (oculto)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"></div>
+      <div class="field"><span class="lbl">Produto de</span><div class="pillset cond">
+        <label><input type="radio" name="e-own" id="e-own-loja" value="loja"><span>Da loja</span></label>
+        <label><input type="radio" name="e-own" id="e-own-terc" value="terc"><span>Terceiro</span></label></div></div>
+      <div class="field" id="e-pctw"><label for="e-pct">Comissão da Cave (%)</label><div class="pctin"><input id="e-pct" inputmode="numeric" placeholder="15"><div class="seg quick"><button type="button" data-qp="10">10%</button><button type="button" data-qp="15">15%</button><button type="button" data-qp="20">20%</button></div></div></div>
+    </div>
+    <div class="row2" id="e-ownerw">
+      <div class="field"><label for="e-owner">Proprietário</label><input id="e-owner" placeholder="Nome de quem é o produto"></div>
+      <div class="field"><label for="e-ophone">Telefone do proprietário</label><input id="e-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
+    </div>
+    <p class="final" id="e-comm" hidden></p>
+    <div class="row2">
+      <div class="field" id="e-costw"><label for="e-cost">Valor do custo do produto (oculto)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"></div>
       <div class="field"><span class="lbl">Estado do produto</span><div class="pillset cond">
         <label><input type="radio" name="e-cond" id="e-novo" value="novo"><span>Novo</span></label>
         <label><input type="radio" name="e-cond" id="e-usado" value="usado"><span>Usado</span></label></div></div>
@@ -896,6 +910,18 @@ $("#rmDemo").addEventListener("click",async function(){
 
 
 // ---------- Editor
+// Produto da loja (100% da Cave, tem custo) ou de terceiro (comissão de 10, 15, 20%...)
+function readOwn(){const terc=$("#e-own-terc").checked;return terc?{pct:Math.min(99,digits($("#e-pct").value)||0),owner:$("#e-owner").value.trim(),phone:$("#e-ophone").value.trim()}:{pct:100}}
+function syncOwn(){
+  const terc=$("#e-own-terc").checked;$("#e-pctw").hidden=!terc;$("#e-ownerw").hidden=!terc;$("#e-costw").hidden=terc;
+  document.querySelectorAll(".quick [data-qp]").forEach(b=>b.setAttribute("aria-pressed",String($("#e-pct").value===b.dataset.qp)));
+  const pr=finalPrice({price:parseMoney($("#e-price").value),discount:readDisc()}),o=readOwn(),el=$("#e-comm");
+  if(!terc||!pr||!o.pct){el.hidden=true;return}
+  el.hidden=false;el.innerHTML=`Na venda: Cave recebe <b>${brl(pr*o.pct/100)}</b> · proprietário recebe <b>${brl(pr-pr*o.pct/100)}</b>`;
+}
+document.querySelectorAll('[name="e-own"]').forEach(r=>r.addEventListener("change",()=>{if($("#e-own-terc").checked&&!$("#e-pct").value)$("#e-pct").value="15";syncOwn()}));
+document.querySelectorAll(".quick [data-qp]").forEach(b=>b.addEventListener("click",()=>{$("#e-pct").value=b.dataset.qp;syncOwn()}));
+$("#e-pct").addEventListener("input",e=>{e.target.value=String(Math.min(99,digits(e.target.value))||"");syncOwn()});
 // Desconto: % ou R$ sobre o valor. O site mostra o valor riscado e o preço final.
 let DT="pct";
 function finalPrice(p){const d=p.discount;if(!d||!d.value)return p.price;const v=d.type==="pct"?Math.round(p.price*(1-d.value/100)):p.price-d.value;return Math.max(0,v)}
@@ -904,7 +930,7 @@ function readDisc(){const raw=$("#e-disc").value;const v=DT==="pct"?Math.min(90,
 function renderFinal(){const pr=parseMoney($("#e-price").value),d=readDisc(),el=$("#e-final");if(!d||!pr){el.hidden=true;return}const f=finalPrice({price:pr,discount:d});el.hidden=false;el.innerHTML=`Preço no site: <s>${brl(pr)}</s> <b>${brl(f)}</b> <span class="pill on">−${d.type==="pct"?d.value+"%":brl(pr-f)}</span>`}
 document.querySelectorAll(".seg [data-dt]").forEach(b=>b.addEventListener("click",()=>{if(DT===b.dataset.dt)return;DT=b.dataset.dt;$("#e-disc").value="";syncDT();renderFinal();renderPreview()}));
 $("#e-disc").addEventListener("focus",()=>{if(DT==="brl")$("#e-disc").value=$("#e-disc").value.replace(/,\d{0,2}$/,"")});
-$("#e-disc").addEventListener("input",()=>{const el=$("#e-disc");el.value=DT==="pct"?String(Math.min(90,digits(el.value))||""):money(parseMoney(el.value));renderFinal();renderPreview()});
+$("#e-disc").addEventListener("input",()=>{const el=$("#e-disc");el.value=DT==="pct"?String(Math.min(90,digits(el.value))||""):money(parseMoney(el.value));renderFinal();renderPreview();syncOwn()});
 $("#e-disc").addEventListener("blur",()=>{if(DT==="brl"){const el=$("#e-disc");el.value=money00(parseMoney(el.value))}});
 // Outras seções onde o produto também aparece
 // Seções: modalidades com suas seções e todas as marcas (marca sem seção usa a lista geral de tipos)
@@ -930,13 +956,16 @@ function openEditor(p){
   D.photos=(D.photos||[]).map(path=>({path}));
   $("#edTitle").textContent=p?"Editar produto":"Novo produto";
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";
+  const cg=(p&&(FIN.consign||{})[p.id])||null;
+  const terc=cg?cg.pct<100:!p?false:defPct(D)<100&&!(FIN.costs||{})[p.id];
+  $(terc?"#e-own-terc":"#e-own-loja").checked=true;$("#e-pct").value=cg&&cg.pct<100?cg.pct:(terc?defPct(D):"");$("#e-owner").value=cg?cg.owner||"":"";$("#e-ophone").value=cg?cg.phone||"":"";syncOwn();
   $("#e-price").value=money00(D.price);DT=(D.discount&&D.discount.type)||"pct";$("#e-disc").value=D.discount&&D.discount.value?(DT==="brl"?money00(D.discount.value):D.discount.value):"";syncDT();D.also=(D.also||[]).map(x=>({...x}));renderAlso();$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
   $("#e-"+D.cond).checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
   $("#e-cat").innerHTML=secOpts("");
   $("#e-cat").value=`${D.cat}|${D.group||""}`;if(!$("#e-cat").value)$("#e-cat").selectedIndex=0;fillSubs(D.sub);
   $("#e-delete").hidden=!p;$("#e-delete").dataset.armed="";$("#e-delete").textContent="Apagar produto";
-  renderPhotos();renderFinal();renderPreview();
+  renderPhotos();renderFinal();renderPreview();syncOwn();
   $("#editor").hidden=false;document.body.style.overflow="hidden";$("#editor .ed-body").scrollTop=0;
 }
 function closeEditor(){$("#editor").hidden=true;document.body.style.overflow="";D=null}
@@ -952,7 +981,7 @@ $("#e-cat").addEventListener("change",()=>{fillSubs();renderPreview()});
 $("#e-subcat").addEventListener("change",()=>{$("#e-other-wrap").hidden=$("#e-subcat").value!=="__other";renderPreview()});
 ["#e-title","#e-sub","#e-other"].forEach(s=>$(s).addEventListener("input",renderPreview));
 document.querySelectorAll('[name="e-cond"]').forEach(r=>r.addEventListener("change",renderPreview));
-moneyField($("#e-price"),()=>{renderFinal();renderPreview()});moneyField($("#e-cost"));
+moneyField($("#e-price"),()=>{renderFinal();renderPreview();syncOwn()});moneyField($("#e-cost"));
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
   return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:D.tag||"",
@@ -998,7 +1027,9 @@ $("#edSave").addEventListener("click",async()=>{
   if(!f.price){toast("Coloque o valor do produto.",true);$("#e-price").focus();return}
   if(!f.sub){toast("Escolha ou escreva o tipo do produto.",true);return}
   const nowSold=f.status==="vendido"&&!(orig&&orig.status==="vendido"),unSold=f.status!=="vendido"&&orig&&orig.status==="vendido";
-  const cost=parseMoney($("#e-cost").value);
+  const own=readOwn();
+  if(own.pct<100&&!own.pct){toast("Coloque a comissão da Cave.",true);$("#e-pct").focus();return}
+  const cost=own.pct<100?0:parseMoney($("#e-cost").value);
   const sale=nowSold?await askSale({...f,_cost:cost}):null;
   if(nowSold&&!sale)return;
   try{
@@ -1020,7 +1051,7 @@ $("#edSave").addEventListener("click",async()=>{
     busy("Salvando produto…");
     await updateProducts(list=>{const i=list.findIndex(x=>x.id===prod.id);if(i>=0)list[i]=prod;else list.unshift(prod)},`${orig?"Edita":"Novo produto"}: ${prod.title}`);
     for(const p of removed){busy("Limpando fotos antigas…");await delFile(p,`Remove foto: ${prod.title}`)}
-    await saveCost(prod.id,cost);
+    await saveCost(prod.id,cost);await saveConsign(prod.id,own);
     if(nowSold){busy("Registrando venda…");await recordSale(prod,sale)}else if(unSold)await unrecordSale(prod);
     closeEditor();renderList();renderFin();toast("Salvo. O site atualiza em cerca de 1 minuto.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
@@ -1191,11 +1222,11 @@ const payName=k=>(PAYS.find(x=>x[0]===k)||[,"—"])[1];
 const DEF_FEES={pix:0,dinheiro:0,debito:1.5,credito:3.5,parcelado:6};
 const REPASSE_DIAS=7;
 const FS={p:1,mod:"all"};
-const defPct=p=>p.cond==="novo"?100:10;
+const defPct=p=>p.cond==="novo"?100:15;
 const r2=v=>Math.round(v*100)/100;
 const feeOf=(pay,v)=>r2(Number(v||0)*Number((FIN.fees||DEF_FEES)[pay]||0)/100);
 const pctTxt=v=>String(v).replace(".",",");
-function finFix(d){d=d||{};d.sales=d.sales||[];d.expenses=d.expenses||[];d.rentals=d.rentals||[];d.costs=d.costs||{};d.fitPaid=d.fitPaid||{};d.fees={...DEF_FEES,...(d.fees||{})};return d}
+function finFix(d){d=d||{};d.sales=d.sales||[];d.expenses=d.expenses||[];d.rentals=d.rentals||[];d.costs=d.costs||{};d.consign=d.consign||{};d.fitPaid=d.fitPaid||{};d.fees={...DEF_FEES,...(d.fees||{})};return d}
 async function loadFin(){
   try{const {data}=await getJSON("data/financeiro.json");FIN=finFix(JSON.parse(await dec(await dkKey(S.dk),data)))}
   catch(x){if(x.status===404)FIN=finFix();else throw x}
@@ -1220,7 +1251,7 @@ const inRange=(iso,[a,b])=>{const d=new Date(iso.length===10?iso+"T12:00":iso);r
 function finSales(rg){
   const recs=FIN.sales.filter(s=>inRange(s.at,rg));
   const known=new Set(FIN.sales.map(s=>s.pid)); // vendidos antes do financeiro: preço do anúncio e parte padrão
-  PRODS.filter(p=>p.status==="vendido"&&p.soldAt&&!known.has(p.id)&&inRange(p.soldAt,rg)).forEach(p=>recs.push({pid:p.id,title:p.title,cat:p.cat,price:finalPrice(p),pct:defPct(p),cost:FIN.costs[p.id]||0,pay:"pix",fee:0,at:p.soldAt,legacy:true}));
+  PRODS.filter(p=>p.status==="vendido"&&p.soldAt&&!known.has(p.id)&&inRange(p.soldAt,rg)).forEach(p=>recs.push({pid:p.id,title:p.title,cat:p.cat,price:finalPrice(p),pct:(FIN.consign[p.id]||{}).pct??defPct(p),cost:FIN.costs[p.id]||0,pay:"pix",fee:0,at:p.soldAt,legacy:true}));
   return recs;
 }
 // Gastos fixos: repetem todo mês no mesmo dia, desde a data do 1º lançamento até "until"
@@ -1251,7 +1282,7 @@ function finCalc(rg){
 }
 function pendingRepasses(){
   const now=new Date(),list=[];
-  FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Dono não informado",what:s.title,value:saleOwner(s),due,late:due<now})});
+  FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Proprietário não informado",what:s.title,value:saleOwner(s),due,late:due<now})});
   FIN.rentals.filter(r=>Number(r.pct??100)<100&&!r.paidAt).forEach(r=>{const due=new Date(new Date((r.end||r.start)+"T12:00").getTime()+REPASSE_DIAS*864e5);list.push({kind:"rent",id:r.id,who:r.owner||"Proprietário não informado",what:`Locação · ${r.item}`,value:rentOwnerOf(r),due,late:due<now})});
   return list.sort((a,b)=>(a.due||Infinity)-(b.due||Infinity));
 }
@@ -1350,10 +1381,10 @@ const payOpts=sel=>PAYS.map(([k,t])=>`<option value="${k}"${k===sel?" selected":
 function askSale(p){
   saleP=p;
   $("#sl-title").textContent=p.title;
-  $("#sl-price").value=money00(finalPrice(p));$("#sl-pct").value=defPct(p);
+  const cg=FIN.consign[p.id];$("#sl-price").value=money00(finalPrice(p));$("#sl-pct").value=cg?cg.pct:(FIN.costs[p.id]?100:defPct(p));
   $("#sl-pay").innerHTML=payOpts("pix");
   $("#sl-cost").value=money00(p._cost??FIN.costs[p.id]??0);
-  $("#sl-owner").value="";$("#sl-ophone").value="";
+  $("#sl-owner").value=cg?cg.owner||"":"";$("#sl-ophone").value=cg?cg.phone||"":"";
   calcSale();$("#saleSh").hidden=false;
   return new Promise(r=>{saleResolve=r});
 }
@@ -1363,7 +1394,7 @@ function calcSale(){
   const s=saleForm(),own=s.pct>=100;
   $("#sl-costw").hidden=!own;$("#sl-ownw").hidden=own;
   $("#sl-out").innerHTML=`<div><span>Venda</span><b>${brl(s.price)}</b></div>`+
-    (own?`<div><span>Custo do produto</span><b>− ${brl(s.cost)}</b></div>`:`<div><span>Repasse ao dono (${100-s.pct}%)</span><b>− ${brl(saleOwner(s))}</b></div>`)+
+    (own?`<div><span>Custo do produto</span><b>− ${brl(s.cost)}</b></div>`:`<div><span>Repasse ao proprietário (${100-s.pct}%)</span><b>− ${brl(saleOwner(s))}</b></div>`)+
     (s.fee?`<div><span>Taxa ${payName(s.pay)}</span><b>− ${brl(s.fee)}</b></div>`:"")+
     `<div class="tot"><span>Fica para a Cave</span><b>${brl(saleNet(s))}</b></div>`;
 }
@@ -1375,6 +1406,7 @@ $("#sl-cancel").addEventListener("click",()=>closeSale(null));
 $("#sl-ok").addEventListener("click",()=>{const s=saleForm();if(!s.price)return toast("Coloque o valor da venda.",true);closeSale(s)});
 async function recordSale(p,sale){await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id);d.sales.push({pid:p.id,title:p.title,cat:p.cat,...sale,at:new Date().toISOString()});if(sale.pct>=100&&sale.cost)d.costs[p.id]=sale.cost},"Financeiro: venda registrada")}
 async function unrecordSale(p){if(FIN.sales.some(s=>s.pid===p.id))await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id)},"Financeiro: venda desfeita")}
+async function saveConsign(id,o){const cur=FIN.consign[id];const same=cur?JSON.stringify(cur)===JSON.stringify(o):o.pct>=100;if(!same)await saveFin(d=>{if(o.pct>=100)delete d.consign[id];else d.consign[id]=o},"Financeiro: comissão do produto")}
 async function saveCost(id,cost){if(Number(FIN.costs[id]||0)!==cost)await saveFin(d=>{if(cost)d.costs[id]=cost;else delete d.costs[id]},"Financeiro: custo do produto")}
 
 // ----- Folha: novo gasto
