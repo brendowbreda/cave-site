@@ -172,7 +172,7 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .legend i{width:12px;height:12px;border-radius:4px}
 .lg-f{background:var(--fit)}.lg-l{background:var(--buy)}
 .bk.f{border-left:4px solid var(--fit)}
-.bk.l{border-left:4px solid var(--buy);cursor:default}
+.bk.l{border-left:4px solid var(--buy)}
 .pctrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px}
 .pctrow input{width:72px!important;min-height:44px!important;text-align:center;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:16px}
 .pctrow b{margin-left:auto;font-size:15px}
@@ -550,7 +550,8 @@ p{margin:0}
     <div class="field"><label for="lc-pay">Pagamento</label><select id="lc-pay"></select></div>
   </div>
   <div class="split" id="lc-out"></div>
-  <div class="row2"><button class="btn" id="lc-cancel" type="button">Cancelar</button><button class="btn buy" id="lc-ok" type="button">Salvar locação</button></div>
+  <button class="btn danger" id="lc-del" type="button" hidden>Cancelar locação</button>
+  <div class="row2"><button class="btn" id="lc-cancel" type="button">Fechar</button><button class="btn buy" id="lc-ok" type="button">Salvar locação</button></div>
 </div></div>
 
 <!-- AGENDAMENTO BIKE FIT -->
@@ -1289,7 +1290,7 @@ function renderFin(){
     <div class="fc">
       <div class="fc-h"><span class="k">Locação ${lbl}</span><button class="btn small" id="rentNew" type="button">+ Lançar locação</button></div>
       <b class="v">${brl(c.rentCave)}</b><span class="s">parte da Cave de ${brl(c.rentTot)} · ${plural(c.rents.length,"locação","locações")}</span>
-      ${c.rents.length?`<div class="exps">${c.rents.slice().sort((a,b)=>b.start.localeCompare(a.start)).slice(0,6).map(r=>`<div class="exp"><span class="d">${fdate(r.start)}</span><span class="t">${esc(r.item)}${r.client?` · ${esc(r.client)}`:""}</span><span>${brl(r.value)}</span><button type="button" data-lrm="${esc(r.id)}" aria-label="Apagar locação">✕</button></div>`).join("")}</div>`:""}
+      ${c.rents.length?`<div class="exps">${c.rents.slice().sort((a,b)=>b.start.localeCompare(a.start)).slice(0,6).map(r=>`<div class="exp" data-lr="${esc(r.id)}" style="cursor:pointer"><span class="d">${fdate(r.start)}</span><span class="t">${esc(r.item)}${r.client?` · ${esc(r.client)}`:""}</span><span>${brl(r.value)}</span><button type="button" data-lrm="${esc(r.id)}" aria-label="Apagar locação">✕</button></div>`).join("")}</div>`:""}
     </div>
     <div class="fc">
       <span class="k">Produtos vendidos ${lbl}</span><b class="v">${c.sales.length}</b>
@@ -1315,6 +1316,7 @@ $("#finBody").addEventListener("click",async e=>{
   if(e.target.closest("#expNew"))return openExp();
   if(e.target.closest("#rentNew"))return openRentSh();
   if(e.target.closest("#finCsv"))return exportCsv();
+  const lr=e.target.closest("[data-lr]");if(lr&&!e.target.closest("[data-lrm]"))return openRentSh(null,FIN.rentals.find(x=>x.id===lr.dataset.lr));
   const x=e.target.closest("[data-xrm]"),l=e.target.closest("[data-lrm]"),pay=e.target.closest("[data-pay]");
   try{
     if(x){
@@ -1394,26 +1396,45 @@ $("#ex-ok").addEventListener("click",async()=>{
 });
 
 // ----- Folha: lançar locação
-function openRentSh(day){
-  $("#lc-item").innerHTML=(CFG.rentals||[]).map(r=>`<option>${esc(r.name)}</option>`).join("")+`<option value="__o">Outro…</option>`;
-  $("#lc-other").value="";$("#lc-otherw").hidden=true;$("#lc-client").value="";$("#lc-val").value="";$("#lc-owner").value="";$("#lc-pct").value=splitPct("loc");
-  $("#lc-start").value=day||ymd(new Date());$("#lc-end").value="";$("#lc-pay").innerHTML=payOpts("pix");
+let LR=null; // locação em edição
+function openRentSh(day,r){
+  LR=r||null;
+  const names=(CFG.rentals||[]).map(x=>x.name),custom=r&&!names.includes(r.item);
+  $("#lc-h").textContent=r?"Editar locação":"Lançar locação";
+  $("#lc-item").innerHTML=names.map(n=>`<option>${esc(n)}</option>`).join("")+`<option value="__o">Outro…</option>`;
+  $("#lc-item").value=r?(custom?"__o":r.item):names[0]||"__o";
+  $("#lc-other").value=custom?r.item:"";$("#lc-otherw").hidden=!custom;
+  $("#lc-client").value=r?r.client||"":"";$("#lc-owner").value=r?r.owner||"":"";
+  $("#lc-pct").value=r?(r.pct??100):splitPct("loc");
+  $("#lc-val").value=r?money00(r.value):"";
+  $("#lc-start").value=r?r.start:(day||ymd(new Date()));$("#lc-end").value=r?r.end||"":"";
+  $("#lc-pay").innerHTML=payOpts(r?r.pay:"pix");
+  $("#lc-del").hidden=!r;$("#lc-del").dataset.armed="";$("#lc-del").textContent="Cancelar locação";
   calcRent();$("#rentSh").hidden=false;
 }
+$("#lc-del").addEventListener("click",async function(){
+  if(!LR)return;
+  if(this.dataset.armed!=="1"){this.dataset.armed="1";this.textContent="Toque de novo para cancelar a locação";return}
+  const id=LR.id;busy("Cancelando locação…");
+  try{await saveFin(d=>{d.rentals=d.rentals.filter(y=>y.id!==id)},"Financeiro: locação cancelada");$("#rentSh").hidden=true;LR=null;renderFin();if(VIEW==="fit")renderFit();toast("Locação cancelada.")}
+  catch(x){toast(errMsg(x),true)}finally{busy()}
+});
 function calcRent(){const v=parseMoney($("#lc-val").value),pc=Math.min(100,digits($("#lc-pct").value)),f=feeOf($("#lc-pay").value,v),cave=r2(v*pc/100);
   $("#lc-out").innerHTML=`<div><span>Locação</span><b>${brl(v)}</b></div>${pc<100?`<div><span>Repasse ao dono (${100-pc}%)</span><b>− ${brl(v-cave)}</b></div>`:""}${f?`<div><span>Taxa ${payName($("#lc-pay").value)}</span><b>− ${brl(f)}</b></div>`:""}<div class="tot"><span>Fica para a Cave</span><b>${brl(cave-f)}</b></div>`}
 $("#lc-pct").addEventListener("input",e=>{e.target.value=String(Math.min(100,digits(e.target.value)||0));calcRent()});
 $("#lc-item").addEventListener("change",()=>{$("#lc-otherw").hidden=$("#lc-item").value!=="__o"});
 moneyField($("#lc-val"),calcRent);$("#lc-pay").addEventListener("change",calcRent);
-$("#lc-cancel").addEventListener("click",()=>{$("#rentSh").hidden=true});
+$("#lc-cancel").addEventListener("click",()=>{$("#rentSh").hidden=true;LR=null});
 $("#lc-ok").addEventListener("click",async()=>{
   const item=$("#lc-item").value==="__o"?$("#lc-other").value.trim():$("#lc-item").value,value=parseMoney($("#lc-val").value),start=$("#lc-start").value,pay=$("#lc-pay").value;
   if(!item)return toast("Escolha o item alugado.",true);
   if(!value)return toast("Coloque o valor da locação.",true);
   if(!start)return toast("Escolha a data de retirada.",true);
-  const r={id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),owner:$("#lc-owner").value.trim(),pct:Math.min(100,digits($("#lc-pct").value)),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
+  const end=$("#lc-end").value;if(end&&end<start)return toast("A devolução não pode ser antes da retirada.",true);
+  const r={...(LR||{}),id:LR?LR.id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),owner:$("#lc-owner").value.trim(),pct:Math.min(100,digits($("#lc-pct").value)),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
   busy("Salvando locação…");
-  try{await saveFin(d=>{d.rentals.push(r)},"Financeiro: nova locação");$("#rentSh").hidden=true;renderFin();if(VIEW==="fit")renderFit();toast("Locação lançada.")}
+  const editing=!!LR;
+  try{await saveFin(d=>{const i=d.rentals.findIndex(y=>y.id===r.id);if(i>=0)d.rentals[i]=r;else d.rentals.push(r)},editing?"Financeiro: locação editada":"Financeiro: nova locação");$("#rentSh").hidden=true;LR=null;renderFin();if(VIEW==="fit")renderFit();toast(editing?"Locação atualizada.":"Locação lançada.")}
   catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 
@@ -1492,10 +1513,10 @@ function renderFit(){
       <span class="bk-t">${b.at.slice(11,16)}</span>
       <span class="bk-i"><b>${esc(b.name)}</b><span>${["Bike Fit",esc([b.brand,b.model,b.year].filter(Boolean).join(" ")),CATS[b.cat]||""].filter(Boolean).join(" · ")}</span></span>
       <span class="price">${brl(b.price)}</span></button>`).join("");
-  const rentRows=rents.map(r=>`<div class="bk l">
+  const rentRows=rents.map(r=>`<button type="button" class="bk l" data-lr="${esc(r.id)}">
       <span class="bk-t">${fd(r.start)}</span>
       <span class="bk-i"><b>${esc(r.item)}</b><span>Locação${r.client?` · ${esc(r.client)}`:""}${r.end?` · até ${fd(r.end)}`:""}</span></span>
-      <span class="price">${brl(r.value)}</span></div>`).join("");
+      <span class="price">${brl(r.value)}</span></button>`).join("");
   const rowsHtml=loc?rentRows+fitRows:fitRows+rentRows;
   $("#dayList").innerHTML=`<p class="eyebrow" style="margin:18px 0 8px">${+dd} de ${MONTHS[+mm-1].toLowerCase()}</p>`+(rowsHtml||`<p class="muted" style="font-size:14px">Nada marcado neste dia.</p>`);
   loc?renderRentStats():renderStats();
@@ -1544,7 +1565,7 @@ $("#calPrev").addEventListener("click",()=>{CAL.m--;if(CAL.m<0){CAL.m=11;CAL.y--
 $("#calNext").addEventListener("click",()=>{CAL.m++;if(CAL.m>11){CAL.m=0;CAL.y++}renderFit()});
 $("#cal").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(!b)return;CAL.day=b.dataset.day;renderFit()});
 $("#fitPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;CAL.p=+b.dataset.p;document.querySelectorAll("#fitPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));CAL.mode==="loc"&&isAdm()?renderRentStats():renderStats()});
-$("#dayList").addEventListener("click",e=>{const b=e.target.closest("[data-bk]");if(b)openFit(FIT.find(x=>x.id===b.dataset.bk))});
+$("#dayList").addEventListener("click",e=>{const b=e.target.closest("[data-bk]");if(b)return openFit(FIT.find(x=>x.id===b.dataset.bk));const l=e.target.closest("[data-lr]");if(l)openRentSh(null,(FIN.rentals||[]).find(x=>x.id===l.dataset.lr))});
 $("#fitNew").addEventListener("click",()=>CAL.mode==="loc"&&isAdm()?openRentSh(CAL.day):openFit(null));
 
 let FB=null;
