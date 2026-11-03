@@ -196,6 +196,14 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .pctin{display:flex;gap:8px}
 .pctin input{width:76px!important;flex:none;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:11px 12px;font-size:16px;text-align:center}
 .seg.quick{flex:1}.seg.quick button{flex:1}
+.fs-grid{display:grid;gap:10px}
+.fs-grid .st{align-content:start}
+@media (min-width:640px){.fs-grid{grid-template-columns:1fr 1fr}}
+.big-n{font-size:34px!important;letter-spacing:-.02em}
+.kv2{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.st .kv2:first-child{border-top:0;padding-top:0}
+.kv2 b{font-size:22px}
+.male{color:#3B82F6}.female{color:#EC4899}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -1580,24 +1588,21 @@ function renderStats(){
   const m=done.filter(b=>b.sex==="M").length,f=done.filter(b=>b.sex==="F").length,pct=x=>n?Math.round(x/n*100)+"%":"0%";
   const tot=done.reduce((s,b)=>s+Number(b.price||0),0),cave=r2(done.reduce((s,b)=>s+fitCaveOf(b),0)),fp=splitPct("fit");
   const lbl=CAL.p===1?"neste mês":`nos últimos ${CAL.p} meses`;
-  $("#fitStats").innerHTML=`
-    <div class="st big"><span class="k">1. Bike fits feitos ${lbl}</span><b>${n}</b><span class="muted">${next} agendado${next===1?"":"s"} a partir de hoje</span></div>
-    <div class="st-grid">
-      <div class="st"><span class="k">2.1. Estrada & Mountain Bike</span><b>${road}</b></div>
-      <div class="st"><span class="k">2.2. Triathlon / TT</span><b>${tri}</b></div>
-      <div class="st"><span class="k">3. Masculino</span><b>${pct(m)}</b></div>
-      <div class="st"><span class="k">3. Feminino</span><b>${pct(f)}</b></div>
-    </div>
-    <div class="st"><span class="k">4.1. Valor total</span><b>${brl(tot)}</b></div>
-    <div class="st-grid">
-      <div class="st"><span class="k">4.2. Cave.&nbsp;Floripa (${fp}%)</span><b>${brl(cave)}</b></div>
-      <div class="st"><span class="k">4.3. Guilherme (${100-fp}%)</span><b>${brl(tot-cave)}</b></div>
-    </div>`;
+  $("#fitStats").innerHTML=`<div class="fs-grid">
+    <div class="st"><span class="k">Bike fits feitos ${lbl}</span><b class="big-n">${n}</b></div>
+    <div class="st"><div class="kv2"><span>Estrada & Mountain Bike</span><b>${road}</b></div><div class="kv2"><span>Triathlon / TT</span><b>${tri}</b></div></div>
+    <div class="st"><div class="kv2"><span>Masculino</span><b class="male">${pct(m)}</b></div><div class="kv2"><span>Feminino</span><b class="female">${pct(f)}</b></div></div>
+    <div class="st"><span class="k">Valor total <button type="button" class="qm" id="fitHelp" aria-expanded="false" aria-label="O que é o valor total?">?</button></span><b class="big-n">${brl(tot)}</b>
+      <p class="qtip" id="fitTip" hidden>Valor total recebido a título de bike fit no período selecionado.</p>
+      <div class="kv2"><span>Parte: Guilherme Garcia Cunha ${100-fp}%</span><b>${brl(tot-cave)}</b></div>
+      <div class="kv2"><span>Parte: Cave.&nbsp;Floripa ${fp}%</span><b>${brl(cave)}</b></div></div>
+  </div>`;
 }
 $("#calPrev").addEventListener("click",()=>{CAL.m--;if(CAL.m<0){CAL.m=11;CAL.y--}renderFit()});
 $("#calNext").addEventListener("click",()=>{CAL.m++;if(CAL.m>11){CAL.m=0;CAL.y++}renderFit()});
 $("#cal").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(!b)return;CAL.day=b.dataset.day;renderFit()});
 $("#fitPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;CAL.p=+b.dataset.p;document.querySelectorAll("#fitPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));CAL.mode==="loc"&&isAdm()?renderRentStats():renderStats()});
+$("#fitStats").addEventListener("click",e=>{const q=e.target.closest("#fitHelp");if(q){const t=$("#fitTip");t.hidden=!t.hidden;q.setAttribute("aria-expanded",!t.hidden)}});
 $("#dayList").addEventListener("click",e=>{const b=e.target.closest("[data-bk]");if(b)return openFit(FIT.find(x=>x.id===b.dataset.bk));const l=e.target.closest("[data-lr]");if(l)openRentSh(null,(FIN.rentals||[]).find(x=>x.id===l.dataset.lr))});
 $("#fitNew").addEventListener("click",()=>CAL.mode==="loc"&&isAdm()?openRentSh(CAL.day):openFit(null));
 
