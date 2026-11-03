@@ -188,6 +188,10 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .final s{color:var(--muted)}
 .also{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative}
 .also .icon-btn{position:absolute;top:-6px;right:0;width:28px;height:28px;font-size:13px;color:var(--bad)}
+.qm{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:12px;font-weight:700;line-height:1;padding:0;margin-left:6px;vertical-align:middle}
+.qm[aria-expanded="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.qtip{font-size:13px;color:var(--muted);line-height:1.5;padding:10px 12px;border-radius:10px;background:var(--bg);margin:2px 0}
+.qtip b{color:var(--ink)}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -588,9 +592,8 @@ p{margin:0}
 <div class="editor" id="editor" hidden role="dialog" aria-modal="true" aria-labelledby="edTitle">
   <div class="ed-head"><b id="edTitle">Novo produto</b><button class="icon-btn" id="edClose" aria-label="Fechar sem salvar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
   <div class="ed-body"><div class="wrap form" id="edForm">
-    <div class="field"><span class="lbl">Fotos <span class="muted" id="e-n">0/5</span></span>
+    <div class="field"><span class="lbl"><span id="e-n">0/5</span> fotos <span class="muted" style="font-weight:400">(a primeira foto é a capa)</span></span>
       <div class="photos" id="e-photos"></div>
-      <span class="hint">Até 5 fotos. A primeira é a capa. As fotos são reduzidas automaticamente.</span>
     </div>
     <div class="field"><label for="e-title">Nome do produto (título)</label><input id="e-title" placeholder="Ex.: Canyon Speedmax CF SLX 8 Di2"></div>
     <div class="field"><label for="e-sub">Subtítulo</label><input id="e-sub" placeholder="Ex.: Tam. M · Shimano Ultegra Di2 · 2023"><span class="hint">Tamanho, modelo, ano. Aparece mesmo depois de vendido.</span></div>
@@ -1280,9 +1283,10 @@ function renderFin(){
       </div>
     </div>
     <div class="fc rep${rep.some(x=>x.late)?" late":""}">
-      <div class="fc-h"><span class="k">A repassar</span><span class="s">Donos em até ${REPASSE_DIAS} dias</span></div>
+      <div class="fc-h"><span class="k">Valor a repassar <button type="button" class="qm" id="repHelp" aria-expanded="false" aria-label="O que é o valor a repassar?">?</button></span></div>
       <b class="v">${brl(repTot)}</b>
-      ${rep.length?`<div class="reps">${rep.map(x=>`<div class="rp${x.late?" late":""}"><span class="t"><b>${esc(x.who)}</b><span>${esc(x.what)}${x.due?` · ${x.late?"atrasado desde":"até"} ${fdate(ymd(x.due))}`:""}</span></span><span class="m">${brl(x.value)}</span><button class="btn small" type="button" data-pay="${x.kind}" data-id="${esc(x.id||"")}">Pago</button></div>`).join("")}</div>`:`<span class="s">Nenhum repasse pendente.</span>`}
+      <p class="qtip" id="repTip" hidden>É o dinheiro que pertence a outras pessoas: o proprietário de um produto consignado ou de um equipamento alugado, e o Guilherme no Bike Fit. Depois da venda, a Cave espera até ${REPASSE_DIAS} dias para confirmar que deu tudo certo (sem devolução ou problema) e então repassa o valor. Toque em <b>Pago</b> quando fizer a transferência.</p>
+      ${rep.length?`<div class="reps">${rep.map(x=>`<div class="rp${x.late?" late":""}"><span class="t"><b>${esc(x.who)}</b><span>${esc(x.what)}${x.due?` · ${x.late?"atrasado desde":"até"} ${fdate(ymd(x.due))}`:""}</span></span><span class="m">${brl(x.value)}</span><button class="btn small" type="button" data-pay="${x.kind}" data-id="${esc(x.id||"")}">Pago</button></div>`).join("")}</div>`:""}
     </div>
     <div class="fc-grid">
       <div class="fc"><span class="k">Caixa (parte da Cave nas vendas)</span><b class="v">${brl(c.vendasCave)}</b><span class="s">de ${brl(c.bruto)} vendidos${c.custo?` · custo ${brl(c.custo)}`:""}</span></div>
@@ -1314,6 +1318,7 @@ $("#finPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]"
 const arm=(el,txt)=>{if(el.dataset.armed==="1")return true;el.dataset.armed="1";el.textContent=txt;el.classList.add("armed");return false};
 $("#finBody").addEventListener("click",async e=>{
   const m=e.target.closest("[data-m]");if(m){FS.mod=m.dataset.m;return renderFin()}
+  const qh=e.target.closest("#repHelp");if(qh){const t=$("#repTip");t.hidden=!t.hidden;qh.setAttribute("aria-expanded",!t.hidden);return}
   if(e.target.closest("#expNew"))return openExp();
   if(e.target.closest("#rentNew"))return openRentSh();
   if(e.target.closest("#finCsv"))return exportCsv();
