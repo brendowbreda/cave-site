@@ -232,6 +232,7 @@ p{margin:0}
 .pillset input{position:absolute;opacity:0;pointer-events:none}
 .pillset span{height:40px;padding:0 16px;display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;font-size:14px;font-weight:500;background:var(--surface)}
 .pillset input:checked + span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pillset.cond input:checked + span{background:var(--buy);border-color:var(--buy);color:var(--buy-ink)}
 .pillset input.sold:checked + span{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
 .pillset input:focus-visible + span{outline:2px solid var(--ink);outline-offset:2px}
 
@@ -593,11 +594,11 @@ p{margin:0}
 <div class="editor" id="editor" hidden role="dialog" aria-modal="true" aria-labelledby="edTitle">
   <div class="ed-head"><b id="edTitle">Novo produto</b><button class="icon-btn" id="edClose" aria-label="Fechar sem salvar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
   <div class="ed-body"><div class="wrap form" id="edForm">
-    <div class="field"><span class="lbl"><span id="e-n">0/5</span> fotos <span class="muted" style="font-weight:400">(a primeira foto é a capa)</span></span>
+    <div class="field"><span class="lbl"><span id="e-n">0/10</span> fotos <span class="muted" style="font-weight:400">· a primeira foto é a capa</span></span>
       <div class="photos" id="e-photos"></div>
     </div>
     <div class="field"><label for="e-title">Nome do produto (título)</label><input id="e-title" placeholder="Ex.: Canyon Speedmax CF SLX 8 Di2"></div>
-    <div class="field"><label for="e-sub">Subtítulo</label><input id="e-sub" placeholder="Ex.: Tam. M · Shimano Ultegra Di2 · 2023"><span class="hint">Tamanho, modelo, ano. Aparece mesmo depois de vendido.</span></div>
+    <div class="field"><label for="e-sub">Subtítulo</label><input id="e-sub" placeholder="Ex.: Tam. M · Shimano Ultegra Di2 · 2023"></div>
     <div class="field"><label for="e-desc">Descrição</label><textarea id="e-desc" placeholder="Estado do produto, uso, revisões, o que acompanha."></textarea></div>
     <div class="row2">
       <div class="field"><label for="e-price">Valor</label><input id="e-price" inputmode="numeric" placeholder="R$ 0,00"></div>
@@ -606,12 +607,11 @@ p{margin:0}
     </div>
     <p class="final" id="e-final" hidden></p>
     <div class="row2">
-      <div class="field"><label for="e-cost">Custo (só no painel)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"></div>
-      <div class="field"><span class="lbl">Estado</span><div class="pillset">
+      <div class="field"><label for="e-cost">Valor do custo do produto (oculto)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"></div>
+      <div class="field"><span class="lbl">Estado do produto</span><div class="pillset cond">
         <label><input type="radio" name="e-cond" id="e-novo" value="novo"><span>Novo</span></label>
         <label><input type="radio" name="e-cond" id="e-usado" value="usado"><span>Usado</span></label></div></div>
     </div>
-    <span class="hint" style="margin-top:-8px">Custo: quanto a loja pagou. Deixe vazio em produto consignado.</span>
     <div class="row2">
       <div class="field"><label for="e-cat">Seção</label><select id="e-cat"></select></div>
       <div class="field"><label for="e-subcat">Tipo</label><select id="e-subcat"></select></div>
@@ -619,13 +619,6 @@ p{margin:0}
     <div class="field" id="e-other-wrap" hidden><label for="e-other">Outro tipo</label><input id="e-other" placeholder="Ex.: Coroa"></div>
     <div id="e-also" class="form"></div>
     <button class="btn small" id="e-addsec" type="button" style="justify-self:start">+ Aparecer em outra seção</button>
-    <span class="hint" style="margin-top:-8px">Ex.: uma cinta cardíaca em Garmin e também em Bicicleta › Acessórios e Corrida › Acessórios. Assim ela aparece buscando pela marca e pelo esporte.</span>
-    <label class="check"><input type="checkbox" id="e-feat"><span><b>Fixar no topo</b> · aparece primeiro na marca e no esporte (ex.: lançamento)</span></label>
-    <div class="field"><label for="e-tag">Selo (opcional)</label><input id="e-tag" placeholder="Ex.: Revisada, CeramicSpeed" maxlength="18"></div>
-    <div class="field"><span class="lbl">Situação</span><div class="pillset">
-      <label><input type="radio" name="e-status" id="e-disp" value="disponivel"><span>À venda</span></label>
-      <label><input type="radio" name="e-status" id="e-vend" value="vendido" class="sold"><span>Vendido</span></label></div>
-      <span class="hint">Vendido: a foto fica borrada em preto e branco e o preço vira R$ *****,**.</span></div>
     <div class="field"><span class="lbl">Como vai aparecer</span><div id="e-preview"></div></div>
     <button class="btn danger" id="e-delete" type="button">Apagar produto</button>
   </div></div>
@@ -936,9 +929,9 @@ function openEditor(p){
   D=p?JSON.parse(JSON.stringify(p)):{id:"p-"+Date.now().toString(36),cat:c0.id,group:c0.groups[0].id,sub:c0.groups[0].subs[0],cond:"usado",status:"disponivel",price:0,title:"",subtitle:"",desc:"",tag:"",photos:[]};
   D.photos=(D.photos||[]).map(path=>({path}));
   $("#edTitle").textContent=p?"Editar produto":"Novo produto";
-  $("#e-feat").checked=!!D.featured;$("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";$("#e-tag").value=D.tag||"";
+  $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";
   $("#e-price").value=money00(D.price);DT=(D.discount&&D.discount.type)||"pct";$("#e-disc").value=D.discount&&D.discount.value?(DT==="brl"?money00(D.discount.value):D.discount.value):"";syncDT();D.also=(D.also||[]).map(x=>({...x}));renderAlso();$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
-  $("#e-"+D.cond).checked=true;$(D.status==="vendido"?"#e-vend":"#e-disp").checked=true;
+  $("#e-"+D.cond).checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
   $("#e-cat").innerHTML=secOpts("");
   $("#e-cat").value=`${D.cat}|${D.group||""}`;if(!$("#e-cat").value)$("#e-cat").selectedIndex=0;fillSubs(D.sub);
@@ -957,13 +950,13 @@ function fillSubs(sel){
 }
 $("#e-cat").addEventListener("change",()=>{fillSubs();renderPreview()});
 $("#e-subcat").addEventListener("change",()=>{$("#e-other-wrap").hidden=$("#e-subcat").value!=="__other";renderPreview()});
-["#e-title","#e-sub","#e-other","#e-tag"].forEach(s=>$(s).addEventListener("input",renderPreview));
-document.querySelectorAll('[name="e-cond"],[name="e-status"]').forEach(r=>r.addEventListener("change",renderPreview));
+["#e-title","#e-sub","#e-other"].forEach(s=>$(s).addEventListener("input",renderPreview));
+document.querySelectorAll('[name="e-cond"]').forEach(r=>r.addEventListener("change",renderPreview));
 moneyField($("#e-price"),()=>{renderFinal();renderPreview()});moneyField($("#e-cost"));
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
-  return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:$("#e-tag").value.trim(),
-    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:document.querySelector('[name="e-status"]:checked').value,cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,featured:$("#e-feat").checked,discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
+  return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:D.tag||"",
+    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:D.status||"disponivel",cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,featured:!!D.featured,discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
 }
 function renderPreview(){
   const f=readForm(),s=f.status==="vendido",ph=D.photos[0];
@@ -972,12 +965,12 @@ function renderPreview(){
 }
 function renderPhotos(){
   const n=D.photos.length;
-  $("#e-n").textContent=`${n}/5`;
+  $("#e-n").textContent=`${n}/10`;
   $("#e-photos").innerHTML=D.photos.map((ph,i)=>`<div class="ps"><img src="${esc(ph.dataUrl||picURL(ph.path))}" alt="Foto ${i+1}">${i===0?`<span class="cover">Capa</span>`:""}
     <div class="pa">${i>0?`<button type="button" data-mv="${i}" aria-label="Mover foto ${i+1} para antes">←</button>`:""}<button type="button" data-rm="${i}" aria-label="Remover foto ${i+1}">✕</button></div></div>`).join("")
-    +(n<5?`<label class="ps add" for="e-file">+ Foto<input id="e-file" type="file" accept="image/*" multiple></label>`:"");
+    +(n<10?`<label class="ps add" for="e-file">+ Foto<input id="e-file" type="file" accept="image/*" multiple></label>`:"");
   const f=$("#e-file");if(f)f.addEventListener("change",async()=>{
-    const files=[...f.files].slice(0,5-D.photos.length);
+    const files=[...f.files].slice(0,10-D.photos.length);
     busy("Preparando fotos…");
     try{for(const file of files)D.photos.push({dataUrl:await compress(file)})}catch(e){toast("Não foi possível ler uma das fotos. Tente outra imagem.",true)}
     busy();renderPhotos();renderPreview();
