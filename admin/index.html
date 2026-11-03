@@ -1379,7 +1379,7 @@ function renderFin(){
         </div></div>`).join("")}</div>`:""}
     </div>
     <div class="fc-grid">
-      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${plural(c.fit.length,"bike fit","bike fits")}</b><span class="s">Total cobrado pelo Guilherme: <b>${brl(c.fitTot)}</b></span><span class="s">Aluguel do espaço (${splitPct("fit")}%): <b>${brl(c.fitCave)}</b></span>
+      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${plural(c.fit.length,"bike fit","bike fits")}</b><span class="s">Guilherme Garcia Cunha: <b>${brl(c.fitTot-c.fitCave)}</b></span><span class="s">Cave.&nbsp;Floripa (${splitPct("fit")}%): <b>${brl(c.fitCave)}</b></span>
         ${fitDue.n?`<div class="rp"><span class="t"><b>A receber do Guilherme</b><span>${plural(fitDue.n,"bike fit","bike fits")} · ${splitPct("fit")}% de aluguel</span></span><span class="m">${brl(fitDue.v)}</span><button class="btn small" type="button" data-pay="fit">Recebido</button></div>`:""}</div>
       <div class="fc"><span class="k">Locação ${lbl}</span><b class="v">${brl(c.rentCave)}</b><span class="s">parte da Cave de ${brl(c.rentTot)} · ${plural(c.rents.length,"locação","locações")}</span></div>
     </div>
