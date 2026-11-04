@@ -62,7 +62,7 @@
    "group": "componentes",
    "sub": "Rodas",
    "cond": "usado",
-   "status": "disponivel",
+   "status": "vendido",
    "price": 21500,
    "title": "Roda DT SWISS ARC 1100 DICUT - DISC",
    "subtitle": "",
@@ -81,7 +81,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T15:10:19.992Z",
-   "createdAt": "2026-11-04T01:45:13.474Z"
+   "createdAt": "2026-11-04T01:45:13.474Z",
+   "soldAt": "2026-11-04T15:10:44.434Z"
   },
   {
    "id": "p-mw1g3cy0",
