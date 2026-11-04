@@ -1108,7 +1108,6 @@ function offerFlow(step){
     setSheet("Fazer oferta",`${stepper(3)}${summary(p,offer.value)}
       <div class="kv">
         <div><span>Preço anunciado</span><b class="mono">${brl(p.price)}</b></div>
-        ${(offer.inst||1)>1?`<div><span>Parcelamento</span><b class="mono">${offer.inst}x de ${brl(instTotal(offer.value,offer.inst)/offer.inst)} <span style="color:var(--muted);font-weight:400">(total ${brl(instTotal(offer.value,offer.inst))})</span></b></div>`:`<div><span>Pagamento</span><b>À vista no cartão</b></div>`}
         <div><span>Sua oferta</span><b class="mono">${brl(offer.value)} <span style="color:var(--muted);font-weight:400">(−${disc}%)</span></b></div>
       </div>
       <div class="timeline" style="margin:22px 0">
@@ -1137,16 +1136,12 @@ function offerFlow(step){
     const t=new Date(),exp=new Date(t.getTime()+864e5);
     const hh=d=>d.toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
     setSheet("Oferta enviada",`${stepper(4)}
-      <div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta enviada</h3><p>Valor ofertado <b style="color:var(--ink)">${brl(offer.value)}</b><br>${esc(p.title)}<br>Assim que o vendedor responder, entramos em contato pelo WhatsApp.</p></div>
-      <div class="timeline" style="margin:18px 0 22px">
-        <div class="tl done"><b>Oferta enviada</b><span>${t.toLocaleDateString("pt-BR")} - horário: ${t.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</span></div>
-        <div class="tl done"><b>Valor reservado no cartão</b><span>Pré-autorização, sem cobrança</span></div>
-      </div>
-      <div class="demo"><span class="demo-flag">Teste: simular a resposta do vendedor</span><div class="row"><button id="simY">Aceita</button><button id="simN">Recusa</button></div></div>`,
+      <div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta enviada</h3><p>Valor ofertado <b style="color:var(--ink)">${brl(offer.value)}</b><br>${esc(p.title)}</p></div>
+      `,
       `<button class="btn block" id="done">Voltar para a loja</button>`);
     $("#done").onclick=closeSheet;
-    $("#simY").onclick=()=>setSheet("Oferta aceita",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta aceita</h3><p>O vendedor aceitou ${brl(offer.value)}.<br>Vamos chamar você no WhatsApp ${esc(offer.contact?.phone||"")} para confirmar o pagamento e combinar a entrega.</p></div>`,`<a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Minha oferta de ${brl(offer.value)} pelo ${p.title} foi aceita. Vamos combinar a entrega?`)}">Combinar entrega</a>`);
-    $("#simN").onclick=()=>{setSheet("Oferta recusada",`<div class="big-ok"><div class="circ r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div><h3>Oferta recusada</h3><p>Nada foi cobrado e a reserva de ${brl(offer.value)} foi cancelada.<br>Vamos chamar você no WhatsApp com o valor do produto, caso ainda tenha interesse.</p></div>`,`<button class="btn" id="again">Nova oferta</button><button class="btn buy" id="buyNow">Comprar por ${brl(p.price)}</button>`);$("#again").onclick=()=>offerFlow(1);$("#buyNow").onclick=buyFlow};
+    if($("#simY"))$("#simY").onclick=()=>setSheet("Oferta aceita",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Oferta aceita</h3><p>O vendedor aceitou ${brl(offer.value)}.<br>Vamos chamar você no WhatsApp ${esc(offer.contact?.phone||"")} para confirmar o pagamento e combinar a entrega.</p></div>`,`<a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,`Olá! Minha oferta de ${brl(offer.value)} pelo ${p.title} foi aceita. Vamos combinar a entrega?`)}">Combinar entrega</a>`);
+    if($("#simN"))$("#simN").onclick=()=>{setSheet("Oferta recusada",`<div class="big-ok"><div class="circ r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div><h3>Oferta recusada</h3><p>Nada foi cobrado e a reserva de ${brl(offer.value)} foi cancelada.<br>Vamos chamar você no WhatsApp com o valor do produto, caso ainda tenha interesse.</p></div>`,`<button class="btn" id="again">Nova oferta</button><button class="btn buy" id="buyNow">Comprar por ${brl(p.price)}</button>`);$("#again").onclick=()=>offerFlow(1);$("#buyNow").onclick=buyFlow};
   }
 }
 
