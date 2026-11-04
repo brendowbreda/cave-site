@@ -1,6 +1,40 @@
 {
  "products": [
   {
+   "id": "p-mw1f7n5o",
+   "cat": "corrida",
+   "group": "tenis",
+   "sub": "Maratona",
+   "cond": "usado",
+   "status": "disponivel",
+   "price": 2000,
+   "title": "Tenis On Cloudboom Strike",
+   "subtitle": "Tamanho US M9 | EU42.5 | BR 42",
+   "desc": "O On Cloudboom Strike foi desenvolvido para corredores que buscam máxima velocidade, eficiência e retorno de energia em provas de alta performance, especialmente meias-maratonas e maratonas.\n\nEquipado com espuma supercrítica Helion™ HF à base de Pebax® e placa de carbono Speedboard®, oferece uma combinação de amortecimento responsivo, propulsão e transições eficientes, favorecendo uma passada rápida e dinâmica.\n\nSua geometria otimizada para competição proporciona uma experiência de corrida ágil, enquanto o cabedal ultraleve em mesh respirável oferece ventilação e conforto sem acrescentar peso desnecessário.\n\nEstado de conservação — Excelente oportunidade!\n\nTênis seminovo, utilizado por apenas 7 km, em estado de conservação semelhante ao de um produto novo. A venda ocorre exclusivamente porque a numeração ficou grande para o proprietário.\n\nEspecificações técnicas\n\nMarca: On Running\n\nModelo: Cloudboom Strike\n\nModalidade: Corrida de rua e competições\n\nIndicação: Meia-maratona e maratona\n\nEntressola: Helion™ HF supercrítica\n\nMaterial da espuma: Base de Pebax®\n\nPlaca: Speedboard® em fibra de carbono\n\nCabedal: Mesh ultraleve e respirável\n\nGeometria: Otimizada para propulsão e eficiência\n\nEstado real do produto: Semelhante ao novo\n\nQuilometragem de uso informada: Apenas 7km\n\nMotivo da venda: Numeração maior que a ideal",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw1f7n5o-mw1few3l1.jpg",
+    "img/products/p-mw1f7n5o-mw1fexfg2.jpg",
+    "img/products/p-mw1f7n5o-mw1feyp93.jpg",
+    "img/products/p-mw1f7n5o-mw1ff0604.jpg",
+    "img/products/p-mw1f7n5o-mw1ff1tc5.jpg"
+   ],
+   "also": [
+    {
+     "cat": "corrida",
+     "group": "tenis",
+     "sub": "Corrida de rua"
+    }
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 200
+   },
+   "demo": false,
+   "updatedAt": "2026-11-04T01:16:49.398Z",
+   "createdAt": "2026-11-04T01:16:49.398Z"
+  },
+  {
    "id": "p-mw01ze0n",
    "cat": "bike",
    "group": "componentes",
