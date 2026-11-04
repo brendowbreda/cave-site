@@ -1,6 +1,35 @@
 {
  "products": [
   {
+   "id": "p-mw1g3cy0",
+   "cat": "bike",
+   "group": "vestuario",
+   "sub": "Sapatilha",
+   "cond": "novo",
+   "status": "disponivel",
+   "price": 2600,
+   "title": "Sapatilha de Triathlon Bont Riot TR+26",
+   "subtitle": "tamanho: US 5W | BR 36W | EU38W",
+   "desc": "A Bont Riot TR+ foi desenvolvida para triatletas que buscam desempenho, conforto e agilidade nas transições, combinando a engenharia australiana da Bont com tecnologias voltadas ao ciclismo de alto rendimento.\n\nSeu grande diferencial está na base em compósito de carbono termomoldável, que permite personalizar o ajuste ao formato dos pés por meio de um procedimento térmico específico, proporcionando maior estabilidade e conforto durante a pedalada.\n\nCom formato anatômico na região dos dedos e altura de sola ultrabaixa, favorece uma posição natural dos pés e uma transferência de potência eficiente, especialmente importante em provas de média e longa distância.\n\nProjetada especificamente para o triathlon, conta com duas tiras de velcro de abertura rápida e alça traseira reforçada, facilitando o calce e a retirada durante as transições.\n\nSeu cabedal com painéis em mesh respirável favorece a ventilação e a drenagem da umidade, oferecendo maior praticidade após a etapa de natação.\n\nEspecificações técnicas\n\nMarca: Bont Cycling\n\nModelo: Riot TR+ / Riot TR\n\nReferência: RTR26W\n\nModalidade: Triathlon\n\nCor: Branco\n\nAltura de sola informada: Aproximadamente 4,8 mm\n\nFechamento: Duas tiras de velcro de abertura rápida\n\nAlça traseira: Reforçada para facilitar as transições\n\nFixação dos tacos: Padrão de três furos\nCompatibilidade: Shimano SPD-SL e Look, conforme o modelo dos tacos",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw1g3cy0-mw1g6ig41.jpg",
+    "img/products/p-mw1g3cy0-mw1g6joa2.jpg",
+    "img/products/p-mw1g3cy0-mw1g6kvy3.jpg",
+    "img/products/p-mw1g3cy0-mw1g6m554.jpg",
+    "img/products/p-mw1g3cy0-mw1g6nbd5.jpg",
+    "img/products/p-mw1g3cy0-mw1g6ofi6.jpg",
+    "img/products/p-mw1g3cy0-mw1g6pla7.jpg"
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 150
+   },
+   "demo": false,
+   "updatedAt": "2026-11-04T01:38:19.819Z",
+   "createdAt": "2026-11-04T01:38:19.819Z"
+  },
+  {
    "id": "p-mw1fw2ix",
    "cat": "bike",
    "group": "acessorios",
