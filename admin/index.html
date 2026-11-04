@@ -115,6 +115,7 @@ body[data-home="fin"] .dash>.prods,body[data-home="prods"] .dash>.fin{display:no
 .mods b{font-size:18px}
 .fc.bad{border-color:color-mix(in srgb,var(--bad) 45%,var(--line));background:var(--bad-soft)}
 .fc.bad .k{color:var(--bad)}
+.fc .s b.pos{color:var(--buy)}
 .fc.bad .v{color:#8E1B12}
 :root:not([data-theme="light"]) .fc.bad .v{color:#FF6B5E}
 .fc.bad .more{justify-self:start;border-color:var(--bad);color:var(--bad)}
@@ -1381,7 +1382,9 @@ function renderFin(){
     <div class="fc-grid">
       <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${plural(c.fit.length,"bike fit","bike fits")}</b><span class="s">Guilherme Garcia Cunha: <b>${brl(c.fitTot-c.fitCave)}</b></span><span class="s">Cave.&nbsp;Floripa (${splitPct("fit")}%): <b>${brl(c.fitCave)}</b></span>
         ${fitDue.n?`<div class="rp"><span class="t"><b>A receber do Guilherme</b><span>${plural(fitDue.n,"bike fit","bike fits")} · ${splitPct("fit")}% de aluguel</span></span><span class="m">${brl(fitDue.v)}</span><button class="btn small" type="button" data-pay="fit">Recebido</button></div>`:""}</div>
-      <div class="fc"><span class="k">Locação ${lbl}</span><b class="v">${brl(c.rentCave)}</b><span class="s">parte da Cave de ${brl(c.rentTot)} · ${plural(c.rents.length,"locação","locações")}</span></div>
+      <div class="fc"><span class="k">Locação ${lbl}</span>${(()=>{const g={Bicicletas:0,Rodas:0,"Acessórios":0};c.rents.forEach(r=>{const it=(CFG.rentals||[]).find(x=>x.name===r.item);const k=it&&it.group==="Bicicletas"?"Bicicletas":it&&it.group==="Rodas"?"Rodas":"Acessórios";g[k]+=rentDays(r).length});const fee=c.rents.reduce((t,r)=>t+Number(r.fee||0),0);
+        return `${Object.entries(g).map(([k,v])=>`<span class="s">${k}: <b>${v} ${v===1?"dia":"dias"} locado${v===1?"":"s"}</b></span>`).join("")}
+        <span class="s">Valor total: <b>${brl(c.rentTot)}</b></span><span class="s">Lucro líquido Cave.&nbsp;Floripa: <b class="pos">${brl(c.rentCave-fee)}</b></span>`})()}</div>
     </div>
     <div class="fc bad">
       <div class="fc-h"><span class="k">Gastos ${lbl}</span><button class="btn small danger" id="expNew" type="button">+ Adicionar gasto</button></div>
