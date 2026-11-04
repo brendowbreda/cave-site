@@ -1239,7 +1239,7 @@ $("#us-list").addEventListener("click",async e=>{
 });
 $("#usForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const rows=[...document.querySelectorAll("#us-list [data-slot]")].map(el=>{const i=el.dataset.slot;return {slot:SLOTS[i],oldId:el.dataset.id,name:$("#us-n"+i).value.trim(),email:$("#us-e"+i).value.trim(),pass:$("#us-p"+i).value}});
+  const rows=[...document.querySelectorAll("#us-list .cfg-item[data-slot]")].map(el=>{const i=el.dataset.slot;return {slot:SLOTS[i],oldId:el.dataset.id,name:$("#us-n"+i).value.trim(),email:$("#us-e"+i).value.trim(),pass:$("#us-p"+i).value}});
   for(const r of rows){
     if(!r.email&&!r.oldId)continue;
     if(!okEmail(r.email))return toast(`E-mail inválido em ${ROLES[r.slot.role]}.`,true);
