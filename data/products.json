@@ -1,6 +1,34 @@
 {
  "products": [
   {
+   "id": "p-mw1fw2ix",
+   "cat": "bike",
+   "group": "acessorios",
+   "sub": "Mala bike",
+   "cond": "usado",
+   "status": "disponivel",
+   "price": 1600,
+   "title": "Mala Bike - EVOC Travel Bag",
+   "subtitle": "tamanho: 139 x 36 x 80 cm",
+   "desc": "A EVOC Bike Travel Bag Large foi desenvolvida para ciclistas e triatletas que precisam transportar suas bicicletas com praticidade e proteção durante viagens aéreas, competições e deslocamentos de longa distância.\n\nCom construção híbrida Soft/Hard Case, combina a flexibilidade de uma mala acolchoada com elementos estruturais de proteção, proporcionando uma solução funcional para o transporte de bicicletas de alto desempenho.\n\nSeu interior conta com compartimentos específicos para duas rodas, permitindo organizar os componentes separadamente e reduzir o contato entre as peças durante o transporte.\n\nEquipada com rodas de transporte do tipo skate, oferece excelente rolamento e facilidade de movimentação em aeroportos, hotéis e centros de competição.\n\nEspecificações técnicas\n\nMarca: EVOC\n\nModelo: Bike Travel Bag\n\nTamanho: Large\n\nModalidade: Transporte de bicicletas\n\nComprimento: 139 cm\nLargura: 36 cm\n\nAltura: 80 cm\n\nCompartimentos: Espaço dedicado para duas rodas\n\nSistema de transporte: Rodas tipo skate de alto rolamento\n\nDiferencial: Estrutura de proteção combinada com facilidade de transporte",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw1fw2ix-mw1g10sr1.jpg",
+    "img/products/p-mw1fw2ix-mw1g12bf2.jpg",
+    "img/products/p-mw1fw2ix-mw1g13i03.jpg",
+    "img/products/p-mw1fw2ix-mw1g14s74.jpg",
+    "img/products/p-mw1fw2ix-mw1g16125.jpg",
+    "img/products/p-mw1fw2ix-mw1g17a26.jpg"
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 475
+   },
+   "demo": false,
+   "updatedAt": "2026-11-04T01:34:02.525Z",
+   "createdAt": "2026-11-04T01:34:02.525Z"
+  },
+  {
    "id": "p-mw1fml8f",
    "cat": "bike",
    "group": "bikes",
