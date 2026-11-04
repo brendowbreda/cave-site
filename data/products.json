@@ -1,6 +1,35 @@
 {
  "products": [
   {
+   "id": "p-mw1gk9xp",
+   "cat": "corrida",
+   "group": "acessorios",
+   "sub": "Carrinho de Corrida",
+   "cond": "usado",
+   "status": "disponivel",
+   "price": 2250,
+   "title": "BOB Gear IRONMAN",
+   "subtitle": "Carrinho de Corrida BOB Gear IRONMAN (Original)",
+   "desc": "O BOB Gear IRONMAN Edition foi desenvolvido para corredores que desejam conciliar a paixão pelo esporte com os momentos em família, oferecendo estabilidade, conforto e segurança durante caminhadas e treinos de corrida.\n\nInspirado no universo do IRONMAN, apresenta uma construção esportiva projetada para proporcionar excelente desempenho em superfícies pavimentadas, permitindo que pais e mães mantenham uma rotina ativa ao lado dos filhos.\n\nSeu grande diferencial está na roda dianteira fixa e nas três rodas de 16 polegadas com pneus de alta pressão, que favorecem uma rolagem eficiente, estabilidade direcional e movimentos suaves durante a corrida.\n\nEquipado com freio de mão no guidão e trava de estacionamento, oferece recursos adicionais de controle, especialmente importantes em percursos com inclinações.\n\nO sistema de suspensão ajustável, cinto de segurança de cinco pontos e capota retrátil ampla proporciona conforto e proteção à criança durante os passeios.\n\nAlém disso, sua estrutura dobrável facilita o armazenamento e o transporte, tornando o carrinho uma opção prática para acompanhar a rotina de treinos e viagens.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw1gk9xp-mw1gmd9r1.jpg",
+    "img/products/p-mw1gk9xp-mw1gmehe2.jpg",
+    "img/products/p-mw1gk9xp-mw1gmfrr3.jpg",
+    "img/products/p-mw1gk9xp-mw1gmh3b4.jpg",
+    "img/products/p-mw1gk9xp-mw1gmii85.jpg",
+    "img/products/p-mw1gk9xp-mw1gmjuv6.jpg",
+    "img/products/p-mw1gk9xp-mw1gmkyn7.jpg"
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 300
+   },
+   "demo": false,
+   "updatedAt": "2026-11-04T01:50:40.031Z",
+   "createdAt": "2026-11-04T01:50:40.031Z"
+  },
+  {
    "id": "p-mw1gbza9",
    "cat": "bike",
    "group": "componentes",
