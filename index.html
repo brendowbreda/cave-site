@@ -1034,7 +1034,7 @@ function stepper(n){return `<div class="stepper" aria-label="Etapa ${n} de 4">${
 // juros compostos ao mês (Tabela Price): parcela = V·i / (1 − (1+i)^−n)
 const instRate=()=>Number(((CFG.cardFees)||{}).juros??2.99)/100;
 const instTotal=(v,n)=>{if(n<=1)return v;const i=instRate();if(!i)return v;const pmt=Math.round(v*i/(1-Math.pow(1+i,-n))*100)/100;return Math.round(pmt*n*100)/100};
-function instOpts(v,sel){let h="";for(let n=1;n<=10;n++){const t=instTotal(v,n);h+=`<option value="${n}"${n==sel?" selected":""}>${n===1?`1x de ${brl(v)} (à vista, sem juros)`:`${n}x de ${brl(t/n)} (total ${brl(t)})`}</option>`}return h}
+function instOpts(v,sel){let h="";for(let n=1;n<=10;n++){const t=instTotal(v,n);h+=`<option value="${n}"${n==sel?" selected":""}>${n===1?`1x de ${brl(v)} (sem juros)`:`${n}x de ${brl(t/n)} (total ${brl(t)})`}</option>`}return h}
 function fitInput(inp){const c=fitInput.c||(fitInput.c=document.createElement("canvas").getContext("2d"));c.font=getComputedStyle(inp).font;inp.style.width=Math.ceil(c.measureText(inp.value||inp.placeholder).width+1)+"px"}
 function judge(v,price){
   const r=v/price,floor=CFG.offerFloor||.75;
