@@ -429,11 +429,14 @@ footer .flogo{width:min(200px,55vw);height:auto}
 @media (max-width:520px){.paygrid{grid-template-columns:1fr}}
 .payopt{position:relative;cursor:pointer}
 .payopt input{position:absolute;opacity:0;pointer-events:none}
-.payopt span{display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);height:100%}
+.paygrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:520px){.paygrid.two{grid-template-columns:1fr}}
+.payopt[hidden]{display:none}
+.payopt span{display:grid;grid-template-columns:auto 1fr;column-gap:12px;row-gap:2px;align-content:center;align-items:center;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);height:100%}
 .payopt i{grid-row:1/3;display:flex;gap:2px;color:var(--ink)}
 .payopt i svg{width:22px;height:22px}
-.payopt b{font-size:15px}
-.payopt small{font-size:12px;color:var(--muted)}
+.payopt b{font-size:15px;align-self:end;line-height:1.25}
+.payopt small{font-size:12px;color:var(--muted);align-self:start;line-height:1.35}
 .payopt input:checked+span{border-color:var(--buy);box-shadow:0 0 0 1px var(--buy)}
 .payopt input:focus-visible+span{outline:2px solid var(--ink);outline-offset:2px}
 .lbl.big{font-size:17px;font-weight:700}
@@ -941,6 +944,10 @@ function pixPayload(key,name,city,amount){
 function loadQR(){return window.QRCode?Promise.resolve():new Promise((ok,no)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";sc.onload=ok;sc.onerror=no;document.head.appendChild(sc)})}
 const buy={ship:"loja",cep:"",frete:null,city:"",pay:"pix",inst:1,card:{},pixPart:0};
 const r2c=v=>Math.round(v*100)/100;
+const STORE_ADDR="Rua Evaldo Schaeffer, nº 293 — Jardim Atlântico — Florianópolis/SC — CEP: 88095-350";
+const STORE_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg>';
+const TRUCK_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.5h11v10h-11zM13.5 10h4l3 3.5v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>';
+const CASH_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.8"/><path d="M6 9.5v5M18 9.5v5"/></svg>';
 const PIX_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 21.2 12 12 21.2 2.8 12z"/><path d="M8.2 8.6 12 12.4l3.8-3.8M8.2 15.4 12 11.6l3.8 3.8"/></svg>';
 const CARD_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19M6 15h4"/></svg>';
 function buyFlow(){
@@ -948,17 +955,17 @@ function buyFlow(){
   buy.frete=null;buy.city="";
   setSheet("Comprar",`${summary(p)}
     <div class="form">
-      <div class="field"><span class="lbl big">Forma de entrega</span><div class="pillset">
-        <label><input type="radio" name="ship" value="loja"${buy.ship==="loja"?" checked":""}><span>Retirar na loja física (Florianópolis)</span></label>
-        <label><input type="radio" name="ship" value="envio"${buy.ship==="envio"?" checked":""}><span>Frete</span></label></div></div>
+      <div class="field"><span class="lbl big">Forma de entrega</span><div class="paygrid two">
+        <label class="payopt"><input type="radio" name="ship" value="loja"${buy.ship==="loja"?" checked":""}><span><i>${STORE_IC}</i><b>Retirar na loja física (Florianópolis)</b><small>${STORE_ADDR}</small></span></label>
+        <label class="payopt"><input type="radio" name="ship" value="envio"${buy.ship==="envio"?" checked":""}><span><i>${TRUCK_IC}</i><b>Frete</b><small>Entrega no seu endereço</small></span></label></div></div>
       <div class="field" id="cepw" hidden><label for="cep">CEP</label>
         <div class="cep"><input id="cep" inputmode="numeric" placeholder="00000-000" value="${esc(buy.cep)}"><button class="btn" type="button" id="calcShip">Calcular frete</button></div>
         <a class="hint" href="https://buscacepinter.correios.com.br/app/endereco/index.php?t" target="_blank" rel="noopener" style="text-decoration:underline">Não sei meu CEP</a>
         <div id="shipOut"></div></div>
       <div class="field"><span class="lbl big">Meios de pagamento</span><div class="paygrid">
+        <label class="payopt" id="cashOpt"><input type="radio" name="pay" value="cash"${buy.pay==="cash"?" checked":""}><span><i>${CASH_IC}</i><b>Dinheiro</b><small>Somente na retirada na loja física</small></span></label>
         <label class="payopt"><input type="radio" name="pay" value="pix"${buy.pay==="pix"?" checked":""}><span><i>${PIX_IC}</i><b>Pix</b><small>Aprovação imediata</small></span></label>
-        <label class="payopt"><input type="radio" name="pay" value="card"${buy.pay==="card"?" checked":""}><span><i>${CARD_IC}</i><b>Cartão de crédito</b><small>Em até 10x no cartão</small></span></label>
-        <label class="payopt"><input type="radio" name="pay" value="combo"${buy.pay==="combo"?" checked":""}><span><i>${PIX_IC}${CARD_IC}</i><b>Combinar 2 meios</b><small>Parte no Pix, parte no cartão</small></span></label></div></div>
+        <label class="payopt"><input type="radio" name="pay" value="card"${buy.pay==="card"?" checked":""}><span><i>${CARD_IC}</i><b>Cartão de crédito</b><small>Em até 10x no cartão (com juros)</small></span></label></div></div>
       <div class="field" id="combow" hidden><label for="bpix">Valor no Pix</label><input id="bpix" inputmode="numeric" placeholder="R$ 0,00"><span class="hint" id="bcard"></span></div>
       <div class="form" id="cardw" hidden>
         <div class="field"><label for="bcn">Número do cartão</label><input id="bcn" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000"></div>
@@ -972,9 +979,12 @@ function buyFlow(){
     `<button class="btn" id="back">Voltar</button><button class="btn buy" id="confirmBuy">Confirmar compra</button>`);
   const total=()=>p.price+(buy.ship==="envio"&&buy.frete?buy.frete:0);
   const upd=()=>{
-    buy.ship=document.querySelector('[name="ship"]:checked').value;buy.pay=document.querySelector('[name="pay"]:checked').value;
-    $("#cepw").hidden=buy.ship!=="envio";$("#cardw").hidden=buy.pay==="pix";$("#combow").hidden=buy.pay!=="combo";
-    const t=total(),pixPart=buy.pay==="combo"?Math.min(t,buy.pixPart||0):buy.pay==="pix"?t:0,cardPart=r2c(t-pixPart);
+    buy.ship=document.querySelector('[name="ship"]:checked').value;
+    $("#cashOpt").hidden=buy.ship!=="loja";
+    if(buy.ship!=="loja"&&document.querySelector('[name="pay"][value="cash"]').checked)document.querySelector('[name="pay"][value="pix"]').checked=true;
+    buy.pay=document.querySelector('[name="pay"]:checked').value;
+    $("#cepw").hidden=buy.ship!=="envio";$("#cardw").hidden=buy.pay!=="card";$("#combow").hidden=buy.pay!=="combo";
+    const t=total(),pixPart=buy.pay==="combo"?Math.min(t,buy.pixPart||0):buy.pay!=="card"?t:0,cardPart=r2c(t-pixPart);
     $("#bcard").textContent=buy.pay==="combo"?`Restante no cartão: ${brl(cardPart)}`:"";
     $("#binst").innerHTML=instOpts(cardPart,buy.inst);
     const fin=pixPart+(cardPart>0&&buy.inst>1?instTotal(cardPart,buy.inst):cardPart);buy.fin=fin;buy.pixAmt=pixPart;buy.cardAmt=cardPart;
@@ -1002,14 +1012,14 @@ function buyFlow(){
   $("#back").onclick=openProductInPlace;
   $("#confirmBuy").onclick=async()=>{
     if(buy.pay==="combo"&&!(buy.pixAmt>0&&buy.cardAmt>0))return toast("Digite quanto vai pagar no Pix. O restante vai no cartão.");
-    if(buy.pay!=="pix"){const c=buy.card;if(!(c.bcn?.replace(/\D/g,"").length>=15&&c.bcname?.trim().length>2&&/^\d{2}\/\d{2}$/.test(c.bcexp||"")&&(c.bccv||"").length>=3))return toast("Preencha os dados do cartão.")}
+    if(buy.pay==="card"){const c=buy.card;if(!(c.bcn?.replace(/\D/g,"").length>=15&&c.bcname?.trim().length>2&&/^\d{2}\/\d{2}$/.test(c.bcexp||"")&&(c.bccv||"").length>=3))return toast("Preencha os dados do cartão.")}
     const fin=buy.fin,cardFin=fin-buy.pixAmt;
     const ship=buy.ship==="envio"?`Entrega para ${buy.city} (CEP ${buy.cep}) · frete ${buy.frete?brl(buy.frete):"grátis"}`:"Retirar na loja física (Florianópolis)";
     const cardTxt=buy.inst>1?`cartão em ${buy.inst}x de ${brl(cardFin/buy.inst)} (total ${brl(cardFin)})`:`cartão à vista ${brl(cardFin)}`;
-    const pay=buy.pay==="pix"?"Pix":buy.pay==="combo"?`Pix ${brl(buy.pixAmt)} + ${cardTxt}`:cardTxt.charAt(0).toUpperCase()+cardTxt.slice(1);
+    const pay=buy.pay==="cash"?"Dinheiro na retirada":buy.pay==="pix"?"Pix":buy.pay==="combo"?`Pix ${brl(buy.pixAmt)} + ${cardTxt}`:cardTxt.charAt(0).toUpperCase()+cardTxt.slice(1);
     const msg=`Olá! Quero comprar: ${p.title}${p.subtitle?` (${p.subtitle})`:""}.\nValor total: ${brl(fin)}\nEntrega: ${ship}\nPagamento: ${pay}`;
     const key=(CFG.company||{}).pix;
-    if(buy.pay!=="card"&&key){
+    if((buy.pay==="pix"||buy.pay==="combo")&&key){
       const code=pixPayload(key,(CFG.company||{}).razao||"Cave Floripa","Florianopolis",buy.pixAmt);
       setSheet("Pagar com Pix",`<div class="big-ok"><h3>${brl(buy.pixAmt)}</h3><p>${esc(p.title)}${buy.pay==="combo"?`<br>Restante no ${esc(cardTxt)}`:""}</p></div>
         <div class="pix"><div id="qr" class="qr"></div>
