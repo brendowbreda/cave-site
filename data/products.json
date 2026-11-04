@@ -754,7 +754,9 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T02:16:31.369Z",
-   "createdAt": "2026-11-02T23:01:58.359Z"
+   "createdAt": "2026-11-02T23:01:58.359Z",
+   "family": "fr170",
+   "variant": "Whitestone / Cloud Blue"
   },
   {
    "id": "p-mvzuyt8x",
@@ -865,7 +867,9 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T02:17:01.284Z",
-   "createdAt": "2026-11-02T22:43:25.124Z"
+   "createdAt": "2026-11-02T22:43:25.124Z",
+   "family": "fr170",
+   "variant": "Black / Amp Yellow"
   },
   {
    "id": "p-mvzu82fg",

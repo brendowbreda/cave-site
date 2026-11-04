@@ -673,6 +673,10 @@ p{margin:0}
     </div>
     <div class="field"><label for="e-title">Nome do produto (título)</label><input id="e-title" placeholder="Ex.: Canyon Speedmax CF SLX 8 Di2"></div>
     <div class="field"><label for="e-sub">Subtítulo</label><input id="e-sub" placeholder="Ex.: Tam. M · Shimano Ultegra Di2 · 2023"></div>
+    <div class="row2">
+      <div class="field"><label for="e-fam">Mesmo produto em outra cor de</label><select id="e-fam"></select></div>
+      <div class="field"><label for="e-var">Nome da cor</label><input id="e-var" placeholder="Ex.: Black / Amp Yellow"></div>
+    </div>
     <div class="field"><label for="e-desc">Descrição</label><textarea id="e-desc" placeholder="Estado do produto, uso, revisões, o que acompanha."></textarea></div>
     <div class="row2">
       <div class="field"><label for="e-price">Valor</label><input id="e-price" inputmode="numeric" placeholder="R$ 0,00"></div>
@@ -1034,6 +1038,9 @@ function openEditor(p){
   D=p?JSON.parse(JSON.stringify(p)):{id:"p-"+Date.now().toString(36),cat:c0.id,group:c0.groups[0].id,sub:c0.groups[0].subs[0],cond:"usado",status:"disponivel",price:0,title:"",subtitle:"",desc:"",tag:"",photos:[]};
   D.photos=(D.photos||[]).map(path=>({path}));
   $("#edTitle").textContent=p?"Editar produto":"Novo produto";
+  $("#e-fam").innerHTML=`<option value="">Nenhum (produto único)</option>`+PRODS.filter(x=>x.id!==D.id).sort((a,b)=>a.title.localeCompare(b.title,"pt-BR")).map(x=>`<option value="${esc(x.id)}">${esc(x.title)} — ${esc(x.variant||x.subtitle||"")}</option>`).join("");
+  {const fm=D.family&&PRODS.find(x=>x.id!==D.id&&(x.family||x.id)===D.family);$("#e-fam").value=fm?fm.id:""}
+  $("#e-var").value=D.variant||"";
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";
   const cg=(p&&(FIN.consign||{})[p.id])||null;
   const terc=cg?cg.pct<100:!p?false:defPct(D)<100&&!(FIN.costs||{})[p.id];
@@ -1064,7 +1071,7 @@ moneyField($("#e-price"),()=>{renderFinal();renderPreview();syncOwn()});moneyFie
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
   return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:D.tag||"",
-    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:D.status||"disponivel",cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,featured:!!D.featured,discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
+    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:D.status||"disponivel",cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,featured:!!D.featured,variant:$("#e-var").value.trim(),discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
 }
 function renderPreview(){
   const f=readForm(),s=f.status==="vendido",ph=D.photos[0];
@@ -1122,13 +1129,15 @@ $("#edSave").addEventListener("click",async()=>{
     }
     const old=(orig&&orig.photos)||[],removed=old.filter(p=>!paths.includes(p));
     const prod={...f,photos:paths,demo:false,updatedAt:new Date().toISOString()};
+    const famSel=$("#e-fam").value,famP=famSel&&PRODS.find(x=>x.id===famSel),fam=famP?(famP.family||famP.id):"";
+    if(fam)prod.family=fam;else delete prod.family;if(!prod.variant)delete prod.variant;
     if(!prod.discount)delete prod.discount;if(!prod.featured)delete prod.featured;if(!prod.also||!prod.also.length)delete prod.also;
     if(prod.status==="vendido"&&!(orig&&orig.status==="vendido"))prod.soldAt=new Date().toISOString();
     if(prod.status!=="vendido")delete prod.soldAt;
     if(!orig)prod.createdAt=prod.updatedAt;
     delete prod.icon;if(orig&&orig.icon&&orig.sub===prod.sub)prod.icon=orig.icon;
     busy("Salvando produto…");
-    await updateProducts(list=>{const i=list.findIndex(x=>x.id===prod.id);if(i>=0)list[i]=prod;else list.unshift(prod)},`${orig?"Edita":"Novo produto"}: ${prod.title}`);
+    await updateProducts(list=>{const i=list.findIndex(x=>x.id===prod.id);if(i>=0)list[i]=prod;else list.unshift(prod);if(fam){const o=list.find(x=>x.id===famSel);if(o&&!o.family){o.family=fam;if(!o.variant&&o.subtitle)o.variant=o.subtitle}}},`${orig?"Edita":"Novo produto"}: ${prod.title}`);
     for(const p of removed){busy("Limpando fotos antigas…");await delFile(p,`Remove foto: ${prod.title}`)}
     await saveCost(prod.id,cost);await saveConsign(prod.id,own);
     if(nowSold){busy("Registrando venda…");await recordSale(prod,sale)}else if(unSold)await unrecordSale(prod);

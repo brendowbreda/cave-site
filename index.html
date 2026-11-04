@@ -421,6 +421,16 @@ footer .flogo{width:min(200px,55vw);height:auto}
 .qr{background:#fff;padding:12px;border-radius:14px;line-height:0}
 .pixcode{display:flex;gap:8px;align-items:center;width:100%}
 .pixcode code{flex:1;min-width:0;font-size:12px;word-break:break-all;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);max-height:84px;overflow:auto}
+.vars{display:grid;gap:10px;margin:10px 0 6px}
+.vars-t{font-size:18px;font-weight:700}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;max-width:560px}
+.swb{position:relative;aspect-ratio:1;padding:0;border:0;background:#EAECEC;display:grid;place-items:center;overflow:hidden}
+.swb img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.swb svg{width:60%;stroke:#111;fill:none;stroke-width:1.8}
+.swb::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:transparent}
+.swb.on::after{background:var(--ink)}
+.swb.off{opacity:.4}
+.swname{margin:0;font-size:16px}
 .note.hl{background:var(--buy-soft);border-color:var(--buy)}
 .note.hl b{color:var(--ink)}
 .big-input{display:flex;align-items:baseline;gap:6px;border-bottom:2px solid var(--ink);padding-bottom:6px}
@@ -751,20 +761,24 @@ function filtered(){
   const by=(a,b)=>(!!b.featured-!!a.featured)||(st.sort==="asc"?a.price-b.price:b.price-a.price); // fixados no topo; depois do mais caro para o mais barato
   const okc=p=>!st.cond||p.cond===st.cond;
   const av=l.filter(p=>!sold(p)&&okc(p)).sort(by),sd=l.filter(p=>sold(p)&&okc(p));
-  $("#count").textContent=`${av.length} ${av.length===1?"produto":"produtos"}`;
+  const nf=collapse(av).length;$("#count").textContent=`${nf} ${nf===1?"produto":"produtos"}`;
   return [...av,...sd]; // vendidos sempre no fim
 }
 function card(p){
   const s=sold(p);
   return `<button class="card${s?" is-sold":""}" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${s?"vendido":brl(p.price)}">
-    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>${p.off?`<span class="badge off">${esc(p.off)}</span>`:p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&p.photos?.length>1?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
+    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>${p.off?`<span class="badge off">${esc(p.off)}</span>`:p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&famMembers(p).length>1?`<span class="pics">${famMembers(p).length} cores</span>`:!s&&p.photos?.length>1?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
     <div class="meta"><span class="t">${esc(p.title)}</span>${s?`<span class="s">Vendido</span>`:`<span class="s">${esc(p.subtitle)}</span><span class="p">${priceHtml(p)}</span>`}</div>
   </button>`;
 }
+// Cores/variações: produtos com o mesmo "family" aparecem num card só e se escolhe a cor na página do produto
+const famOf=p=>p.family||p.id;
+const famMembers=p=>P.filter(x=>famOf(x)===famOf(p));
+function collapse(l){const seen=new Set();return l.filter(p=>{const f=famOf(p);if(seen.has(f))return false;seen.add(f);return true})}
 function renderGrid(){
   // sem modalidade escolhida: os 5 anúncios mais recentes, numa fileira que arrasta
   $("#grid").classList.toggle("rail",!st.cat);
-  const l=st.cat?filtered():P.filter(p=>!sold(p)).slice(0,5);
+  const l=collapse(st.cat?filtered():P.filter(p=>!sold(p))).slice(0,st.cat?undefined:5);
   $("#grid").innerHTML=l.length?l.slice(0,st.limit).map(card).join(""):`<p class="empty">Nada por aqui agora. Tem um desses parado em casa? <a href="#vender">A gente vende para você</a>.</p>`;
   document.querySelector(".more").hidden=!st.cat||l.length<=st.limit;
 }
@@ -846,6 +860,7 @@ function openProduct(id){
       <div class="cond">${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>`}</div>
       <h3>${esc(p.title)}</h3>
       ${s?"":`<p class="sub">${esc(p.subtitle)}</p>`}
+      ${famMembers(p).length>1?`<div class="vars"><span class="vars-t">Cores</span><div class="sw">${famMembers(p).map(x=>`<button type="button" class="swb${x.id===p.id?" on":""}${sold(x)?" off":""}" data-var="${esc(x.id)}" aria-pressed="${x.id===p.id}" aria-label="${esc(x.variant||x.subtitle)}${sold(x)?" (vendido)":""}" title="${esc(x.variant||x.subtitle)}">${(x.photos||[])[0]?`<img src="${esc(x.photos[0])}" alt="">`:svg(caveIcon(x))}</button>`).join("")}</div><p class="swname">${esc(p.variant||p.subtitle)}</p></div>`:""}
       ${s?"":`
       <p class="price">${priceHtml(p)}${p.off?` <span class="off-tag">${esc(p.off)}</span>`:""}</p>
       <div class="pd-actions${p.cond==="usado"?"":" one"}">${p.cond==="usado"?`<button class="btn" id="offerBtn">Fazer oferta</button>`:""}<button class="btn buy" id="buyBtn">Comprar</button></div>
@@ -856,6 +871,7 @@ function openProduct(id){
               :"";
   openSheet(s?"Vendido":"Produto",body,foot);
   const g=$("#gal");g.addEventListener("scroll",()=>{const w=g.firstElementChild.getBoundingClientRect().width+8;const i=Math.round(g.scrollLeft/w);document.querySelectorAll("#dots i").forEach((d,k)=>d.classList.toggle("on",k===i))},{passive:true});
+  document.querySelectorAll("[data-var]").forEach(b=>{b.onclick=()=>{if(b.dataset.var!==p.id)openProduct(b.dataset.var)};b.onmouseenter=()=>{$(".swname").textContent=b.title};b.onmouseleave=()=>{$(".swname").textContent=p.variant||p.subtitle}});
   if(!s){$("#buyBtn").onclick=buyFlow;if($("#offerBtn"))$("#offerBtn").onclick=()=>offerFlow(1)}
 }
 
