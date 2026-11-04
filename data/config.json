@@ -117,7 +117,7 @@
    "groups": [
     {
      "id": "tenis",
-     "name": "Tênis de corrida",
+     "name": "Calçados",
      "subs": [
       "Atletismo",
       "Corrida de rua",
@@ -127,7 +127,7 @@
     },
     {
      "id": "roupas",
-     "name": "Roupas para corrida",
+     "name": "Vestuário",
      "subs": [
       "Camisetas",
       "Jaquetas",
@@ -138,7 +138,7 @@
     },
     {
      "id": "acessorios",
-     "name": "Acessórios para corrida",
+     "name": "Acessórios",
      "subs": [
       "Boné & bucket",
       "Cadarço elástico",
