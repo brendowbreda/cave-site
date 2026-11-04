@@ -1754,8 +1754,10 @@ function renderStats(){
       <div class="kv2"><span>Parte: Cave.&nbsp;Floripa (${fp}%)</span><b>${brl(cave)}</b></div></div>
     <div class="st"><span class="k kt">Bike fits feitos ${lbl}</span><b class="big-n">${n}</b>
       <div class="kv2"><span>Estrada & Mountain Bike</span><b>${road}</b></div>
-      <div class="kv2"><span>Triathlon / TT</span><b>${tri}</b></div></div>
-    <div class="st sm"><div class="kv2"><span>Masculino</span><b class="male">${pct(m)}</b></div><div class="kv2"><span>Feminino</span><b class="female">${pct(f)}</b></div></div>
+      <div class="kv2"><span>Triathlon / TT</span><b>${tri}</b></div>
+      <div class="kv2"><span>Total de bike fits agendados</span><b>${next}</b></div>
+      <div class="kv2"><span>Total de bike fits realizados</span><b>${n}</b></div></div>
+    <div class="st sm"><span class="k kt">Gênero</span><div class="kv2" style="border-top:0"><span>Masculino</span><b class="male">${pct(m)}</b></div><div class="kv2"><span>Feminino</span><b class="female">${pct(f)}</b></div></div>
   </div>`;
 }
 $("#calPrev").addEventListener("click",()=>{CAL.m--;if(CAL.m<0){CAL.m=11;CAL.y--}renderFit()});
