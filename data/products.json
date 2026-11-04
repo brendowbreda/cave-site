@@ -1,6 +1,33 @@
 {
  "products": [
   {
+   "id": "p-mw1gbza9",
+   "cat": "bike",
+   "group": "componentes",
+   "sub": "Rodas",
+   "cond": "usado",
+   "status": "disponivel",
+   "price": 21500,
+   "title": "Roda DT SWISS ARC 1100 DICUT - DISC",
+   "subtitle": "",
+   "desc": "A DT Swiss ARC 1100 DICUT DISC representa o mais alto nível de tecnologia aerodinâmica da marca, desenvolvida para triatletas e ciclistas que buscam máxima eficiência, velocidade e desempenho em competições de alto rendimento.\n\nDesenvolvida com o conceito AERO+ em colaboração com a Swiss Side, sua construção aerodinâmica é projetada para minimizar a resistência ao vento e otimizar a estabilidade durante provas de triathlon e contrarrelógio.\n\nSeu grande diferencial está na estrutura de carbono com perfil de disco fechado, desenvolvida para maximizar a eficiência aerodinâmica e favorecer a manutenção de altas velocidades em percursos competitivos.\n\nEquipada com cubo DT Swiss 180 DICUT e sistema Ratchet EXP, oferece um conjunto de alta precisão, baixo peso e excelente eficiência mecânica, proporcionando transmissão de potência confiável.\n\nOs rolamentos cerâmicos SINC Ceramic contribuem para reduzir o atrito e proporcionar uma rolagem suave e eficiente, especialmente importante em provas nas quais cada watt faz a diferença.\n\nCom tecnologia Tubeless Ready, permite a utilização de pneus sem câmara compatíveis, favorecendo menor resistência à rolagem, conforto e proteção contra determinados tipos de perfuração quando utilizada com selante adequado.\n\nEspecificações técnicas\n\nMarca: DT Swiss\n\nModelo: ARC 1100 DICUT DISC\n\nModalidade: Triathlon e contrarrelógio (TT)\n\nTecnologia aerodinâmica: AERO+\n\nCubo: DT Swiss 180 DICUT\n\nSistema de engate: Ratchet EXP\n\nRolamentos: SINC Ceramic\n\nTecnologia de pneus: Tubeless Ready",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw1gbza9-mw1gff4m1.jpg",
+    "img/products/p-mw1gbza9-mw1gfgki2.jpg",
+    "img/products/p-mw1gbza9-mw1gfi043.jpg",
+    "img/products/p-mw1gbza9-mw1gfjfd4.jpg",
+    "img/products/p-mw1gbza9-mw1gfkr35.jpg"
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 3000
+   },
+   "demo": false,
+   "updatedAt": "2026-11-04T01:45:13.474Z",
+   "createdAt": "2026-11-04T01:45:13.474Z"
+  },
+  {
    "id": "p-mw1g3cy0",
    "cat": "bike",
    "group": "vestuario",
