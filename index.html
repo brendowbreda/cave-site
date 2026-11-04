@@ -425,6 +425,17 @@ footer .flogo{width:min(200px,55vw);height:auto}
 .offer-sum .ph svg{width:70%}
 .offer-sum b{display:block;font-size:15px;line-height:1.2}
 .offer-sum span{font:500 13px/1 var(--mono);color:var(--muted)}
+.paygrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:520px){.paygrid{grid-template-columns:1fr}}
+.payopt{position:relative;cursor:pointer}
+.payopt input{position:absolute;opacity:0;pointer-events:none}
+.payopt span{display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);height:100%}
+.payopt i{grid-row:1/3;display:flex;gap:2px;color:var(--ink)}
+.payopt i svg{width:22px;height:22px}
+.payopt b{font-size:15px}
+.payopt small{font-size:12px;color:var(--muted)}
+.payopt input:checked+span{border-color:var(--buy);box-shadow:0 0 0 1px var(--buy)}
+.payopt input:focus-visible+span{outline:2px solid var(--ink);outline-offset:2px}
 .lbl.big{font-size:17px;font-weight:700}
 .cep{display:flex;gap:8px}.cep input{flex:1;min-width:0}.cep .btn{flex:none;min-height:48px}
 .ship-r{margin:6px 0 0;font-size:14px;color:var(--muted)}.ship-r b{color:var(--ink)}.ship-r.err{color:var(--bad)}
@@ -929,23 +940,27 @@ function pixPayload(key,name,city,amount){
   return p+crc.toString(16).toUpperCase().padStart(4,"0");
 }
 function loadQR(){return window.QRCode?Promise.resolve():new Promise((ok,no)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";sc.onload=ok;sc.onerror=no;document.head.appendChild(sc)})}
-const buy={ship:"loja",cep:"",frete:null,city:"",pay:"pix",inst:1,card:{}};
+const buy={ship:"loja",cep:"",frete:null,city:"",pay:"pix",inst:1,card:{},pixPart:0};
+const r2c=v=>Math.round(v*100)/100;
+const PIX_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 21.2 12 12 21.2 2.8 12z"/><path d="M8.2 8.6 12 12.4l3.8-3.8M8.2 15.4 12 11.6l3.8 3.8"/></svg>';
+const CARD_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19M6 15h4"/></svg>';
 function buyFlow(){
   const p=cur,sc=shipCfg();
   buy.frete=null;buy.city="";
   setSheet("Comprar",`${summary(p)}
     <div class="form">
-      <div class="field"><span class="lbl big">Entrega</span><div class="pillset">
+      <div class="field"><span class="lbl big">Forma de entrega</span><div class="pillset">
         <label><input type="radio" name="ship" value="loja"${buy.ship==="loja"?" checked":""}><span>Retirar na loja física (Florianópolis)</span></label>
-        <label><input type="radio" name="ship" value="envio"${buy.ship==="envio"?" checked":""}><span>Entrega</span></label></div></div>
+        <label><input type="radio" name="ship" value="envio"${buy.ship==="envio"?" checked":""}><span>Frete</span></label></div></div>
       <div class="field" id="cepw" hidden><label for="cep">CEP</label>
         <div class="cep"><input id="cep" inputmode="numeric" placeholder="00000-000" value="${esc(buy.cep)}"><button class="btn" type="button" id="calcShip">Calcular frete</button></div>
         <a class="hint" href="https://buscacepinter.correios.com.br/app/endereco/index.php?t" target="_blank" rel="noopener" style="text-decoration:underline">Não sei meu CEP</a>
-        <span class="hint">Compras acima de ${brl(sc.freeFrom)}: frete grátis.</span>
         <div id="shipOut"></div></div>
-      <div class="field"><span class="lbl big">Pagamento</span><div class="pillset">
-        <label><input type="radio" name="pay" value="pix"${buy.pay==="pix"?" checked":""}><span>Pix</span></label>
-        <label><input type="radio" name="pay" value="card"${buy.pay==="card"?" checked":""}><span>Cartão de crédito</span></label></div></div>
+      <div class="field"><span class="lbl big">Meios de pagamento</span><div class="paygrid">
+        <label class="payopt"><input type="radio" name="pay" value="pix"${buy.pay==="pix"?" checked":""}><span><i>${PIX_IC}</i><b>Pix</b><small>Aprovação imediata</small></span></label>
+        <label class="payopt"><input type="radio" name="pay" value="card"${buy.pay==="card"?" checked":""}><span><i>${CARD_IC}</i><b>Cartão de crédito</b><small>Em até 10x no cartão</small></span></label>
+        <label class="payopt"><input type="radio" name="pay" value="combo"${buy.pay==="combo"?" checked":""}><span><i>${PIX_IC}${CARD_IC}</i><b>Combinar 2 meios</b><small>Parte no Pix, parte no cartão</small></span></label></div></div>
+      <div class="field" id="combow" hidden><label for="bpix">Valor no Pix</label><input id="bpix" inputmode="numeric" placeholder="R$ 0,00"><span class="hint" id="bcard"></span></div>
       <div class="form" id="cardw" hidden>
         <div class="field"><label for="bcn">Número do cartão</label><input id="bcn" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000"></div>
         <div class="field"><label for="bcname">Nome impresso no cartão</label><input id="bcname" autocomplete="cc-name"></div>
@@ -959,21 +974,26 @@ function buyFlow(){
   const total=()=>p.price+(buy.ship==="envio"&&buy.frete?buy.frete:0);
   const upd=()=>{
     buy.ship=document.querySelector('[name="ship"]:checked').value;buy.pay=document.querySelector('[name="pay"]:checked').value;
-    $("#cepw").hidden=buy.ship!=="envio";$("#cardw").hidden=buy.pay!=="card";
-    const t=total();$("#binst").innerHTML=instOpts(t,buy.inst);
-    const fin=buy.pay==="card"&&buy.inst>1?instTotal(t,buy.inst):t;
+    $("#cepw").hidden=buy.ship!=="envio";$("#cardw").hidden=buy.pay==="pix";$("#combow").hidden=buy.pay!=="combo";
+    const t=total(),pixPart=buy.pay==="combo"?Math.min(t,buy.pixPart||0):buy.pay==="pix"?t:0,cardPart=r2c(t-pixPart);
+    $("#bcard").textContent=buy.pay==="combo"?`Restante no cartão: ${brl(cardPart)}`:"";
+    $("#binst").innerHTML=instOpts(cardPart,buy.inst);
+    const fin=pixPart+(cardPart>0&&buy.inst>1?instTotal(cardPart,buy.inst):cardPart);buy.fin=fin;buy.pixAmt=pixPart;buy.cardAmt=cardPart;
     $("#btot").textContent=brl(fin)+(buy.ship==="envio"&&buy.frete===null?" + frete":"");
     $("#confirmBuy").disabled=buy.ship==="envio"&&buy.frete===null;
   };
   document.querySelectorAll('[name="ship"],[name="pay"]').forEach(r=>r.addEventListener("change",upd));
   $("#binst").addEventListener("change",e=>{buy.inst=+e.target.value;upd()});
+  const bp=$("#bpix");bp.value=buy.pixPart?brl(buy.pixPart):"";
+  bp.addEventListener("input",()=>{const v=parseInt(bp.value.replace(/,\d{0,2}$/,"").replace(/\D/g,""))||0;buy.pixPart=v;bp.value=v?"R$ "+v.toLocaleString("pt-BR"):"";upd()});
+  bp.addEventListener("blur",()=>{if(buy.pixPart)bp.value=brl(buy.pixPart)});
   const cepI=$("#cep");cepI.addEventListener("input",()=>{const d=cepI.value.replace(/\D/g,"").slice(0,8);cepI.value=d.length>5?d.slice(0,5)+"-"+d.slice(5):d;buy.cep=cepI.value;buy.frete=null;$("#shipOut").innerHTML="";upd()});
   $("#calcShip").onclick=async()=>{
     const d=cepI.value.replace(/\D/g,"");if(d.length!==8){$("#shipOut").innerHTML=`<p class="ship-r err">Digite um CEP com 8 números.</p>`;return}
     $("#shipOut").innerHTML=`<p class="ship-r">Calculando…</p>`;
     try{const r=await fetch(`https://viacep.com.br/ws/${d}/json/`);const j=await r.json();if(j.erro)throw 0;
       const v=p.price>=sc.freeFrom?0:Number(sc[regionOf(j.uf)]||sc.outros);buy.frete=v;buy.city=`${j.localidade}/${j.uf}`;
-      $("#shipOut").innerHTML=`<p class="ship-r">Entrega para <b>${esc(buy.city)}</b>: <b>${v?brl(v):"Frete grátis"}</b></p>`;
+      $("#shipOut").innerHTML=`<p class="ship-r">Entrega para ${esc(buy.city)}: <b>${v?brl(v):"Frete grátis"}</b></p>`;
     }catch(_){$("#shipOut").innerHTML=`<p class="ship-r err">Não encontramos esse CEP. Confira os números.</p>`;buy.frete=null}
     upd();
   };
@@ -982,15 +1002,17 @@ function buyFlow(){
   upd();
   $("#back").onclick=openProductInPlace;
   $("#confirmBuy").onclick=async()=>{
-    if(buy.pay==="card"){const c=buy.card;if(!(c.bcn?.replace(/\D/g,"").length>=15&&c.bcname?.trim().length>2&&/^\d{2}\/\d{2}$/.test(c.bcexp||"")&&(c.bccv||"").length>=3))return toast("Preencha os dados do cartão.")}
-    const t=total(),fin=buy.pay==="card"&&buy.inst>1?instTotal(t,buy.inst):t;
+    if(buy.pay==="combo"&&!(buy.pixAmt>0&&buy.cardAmt>0))return toast("Digite quanto vai pagar no Pix. O restante vai no cartão.");
+    if(buy.pay!=="pix"){const c=buy.card;if(!(c.bcn?.replace(/\D/g,"").length>=15&&c.bcname?.trim().length>2&&/^\d{2}\/\d{2}$/.test(c.bcexp||"")&&(c.bccv||"").length>=3))return toast("Preencha os dados do cartão.")}
+    const fin=buy.fin,cardFin=fin-buy.pixAmt;
     const ship=buy.ship==="envio"?`Entrega para ${buy.city} (CEP ${buy.cep}) · frete ${buy.frete?brl(buy.frete):"grátis"}`:"Retirar na loja física (Florianópolis)";
-    const pay=buy.pay==="pix"?"Pix":buy.inst>1?`Cartão em ${buy.inst}x de ${brl(fin/buy.inst)} (total ${brl(fin)})`:"Cartão à vista";
+    const cardTxt=buy.inst>1?`cartão em ${buy.inst}x de ${brl(cardFin/buy.inst)} (total ${brl(cardFin)})`:`cartão à vista ${brl(cardFin)}`;
+    const pay=buy.pay==="pix"?"Pix":buy.pay==="combo"?`Pix ${brl(buy.pixAmt)} + ${cardTxt}`:cardTxt.charAt(0).toUpperCase()+cardTxt.slice(1);
     const msg=`Olá! Quero comprar: ${p.title}${p.subtitle?` (${p.subtitle})`:""}.\nValor total: ${brl(fin)}\nEntrega: ${ship}\nPagamento: ${pay}`;
     const key=(CFG.company||{}).pix;
-    if(buy.pay==="pix"&&key){
-      const code=pixPayload(key,(CFG.company||{}).razao||"Cave Floripa","Florianopolis",fin);
-      setSheet("Pagar com Pix",`<div class="big-ok"><h3>${brl(fin)}</h3><p>${esc(p.title)}</p></div>
+    if(buy.pay!=="card"&&key){
+      const code=pixPayload(key,(CFG.company||{}).razao||"Cave Floripa","Florianopolis",buy.pixAmt);
+      setSheet("Pagar com Pix",`<div class="big-ok"><h3>${brl(buy.pixAmt)}</h3><p>${esc(p.title)}${buy.pay==="combo"?`<br>Restante no ${esc(cardTxt)}`:""}</p></div>
         <div class="pix"><div id="qr" class="qr"></div>
         <p class="lbl" style="margin:0">Pix copia e cola</p><div class="pixcode"><code id="pixc">${esc(code)}</code><button class="btn small" type="button" id="cpix">Copiar</button></div>
         <p class="hint" style="text-align:center">Abra o app do seu banco, escolha Pix e leia o QR Code ou cole o código. Depois envie o comprovante pelo WhatsApp.</p></div>`,
