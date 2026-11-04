@@ -421,6 +421,12 @@ footer .flogo{width:min(200px,55vw);height:auto}
 .qr{background:#fff;padding:12px;border-radius:14px;line-height:0}
 .pixcode{display:flex;gap:8px;align-items:center;width:100%}
 .pixcode code{flex:1;min-width:0;font-size:12px;word-break:break-all;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);max-height:84px;overflow:auto}
+.dotsw{display:flex;gap:6px;margin:4px 0 2px}
+.dotsw i{width:30px;height:30px;border-radius:50%;background:#EAECEC;border:1.5px solid var(--line);overflow:hidden;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:600;cursor:pointer}
+.dotsw i img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.dotsw i.on{border-color:var(--ink)}
+.dotsw i.off{opacity:.4}
+.dotsw i.plus{background:var(--surface);color:var(--muted)}
 .vars{display:grid;gap:10px;margin:10px 0 6px}
 .vars-t{font-size:18px;font-weight:700}
 .sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;max-width:560px}
@@ -761,14 +767,14 @@ function filtered(){
   const by=(a,b)=>(!!b.featured-!!a.featured)||(st.sort==="asc"?a.price-b.price:b.price-a.price); // fixados no topo; depois do mais caro para o mais barato
   const okc=p=>!st.cond||p.cond===st.cond;
   const av=l.filter(p=>!sold(p)&&okc(p)).sort(by),sd=l.filter(p=>sold(p)&&okc(p));
-  const nf=collapse(av).length;$("#count").textContent=`${nf} ${nf===1?"produto":"produtos"}`;
+  $("#count").textContent=`${av.length} ${av.length===1?"produto":"produtos"}`;
   return [...av,...sd]; // vendidos sempre no fim
 }
 function card(p){
   const s=sold(p);
   return `<button class="card${s?" is-sold":""}" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${s?"vendido":brl(p.price)}">
-    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>${p.off?`<span class="badge off">${esc(p.off)}</span>`:p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&famMembers(p).length>1?`<span class="pics">${famMembers(p).length} cores</span>`:!s&&p.photos?.length>1?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
-    <div class="meta"><span class="t">${esc(p.title)}</span>${s?`<span class="s">Vendido</span>`:`<span class="s">${esc(p.subtitle)}</span><span class="p">${priceHtml(p)}</span>`}</div>
+    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Novo":"Usado"}</span>${p.off?`<span class="badge off">${esc(p.off)}</span>`:p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&p.photos?.length>1&&famMembers(p).length<2?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
+    <div class="meta"><span class="t">${esc(p.title)}</span>${famMembers(p).length>1?`<span class="dotsw">${famMembers(p).slice(0,5).map(x=>`<i class="${x.id===p.id?"on":""}${sold(x)?" off":""}" data-cv="${esc(x.id)}" title="${esc(x.variant||x.subtitle)}">${(x.photos||[])[0]?`<img src="${esc(x.photos[0])}" alt="">`:""}</i>`).join("")}${famMembers(p).length>5?`<i class="plus">+${famMembers(p).length-5}</i>`:""}</span>`:""}${s?`<span class="s">Vendido</span>`:`<span class="s">${esc(p.subtitle)}</span><span class="p">${priceHtml(p)}</span>`}</div>
   </button>`;
 }
 // Cores/variações: produtos com o mesmo "family" aparecem num card só e se escolhe a cor na página do produto
@@ -778,7 +784,7 @@ function collapse(l){const seen=new Set();return l.filter(p=>{const f=famOf(p);i
 function renderGrid(){
   // sem modalidade escolhida: os 5 anúncios mais recentes, numa fileira que arrasta
   $("#grid").classList.toggle("rail",!st.cat);
-  const l=collapse(st.cat?filtered():P.filter(p=>!sold(p))).slice(0,st.cat?undefined:5);
+  const l=st.cat?filtered():collapse(P.filter(p=>!sold(p))).slice(0,5);
   $("#grid").innerHTML=l.length?l.slice(0,st.limit).map(card).join(""):`<p class="empty">Nada por aqui agora. Tem um desses parado em casa? <a href="#vender">A gente vende para você</a>.</p>`;
   document.querySelector(".more").hidden=!st.cat||l.length<=st.limit;
 }
@@ -828,7 +834,7 @@ $("#secs").addEventListener("click",e=>{
 });
 document.addEventListener("click",e=>{if(!$("#finder").contains(e.target))qf.hidden=true});
 $("#moreBtn").addEventListener("click",()=>{st.limit+=12;renderGrid()});
-$("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openProduct(c.dataset.id)});
+$("#grid").addEventListener("click",e=>{const v=e.target.closest("[data-cv]");if(v)return openProduct(v.dataset.cv);const c=e.target.closest(".card");if(c)openProduct(c.dataset.id)});
 
 // ---------- Sheet
 const sheet=$("#sheet"),scrim=$("#scrim");let lastFocus=null;
