@@ -215,11 +215,17 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .male{color:#3B82F6}.female{color:#EC4899}
 .offers{margin-bottom:10px;border-color:var(--fit);background:var(--fit-soft)}
 .offers>.k{color:var(--ink)}
-.of-t{font-weight:700;font-size:15px;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.of-t{font-weight:700;font-size:15px;color:var(--ink);text-decoration:none}
+.of-t:hover{opacity:.75}
 .of-a .okb{background:var(--buy);border-color:var(--buy);color:var(--buy-ink)}
 .of-a .nob{background:var(--bad);border-color:var(--bad);color:#fff}
 .of-a .wab{background:#25D366;border-color:#25D366;color:#fff;margin-left:auto}
-.of{display:grid;gap:10px;padding:12px;border-radius:12px;background:var(--bg)}
+.of{display:grid;gap:10px;padding:12px;border-radius:12px;background:color-mix(in srgb,var(--fit) 32%,var(--fit-soft))}
+.of-i span{color:color-mix(in srgb,var(--ink) 70%,transparent)!important}
+.ofs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ofs div{display:grid;gap:2px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--fit) 32%,var(--fit-soft))}
+.ofs span{font-size:12px;color:color-mix(in srgb,var(--ink) 70%,transparent)}
+.ofs b{font-size:22px}.ofs .okc{color:var(--buy)}.ofs .noc{color:var(--bad)}
 .of-i{display:grid;gap:2px;min-width:0}
 .of-i b{font-size:15px}
 .of-i span{font-size:13px;color:var(--muted)}
@@ -1393,7 +1399,7 @@ function renderFin(){
         ${c.exps.length>5?`<button class="btn small more" id="expMore" type="button">${FS.allExp?"Ver menos":`Ver mais (${c.exps.length-5})`}</button>`:""}`:`<span class="s">Nenhum gasto lançado no período.</span>`}
     </div>`;
 }
-$("#finPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;FS.p=+b.dataset.p;document.querySelectorAll("#finPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderFin()});
+$("#finPeriod").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;FS.p=+b.dataset.p;document.querySelectorAll("#finPeriod .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderFin();renderOffers();loadOffers().then(renderOffers)});
 const arm=(el,txt)=>{if(el.dataset.armed==="1")return true;el.dataset.armed="1";el.textContent=txt;el.classList.add("armed");return false};
 $("#finBody").addEventListener("click",async e=>{
   const m=e.target.closest("[data-m]");if(m){FS.mod=m.dataset.m;return renderFin()}
@@ -1554,7 +1560,7 @@ $("#feeForm").addEventListener("submit",async e=>{
 });
 
 // ---------- Ofertas recebidas (Supabase)
-let OFFERS=[],OFF_ERR="";
+let OFFERS=[],OFF_ERR="",OFF_STATS={n:0,ok:0,no:0};
 const sbCfg=()=>CFG.supabase||{};
 // O painel entra no Supabase com um usuário próprio (e-mail e senha guardados criptografados no Financeiro)
 let SBT=null;
@@ -1577,19 +1583,27 @@ const sbReady=()=>!!(sbCfg().url&&(FIN.sbAuth||FIN.sbKey));
 async function loadOffers(){
   OFF_ERR="";
   if(!sbReady()){OFFERS=[];return}
-  try{OFFERS=await sbReq("offers?status=eq.pendente&order=created_at.desc&limit=50")}catch(e){OFFERS=[];
+  try{
+    const [rg]=[finRange()];
+    const [pend,all]=await Promise.all([sbReq("offers?status=eq.pendente&order=created_at.desc&limit=50"),sbReq("offers?select=status&created_at=gte."+encodeURIComponent(rg[0].toISOString())+"&limit=5000")]);
+    OFFERS=pend;OFF_STATS={n:all.length,ok:all.filter(x=>x.status==="aceita").length,no:all.filter(x=>x.status==="recusada").length};
+  }catch(e){OFFERS=[];
     const why={"Invalid login credentials":"e-mail ou senha não conferem com o usuário criado no Supabase","Email not confirmed":"o usuário ainda não foi confirmado (marque Auto Confirm ao criar, ou confirme em Authentication → Users)","Invalid API key":"a Publishable key não confere"}[e.detail]||e.detail||("erro "+(e.status||"de conexão — confira a Project URL"));
     OFF_ERR=(e.auth?"O usuário do painel não conseguiu entrar no Supabase: ":"Não foi possível carregar as ofertas: ")+why+".";}
 }
 const waTo=(phone,msg)=>`https://wa.me/${waDigits(phone)}?text=${encodeURIComponent(msg)}`;
 function renderOffers(){
   const box=$("#offersBox");if(!box||!isAdm())return;
-  if(!sbReady()||(!OFFERS.length&&!OFF_ERR)){box.innerHTML="";return}
+  if(!sbReady()){box.innerHTML="";return}
+  const lbl=FS.p===1?"neste mês":`nos últimos ${FS.p} meses`,st=OFF_STATS;
+  const ttl=o=>{const p=PRODS.find(x=>x.id===o.product_id);return p?p.title:o.product_title.replace(/\s*\([^()]*(\([^()]*\)[^()]*)*\)\s*$/,"")};
   const d2=s=>{const d=new Date(s);return `${d.toLocaleDateString("pt-BR")} - horário: ${pad(d.getHours())}h${pad(d.getMinutes())}`};
   const pay=o=>o.installments>1?`Cartão em ${o.installments}x de ${brl(o.total/o.installments)} (total ${brl(o.total)})`:"Cartão à vista (1x)";
-  box.innerHTML=`<div class="fc offers"><span class="k">Ofertas recebidas</span>
+  box.innerHTML=`<div class="fc offers"><span class="k">Ofertas ${lbl}</span>
+    <div class="ofs"><div><span>Total de ofertas</span><b>${st.n}</b></div><div><span>Aceitas</span><b class="okc">${st.ok}</b></div><div><span>Recusadas</span><b class="noc">${st.no}</b></div></div>
+    ${OFFERS.length||OFF_ERR?`<span class="k" style="margin-top:8px">Ofertas recebidas</span>`:""}
     ${OFF_ERR?`<span class="s" style="color:var(--bad)">${OFF_ERR}</span>`:OFFERS.map(o=>{const d=Math.round((1-o.offer_value/o.product_price)*100);return `<div class="of" data-of="${esc(o.id)}">
-      <div class="of-i"><a class="of-t" href="../?produto=${encodeURIComponent(o.product_id)}" target="_blank" rel="noopener">${esc(o.product_title)}</a>
+      <div class="of-i"><a class="of-t" href="../?produto=${encodeURIComponent(o.product_id)}" target="_blank" rel="noopener">${esc(ttl(o))}</a>
         <span>${esc(o.buyer_name)} · ${d2(o.created_at)}</span>
         <span>${pay(o)}</span>
         <span class="of-v">Anunciado ${brl(o.product_price)} · <strong>Oferta ${brl(o.offer_value)}</strong> (−${d}%)</span></div>
@@ -1606,7 +1620,7 @@ $("#offersBox").addEventListener("click",async e=>{
     busy("Recusando oferta…");
     try{await sbReq(`offers?id=eq.${o.id}`,{method:"PATCH",body:JSON.stringify({status:"recusada"})});
       if(w)w.location=waTo(o.buyer_phone,`Olá, ${first}! Obrigado pela oferta de ${brl(o.offer_value)} pelo ${o.product_title}. Infelizmente não conseguimos aceitar esse valor, mas o produto continua disponível por ${brl(o.product_price)}. Se tiver interesse, é só responder aqui que fechamos para você.`);
-      OFFERS=OFFERS.filter(x=>x.id!==o.id);renderOffers();toast("Oferta recusada.")}
+      OFFERS=OFFERS.filter(x=>x.id!==o.id);OFF_STATS.no++;renderOffers();toast("Oferta recusada.")}
     catch(x){if(w)w.close();toast("Não foi possível atualizar a oferta.",true)}finally{busy()}
     return;
   }
@@ -1621,7 +1635,7 @@ $("#offersBox").addEventListener("click",async e=>{
     await recordSale(p,sale);
     await updateProducts(list=>{const x=list.find(y=>y.id===p.id);if(x){x.status="vendido";x.soldAt=new Date().toISOString()}},`Vendido (oferta aceita): ${p.title}`);
     if(w)w.location=waTo(o.buyer_phone,`Olá, ${first}! Boa notícia: a sua oferta de ${brl(o.offer_value)} pelo ${o.product_title} foi aceita. Vamos combinar o pagamento e a entrega?`);
-    OFFERS=OFFERS.filter(x=>x.id!==o.id);renderOffers();renderList();renderFin();toast("Oferta aceita e produto marcado como vendido.");
+    OFFERS=OFFERS.filter(x=>x.id!==o.id);OFF_STATS.ok++;renderOffers();renderList();renderFin();toast("Oferta aceita e produto marcado como vendido.");
   }catch(x){if(w)w.close();toast(errMsg(x),true)}finally{busy()}
 });
 function renderSb(){const c=sbCfg();$("#sb-url").value=c.url||"";$("#sb-anon").value=c.anon||"";$("#sb-email").value=(FIN.sbAuth||{}).email||"";$("#sb-pass").value="";$("#sb-svc-st").textContent=FIN.sbAuth?"Usuário salvo e criptografado. Cole outra senha só se quiser trocar.":"O e-mail e a senha ficam criptografados e só o painel usa."}
