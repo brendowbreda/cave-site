@@ -1027,7 +1027,7 @@ function buyFlow(){
 
 // ---------- Fazer oferta
 const offer={value:0,card:{}};
-function stepper(n){return `<div class="stepper" aria-label="Etapa ${n} de 4">${[1,2,3,4].map(i=>`<i class="${i<=n?"on":""}"></i>`).join("")}</div>`}
+function stepper(n){if(n===4)n=3;return `<div class="stepper" aria-label="Etapa ${n} de 3">${[1,2,3].map(i=>`<i class="${i<=n?"on":""}"></i>`).join("")}</div>`}
 // o campo cresce com o número, para o ",00" ficar colado no valor
 // Parcelas: 1x à vista sem juros; 2x a 10x com juros mensais compostos (Configurações → Taxas de pagamento)
 // juros compostos ao mês (Tabela Price): parcela = V·i / (1 − (1+i)^−n)
@@ -1043,6 +1043,21 @@ function judge(v,price){
   if(r<0.85) return {k:"v-warn",t:"Chance moderada",d:"O vendedor pode aceitar ou responder com uma contraproposta. Vamos enviar a sua oferta para avaliação.",ok:true,r};
   if(r<0.93) return {k:"v-ok",t:"Chance razoável",d:"Ofertas nessa faixa costumam abrir negociação. Vamos passar para o vendedor.",ok:true,r};
   return {k:"v-good",t:"Boa chance",d:"Ofertas perto do preço costumam ser aceitas rápido.",ok:true,r};
+}
+async function sendOffer(p,btn){
+      const disc=Math.round((1-offer.value/p.price)*100);
+      const msg=`Nova oferta pelo site\nProduto: ${p.title}${p.subtitle?` (${p.subtitle})`:""}\nPreço anunciado: ${brl(p.price)}\nOferta: ${brl(offer.value)} (−${disc}%)${(offer.inst||1)>1?`\nParcelamento: ${offer.inst}x (total ${brl(instTotal(offer.value,offer.inst))})`:"\nPagamento: à vista"}\nNome: ${offer.contact.name}\nWhatsApp: ${offer.contact.phone}`;
+      const sb=CFG.supabase||{};
+      // com o Supabase ligado a oferta cai no painel; sem ele (ou se falhar) vai pelo WhatsApp da loja
+      const win=sb.url&&sb.anon?null:window.open("about:blank","_blank");
+      let ok=false;
+      if(sb.url&&sb.anon){
+        $(btn).disabled=true;$(btn).textContent="Enviando…";
+        try{const r=await fetch(sb.url.replace(/\/$/,"")+"/rest/v1/offers",{method:"POST",headers:{apikey:sb.anon,...(sb.anon.startsWith("sb_")?{}:{Authorization:"Bearer "+sb.anon}),"Content-Type":"application/json",Prefer:"return=minimal"},
+          body:JSON.stringify({...((offer.inst||1)>1?{installments:offer.inst,total:instTotal(offer.value,offer.inst)}:{}),product_id:p.id,product_title:p.title+(p.subtitle?` (${p.subtitle})`:""),product_price:p.price,offer_value:offer.value,buyer_name:offer.contact.name.trim(),buyer_phone:offer.contact.phone.replace(/\D/g,"")})});ok=r.ok}catch(e){}
+      }
+      if(!ok){const w=win||window.open("about:blank","_blank");if(w)w.location=wa(CFG.whatsapp.loja,msg)}else if(win)win.close();
+      offerFlow(4);
 }
 function offerFlow(step){
   const p=cur;
@@ -1088,7 +1103,7 @@ function offerFlow(step){
         <div class="field"><label for="cpf">CPF</label><input id="cpf" inputmode="numeric" placeholder="000.000.000-00" value="${c.cpf||""}"></div>
         <div class="field"><label for="inst">Parcelamento</label><select id="inst">${instOpts(offer.value,offer.inst||1)}</select></div>
       </div>`,
-      `<button class="btn" id="back">Voltar</button><button class="btn solid" id="next" disabled>Revisar oferta</button>`);
+      `<button class="btn" id="back">Voltar</button><button class="btn buy" id="next" disabled>Enviar oferta</button>`);
     const fmt={cn:v=>v.replace(/\D/g,"").slice(0,16).replace(/(\d{4})(?=\d)/g,"$1 "),cexp:v=>v.replace(/\D/g,"").slice(0,4).replace(/(\d{2})(?=\d)/,"$1/"),ccv:v=>v.replace(/\D/g,"").slice(0,4),cpf:v=>{const d=v.replace(/\D/g,"").slice(0,11);return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2")},cname:v=>v};
     offer.contact=offer.contact||{};
     const ph=v=>{const d=v.replace(/\D/g,"").slice(0,11);return d.length>10?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length>6?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d.length>2?`(${d.slice(0,2)}) ${d.slice(2)}`:d};
@@ -1099,37 +1114,7 @@ function offerFlow(step){
     Object.keys(fmt).forEach(k=>{const el=$("#"+k);el.addEventListener("input",()=>{el.value=fmt[k](el.value);offer.card[k]=el.value;check()})});
     check();
     $("#back").onclick=()=>offerFlow(1);
-    $("#next").onclick=()=>offerFlow(3);
-  }
-  if(step===3){
-    const last=(offer.card.cn||"").replace(/\D/g,"").slice(-4);
-    const disc=Math.round((1-offer.value/p.price)*100);
-    setSheet("Fazer oferta",`${stepper(3)}${summary(p,offer.value)}
-      <div class="kv">
-        <div><span>Preço anunciado</span><b class="mono">${brl(p.price)}</b></div>
-        <div><span>Sua oferta</span><b class="mono">${brl(offer.value)} <span style="color:var(--muted);font-weight:400">(−${disc}%)</span></b></div>
-      </div>
-      <div class="timeline" style="margin:22px 0">
-        <div class="tl now"><b>Agora</b><span><strong style="color:var(--ink)">${brl(offer.value)}</strong> reservado no cartão.<br><strong style="color:var(--ink)">Não é cobrança.</strong></span></div>
-        <div class="tl"><b>Se o vendedor aceitar a oferta</b><span>A cobrança é confirmada e a compra está feita.</span></div>
-        <div class="tl"><b>Se recusar a oferta ou não responder em 24h</b><span>A reserva é cancelada e o limite volta para você.</span></div>
-      </div>`,
-      `<button class="btn" id="back">Voltar</button><button class="btn buy" id="send">Enviar oferta</button>`);
-    $("#back").onclick=()=>offerFlow(2);
-    $("#send").onclick=async()=>{
-      const msg=`Nova oferta pelo site\nProduto: ${p.title}${p.subtitle?` (${p.subtitle})`:""}\nPreço anunciado: ${brl(p.price)}\nOferta: ${brl(offer.value)} (−${disc}%)${(offer.inst||1)>1?`\nParcelamento: ${offer.inst}x (total ${brl(instTotal(offer.value,offer.inst))})`:"\nPagamento: à vista"}\nNome: ${offer.contact.name}\nWhatsApp: ${offer.contact.phone}`;
-      const sb=CFG.supabase||{};
-      // com o Supabase ligado a oferta cai no painel; sem ele (ou se falhar) vai pelo WhatsApp da loja
-      const win=sb.url&&sb.anon?null:window.open("about:blank","_blank");
-      let ok=false;
-      if(sb.url&&sb.anon){
-        $("#send").disabled=true;$("#send").textContent="Enviando…";
-        try{const r=await fetch(sb.url.replace(/\/$/,"")+"/rest/v1/offers",{method:"POST",headers:{apikey:sb.anon,...(sb.anon.startsWith("sb_")?{}:{Authorization:"Bearer "+sb.anon}),"Content-Type":"application/json",Prefer:"return=minimal"},
-          body:JSON.stringify({...((offer.inst||1)>1?{installments:offer.inst,total:instTotal(offer.value,offer.inst)}:{}),product_id:p.id,product_title:p.title+(p.subtitle?` (${p.subtitle})`:""),product_price:p.price,offer_value:offer.value,buyer_name:offer.contact.name.trim(),buyer_phone:offer.contact.phone.replace(/\D/g,"")})});ok=r.ok}catch(e){}
-      }
-      if(!ok){const w=win||window.open("about:blank","_blank");if(w)w.location=wa(CFG.whatsapp.loja,msg)}else if(win)win.close();
-      offerFlow(4);
-    };
+    $("#next").onclick=()=>sendOffer(p,"#next");
   }
   if(step===4){
     const t=new Date(),exp=new Date(t.getTime()+864e5);
