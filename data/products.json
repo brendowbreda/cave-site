@@ -126,7 +126,7 @@
    "group": "acessorios",
    "sub": "Mala bike",
    "cond": "usado",
-   "status": "disponivel",
+   "status": "vendido",
    "price": 1600,
    "title": "Mala Bike - EVOC Travel Bag",
    "subtitle": "tamanho: 139 x 36 x 80 cm",
@@ -146,7 +146,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T01:34:02.525Z",
-   "createdAt": "2026-11-04T01:34:02.525Z"
+   "createdAt": "2026-11-04T01:34:02.525Z",
+   "soldAt": "2026-11-04T16:03:16.759Z"
   },
   {
    "id": "p-mw1fml8f",
