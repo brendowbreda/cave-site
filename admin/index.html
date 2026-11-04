@@ -491,6 +491,15 @@ p{margin:0}
             <div class="field"><label for="co-cnpj">CNPJ</label><input id="co-cnpj" inputmode="numeric" placeholder="00.000.000/0000-00"></div>
             <div class="field"><label for="co-end">Endereço</label><input id="co-end" placeholder="Rua, número, bairro, Florianópolis/SC"></div>
             <div class="field"><label for="co-tel">Telefone/WhatsApp</label><div class="tel"><span>+55</span><input id="co-tel" inputmode="tel" placeholder="(48) 99999-9999" data-tel></div></div>
+            <div class="field"><label for="co-pix">Chave PIX da loja</label><input id="co-pix" autocapitalize="off" placeholder="CNPJ, e-mail, telefone ou chave aleatória"><span class="hint">Usada para gerar o QR Code do Pix na compra pelo site.</span></div>
+            <p class="lbl" style="margin:8px 0 0">Frete (entrega pelo site)</p>
+            <div class="row2">
+              <div class="field"><label for="sh-sc">Santa Catarina</label><input id="sh-sc" inputmode="numeric" data-ship="sc"></div>
+              <div class="field"><label for="sh-sul">PR e RS</label><input id="sh-sul" inputmode="numeric" data-ship="sul"></div>
+              <div class="field"><label for="sh-sudeste">Sudeste</label><input id="sh-sudeste" inputmode="numeric" data-ship="sudeste"></div>
+              <div class="field"><label for="sh-outros">Demais estados</label><input id="sh-outros" inputmode="numeric" data-ship="outros"></div>
+            </div>
+            <div class="field"><label for="sh-free">Frete grátis acima de</label><input id="sh-free" inputmode="numeric" data-ship="freeFrom"></div>
             <button class="btn solid block" type="submit">Salvar dados da empresa</button>
           </form>
         </details>
@@ -1169,7 +1178,8 @@ async function updateConfig(mutate,msg){
 function renderCfg(){
   const co=CFG.company||{};
   $("#co-razao").value=co.razao||"";$("#co-cnpj").value=co.cnpj||"";$("#co-end").value=co.endereco||"";
-  $("#co-tel").value=fmtTel(CFG.whatsapp.loja);
+  $("#co-tel").value=fmtTel(CFG.whatsapp.loja);$("#co-pix").value=co.pix||"";
+  const shd={sc:35,sul:55,sudeste:75,outros:110,freeFrom:1000,...(CFG.shipping||{})};document.querySelectorAll("[data-ship]").forEach(el=>{el.value=money00(shd[el.dataset.ship]);if(!el.dataset.mf){el.dataset.mf=1;moneyField(el)}});
   $("#c-wafit").value=fmtTel(CFG.whatsapp.fit);$("#me-wa").value=fmtTel(CFG.whatsapp.fit);
   $("#me-email").value=S.email||"";$("#me-pass").value="";$("#me-pass2").value="";
   $("#c-fit").innerHTML=CFG.fit.map((f,i)=>`<div class="cfg-item">
@@ -1195,7 +1205,7 @@ $("#co-cnpj").addEventListener("input",e=>{e.target.value=fmtCnpj(e.target.value
 $("#coForm").addEventListener("submit",async e=>{
   e.preventDefault();
   busy("Salvando…");
-  try{await updateConfig(d=>{d.company={razao:$("#co-razao").value.trim(),cnpj:$("#co-cnpj").value.trim(),endereco:$("#co-end").value.trim(),email:(CFG.company||{}).email||""};const w=waDigits($("#co-tel").value);if(w)d.whatsapp.loja=w},"Dados da empresa");renderCfg();toast("Dados da empresa salvos.")}
+  try{await updateConfig(d=>{d.company={razao:$("#co-razao").value.trim(),cnpj:$("#co-cnpj").value.trim(),endereco:$("#co-end").value.trim(),email:(CFG.company||{}).email||"",pix:$("#co-pix").value.trim()};const sh={};document.querySelectorAll("[data-ship]").forEach(el=>sh[el.dataset.ship]=parseMoney(el.value));d.shipping=sh;const w=waDigits($("#co-tel").value);if(w)d.whatsapp.loja=w},"Dados da empresa");renderCfg();toast("Dados da empresa salvos.")}
   catch(x){toast(errMsg(x),true)}finally{busy()}
 });
 $("#cfgForm").addEventListener("submit",async e=>{
