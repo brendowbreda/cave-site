@@ -1,6 +1,30 @@
 {
  "products": [
   {
+   "id": "p-mw1fml8f",
+   "cat": "bike",
+   "group": "bikes",
+   "sub": "Road (estrada)",
+   "cond": "usado",
+   "status": "disponivel",
+   "price": 10000,
+   "title": "Enduravox Comp Cues 2025",
+   "subtitle": "tamanho 54 (entre 1,78 -> 1,83m)",
+   "desc": "A Swift Enduravox Comp Disc 2025 é uma bicicleta de estrada desenvolvida para ciclistas que buscam conforto, eficiência e versatilidade, seja para iniciar no ciclismo de estrada, evoluir nos treinos ou enfrentar percursos de longa distância.\n\nCom quadro em alumínio hidroformado Alloy Triple Butted 6069, combina resistência, rigidez e uma construção otimizada para proporcionar uma pedalada eficiente e confortável.\n\nSua geometria Endurance favorece uma posição de pilotagem mais confortável, ideal para quem deseja acumular quilômetros com estabilidade e confiança, sem abrir mão do desempenho.\n\nEquipada com componentes Shimano CUES e sistema de freios a disco, oferece uma configuração voltada à confiabilidade, ao controle e à versatilidade durante os treinos.\n\nO conjunto é complementado por rodas Swift e selim Selle Royal, proporcionando uma experiência equilibrada para ciclistas que valorizam conforto e qualidade.\n\nEspecificações técnicas\n\nMarca: Swift\n\nModelo: Enduravox Comp Disc\n\nAno: 2025\n\nModalidade: Ciclismo de estrada / Endurance\n\nCor: Branco\n\nTamanho: 54\n\nReferência de altura: Aproximadamente 1,78 m a 1,83 m, conforme informado\n\nQuadro: Alumínio hidroformado Alloy Triple Butted 6069 OLD\n\nGeometria: Endurance\n\nGrupo: Shimano CUES\n\nReferência informada: Shimano BR-U6030\n\nTransmissão: 20 velocidades (2x10), conforme modelo anunciado\n\nFreios: Disco\n\nRodas: Swift\n\nSelim: Selle Royal\n\nDiferencial: Geometria voltada ao conforto e à eficiência em longas distâncias",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw1fml8f-mw1fprbr1.jpg",
+    "img/products/p-mw1fml8f-mw1fpsj32.jpg",
+    "img/products/p-mw1fml8f-mw1fptr03.jpg",
+    "img/products/p-mw1fml8f-mw1fpv0j4.jpg",
+    "img/products/p-mw1fml8f-mw1fpwcv5.jpg",
+    "img/products/p-mw1fml8f-mw1fpxll6.jpg"
+   ],
+   "demo": false,
+   "updatedAt": "2026-11-04T01:25:16.791Z",
+   "createdAt": "2026-11-04T01:25:16.791Z"
+  },
+  {
    "id": "p-mw1f7n5o",
    "cat": "corrida",
    "group": "tenis",
