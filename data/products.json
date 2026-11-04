@@ -1,6 +1,33 @@
 {
  "products": [
   {
+   "id": "p-mw1gq1by",
+   "cat": "bike",
+   "group": "vestuario",
+   "sub": "Sapatilha",
+   "cond": "usado",
+   "status": "disponivel",
+   "price": 800,
+   "title": "Sapatilha de Estrada Specialized Torch 1.0",
+   "subtitle": "tamanho: EU 41 | US 8-Masc | US 9,5-Fem | BR 39",
+   "desc": "A Specialized Torch 1.0 foi desenvolvida para ciclistas que buscam conforto, eficiência e tecnologia em uma sapatilha de estrada, combinando a reconhecida ergonomia da Specialized com recursos projetados para melhorar a experiência sobre a bicicleta.\n\nSeu grande diferencial está na tecnologia Body Geometry, aplicada ao conjunto de solado e palmilha para favorecer o alinhamento biomecânico dos pés, proporcionando maior estabilidade e conforto durante os treinos e percursos de longa distância.\n\nEquipada com sistema de fechamento BOA® L6 de ajuste micrométrico, combinado com uma tira frontal de velcro, permite regular a pressão sobre os pés de maneira prática e precisa, oferecendo firmeza durante a pedalada.\n\nO solado em nylon injetado, com índice de rigidez 6,0, proporciona uma combinação equilibrada de transferência de potência e conforto, ideal para ciclistas que desejam evoluir seu desempenho sem abrir mão da comodidade.\n\nSeu cabedal sintético com perfurações a laser favorece a ventilação e a respirabilidade, contribuindo para manter os pés confortáveis mesmo durante treinos prolongados.",
+   "tag": "",
+   "photos": [
+    "img/products/p-mw1gq1by-mw1gseb61.jpg",
+    "img/products/p-mw1gq1by-mw1gsfro2.jpg",
+    "img/products/p-mw1gq1by-mw1gsh3y3.jpg",
+    "img/products/p-mw1gq1by-mw1gsi9s4.jpg",
+    "img/products/p-mw1gq1by-mw1gsjf45.jpg"
+   ],
+   "discount": {
+    "type": "brl",
+    "value": 320
+   },
+   "demo": false,
+   "updatedAt": "2026-11-04T01:55:18.163Z",
+   "createdAt": "2026-11-04T01:55:18.163Z"
+  },
+  {
    "id": "p-mw1gk9xp",
    "cat": "corrida",
    "group": "acessorios",
