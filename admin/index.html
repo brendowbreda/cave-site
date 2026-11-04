@@ -690,7 +690,7 @@ p{margin:0}
       <div class="field"><label for="e-owner">Proprietário</label><input id="e-owner" placeholder="Nome de quem é o produto"></div>
       <div class="field"><label for="e-ophone">Telefone do proprietário</label><input id="e-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
     </div>
-    <div class="field" id="e-pixw"><label for="e-opix">Chave PIX do proprietário</label><input id="e-opix" autocapitalize="off" placeholder="CPF, e-mail, telefone ou chave aleatória"></div>
+    <div class="field" id="e-pixw"><label for="e-opix">Chave PIX do proprietário</label><input id="e-opix" autocapitalize="off" placeholder="CPF, CNPJ, e-mail, +55 telefone ou aleatória"></div>
     <p class="final" id="e-comm" hidden></p>
     <div class="row2">
       <div class="field" id="e-costw"><label for="e-cost">Valor do custo do produto (oculto)</label><input id="e-cost" inputmode="numeric" placeholder="R$ 0,00"></div>
@@ -981,6 +981,13 @@ $("#rmDemo").addEventListener("click",async function(){
 });
 
 
+// ---------- Máscaras: telefone (DD) 99999-9999 e chave PIX (CPF/CNPJ formatados; e-mail, +telefone e aleatória ficam como estão)
+const pixMask=v=>{v=String(v||"");if(/[a-zA-Z@+]/.test(v)||/^[0-9a-f]{8}-/i.test(v))return v.trim();const d=v.replace(/\D/g,"").slice(0,14);
+  if(d.length<=11)return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+  return d.replace(/^(\d{2})(\d)/,"$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d)/,".$1/$2").replace(/(\d{4})(\d)/,"$1-$2")};
+document.addEventListener("input",e=>{const t=e.target;if(!t.matches)return;
+  if(t.matches("#e-ophone,#sl-ophone"))t.value=telMask(t.value);
+  else if(t.matches("#e-opix,#sl-opix,#lc-pix,#co-pix")&&!/[a-zA-Z@+]/.test(t.value))t.value=pixMask(t.value)});
 // ---------- Editor
 // Produto da loja (100% da Cave, tem custo) ou de terceiro (comissão de 10, 15, 20%...)
 function readOwn(){const terc=$("#e-own-terc").checked;return terc?{pct:Math.min(99,digits($("#e-pct").value)||0),owner:$("#e-owner").value.trim(),phone:$("#e-ophone").value.trim(),pix:$("#e-opix").value.trim()}:{pct:100}}
@@ -1030,7 +1037,7 @@ function openEditor(p){
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";
   const cg=(p&&(FIN.consign||{})[p.id])||null;
   const terc=cg?cg.pct<100:!p?false:defPct(D)<100&&!(FIN.costs||{})[p.id];
-  $(terc?"#e-own-terc":"#e-own-loja").checked=true;$("#e-pct").value=cg&&cg.pct<100?cg.pct:(terc?defPct(D):"");$("#e-owner").value=cg?cg.owner||"":"";$("#e-ophone").value=cg?cg.phone||"":"";$("#e-opix").value=cg?cg.pix||"":"";syncOwn();
+  $(terc?"#e-own-terc":"#e-own-loja").checked=true;$("#e-pct").value=cg&&cg.pct<100?cg.pct:(terc?defPct(D):"");$("#e-owner").value=cg?cg.owner||"":"";$("#e-ophone").value=telMask(cg?cg.phone||"":"");$("#e-opix").value=pixMask(cg?cg.pix||"":"");syncOwn();
   $("#e-price").value=money00(D.price);DT=(D.discount&&D.discount.type)||"pct";$("#e-disc").value=D.discount&&D.discount.value?(DT==="brl"?money00(D.discount.value):D.discount.value):"";syncDT();D.also=(D.also||[]).map(x=>({...x}));renderAlso();$("#e-cost").value=money00(p?(FIN.costs||{})[p.id]||0:0);
   $("#e-"+D.cond).checked=true;
   // Seção = modalidade/marca + grupo (ex.: Bicicleta › Componentes)
@@ -1178,7 +1185,7 @@ async function updateConfig(mutate,msg){
 function renderCfg(){
   const co=CFG.company||{};
   $("#co-razao").value=co.razao||"";$("#co-cnpj").value=co.cnpj||"";$("#co-end").value=co.endereco||"";
-  $("#co-tel").value=fmtTel(CFG.whatsapp.loja);$("#co-pix").value=co.pix||"";
+  $("#co-tel").value=fmtTel(CFG.whatsapp.loja);$("#co-pix").value=pixMask(co.pix||"");
   const shd={sc:35,sul:55,sudeste:75,outros:110,freeFrom:1000,...(CFG.shipping||{})};document.querySelectorAll("[data-ship]").forEach(el=>{el.value=money00(shd[el.dataset.ship]);if(!el.dataset.mf){el.dataset.mf=1;moneyField(el)}});
   $("#c-wafit").value=fmtTel(CFG.whatsapp.fit);$("#me-wa").value=fmtTel(CFG.whatsapp.fit);
   $("#me-email").value=S.email||"";$("#me-pass").value="";$("#me-pass2").value="";
@@ -1456,7 +1463,7 @@ function askSale(p){
   const cg=FIN.consign[p.id];$("#sl-price").value=money00(finalPrice(p));$("#sl-pct").value=cg?cg.pct:(FIN.costs[p.id]?100:defPct(p));
   $("#sl-pay").innerHTML=payOpts("pix");
   $("#sl-cost").value=money00(p._cost??FIN.costs[p.id]??0);
-  $("#sl-owner").value=cg?cg.owner||"":"";$("#sl-ophone").value=cg?cg.phone||"":"";$("#sl-opix").value=cg?cg.pix||"":"";
+  $("#sl-owner").value=cg?cg.owner||"":"";$("#sl-ophone").value=telMask(cg?cg.phone||"":"");$("#sl-opix").value=pixMask(cg?cg.pix||"":"");
   calcSale();$("#saleSh").hidden=false;
   return new Promise(r=>{saleResolve=r});
 }
@@ -1509,7 +1516,7 @@ function openRentSh(day,r){
   $("#lc-item").innerHTML=names.map(n=>`<option>${esc(n)}</option>`).join("")+`<option value="__o">Outro…</option>`;
   $("#lc-item").value=r?(custom?"__o":r.item):names[0]||"__o";
   $("#lc-other").value=custom?r.item:"";$("#lc-otherw").hidden=!custom;
-  $("#lc-client").value=r?r.client||"":"";$("#lc-owner").value=r?r.owner||"":"";$("#lc-pix").value=r?r.ownerPix||"":"";
+  $("#lc-client").value=r?r.client||"":"";$("#lc-owner").value=r?r.owner||"":"";$("#lc-pix").value=pixMask(r?r.ownerPix||"":"");
   $("#lc-pct").value=r?(r.pct??100):splitPct("loc");
   $("#lc-val").value=r?money00(r.value):"";
   $("#lc-start").value=r?r.start:(day||ymd(new Date()));$("#lc-end").value=r?r.end||"":"";
