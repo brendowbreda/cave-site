@@ -798,7 +798,7 @@ function filtered(){
 function card(p){
   const s=sold(p);
   return `<button class="card${s?" is-sold":""}" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${s?"vendido":brl(p.price)}">
-    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Produto novo":"Usado"}</span>${p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&p.photos?.length>1&&famMembers(p).length<2?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
+    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Produto novo":"Produto usado"}</span>${p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&p.photos?.length>1&&famMembers(p).length<2?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
     <div class="meta"><span class="t">${esc(p.title)}</span>${famMembers(p).length>1?`<span class="dotsw">${famMembers(p).slice(0,5).map(x=>`<i class="${x.id===p.id?"on":""}${sold(x)?" off":""}" data-cv="${esc(x.id)}" title="${esc(x.variant||x.subtitle)}">${(x.photos||[])[0]?`<img src="${esc(x.photos[0])}" alt="">`:""}</i>`).join("")}${famMembers(p).length>5?`<i class="plus">+${famMembers(p).length-5}</i>`:""}</span>`:""}${s?`<span class="s">Vendido</span>`:`<span class="s">${esc(p.subtitle)}</span><span class="p">${priceHtml(p)}</span>`}</div>
   </button>`;
 }
@@ -888,7 +888,7 @@ function openProduct(id){
     <div class="gallery${s?" is-sold":""}" id="gal">${shots}</div>
     ${n>1?`<div class="dots" id="dots">${Array.from({length:n},(_,i)=>`<i class="${i?"":"on"}"></i>`).join("")}</div>`:""}
     <div class="pd">
-      <div class="cond">${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Produto novo":"Usado"}</span>`}</div>
+      <div class="cond">${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Produto novo":"Produto usado"}</span>`}</div>
       <h3>${esc(p.title)}</h3>
       ${s?"":`<p class="sub">${esc(p.subtitle)}</p>`}
       ${famMembers(p).length>1?`<div class="vars"><span class="vars-t">Cores</span><div class="sw">${famMembers(p).map(x=>`<button type="button" class="swb${x.id===p.id?" on":""}${sold(x)?" off":""}" data-var="${esc(x.id)}" aria-pressed="${x.id===p.id}" aria-label="${esc(x.variant||x.subtitle)}${sold(x)?" (vendido)":""}" title="${esc(x.variant||x.subtitle)}">${(x.photos||[])[0]?`<img src="${esc(x.photos[0])}" alt="">`:svg(caveIcon(x))}</button>`).join("")}</div><p class="swname">${esc(p.variant||p.subtitle)}</p></div>`:""}
