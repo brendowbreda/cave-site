@@ -1785,7 +1785,7 @@ function renderSplit(){
   const c=(document.querySelector('[name="f-cat"]:checked')||{}).value;
   const v=c?(FB&&FB.cat===c?Number(FB.price):fitPrice(c)):0;
   const fp=Number(FB&&FB.cavePct!=null?FB.cavePct:splitPct("fit"));
-  $("#f-split").innerHTML=c?`<div><span>Valor</span><b>${brl(v)}</b></div><div><span>Cave.&nbsp;Floripa (${fp}%)</span><b>${brl(v*fp/100)}</b></div><div><span>Guilherme (${100-fp}%)</span><b>${brl(v-v*fp/100)}</b></div>`:`<p class="muted" style="font-size:14px">Escolha a categoria para ver o valor.</p>`;
+  $("#f-split").innerHTML=c?`<div><span>Valor a cobrar <small class="muted">(Bike Fit · ${CATS[c]})</small></span><b>${brl(v)}</b></div>`:`<p class="muted" style="font-size:14px">Escolha a categoria para ver o valor.</p>`;
 }
 document.querySelectorAll('[name="f-cat"]').forEach(r=>r.addEventListener("change",renderSplit));
 $("#f-year").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,4)});
