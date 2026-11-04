@@ -246,6 +246,14 @@ section,#loja{scroll-margin-top:68px}
 
 
 .pd-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.how-acc{margin-top:0;border-top:0}
+.how2{display:grid;gap:12px;padding-bottom:18px;font-size:15px;color:var(--muted);line-height:1.55}
+.how2 p{margin:0}
+.how2 b{color:var(--ink)}
+.how2 h5{margin:6px 0 0;font-size:16px;color:var(--ink)}
+.how2 ol,.how2 ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.how2 .tip{padding:14px 16px;border-radius:12px;background:var(--info-soft);color:var(--info);border:1px solid color-mix(in srgb,var(--info) 35%,transparent)}
+.how2 .tip b{display:block;color:var(--info);margin-bottom:4px}
 .how{margin-top:10px;display:grid;gap:12px;padding-top:20px;border-top:1px solid var(--line)}
 .how h4{margin:0;font-size:20px;font-weight:600;letter-spacing:-.03em}
 .how .lead{color:var(--muted);font-size:14px}
@@ -886,16 +894,28 @@ function openProduct(id){
 
 // Como funciona o Fazer oferta: aparece no produto, abaixo dos botões
 function HOW_OFFER(){
-  return `<div class="how">
-    <h4>Como funciona o Fazer oferta</h4>
-    <p class="lead">Disponível apenas para <b>produtos usados</b>.<br>Você escolhe o valor da sua oferta e deixa o cartão reservado,<br>e só paga se a oferta for aceita.</p>
-    <div class="steps">
-      <div class="step"><div><b>Escolha o valor</b><p>Toque em Fazer oferta e digite quanto quer pagar<br>ou use a Oferta rápida: −5%, −10%, −15% ou −20%</p></div></div>
-      <div class="step"><div><b>Reserve no cartão</b><p>O valor fica pré-autorizado no limite do cartão.<br>Não é uma cobrança e não aparece na fatura.</p></div></div>
-      <div class="step"><div><b>Resposta em até 24h</b><p>O proprietário avalia a sua proposta.<br>Enquanto isso, o produto fica reservado.</p></div></div>
-      <div class="step"><div><b>Aceitou, compra feita.<br>Recusou, valor liberado.</b><p>Oferta aceita: confirmamos a cobrança e combinamos a entrega com você.<br>Oferta recusada: a reserva é cancelada na hora e nada é cobrado.</p></div></div>
+  return `<details class="desc-acc how-acc"><summary>Como funciona o Fazer oferta<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+    <div class="how2">
+      <p>Com o <b>Fazer oferta</b>, você propõe ao proprietário o preço que está disposto a pagar. Ele pode <b>aceitar</b>, <b>recusar</b> ou responder com uma <b>contraproposta</b> pelo WhatsApp.</p>
+      <p>É uma ótima forma de levar o equipamento que você procura por um bom preço, sem esperar uma promoção. Disponível apenas para <b>produtos usados</b> que mostram o botão Fazer oferta.</p>
+      <h5>Como fazer uma oferta</h5>
+      <ol>
+        <li>Toque em <b>Fazer oferta</b>.</li>
+        <li>Digite o valor ou use a <b>Oferta rápida</b>: −5%, −10%, −15% ou −20%.</li>
+        <li>Toque em <b>Continuar</b> e preencha seu nome, WhatsApp e os dados do cartão, à vista ou parcelado.</li>
+        <li>Confira o resumo. Se precisar mudar algo, toque em <b>Voltar</b>.</li>
+        <li>Toque em <b>Enviar oferta</b>. A resposta chega pelo WhatsApp em até 24h.</li>
+      </ol>
+      <div class="tip"><b>Dica</b>O valor fica só pré-autorizado no cartão: não é cobrança e não aparece na fatura. Enquanto o proprietário não responde, o produto continua à venda, e quem fechar a compra primeiro leva. Se a oferta for recusada ou outra pessoa comprar antes, a reserva é cancelada e nada é cobrado.</div>
+      <h5>Dicas para a sua oferta ser aceita</h5>
+      <ul>
+        <li><b>Seja razoável:</b> quem aceita ofertas costuma ser flexível no preço e leva a sério as propostas justas.</li>
+        <li><b>Comece pela Oferta rápida:</b> descontos de 5% a 10% têm mais chance de aceite na hora.</li>
+        <li><b>Veja há quanto tempo o produto está anunciado:</b> itens à venda há mais tempo costumam ter mais margem para negociação.</li>
+        <li><b>Fique de olho no WhatsApp:</b> responder rápido a uma contraproposta ajuda a garantir o equipamento.</li>
+      </ul>
     </div>
-  </div>`;
+  </details>`;
 }
 
 function summary(p,price){return `<div class="offer-sum"><div class="ph"><span class="grain"></span>${pic(p)}</div><div style="min-width:0"><b>${esc(p.title)}</b><span>${esc(p.subtitle)}</span><br><span style="color:var(--ink)">${brl(price??p.price)}</span></div></div>`}
