@@ -1247,8 +1247,8 @@ $("#usForm").addEventListener("submit",async e=>{
     if(!r.oldId&&!r.pass)return toast(`Crie uma senha para ${ROLES[r.slot.role]}.`,true);
     r.newId=await userId(r.email);
   }
-  const ids=rows.filter(r=>r.newId).map(r=>r.newId);
-  if(new Set(ids).size!==ids.length)return toast("Cada usuário precisa de um e-mail diferente.",true);
+  const seen={};
+  for(const r of rows){if(!r.newId)continue;if(seen[r.newId])return toast(`O e-mail ${normEmail(r.email)} está repetido em ${ROLES[seen[r.newId]]} e ${ROLES[r.slot.role]}. Cada pessoa precisa de um e-mail diferente.`,true);seen[r.newId]=r.slot.role}
   busy("Salvando usuários…");
   try{
     await saveAdmins(async(users,dir)=>{
