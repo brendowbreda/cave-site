@@ -236,6 +236,7 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .rp-d span{color:var(--muted)}
 .rp-d b{text-align:right;word-break:break-all}
 .cp{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:600;margin-left:6px}
+.us-role{justify-self:start;min-height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:6px 10px;font-weight:700;font-size:15px}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -508,11 +509,12 @@ p{margin:0}
           <summary><span><b>Usuários com acesso ao sistema</b><small>Quem pode entrar no painel administrativo</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
           <form class="acc-in form" id="usForm" novalidate>
             <div id="us-list" class="form"></div>
+            <button class="btn small" id="usAdd" type="button" style="justify-self:start">+ Adicionar novo acesso</button>
             <button class="btn solid block" type="submit">Salvar usuários</button>
           </form>
         </details>
 
-        <details class="acc" data-acc="cfg">
+        <details class="acc" data-acc="cfg" data-only="sistema">
           <summary><span><b>Ofertas (Supabase)</b><small>Onde as ofertas do site ficam guardadas</small></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
           <form class="acc-in form" id="sbForm" novalidate>
             <div class="field"><label for="sb-url">Project URL</label><input id="sb-url" autocapitalize="off" spellcheck="false" placeholder="https://xxxx.supabase.co"></div>
@@ -1203,20 +1205,33 @@ function renderCfg(){
     <div class="field"><label for="cf-p${i}">Valor</label><input id="cf-p${i}" inputmode="numeric" value="${money00(f.price)}" data-money></div></div>`).join("");
   RENT=JSON.parse(JSON.stringify(CFG.rentals));
   if(isAdm())renderSb();
+  document.querySelectorAll("[data-only=sistema]").forEach(x=>x.hidden=S.role!=="sistema");
   $("#c-fitpct").value=splitPct("fit");$("#c-locpct").value=splitPct("loc");syncPct();
   renderFees();
   document.querySelectorAll("[data-money]").forEach(el=>moneyField(el));
   renderRent();
-  $("#us-list").innerHTML=SLOTS.map((s,i)=>{
-    const [id,u]=Object.entries(DIR).find(([,x])=>x.role===s.role)||[];
-    return `<div class="cfg-item" data-slot="${i}" data-id="${id||""}">
-      <b>${ROLES[s.role]}</b>
-      <div class="field"><label for="us-n${i}">Nome</label><input id="us-n${i}" value="${esc(u?u.name:s.name)}"></div>
-      <div class="field"><label for="us-e${i}">E-mail</label><input id="us-e${i}" type="email" autocapitalize="off" value="${esc(u?u.email:"")}" placeholder="nome@cave.floripa.com"></div>
-      <div class="field"><label for="us-p${i}">${u?"Nova senha":"Senha"}</label><input id="us-p${i}" type="password" autocomplete="new-password" placeholder="${u?"Deixe vazio para manter":"Mínimo 10 caracteres"}"></div>
-      ${id===S.id?`<span class="hint">Este é o seu acesso.</span>`:`<button class="btn small del" type="button" data-udel="${id||""}" data-slot="${i}" style="justify-self:start">Excluir acesso</button>`}
-    </div>`}).join("");
+  // ordem: Sócio administrador, Bike Fit e, por último, Sistema (visível só para quem é Sistema)
+  const ord={admin:0,bikefit:1,sistema:2};
+  let list=Object.entries(DIR).map(([id,u])=>({id,...u})).filter(u=>S.role==="sistema"||u.role!=="sistema");
+  if(!list.some(u=>u.role==="admin"))list.push({id:"",role:"admin",name:"Marcelo Leal",email:""});
+  if(!list.some(u=>u.role==="bikefit"))list.push({id:"",role:"bikefit",name:"Guilherme Garcia Cunha",email:""});
+  list.sort((a,b)=>ord[a.role]-ord[b.role]);
+  $("#us-list").innerHTML=list.map(usRow).join("");
 }
+let USN=0;
+function usRow(u){
+  const i=USN++,sis=u.role==="sistema",me=u.id&&u.id===S.id;
+  const roleSel=sis?`<b>${ROLES.sistema}</b>`:`<select class="us-role" aria-label="Perfil">${["admin","bikefit"].map(r=>`<option value="${r}"${u.role===r?" selected":""}>${ROLES[r]}</option>`).join("")}</select>`;
+  return `<div class="cfg-item us-item" data-i="${i}" data-id="${esc(u.id||"")}" data-role="${u.role}">
+      ${roleSel}
+      <div class="field"><label for="us-n${i}">Nome</label><input id="us-n${i}" value="${esc(u.name||"")}"></div>
+      <div class="field"><label for="us-e${i}">E-mail</label><input id="us-e${i}" type="email" autocapitalize="off" value="${esc(u.email||"")}" placeholder="nome@cave.floripa.com"></div>
+      <div class="field"><label for="us-p${i}">${u.id?"Nova senha":"Senha"}</label><input id="us-p${i}" type="password" autocomplete="new-password" placeholder="${u.id?"Deixe vazio para manter":"Mínimo 10 caracteres"}"></div>
+      ${me?`<span class="hint">Este é o seu acesso.</span>`:sis?`<span class="hint">Acesso do sistema. Não pode ser excluído.</span>`:`<button class="btn small del" type="button" data-udel="${esc(u.id||"")}" style="justify-self:start">${u.id?"Excluir acesso":"Remover"}</button>`}
+    </div>`;
+}
+$("#usAdd").addEventListener("click",()=>{$("#us-list").insertAdjacentHTML("beforeend",usRow({id:"",role:"admin",name:"",email:""}));const el=$("#us-list").lastElementChild;el.querySelector("input").focus()});
+
 $("#co-cnpj").addEventListener("input",e=>{e.target.value=fmtCnpj(e.target.value)});
 $("#coForm").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -1239,7 +1254,7 @@ $("#cfgForm").addEventListener("submit",async e=>{
 });
 $("#us-list").addEventListener("click",async e=>{
   const b=e.target.closest("[data-udel]");if(!b)return;
-  if(!b.dataset.udel){const i=b.dataset.slot;["us-e","us-p"].forEach(k=>$("#"+k+i).value="");return toast("Esta pessoa ainda não tem acesso ao sistema.")}
+  if(!b.dataset.udel){b.closest(".us-item").remove();return}
   const u=DIR[b.dataset.udel];
   if(b.dataset.armed!=="1"){b.dataset.armed="1";b.textContent=`Confirmar exclusão de ${u&&u.name?u.name.split(" ")[0]:"usuário"}`;setTimeout(()=>{if(b.isConnected){b.dataset.armed="";b.textContent="Excluir acesso"}},5000);return}
   busy("Excluindo acesso…");
@@ -1248,7 +1263,7 @@ $("#us-list").addEventListener("click",async e=>{
 });
 $("#usForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const rows=[...document.querySelectorAll("#us-list .cfg-item[data-slot]")].map(el=>{const i=el.dataset.slot;return {slot:SLOTS[i],oldId:el.dataset.id,name:$("#us-n"+i).value.trim(),email:$("#us-e"+i).value.trim(),pass:$("#us-p"+i).value}});
+  const rows=[...document.querySelectorAll("#us-list .us-item")].map(el=>{const i=el.dataset.i,rs=el.querySelector(".us-role");return {slot:{role:rs?rs.value:el.dataset.role},oldId:el.dataset.id,name:$("#us-n"+i).value.trim(),email:$("#us-e"+i).value.trim(),pass:$("#us-p"+i).value}});
   for(const r of rows){
     if(!r.email&&!r.oldId)continue;
     if(!okEmail(r.email))return toast(`E-mail inválido em ${ROLES[r.slot.role]}.`,true);
