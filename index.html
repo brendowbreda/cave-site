@@ -784,9 +784,9 @@ const famOf=p=>p.family||p.id;
 const famMembers=p=>P.filter(x=>famOf(x)===famOf(p));
 function collapse(l){const seen=new Set();return l.filter(p=>{const f=famOf(p);if(seen.has(f))return false;seen.add(f);return true})}
 function renderGrid(){
-  // sem modalidade escolhida: os 5 anúncios mais recentes, numa fileira que arrasta
+  // sem modalidade escolhida: os 10 anúncios mais recentes, numa fileira que arrasta
   $("#grid").classList.toggle("rail",!st.cat);
-  const l=st.cat?filtered():collapse(P.filter(p=>!sold(p))).slice(0,5);
+  const l=st.cat?filtered():collapse(P.filter(p=>!sold(p))).slice(0,10);
   $("#grid").innerHTML=l.length?l.slice(0,st.limit).map(card).join(""):`<p class="empty">Nada por aqui agora. Tem um desses parado em casa? <a href="#vender">A gente vende para você</a>.</p>`;
   document.querySelector(".more").hidden=!st.cat||l.length<=st.limit;
 }
