@@ -593,7 +593,7 @@ p{margin:0}
   <div class="field" id="sl-costw"><label for="sl-cost">Custo do produto</label><input id="sl-cost" inputmode="numeric" placeholder="R$ 0,00"><span class="hint">Quanto a loja pagou. Só aparece no painel.</span></div>
   <div class="row2" id="sl-ownw" hidden>
     <div class="field"><label for="sl-owner">Proprietário</label><input id="sl-owner" placeholder="Nome"></div>
-    <div class="field"><label for="sl-ophone">Telefone</label><input id="sl-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
+    <div class="field"><label for="sl-ophone">WhatsApp do proprietário</label><input id="sl-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
   </div>
   <div class="field" id="sl-pixw" hidden><label for="sl-opix">Chave PIX do proprietário</label><input id="sl-opix" autocapitalize="off" placeholder="Para fazer o repasse"></div>
   <div class="field"><label for="sl-pay">Forma de pagamento</label><select id="sl-pay"></select></div>
@@ -624,6 +624,7 @@ p{margin:0}
     <div class="field"><label for="lc-owner">Proprietário</label><input id="lc-owner" placeholder="Nome (vazio se for da Cave)"></div>
     <div class="field"><label for="lc-pct">Parte da Cave (%)</label><input id="lc-pct" inputmode="numeric"></div>
   </div>
+  <div class="field"><label for="lc-ophone">WhatsApp do proprietário</label><input id="lc-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
   <div class="field"><label for="lc-pix">Chave PIX do proprietário</label><input id="lc-pix" autocapitalize="off" placeholder="Para fazer o repasse"></div>
   <div class="row2">
     <div class="field"><label for="lc-start">Retirada</label><input id="lc-start" type="date"></div>
@@ -694,7 +695,7 @@ p{margin:0}
     </div>
     <div class="row2" id="e-ownerw">
       <div class="field"><label for="e-owner">Proprietário</label><input id="e-owner" placeholder="Nome de quem é o produto"></div>
-      <div class="field"><label for="e-ophone">Telefone do proprietário</label><input id="e-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
+      <div class="field"><label for="e-ophone">WhatsApp do proprietário</label><input id="e-ophone" inputmode="tel" placeholder="(48) 99999-9999"></div>
     </div>
     <div class="field" id="e-pixw"><label for="e-opix">Chave PIX do proprietário</label><input id="e-opix" autocapitalize="off" placeholder="CPF, CNPJ, e-mail, +55 telefone ou aleatória"></div>
     <p class="final" id="e-comm" hidden></p>
@@ -992,7 +993,7 @@ const pixMask=v=>{v=String(v||"");if(/[a-zA-Z@+]/.test(v)||/^[0-9a-f]{8}-/i.test
   if(d.length<=11)return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2");
   return d.replace(/^(\d{2})(\d)/,"$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d)/,".$1/$2").replace(/(\d{4})(\d)/,"$1-$2")};
 document.addEventListener("input",e=>{const t=e.target;if(!t.matches)return;
-  if(t.matches("#e-ophone,#sl-ophone"))t.value=telMask(t.value);
+  if(t.matches("#e-ophone,#sl-ophone,#lc-ophone"))t.value=telMask(t.value);
   else if(t.matches("#e-opix,#sl-opix,#lc-pix,#co-pix")&&!/[a-zA-Z@+]/.test(t.value))t.value=pixMask(t.value)});
 // ---------- Editor
 // Produto da loja (100% da Cave, tem custo) ou de terceiro (comissão de 10, 15, 20%...)
@@ -1117,6 +1118,8 @@ $("#edSave").addEventListener("click",async()=>{
   const nowSold=f.status==="vendido"&&!(orig&&orig.status==="vendido"),unSold=f.status!=="vendido"&&orig&&orig.status==="vendido";
   const own=readOwn();
   if(own.pct<100&&!own.pct){toast("Coloque a comissão da Cave.",true);$("#e-pct").focus();return}
+  if(own.pct<100&&!own.owner){toast("Coloque o nome do proprietário.",true);$("#e-owner").focus();return}
+  if(own.pct<100&&own.phone.replace(/\D/g,"").length<10){toast("Coloque o WhatsApp do proprietário.",true);$("#e-ophone").focus();return}
   const cost=own.pct<100?0:parseMoney($("#e-cost").value);
   const sale=nowSold?await askSale({...f,_cost:cost}):null;
   if(nowSold&&!sale)return;
@@ -1387,8 +1390,8 @@ function finCalc(rg){
 }
 function pendingRepasses(){
   const now=new Date(),list=[];
-  FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Proprietário não informado",what:s.title,value:saleOwner(s),gross:s.price,pct:s.pct,pix:(s.owner&&s.owner.pix)||(FIN.consign[s.pid]||{}).pix||"",phone:(s.owner&&s.owner.phone)||"",due,late:due<now})});
-  FIN.rentals.filter(r=>Number(r.pct??100)<100&&!r.paidAt).forEach(r=>{const due=new Date(new Date((r.end||r.start)+"T12:00").getTime()+REPASSE_DIAS*864e5);list.push({kind:"rent",id:r.id,gross:Number(r.value||0),pct:Number(r.pct??100),pix:r.ownerPix||"",phone:"",who:r.owner||"Proprietário não informado",what:`Locação · ${r.item}`,value:rentOwnerOf(r),due,late:due<now})});
+  FIN.sales.filter(s=>s.pct<100&&!s.paidAt).forEach(s=>{const due=new Date(new Date(s.at).getTime()+REPASSE_DIAS*864e5);list.push({kind:"sale",id:s.pid,who:(s.owner&&s.owner.name)||"Proprietário não informado",what:s.title,value:saleOwner(s),gross:s.price,pct:s.pct,pix:(s.owner&&s.owner.pix)||(FIN.consign[s.pid]||{}).pix||"",phone:(s.owner&&s.owner.phone)||(FIN.consign[s.pid]||{}).phone||"",due,late:due<now})});
+  FIN.rentals.filter(r=>Number(r.pct??100)<100&&!r.paidAt).forEach(r=>{const due=new Date(new Date((r.end||r.start)+"T12:00").getTime()+REPASSE_DIAS*864e5);list.push({kind:"rent",id:r.id,gross:Number(r.value||0),pct:Number(r.pct??100),pix:r.ownerPix||"",phone:r.ownerPhone||"",who:r.owner||"Proprietário não informado",what:`Locação · ${r.item}`,value:rentOwnerOf(r),due,late:due<now})});
   return list.sort((a,b)=>(a.due||Infinity)-(b.due||Infinity));
 }
 function renderFin(){
@@ -1407,8 +1410,8 @@ function renderFin(){
       <div class="lines">
         <div><span>Vendas · parte da Cave</span><span>+ ${brl(c.vendasCave)}</span></div>
         <div><span>Locação · parte da Cave</span><span>+ ${brl(c.rentCave)}</span></div>
-        <div><span>Bike Fit · aluguel do espaço</span><span>+ ${brl(c.fitCave)}</span></div>
-        <div class="r"><span>Taxas de pagamento</span><span>− ${brl(c.taxas)}</span></div>
+        <div><span>Bike Fit · parte da Cave</span><span>+ ${brl(c.fitCave)}</span></div>
+        <div class="r"><span>Taxas de pagamento (cartão)</span><span>− ${brl(c.taxas)}</span></div>
         <div class="r"><span>Gastos</span><span>− ${brl(c.gastos)}</span></div>
       </div>
     </div>
@@ -1421,13 +1424,14 @@ function renderFin(){
           <div><span>${x.kind==="rent"?"Locação":"Produto vendido"}</span><b>${esc(x.what.replace(/^Locação · /,""))}</b></div>
           <div><span>Valor da ${x.kind==="rent"?"locação":"venda"}</span><b>${brl(x.gross)}</b></div>
           <div><span>Proprietário</span><b>${esc(x.who)}</b></div>
+          <div><span>WhatsApp</span><b>${x.phone?`${esc(telMask(x.phone))} <a class="cp" target="_blank" rel="noopener" href="${waTo(x.phone,`Olá, ${x.who.split(" ")[0]}! Aqui é da Cave. Floripa. Seu ${x.kind==="rent"?"equipamento foi alugado":"produto foi vendido"} (${x.what.replace(/^Locação · /,"")}) e o valor de ${brl(x.value)} será repassado. Pode confirmar sua chave PIX?`)}">Chamar</a>`:"não informado"}</b></div>
           <div><span>Chave PIX</span><b>${x.pix?`${esc(x.pix)} <button type="button" class="cp" data-copy="${esc(x.pix)}">Copiar</button>`:"não informada"}</b></div>
           <div><span>Proprietário (${100-x.pct}%)</span><b>${brl(x.value)}</b></div>
           <div><span>Cave.&nbsp;Floripa (${x.pct}%)</span><b>${brl(x.gross-x.value)}</b></div>
         </div></div>`).join("")}</div>`:""}
     </div>
     <div class="fc-grid">
-      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${plural(c.fit.length,"bike fit","bike fits")}</b><span class="s">Guilherme Garcia Cunha: <b>${brl(c.fitTot-c.fitCave)}</b></span><span class="s">Cave.&nbsp;Floripa (${splitPct("fit")}%): <b>${brl(c.fitCave)}</b></span>
+      <div class="fc"><span class="k">Bike Fit ${lbl}</span><b class="v">${plural(c.fit.length,"bike fit","bike fits")}</b><span class="s">Total de bike fits agendados: <b>${FIT.filter(b=>atDate(b)>new Date()).length}</b></span><span class="s">Total de bike fits realizados: <b>${c.fit.length}</b></span><span class="s">Guilherme Garcia Cunha: <b>${brl(c.fitTot-c.fitCave)}</b></span><span class="s">Cave.&nbsp;Floripa (${splitPct("fit")}%): <b>${brl(c.fitCave)}</b></span>
         ${fitDue.n?`<div class="rp"><span class="t"><b>A receber do Guilherme</b><span>${plural(fitDue.n,"bike fit","bike fits")} · ${splitPct("fit")}% de aluguel</span></span><span class="m">${brl(fitDue.v)}</span><button class="btn small" type="button" data-pay="fit">Recebido</button></div>`:""}</div>
       <div class="fc"><span class="k">Locação ${lbl}</span>${(()=>{const g={Bicicletas:0,Rodas:0,"Acessórios":0};c.rents.forEach(r=>{const it=(CFG.rentals||[]).find(x=>x.name===r.item);const k=it&&it.group==="Bicicletas"?"Bicicletas":it&&it.group==="Rodas"?"Rodas":"Acessórios";g[k]+=rentDays(r).length});const fee=c.rents.reduce((t,r)=>t+Number(r.fee||0),0);
         return `${Object.entries(g).map(([k,v])=>`<span class="s">${k}: <b>${v} ${v===1?"dia":"dias"} locado${v===1?"":"s"}</b></span>`).join("")}
@@ -1506,7 +1510,7 @@ moneyField($("#sl-price"),calcSale);moneyField($("#sl-cost"),calcSale);
 $("#sl-pct").addEventListener("input",e=>{e.target.value=String(Math.min(100,digits(e.target.value)||0));calcSale()});
 $("#sl-pay").addEventListener("change",calcSale);
 $("#sl-cancel").addEventListener("click",()=>closeSale(null));
-$("#sl-ok").addEventListener("click",()=>{const s=saleForm();if(!s.price)return toast("Coloque o valor da venda.",true);closeSale(s)});
+$("#sl-ok").addEventListener("click",()=>{const s=saleForm();if(!s.price)return toast("Coloque o valor da venda.",true);if(s.owner&&(s.owner.phone||"").replace(/\D/g,"").length<10){$("#sl-ophone").focus();return toast("Coloque o WhatsApp do proprietário.",true)}closeSale(s)});
 async function recordSale(p,sale){await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id);d.sales.push({pid:p.id,title:p.title,cat:p.cat,...sale,at:new Date().toISOString()});if(sale.pct>=100&&sale.cost)d.costs[p.id]=sale.cost},"Financeiro: venda registrada")}
 async function unrecordSale(p){if(FIN.sales.some(s=>s.pid===p.id))await saveFin(d=>{d.sales=d.sales.filter(s=>s.pid!==p.id)},"Financeiro: venda desfeita")}
 async function saveConsign(id,o){const cur=FIN.consign[id];const same=cur?JSON.stringify(cur)===JSON.stringify(o):o.pct>=100;if(!same)await saveFin(d=>{if(o.pct>=100)delete d.consign[id];else d.consign[id]=o},"Financeiro: comissão do produto")}
@@ -1540,7 +1544,7 @@ function openRentSh(day,r){
   $("#lc-item").innerHTML=names.map(n=>`<option>${esc(n)}</option>`).join("")+`<option value="__o">Outro…</option>`;
   $("#lc-item").value=r?(custom?"__o":r.item):names[0]||"__o";
   $("#lc-other").value=custom?r.item:"";$("#lc-otherw").hidden=!custom;
-  $("#lc-client").value=r?r.client||"":"";$("#lc-owner").value=r?r.owner||"":"";$("#lc-pix").value=pixMask(r?r.ownerPix||"":"");
+  $("#lc-client").value=r?r.client||"":"";$("#lc-owner").value=r?r.owner||"":"";$("#lc-pix").value=pixMask(r?r.ownerPix||"":"");$("#lc-ophone").value=telMask(r?r.ownerPhone||"":"");
   $("#lc-pct").value=r?(r.pct??100):splitPct("loc");
   $("#lc-val").value=r?money00(r.value):"";
   $("#lc-start").value=r?r.start:(day||ymd(new Date()));$("#lc-end").value=r?r.end||"":"";
@@ -1564,10 +1568,11 @@ $("#lc-cancel").addEventListener("click",()=>{$("#rentSh").hidden=true;LR=null})
 $("#lc-ok").addEventListener("click",async()=>{
   const item=$("#lc-item").value==="__o"?$("#lc-other").value.trim():$("#lc-item").value,value=parseMoney($("#lc-val").value),start=$("#lc-start").value,pay=$("#lc-pay").value;
   if(!item)return toast("Escolha o item alugado.",true);
+  if(Math.min(100,digits($("#lc-pct").value))<100&&$("#lc-owner").value.trim()&&$("#lc-ophone").value.replace(/\D/g,"").length<10){$("#lc-ophone").focus();return toast("Coloque o WhatsApp do proprietário.",true)}
   if(!value)return toast("Coloque o valor da locação.",true);
   if(!start)return toast("Escolha a data de retirada.",true);
   const end=$("#lc-end").value;if(end&&end<start)return toast("A devolução não pode ser antes da retirada.",true);
-  const r={...(LR||{}),id:LR?LR.id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),owner:$("#lc-owner").value.trim(),ownerPix:$("#lc-pix").value.trim(),pct:Math.min(100,digits($("#lc-pct").value)),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
+  const r={...(LR||{}),id:LR?LR.id:"l-"+Date.now().toString(36),item,client:$("#lc-client").value.trim(),owner:$("#lc-owner").value.trim(),ownerPix:$("#lc-pix").value.trim(),ownerPhone:$("#lc-ophone").value.trim(),pct:Math.min(100,digits($("#lc-pct").value)),start,end:$("#lc-end").value,value,pay,fee:feeOf(pay,value),by:S.name||S.email};
   busy("Salvando locação…");
   const editing=!!LR;
   try{await saveFin(d=>{const i=d.rentals.findIndex(y=>y.id===r.id);if(i>=0)d.rentals[i]=r;else d.rentals.push(r)},editing?"Financeiro: locação editada":"Financeiro: nova locação");$("#rentSh").hidden=true;LR=null;renderFin();if(VIEW==="fit")renderFit();toast(editing?"Locação atualizada.":"Locação lançada.")}
@@ -1850,6 +1855,9 @@ if(location.hash==="#configurar"){$("#login").hidden=true;$("#setup").hidden=fal
 else if(S)start();else showLogin();
 // Sessão termina todo dia às 23h59
 setInterval(()=>{if(S&&S.exp&&Date.now()>S.exp){clearSession();location.reload()}},30000);
+// a cada minuto busca ofertas novas (sem recarregar a página)
+setInterval(async()=>{if(!S||!isAdm()||document.hidden)return;const n=OFFERS.length;await loadOffers();renderOffers();if(OFFERS.length>n)toast("Nova oferta recebida.")},60000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&S&&isAdm())loadOffers().then(renderOffers)});
 </script>
 </body>
 </html>
