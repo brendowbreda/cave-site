@@ -1030,7 +1030,7 @@ function buyFlow(){
       try{await loadQR();new QRCode($("#qr"),{text:code,width:220,height:220,correctLevel:QRCode.CorrectLevel.M})}catch(_){$("#qr").remove()}
       return;
     }
-    setSheet("Pedido",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Pedido reservado</h3><p>${esc(p.title)} está reservado para você.<br>Vamos confirmar o pagamento e a entrega pelo WhatsApp.</p></div>`,
+    setSheet("Pedido",`<div class="big-ok"><div class="circ">${CHECK}</div><h3>Pedido reservado</h3><p><b style="color:var(--ink)">${esc(p.title)}</b><br>Vamos finalizar seu pedido pelo WhatsApp.</p></div>`,
       `<a class="btn wa block" target="_blank" rel="noopener" href="${wa(CFG.whatsapp.loja,msg)}">Finalizar no WhatsApp</a>`);
   };
 }
