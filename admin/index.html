@@ -1644,7 +1644,7 @@ function renderOffers(){
   const lbl=FS.p===1?"neste mês":`nos últimos ${FS.p} meses`,st=OFF_STATS;
   const ttl=o=>{const p=PRODS.find(x=>x.id===o.product_id);return p?p.title:o.product_title.replace(/\s*\([^()]*(\([^()]*\)[^()]*)*\)\s*$/,"")};
   const d2=s=>{const d=new Date(s);return `${d.toLocaleDateString("pt-BR")} - horário: ${pad(d.getHours())}h${pad(d.getMinutes())}`};
-  const pay=o=>o.installments>1?`Cartão em ${o.installments}x de ${brl(o.total/o.installments)} (total ${brl(o.total)})`:"Cartão à vista (1x)";
+  const pay=o=>o.installments===0?"Pix":o.installments>1?`Cartão em ${o.installments}x de ${brl(o.total/o.installments)} (total ${brl(o.total)})`:"Cartão à vista (1x)";
   box.innerHTML=`<div class="fc offers"><span class="k">Ofertas ${lbl}</span>
     <div class="ofs"><div><span>Total de ofertas</span><b>${st.n}</b></div><div><span>Aceitas</span><b class="okc">${st.ok}</b></div><div><span>Recusadas</span><b class="noc">${st.no}</b></div></div>
     ${OFFERS.length||OFF_ERR?`<span class="k" style="margin-top:8px">Ofertas recebidas</span>`:""}

@@ -916,10 +916,10 @@ function HOW_OFFER(){
       <ol>
         <li>Toque em <b>Fazer oferta</b>.</li>
         <li>Digite o valor ou use a <b>Oferta rápida</b>:<br>−5%, −10%, −15% ou −20%.</li>
-        <li>Preencha seus dados: nome completo, WhatsApp e os dados do cartão.</li>
+        <li>Preencha seus dados: nome completo, WhatsApp e como pretende pagar (Pix ou cartão).</li>
         <li>Toque em <b>Enviar oferta</b>. A resposta chega pelo WhatsApp em até 24h.</li>
       </ol>
-      <div class="tip"><b>Dica</b>O valor da oferta só é cobrado se ela for aceita. Enquanto o proprietário não responde, o produto continua à venda, e quem fechar a compra primeiro leva. Se a oferta for recusada ou outra pessoa comprar antes, a reserva é cancelada e nada é cobrado.</div>
+      <div class="tip"><b>Dica</b>Nada é cobrado ao enviar a oferta. Se ela for aceita, combinamos o pagamento pelo WhatsApp. Enquanto o proprietário não responde, o produto continua à venda, e quem fechar a compra primeiro leva.</div>
       <h5>Dicas para a sua oferta ser aceita</h5>
       <p>Seja realista: quem aceita ofertas costuma ser flexível no preço e leva a sério as propostas justas. <b>Descontos de 5% a 10% têm mais chance de serem aceitos na hora.</b> Outro ponto importante: itens à venda há mais tempo costumam ter mais margem para negociação.</p>
     </div>
@@ -968,11 +968,7 @@ function buyFlow(){
         <label class="payopt"><input type="radio" name="pay" value="card"${buy.pay==="card"?" checked":""}><span><i>${CARD_IC}</i><b>Cartão de crédito</b><small>Em até 10x no cartão (com juros)</small></span></label></div></div>
       <div class="field" id="combow" hidden><label for="bpix">Valor no Pix</label><input id="bpix" inputmode="numeric" placeholder="R$ 0,00"><span class="hint" id="bcard"></span></div>
       <div class="form" id="cardw" hidden>
-        <div class="field"><label for="bcn">Número do cartão</label><input id="bcn" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000"></div>
-        <div class="field"><label for="bcname">Nome impresso no cartão</label><input id="bcname" autocomplete="cc-name"></div>
-        <div class="row2"><div class="field"><label for="bcexp">Validade</label><input id="bcexp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA"></div>
-          <div class="field"><label for="bccv">CVV</label><input id="bccv" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4"></div></div>
-        <div class="field"><label for="binst">Parcelamento</label><select id="binst"></select></div>
+        <div class="field"><label for="binst">Parcelamento</label><select id="binst"></select><span class="hint">O pagamento no cartão é finalizado pelo WhatsApp.</span></div>
       </div>
       <div class="kv"><div><span>Valor total</span><b class="mono" id="btot"></b></div></div>
     </div>`,
@@ -1006,13 +1002,10 @@ function buyFlow(){
     }catch(_){$("#shipOut").innerHTML=`<p class="ship-r err">Não encontramos esse CEP. Confira os números.</p>`;buy.frete=null}
     upd();
   };
-  const fmt={bcn:v=>v.replace(/\D/g,"").slice(0,16).replace(/(\d{4})(?=\d)/g,"$1 "),bcexp:v=>v.replace(/\D/g,"").slice(0,4).replace(/(\d{2})(?=\d)/,"$1/"),bccv:v=>v.replace(/\D/g,"").slice(0,4),bcname:v=>v};
-  Object.keys(fmt).forEach(k=>{const el=$("#"+k);el.addEventListener("input",()=>{el.value=fmt[k](el.value);buy.card[k]=el.value})});
   upd();
   $("#back").onclick=openProductInPlace;
   $("#confirmBuy").onclick=async()=>{
     if(buy.pay==="combo"&&!(buy.pixAmt>0&&buy.cardAmt>0))return toast("Digite quanto vai pagar no Pix. O restante vai no cartão.");
-    if(buy.pay==="card"){const c=buy.card;if(!(c.bcn?.replace(/\D/g,"").length>=15&&c.bcname?.trim().length>2&&/^\d{2}\/\d{2}$/.test(c.bcexp||"")&&(c.bccv||"").length>=3))return toast("Preencha os dados do cartão.")}
     const fin=buy.fin,cardFin=fin-buy.pixAmt;
     const ship=buy.ship==="envio"?`Entrega para ${buy.city} (CEP ${buy.cep}) · frete ${buy.frete?brl(buy.frete):"grátis"}`:"Retirar na loja física (Florianópolis)";
     const cardTxt=buy.inst>1?`cartão em ${buy.inst}x de ${brl(cardFin/buy.inst)} (total ${brl(cardFin)})`:`cartão à vista ${brl(cardFin)}`;
@@ -1056,7 +1049,7 @@ function judge(v,price){
 }
 async function sendOffer(p,btn){
       const disc=Math.round((1-offer.value/p.price)*100);
-      const msg=`Nova oferta pelo site\nProduto: ${p.title}${p.subtitle?` (${p.subtitle})`:""}\nPreço anunciado: ${brl(p.price)}\nOferta: ${brl(offer.value)} (−${disc}%)${(offer.inst||1)>1?`\nParcelamento: ${offer.inst}x (total ${brl(instTotal(offer.value,offer.inst))})`:"\nPagamento: à vista"}\nNome: ${offer.contact.name}\nWhatsApp: ${offer.contact.phone}`;
+      const msg=`Nova oferta pelo site\nProduto: ${p.title}${p.subtitle?` (${p.subtitle})`:""}\nPreço anunciado: ${brl(p.price)}\nOferta: ${brl(offer.value)} (−${disc}%)${offer.inst===0?"\nPagamento: Pix":(offer.inst||1)>1?`\nPagamento: cartão em ${offer.inst}x (total ${brl(instTotal(offer.value,offer.inst))})`:"\nPagamento: cartão 1x"}\nNome: ${offer.contact.name}\nWhatsApp: ${offer.contact.phone}`;
       const sb=CFG.supabase||{};
       // com o Supabase ligado a oferta cai no painel; sem ele (ou se falhar) vai pelo WhatsApp da loja
       const win=sb.url&&sb.anon?null:window.open("about:blank","_blank");
@@ -1064,7 +1057,7 @@ async function sendOffer(p,btn){
       if(sb.url&&sb.anon){
         $(btn).disabled=true;$(btn).textContent="Enviando…";
         try{const r=await fetch(sb.url.replace(/\/$/,"")+"/rest/v1/offers",{method:"POST",headers:{apikey:sb.anon,...(sb.anon.startsWith("sb_")?{}:{Authorization:"Bearer "+sb.anon}),"Content-Type":"application/json",Prefer:"return=minimal"},
-          body:JSON.stringify({...((offer.inst||1)>1?{installments:offer.inst,total:instTotal(offer.value,offer.inst)}:{}),product_id:p.id,product_title:p.title+(p.subtitle?` (${p.subtitle})`:""),product_price:p.price,offer_value:offer.value,buyer_name:offer.contact.name.trim(),buyer_phone:offer.contact.phone.replace(/\D/g,"")})});ok=r.ok}catch(e){}
+          body:JSON.stringify({...(offer.inst===0?{installments:0}:(offer.inst||1)>1?{installments:offer.inst,total:instTotal(offer.value,offer.inst)}:{}),product_id:p.id,product_title:p.title+(p.subtitle?` (${p.subtitle})`:""),product_price:p.price,offer_value:offer.value,buyer_name:offer.contact.name.trim(),buyer_phone:offer.contact.phone.replace(/\D/g,"")})});ok=r.ok}catch(e){}
       }
       if(!ok){const w=win||window.open("about:blank","_blank");if(w)w.location=wa(CFG.whatsapp.loja,msg)}else if(win)win.close();
       offerFlow(4);
@@ -1098,30 +1091,20 @@ function offerFlow(step){
   if(step===2){
     const c=offer.card;
     setSheet("Fazer oferta",`${stepper(2)}${summary(p,offer.value)}
-      <div class="note hl" style="margin-bottom:16px">${SHIELD}<span><b>Pré-autorização de ${brl(offer.value)}.</b><br>O valor fica reservado no limite do cartão por até 24h.<br>Se a oferta for recusada ou expirar, a reserva é cancelada sozinha.</span></div>
+      <div class="note hl" style="margin-bottom:16px">${SHIELD}<span><b>Nada é cobrado agora.</b><br>Se a oferta for aceita, combinamos o pagamento pelo WhatsApp.</span></div>
       <div class="form">
         <p class="lbl" style="margin:0">Seus dados</p>
         <div class="field"><label for="oname">Nome completo</label><input id="oname" autocomplete="name" value="${esc(offer.contact?.name||"")}"></div>
         <div class="field"><label for="ophone">WhatsApp</label><input id="ophone" inputmode="tel" autocomplete="tel" placeholder="(48) 99999-9999" value="${esc(offer.contact?.phone||"")}"></div>
-        <p class="lbl" style="margin:6px 0 0">Cartão</p>
-        <div class="field"><label for="cn">Número do cartão</label><input id="cn" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" value="${c.cn||""}"></div>
-        <div class="field"><label for="cname">Nome impresso no cartão</label><input id="cname" autocomplete="cc-name" value="${esc(c.cname||"")}"></div>
-        <div class="row2">
-          <div class="field"><label for="cexp">Validade</label><input id="cexp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" value="${c.cexp||""}"></div>
-          <div class="field"><label for="ccv">CVV</label><input id="ccv" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" value="${c.ccv||""}"></div>
-        </div>
-        <div class="field"><label for="cpf">CPF</label><input id="cpf" inputmode="numeric" placeholder="000.000.000-00" value="${c.cpf||""}"></div>
-        <div class="field"><label for="inst">Parcelamento</label><select id="inst">${instOpts(offer.value,offer.inst||1)}</select></div>
+        <div class="field"><label for="inst">Como pretende pagar</label><select id="inst"><option value="0"${offer.inst===0?" selected":""}>Pix (${brl(offer.value)})</option>${instOpts(offer.value,offer.inst??1).replace(/>(\d+x)/g,">Cartão $1")}</select></div>
       </div>`,
       `<button class="btn" id="back">Voltar</button><button class="btn buy" id="next" disabled>Enviar oferta</button>`);
-    const fmt={cn:v=>v.replace(/\D/g,"").slice(0,16).replace(/(\d{4})(?=\d)/g,"$1 "),cexp:v=>v.replace(/\D/g,"").slice(0,4).replace(/(\d{2})(?=\d)/,"$1/"),ccv:v=>v.replace(/\D/g,"").slice(0,4),cpf:v=>{const d=v.replace(/\D/g,"").slice(0,11);return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2")},cname:v=>v};
     offer.contact=offer.contact||{};
     const ph=v=>{const d=v.replace(/\D/g,"").slice(0,11);return d.length>10?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length>6?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d.length>2?`(${d.slice(0,2)}) ${d.slice(2)}`:d};
     $("#oname").addEventListener("input",e=>{offer.contact.name=e.target.value;check()});
     $("#inst").addEventListener("change",e=>{offer.inst=+e.target.value});
     $("#ophone").addEventListener("input",e=>{e.target.value=ph(e.target.value);offer.contact.phone=e.target.value;check()});
-    const check=()=>{const d=offer.card;$("#next").disabled=!((offer.contact.name||"").trim().split(/\s+/).length>=2&&(offer.contact.phone||"").replace(/\D/g,"").length>=10&&d.cn?.replace(/\D/g,"").length>=15&&d.cname?.trim().length>2&&/^\d{2}\/\d{2}$/.test(d.cexp||"")&&(d.ccv||"").length>=3&&(d.cpf||"").replace(/\D/g,"").length===11)};
-    Object.keys(fmt).forEach(k=>{const el=$("#"+k);el.addEventListener("input",()=>{el.value=fmt[k](el.value);offer.card[k]=el.value;check()})});
+    const check=()=>{$("#next").disabled=!((offer.contact.name||"").trim().split(/\s+/).length>=2&&(offer.contact.phone||"").replace(/\D/g,"").length>=10)};
     check();
     $("#back").onclick=()=>offerFlow(1);
     $("#next").onclick=()=>sendOffer(p,"#next");
