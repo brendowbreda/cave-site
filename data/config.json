@@ -330,7 +330,8 @@
   "razao": "Cave. Floripa",
   "cnpj": "",
   "endereco": "Rua Evaldo Schaeffer, nº 293 — Jardim Atlântico — Florianópolis/SC — CEP: 88095-350",
-  "email": ""
+  "email": "",
+  "pix": ""
  },
  "supabase": {
   "url": "https://pdvwvvopprlpxlilcytb.supabase.co",
@@ -341,5 +342,12 @@
   "credito": 3.5,
   "parcelado": 6,
   "juros": 2.99
+ },
+ "shipping": {
+  "sc": 40,
+  "sul": 50,
+  "sudeste": 60,
+  "outros": 100,
+  "freeFrom": 1000
  }
 }
