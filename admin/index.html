@@ -237,6 +237,7 @@ body.has-tab .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .rp-d b{text-align:right;word-break:break-all}
 .cp{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:600;margin-left:6px}
 .us-role{justify-self:start;min-height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:6px 10px;font-weight:700;font-size:15px}
+.plink{display:flex;gap:8px;align-items:center}.plink code{flex:1;min-width:0;font-size:12px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .split{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .split div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .split div:first-child{font-size:16px}
@@ -706,6 +707,11 @@ p{margin:0}
         <label><input type="radio" name="e-cond" id="e-usado" value="usado"><span>Usado</span></label></div></div>
     </div>
     <div class="row2">
+      <label class="check" style="align-self:center"><input type="checkbox" id="e-od"><span><b>Sob encomenda</b> (produto novo sem estoque)</span></label>
+      <div class="field" id="e-leadw" hidden><label for="e-lead">Prazo de entrega</label><input id="e-lead" placeholder="Ex.: 15 a 20 dias"></div>
+    </div>
+    <div class="field" id="e-linkw" hidden><span class="lbl">Link do produto</span><div class="plink"><code id="e-link"></code><button class="btn small" type="button" id="e-copylink">Copiar link</button></div></div>
+    <div class="row2">
       <div class="field"><label for="e-cat">Seção</label><select id="e-cat"></select></div>
       <div class="field"><label for="e-subcat">Tipo</label><select id="e-subcat"></select></div>
     </div>
@@ -977,6 +983,7 @@ $("#alist").addEventListener("click",async e=>{
   try{
     if(toSold)await recordSale(p,sale);else await unrecordSale(p);
     await updateProducts(list=>{const x=list.find(y=>y.id===id);if(x){x.status=toSold?"vendido":"disponivel";x.soldAt=toSold?new Date().toISOString():undefined}},`${toSold?"Vendido":"De volta à venda"}: ${p.title}`);
+    {const np=PRODS.find(y=>y.id===id);if(np&&np.slug)await writeStub(np)}
     renderList();renderFin();toast(toSold?"Marcado como vendido. O site atualiza em cerca de 1 minuto.":"De volta à venda. O site atualiza em cerca de 1 minuto.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
 });
@@ -995,6 +1002,42 @@ const pixMask=v=>{v=String(v||"");if(/[a-zA-Z@+]/.test(v)||/^[0-9a-f]{8}-/i.test
 document.addEventListener("input",e=>{const t=e.target;if(!t.matches)return;
   if(t.matches("#e-ophone,#sl-ophone,#lc-ophone"))t.value=telMask(t.value);
   else if(t.matches("#e-opix,#sl-opix,#lc-pix,#co-pix")&&!/[a-zA-Z@+]/.test(t.value))t.value=pixMask(t.value)});
+// ---------- Link próprio do produto (produto/<slug>/index.html)
+// Gera a página de link próprio do produto (usada pelo painel e pelo script de geração inicial)
+function caveSlug(p){const base=String(p.title||"produto").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60);return (base||"produto")+"-"+String(p.id).replace(/^p-/,"")}
+function caveStub(p,site){
+  const e=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  const d=p.discount,price=d&&d.value&&p.status!=="vendido"?Math.max(0,d.type==="pct"?Math.round(p.price*(1-d.value/100)):p.price-d.value):p.price;
+  const sold=p.status==="vendido";
+  const url=site+"produto/"+p.slug+"/";
+  const img=(p.photos||[])[0]?site+p.photos[0]:site+"assets/favicon.png";
+  const title=`${p.title} | Cave Floripa`;
+  const desc=sold?`${p.title} · Vendido · Cave Floripa`:`${p.subtitle?p.subtitle+" · ":""}${brl(price)} · ${p.cond==="novo"?"Produto novo":"Produto usado"}${p.onDemand?" · Sob encomenda":""} · Cave Floripa, Florianópolis`;
+  return `<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>${e(title)}</title>
+<meta name="description" content="${e(desc)}">
+<link rel="canonical" href="${e(url)}">
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="Cave Floripa">
+<meta property="og:title" content="${e(p.title)}">
+<meta property="og:description" content="${e(desc)}">
+<meta property="og:image" content="${e(img)}">
+<meta property="og:url" content="${e(url)}">
+<meta name="twitter:card" content="summary_large_image">
+<base href="../../">
+<script>window.CAVE_PRODUCT=${JSON.stringify(p.id)};fetch("index.html",{cache:"no-store"}).then(r=>r.text()).then(h=>{h=h.replace('<base href="./">','<base href="../../"><script>window.CAVE_PRODUCT=${JSON.stringify(p.id)}<\\/script>');document.open();document.write(h);document.close()}).catch(()=>{location.replace("../../?produto="+encodeURIComponent(window.CAVE_PRODUCT))})<\/script>
+</head><body><noscript><a href="../../?produto=${e(encodeURIComponent(p.id))}">${e(p.title)}</a></noscript></body></html>
+`;
+}
+const SITE_BASE=()=>new URL("../",location.href).href;
+async function writeStub(p){try{let sha;try{sha=(await gh(cpath(`produto/${p.slug}/index.html`)+`?ref=${S.branch}`)).sha}catch(x){if(x.status!==404)throw x}
+  await putFile(`produto/${p.slug}/index.html`,b64enc(caveStub(p,SITE_BASE())),`Link do produto: ${p.title}`,sha)}catch(e){console.warn("link",e)}}
+$("#e-od").addEventListener("change",()=>{$("#e-leadw").hidden=!$("#e-od").checked});
+$("#e-copylink").addEventListener("click",async()=>{const u=$("#e-link").textContent;try{await navigator.clipboard.writeText(u);toast("Link copiado.")}catch(_){prompt("Copie o link:",u)}});
 // ---------- Editor
 // Produto da loja (100% da Cave, tem custo) ou de terceiro (comissão de 10, 15, 20%...)
 function readOwn(){const terc=$("#e-own-terc").checked;return terc?{pct:Math.min(99,digits($("#e-pct").value)||0),owner:$("#e-owner").value.trim(),phone:$("#e-ophone").value.trim(),pix:$("#e-opix").value.trim()}:{pct:100}}
@@ -1044,6 +1087,7 @@ function openEditor(p){
   $("#e-fam").innerHTML=`<option value="">Nenhum (produto único)</option>`+PRODS.filter(x=>x.id!==D.id).sort((a,b)=>a.title.localeCompare(b.title,"pt-BR")).map(x=>`<option value="${esc(x.id)}">${esc(x.title)} — ${esc(x.variant||x.subtitle||"")}</option>`).join("");
   {const fm=D.family&&PRODS.find(x=>x.id!==D.id&&(x.family||x.id)===D.family);$("#e-fam").value=fm?fm.id:""}
   $("#e-var").value=D.variant||"";
+  $("#e-od").checked=!!D.onDemand;$("#e-lead").value=D.leadTime||"";$("#e-leadw").hidden=!D.onDemand;$("#e-linkw").hidden=!D.slug;$("#e-link").textContent=D.slug?SITE_BASE()+"produto/"+D.slug+"/":"";
   $("#e-title").value=D.title;$("#e-sub").value=D.subtitle;$("#e-desc").value=D.desc||"";
   const cg=(p&&(FIN.consign||{})[p.id])||null;
   const terc=cg?cg.pct<100:!p?false:defPct(D)<100&&!(FIN.costs||{})[p.id];
@@ -1074,7 +1118,7 @@ moneyField($("#e-price"),()=>{renderFinal();renderPreview();syncOwn()});moneyFie
 function readForm(){
   const sub=$("#e-subcat").value==="__other"?$("#e-other").value.trim():$("#e-subcat").value;
   return {...D,title:$("#e-title").value.trim(),subtitle:$("#e-sub").value.trim(),desc:$("#e-desc").value.trim(),tag:D.tag||"",
-    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:D.status||"disponivel",cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,featured:!!D.featured,variant:$("#e-var").value.trim(),discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
+    price:parseMoney($("#e-price").value),cond:document.querySelector('[name="e-cond"]:checked').value,status:D.status||"disponivel",cat:$("#e-cat").value.split("|")[0],group:$("#e-cat").value.split("|")[1],sub,featured:!!D.featured,onDemand:$("#e-od").checked,leadTime:$("#e-od").checked?$("#e-lead").value.trim():"",variant:$("#e-var").value.trim(),discount:readDisc(),also:(D.also||[]).filter(a=>a.cat&&a.sub)};
 }
 function renderPreview(){
   const f=readForm(),s=f.status==="vendido",ph=D.photos[0];
@@ -1136,6 +1180,7 @@ $("#edSave").addEventListener("click",async()=>{
     const prod={...f,photos:paths,demo:false,updatedAt:new Date().toISOString()};
     const famSel=$("#e-fam").value,famP=famSel&&PRODS.find(x=>x.id===famSel),fam=famP?(famP.family||famP.id):"";
     if(fam)prod.family=fam;else delete prod.family;if(!prod.variant)delete prod.variant;
+    if(!prod.slug)prod.slug=caveSlug(prod);if(!prod.onDemand){delete prod.onDemand;delete prod.leadTime}else if(!prod.leadTime)delete prod.leadTime;
     if(!prod.discount)delete prod.discount;if(!prod.featured)delete prod.featured;if(!prod.also||!prod.also.length)delete prod.also;
     if(prod.status==="vendido"&&!(orig&&orig.status==="vendido"))prod.soldAt=new Date().toISOString();
     if(prod.status!=="vendido")delete prod.soldAt;
@@ -1143,6 +1188,7 @@ $("#edSave").addEventListener("click",async()=>{
     delete prod.icon;if(orig&&orig.icon&&orig.sub===prod.sub)prod.icon=orig.icon;
     busy("Salvando produto…");
     await updateProducts(list=>{const i=list.findIndex(x=>x.id===prod.id);if(i>=0)list[i]=prod;else list.unshift(prod);if(fam){const o=list.find(x=>x.id===famSel);if(o&&!o.family){o.family=fam;if(!o.variant&&o.subtitle)o.variant=o.subtitle}}},`${orig?"Edita":"Novo produto"}: ${prod.title}`);
+    busy("Atualizando o link do produto…");await writeStub(prod);
     for(const p of removed){busy("Limpando fotos antigas…");await delFile(p,`Remove foto: ${prod.title}`)}
     await saveCost(prod.id,cost);await saveConsign(prod.id,own);
     if(nowSold){busy("Registrando venda…");await recordSale(prod,sale)}else if(unSold)await unrecordSale(prod);
@@ -1155,6 +1201,7 @@ $("#e-delete").addEventListener("click",async function(){
   try{
     await updateProducts(list=>{const i=list.findIndex(x=>x.id===p.id);if(i>=0)list.splice(i,1)},`Apaga: ${p.title}`);
     for(const ph of p.photos||[])await delFile(ph,`Remove foto: ${p.title}`);
+    if(p.slug)await delFile(`produto/${p.slug}/index.html`,`Remove link: ${p.title}`).catch(()=>{});
     closeEditor();renderList();renderFin();toast("Produto apagado.");
   }catch(err){toast(errMsg(err),true)}finally{busy()}
 });

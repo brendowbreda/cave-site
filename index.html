@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+<base href="./">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
@@ -213,6 +214,12 @@ section,#loja{scroll-margin-top:68px}
 .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .badge{position:absolute;top:10px;left:10px;font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.72);color:#fff;z-index:2}
 .badge.novo{background:var(--buy);color:var(--buy-ink)}
+.badge.od{background:#2563EB;color:#fff}
+.badge.od.right{left:auto;right:10px}
+.pd .cond{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pd .cond .share{margin-left:auto;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.pd .cond .share svg{width:16px;height:16px}
+.od-note{margin:0;font-size:14px;color:var(--muted)}.od-note b{color:#2563EB}
 .badge.usado{background:#F5C518;color:#1A1500}
 .badge.hl{left:auto;right:10px;background:var(--ink);color:var(--bg)}
 .sortbar{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);margin-top:18px;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -798,7 +805,7 @@ function filtered(){
 function card(p){
   const s=sold(p);
   return `<button class="card${s?" is-sold":""}" data-id="${esc(p.id)}" aria-label="${esc(p.title)}, ${s?"vendido":brl(p.price)}">
-    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Produto novo":"Produto usado"}</span>${p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&p.photos?.length>1&&famMembers(p).length<2?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
+    <div class="ph"><span class="grain"></span>${pic(p)}${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Produto novo":"Produto usado"}</span>${p.onDemand?`<span class="badge od right">Sob encomenda</span>`:p.tag?`<span class="badge hl">${esc(p.tag)}</span>`:""}`}${!s&&p.photos?.length>1&&famMembers(p).length<2?`<span class="pics">${p.photos.length} fotos</span>`:""}</div>
     <div class="meta"><span class="t">${esc(p.title)}</span>${famMembers(p).length>1?`<span class="dotsw">${famMembers(p).slice(0,5).map(x=>`<i class="${x.id===p.id?"on":""}${sold(x)?" off":""}" data-cv="${esc(x.id)}" title="${esc(x.variant||x.subtitle)}">${(x.photos||[])[0]?`<img src="${esc(x.photos[0])}" alt="">`:""}</i>`).join("")}${famMembers(p).length>5?`<i class="plus">+${famMembers(p).length-5}</i>`:""}</span>`:""}${s?`<span class="s">Vendido</span>`:`<span class="s">${esc(p.subtitle)}</span><span class="p">${priceHtml(p)}</span>`}</div>
   </button>`;
 }
@@ -871,7 +878,7 @@ function openSheet(title,body,foot){
   setTimeout(()=>$("#sheetClose").focus(),50);
 }
 function setSheet(title,body,foot){$("#sheetTitle").textContent=title;$("#sheetBody").innerHTML=body;$("#sheetFoot").innerHTML=foot||"";$("#sheetFoot").hidden=!foot;$("#sheetBody").scrollTop=0}
-function closeSheet(){sheet.classList.remove("on");scrim.classList.remove("on");document.body.style.overflow="";setTimeout(()=>{sheet.hidden=true;scrim.hidden=true},280);lastFocus&&lastFocus.focus&&lastFocus.focus()}
+function closeSheet(){if(location.pathname.includes("/produto/")){try{history.replaceState(null,"",rootURL()+location.hash)}catch(_){}document.title=SITE_TITLE}sheet.classList.remove("on");scrim.classList.remove("on");document.body.style.overflow="";setTimeout(()=>{sheet.hidden=true;scrim.hidden=true},280);lastFocus&&lastFocus.focus&&lastFocus.focus()}
 $("#sheetClose").addEventListener("click",closeSheet);scrim.addEventListener("click",closeSheet);
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)closeSheet()});
 
@@ -879,8 +886,17 @@ const SHOTS=["","transform:scale(1.25) translate(6%,4%)","transform:rotate(-8deg
 const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const SHIELD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>';
 let cur=null;
+// Link próprio de cada produto: produto/<slug>/ (página gerada pelo painel com título e foto para o WhatsApp)
+const SITE_TITLE=document.title;
+const SHARE_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+const prodURL=p=>new URL("produto/"+(p.slug||p.id)+"/",document.baseURI).href;
+const rootURL=()=>new URL("./",document.baseURI).href;
+async function shareProduct(p){const url=prodURL(p);
+  if(navigator.share){try{await navigator.share({title:p.title,text:`${p.title} · ${brl(p.price)} · Cave Floripa`,url});return}catch(e){if(e.name==="AbortError")return}}
+  try{await navigator.clipboard.writeText(url);toast("Link do produto copiado.")}catch(_){prompt("Copie o link do produto:",url)}}
 function openProduct(id){
   const p=P.find(x=>x.id===id);if(!p)return;cur=p;
+  try{history.replaceState(null,"",prodURL(p));document.title=`${p.title} | Cave Floripa`}catch(_){}
   const s=sold(p);
   const n=Math.max(1,(p.photos||[]).length);
   const shots=Array.from({length:n},(_,i)=>`<div class="ph" role="img" aria-label="Foto ${i+1} de ${n}"><span class="grain"></span>${pic(p,i,p.photos?.length?"":`style="${SHOTS[i]}"`)}${n>1?`<span class="pics">${i+1}/${n}</span>`:""}</div>`).join("");
@@ -888,12 +904,13 @@ function openProduct(id){
     <div class="gallery${s?" is-sold":""}" id="gal">${shots}</div>
     ${n>1?`<div class="dots" id="dots">${Array.from({length:n},(_,i)=>`<i class="${i?"":"on"}"></i>`).join("")}</div>`:""}
     <div class="pd">
-      <div class="cond">${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Produto novo":"Produto usado"}</span>`}</div>
+      <div class="cond">${s?`<span class="badge sold">Vendido</span>`:`<span class="badge ${p.cond}">${p.cond==="novo"?"Produto novo":"Produto usado"}</span>${p.onDemand?`<span class="badge od">Sob encomenda</span>`:""}`}<button type="button" class="share" id="shareBtn" aria-label="Compartilhar o link do produto">${SHARE_IC}<span>Compartilhar</span></button></div>
       <h3>${esc(p.title)}</h3>
       ${s?"":`<p class="sub">${esc(p.subtitle)}</p>`}
       ${famMembers(p).length>1?`<div class="vars"><span class="vars-t">Cores</span><div class="sw">${famMembers(p).map(x=>`<button type="button" class="swb${x.id===p.id?" on":""}${sold(x)?" off":""}" data-var="${esc(x.id)}" aria-pressed="${x.id===p.id}" aria-label="${esc(x.variant||x.subtitle)}${sold(x)?" (vendido)":""}" title="${esc(x.variant||x.subtitle)}">${(x.photos||[])[0]?`<img src="${esc(x.photos[0])}" alt="">`:svg(caveIcon(x))}</button>`).join("")}</div><p class="swname">${esc(p.variant||p.subtitle)}</p></div>`:""}
       ${s?"":`
       <p class="price">${priceHtml(p)}</p>
+      ${p.onDemand?`<p class="od-note"><b>Sob encomenda.</b> ${p.leadTime?`Prazo de entrega: ${esc(p.leadTime)}.`:"Prazo de entrega combinado pelo WhatsApp."}</p>`:""}
       <div class="pd-actions${p.cond==="usado"?"":" one"}">${p.cond==="usado"?`<button class="btn" id="offerBtn">Fazer oferta</button>`:""}<button class="btn buy" id="buyBtn">Comprar</button></div>
       ${p.desc?`<details class="desc-acc"><summary>Descrição<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p class="desc">${esc(p.desc)}</p></details>`:""}
       ${p.cond==="usado"?HOW_OFFER():""}`}
@@ -903,6 +920,7 @@ function openProduct(id){
   openSheet(s?"Vendido":"Produto",body,foot);
   const g=$("#gal");g.addEventListener("scroll",()=>{const w=g.firstElementChild.getBoundingClientRect().width+8;const i=Math.round(g.scrollLeft/w);document.querySelectorAll("#dots i").forEach((d,k)=>d.classList.toggle("on",k===i))},{passive:true});
   document.querySelectorAll("[data-var]").forEach(b=>{b.onclick=()=>{if(b.dataset.var!==p.id)openProduct(b.dataset.var)};b.onmouseenter=()=>{$(".swname").textContent=b.title};b.onmouseleave=()=>{$(".swname").textContent=p.variant||p.subtitle}});
+  $("#shareBtn").onclick=()=>shareProduct(p);
   if(!s){$("#buyBtn").onclick=buyFlow;if($("#offerBtn"))$("#offerBtn").onclick=()=>offerFlow(1)}
 }
 
@@ -1010,7 +1028,7 @@ function buyFlow(){
     const ship=buy.ship==="envio"?`Entrega para ${buy.city} (CEP ${buy.cep}) · frete ${buy.frete?brl(buy.frete):"grátis"}`:"Retirar na loja física (Florianópolis)";
     const cardTxt=buy.inst>1?`cartão em ${buy.inst}x de ${brl(cardFin/buy.inst)} (total ${brl(cardFin)})`:`cartão à vista ${brl(cardFin)}`;
     const pay=buy.pay==="cash"?"Dinheiro na retirada":buy.pay==="pix"?"Pix":buy.pay==="combo"?`Pix ${brl(buy.pixAmt)} + ${cardTxt}`:cardTxt.charAt(0).toUpperCase()+cardTxt.slice(1);
-    const msg=`Olá! Quero comprar: ${p.title}${p.subtitle?` (${p.subtitle})`:""}.\nValor total: ${brl(fin)}\nEntrega: ${ship}\nPagamento: ${pay}`;
+    const msg=`Olá! Quero comprar: ${p.title}${p.subtitle?` (${p.subtitle})`:""}${p.onDemand?" (sob encomenda)":""}.\nLink: ${prodURL(p)}\nValor total: ${brl(fin)}\nEntrega: ${ship}\nPagamento: ${pay}`;
     const key=(CFG.company||{}).pix;
     if((buy.pay==="pix"||buy.pay==="combo")&&key){
       const code=pixPayload(key,(CFG.company||{}).razao||"Cave Floripa","Florianopolis",buy.pixAmt);
@@ -1191,7 +1209,7 @@ async function load(){
   }catch(e){$("#grid").innerHTML=`<p class="empty">Não foi possível carregar os produtos. Atualize a página.</p>`;return}
   renderConfig();renderNav();renderGrid();
   // link direto para um produto: ?produto=<id>
-  const pid=new URLSearchParams(location.search).get("produto");
+  const pid=window.CAVE_PRODUCT||new URLSearchParams(location.search).get("produto");
   if(pid&&P.some(x=>x.id===pid))openProduct(pid);
 }
 load();

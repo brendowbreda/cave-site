@@ -32,7 +32,8 @@
      "group": "",
      "sub": "Sapatilha"
     }
-   ]
+   ],
+   "slug": "sapatilha-de-estrada-specialized-torch-1-0-mw1gq1by"
   },
   {
    "id": "p-mw1gk9xp",
@@ -61,7 +62,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T01:50:40.031Z",
-   "createdAt": "2026-11-04T01:50:40.031Z"
+   "createdAt": "2026-11-04T01:50:40.031Z",
+   "slug": "bob-gear-ironman-mw1gk9xp"
   },
   {
    "id": "p-mw1gbza9",
@@ -88,7 +90,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T15:10:19.992Z",
-   "createdAt": "2026-11-04T01:45:13.474Z"
+   "createdAt": "2026-11-04T01:45:13.474Z",
+   "slug": "roda-dt-swiss-arc-1100-dicut-disc-mw1gbza9"
   },
   {
    "id": "p-mw1g3cy0",
@@ -117,7 +120,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T01:38:19.819Z",
-   "createdAt": "2026-11-04T01:38:19.819Z"
+   "createdAt": "2026-11-04T01:38:19.819Z",
+   "slug": "sapatilha-de-triathlon-bont-riot-tr-26-mw1g3cy0"
   },
   {
    "id": "p-mw1fw2ix",
@@ -145,7 +149,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T01:34:02.525Z",
-   "createdAt": "2026-11-04T01:34:02.525Z"
+   "createdAt": "2026-11-04T01:34:02.525Z",
+   "slug": "mala-bike-evoc-travel-bag-mw1fw2ix"
   },
   {
    "id": "p-mw1fml8f",
@@ -169,7 +174,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T01:25:16.791Z",
-   "createdAt": "2026-11-04T01:25:16.791Z"
+   "createdAt": "2026-11-04T01:25:16.791Z",
+   "slug": "enduravox-comp-cues-2025-mw1fml8f"
   },
   {
    "id": "p-mw1f7n5o",
@@ -203,7 +209,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T01:16:49.398Z",
-   "createdAt": "2026-11-04T01:16:49.398Z"
+   "createdAt": "2026-11-04T01:16:49.398Z",
+   "slug": "tenis-on-cloudboom-strike-mw1f7n5o"
   },
   {
    "id": "p-mw01ze0n",
@@ -230,7 +237,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T00:49:36.539Z",
-   "createdAt": "2026-11-03T02:14:00.270Z"
+   "createdAt": "2026-11-03T02:14:00.270Z",
+   "slug": "rodas-reserve-mw01ze0n"
   },
   {
    "id": "p-mw01wldi",
@@ -264,7 +272,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T00:50:16.586Z",
-   "createdAt": "2026-11-03T02:12:33.432Z"
+   "createdAt": "2026-11-03T02:12:33.432Z",
+   "slug": "cervelo-p-series-disc-2024-mw01wldi"
   },
   {
    "id": "p-mw01tayi",
@@ -301,7 +310,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T00:50:44.703Z",
-   "createdAt": "2026-11-03T02:10:32.805Z"
+   "createdAt": "2026-11-03T02:10:32.805Z",
+   "slug": "trek-speed-concept-slr-7-project-one-2025-mw01tayi"
   },
   {
    "id": "p-mw01pwi7",
@@ -336,7 +346,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-04T00:51:10.819Z",
-   "createdAt": "2026-11-03T02:08:00.992Z"
+   "createdAt": "2026-11-03T02:08:00.992Z",
+   "slug": "bicicleta-de-triathlon-s-works-shiv-disc-2021-mw01pwi7"
   },
   {
    "id": "p-mw01jxy3",
@@ -363,7 +374,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T00:51:57.486Z",
-   "createdAt": "2026-11-03T02:04:32.385Z"
+   "createdAt": "2026-11-03T02:04:32.385Z",
+   "slug": "look-795-blade-rs-carbon-disc-mw01jxy3"
   },
   {
    "id": "p-mvzxqzuf",
@@ -387,7 +399,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-03T00:15:59.944Z",
-   "createdAt": "2026-11-03T00:15:31.021Z"
+   "createdAt": "2026-11-03T00:15:31.021Z",
+   "slug": "favero-assioma-pro-rs-1-shimano-mvzxqzuf"
   },
   {
    "id": "p-mvzxoqd2",
@@ -406,7 +419,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-03T00:13:48.771Z",
-   "createdAt": "2026-11-03T00:13:48.771Z"
+   "createdAt": "2026-11-03T00:13:48.771Z",
+   "slug": "corrente-shimano-12v-mvzxoqd2"
   },
   {
    "id": "p-mvzxl3s5",
@@ -434,7 +448,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-03T00:11:57.100Z",
-   "createdAt": "2026-11-03T00:11:57.100Z"
+   "createdAt": "2026-11-03T00:11:57.100Z",
+   "slug": "shimano-dura-ace-r9270-sti-pinca-de-freio-hidraulico-mvzxl3s5"
   },
   {
    "id": "p-mvzxfagw",
@@ -462,7 +477,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-03T00:07:49.558Z",
-   "createdAt": "2026-11-03T00:07:25.024Z"
+   "createdAt": "2026-11-03T00:07:25.024Z",
+   "slug": "shimano-dura-ace-r9200-pedivela-c-power-meter-dual-mvzxfagw"
   },
   {
    "id": "p-mvzx6h1j",
@@ -482,7 +498,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-03T00:02:47.144Z",
-   "createdAt": "2026-11-03T00:02:47.144Z"
+   "createdAt": "2026-11-03T00:02:47.144Z",
+   "slug": "pneu-continental-grand-prix-5000-s-tr-black-mvzx6h1j"
   },
   {
    "id": "p-mvzx3p2x",
@@ -506,7 +523,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-02T23:58:15.224Z",
-   "createdAt": "2026-11-02T23:58:15.224Z"
+   "createdAt": "2026-11-02T23:58:15.224Z",
+   "slug": "continental-tour-de-france-limited-edition-700x30-mvzx3p2x"
   },
   {
    "id": "p-mvzx0g8f",
@@ -525,7 +543,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:55:02.237Z",
-   "createdAt": "2026-11-02T23:55:02.237Z"
+   "createdAt": "2026-11-02T23:55:02.237Z",
+   "slug": "pneu-michelin-pro5-competition-line-mvzx0g8f"
   },
   {
    "id": "p-mvzwvm21",
@@ -545,7 +564,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:51:50.606Z",
-   "createdAt": "2026-11-02T23:51:50.606Z"
+   "createdAt": "2026-11-02T23:51:50.606Z",
+   "slug": "shimano-taco-sm-sh11-spd-sl-mvzwvm21"
   },
   {
    "id": "p-mvzwrmt2",
@@ -566,7 +586,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T00:52:59.002Z",
-   "createdAt": "2026-11-02T23:48:01.739Z"
+   "createdAt": "2026-11-02T23:48:01.739Z",
+   "slug": "met-codatronca-capacete-aerodinamico-para-triathlon-e-contra-mvzwrmt2"
   },
   {
    "id": "p-mvzwkdww",
@@ -585,7 +606,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:43:32.015Z",
-   "createdAt": "2026-11-02T23:43:32.015Z"
+   "createdAt": "2026-11-02T23:43:32.015Z",
+   "slug": "sram-sl-500-aero-shifter-set-11-speed-mvzwkdww"
   },
   {
    "id": "p-mvzwbkrs",
@@ -604,7 +626,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:39:37.351Z",
-   "createdAt": "2026-11-02T23:38:45.190Z"
+   "createdAt": "2026-11-02T23:38:45.190Z",
+   "slug": "sram-r2c-tt-shifter-set-11v-mvzwbkrs"
   },
   {
    "id": "p-mvzvtyef",
@@ -623,7 +646,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T00:54:01.019Z",
-   "createdAt": "2026-11-02T23:21:46.380Z"
+   "createdAt": "2026-11-02T23:21:46.380Z",
+   "slug": "cabo-carregador-dados-usb-c-garmin-mvzvtyef"
   },
   {
    "id": "p-mvzvqfjb",
@@ -651,7 +675,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:19:34.795Z",
-   "createdAt": "2026-11-02T23:19:34.795Z"
+   "createdAt": "2026-11-02T23:19:34.795Z",
+   "slug": "monitor-cardiaco-peitoral-garmin-hrm-200-mvzvqfjb"
   },
   {
    "id": "p-mvzvltje",
@@ -673,7 +698,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:17:20.856Z",
-   "createdAt": "2026-11-02T23:16:11.026Z"
+   "createdAt": "2026-11-02T23:16:11.026Z",
+   "slug": "garmin-forerunner-965-mvzvltje"
   },
   {
    "id": "p-mvzvgczg",
@@ -695,7 +721,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T00:54:33.252Z",
-   "createdAt": "2026-11-02T23:12:52.155Z"
+   "createdAt": "2026-11-02T23:12:52.155Z",
+   "slug": "radar-garmin-varia-rtl515-mvzvgczg"
   },
   {
    "id": "p-mvzvaiye",
@@ -717,7 +744,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:07:30.539Z",
-   "createdAt": "2026-11-02T23:07:30.539Z"
+   "createdAt": "2026-11-02T23:07:30.539Z",
+   "slug": "garmin-forerunner-570-mvzvaiye"
   },
   {
    "id": "p-mvzv7qgu",
@@ -739,7 +767,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:05:00.234Z",
-   "createdAt": "2026-11-02T23:05:00.234Z"
+   "createdAt": "2026-11-02T23:05:00.234Z",
+   "slug": "garmin-forerunner-70-mvzv7qgu"
   },
   {
    "id": "p-mvzv3l93",
@@ -763,7 +792,8 @@
    "updatedAt": "2026-11-04T02:16:31.369Z",
    "createdAt": "2026-11-02T23:01:58.359Z",
    "family": "fr170",
-   "variant": "Whitestone / Cloud Blue"
+   "variant": "Whitestone / Cloud Blue",
+   "slug": "garmin-forerunner-170-music-mvzv3l93"
   },
   {
    "id": "p-mvzuyt8x",
@@ -784,7 +814,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-04T00:54:58.068Z",
-   "createdAt": "2026-11-02T22:58:34.435Z"
+   "createdAt": "2026-11-02T22:58:34.435Z",
+   "slug": "radar-garmin-varia-rearvue-820-luz-traseira-de-radar-mvzuyt8x"
   },
   {
    "id": "p-mvzuttrd",
@@ -810,7 +841,8 @@
    },
    "demo": false,
    "updatedAt": "2026-11-02T22:54:28.383Z",
-   "createdAt": "2026-11-02T22:54:28.383Z"
+   "createdAt": "2026-11-02T22:54:28.383Z",
+   "slug": "garmin-edge-550-mvzuttrd"
   },
   {
    "id": "p-mvzumuuj",
@@ -832,7 +864,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T22:50:54.156Z",
-   "createdAt": "2026-11-02T22:50:54.156Z"
+   "createdAt": "2026-11-02T22:50:54.156Z",
+   "slug": "garmin-edge-540-mvzumuuj"
   },
   {
    "id": "p-mvzuiwmm",
@@ -853,7 +886,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:08:35.242Z",
-   "createdAt": "2026-11-02T22:46:08.052Z"
+   "createdAt": "2026-11-02T22:46:08.052Z",
+   "slug": "garmin-forerunner-970-mvzuiwmm"
   },
   {
    "id": "p-mvzueyhh",
@@ -876,7 +910,8 @@
    "updatedAt": "2026-11-04T02:17:01.284Z",
    "createdAt": "2026-11-02T22:43:25.124Z",
    "family": "fr170",
-   "variant": "Black / Amp Yellow"
+   "variant": "Black / Amp Yellow",
+   "slug": "garmin-forerunner-170-music-mvzueyhh"
   },
   {
    "id": "p-mvzu82fg",
@@ -904,7 +939,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T22:37:55.679Z",
-   "createdAt": "2026-11-02T22:37:55.679Z"
+   "createdAt": "2026-11-02T22:37:55.679Z",
+   "slug": "monitor-cardiaco-peitoral-garmin-hrm-600-mvzu82fg"
   },
   {
    "id": "p-mvzu3mqf",
@@ -927,7 +963,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:08:18.659Z",
-   "createdAt": "2026-11-02T22:34:19.720Z"
+   "createdAt": "2026-11-02T22:34:19.720Z",
+   "slug": "garmin-fenix-8-safira-titanio-amoled-mvzu3mqf"
   },
   {
    "id": "p-mvztyirf",
@@ -948,7 +985,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T23:08:10.892Z",
-   "createdAt": "2026-11-02T22:30:08.939Z"
+   "createdAt": "2026-11-02T22:30:08.939Z",
+   "slug": "garmin-forerunner-165-music-mvztyirf"
   },
   {
    "id": "p-mvztipuj",
@@ -974,7 +1012,8 @@
     "type": "brl",
     "value": 200
    },
-   "featured": true
+   "featured": true,
+   "slug": "cirqa-pulseira-inteligente-garmin-mvztipuj"
   },
   {
    "id": "p-mvzr0crc",
@@ -1001,7 +1040,8 @@
    "discount": {
     "type": "brl",
     "value": 200
-   }
+   },
+   "slug": "garmin-forerunner-265-music-mvzr0crc"
   },
   {
    "id": "p-mvzp6duu",
@@ -1022,7 +1062,8 @@
    ],
    "demo": false,
    "updatedAt": "2026-11-02T22:40:00.074Z",
-   "createdAt": "2026-11-02T20:18:42.114Z"
+   "createdAt": "2026-11-02T20:18:42.114Z",
+   "slug": "cinta-cardiaca-wahoo-trackr-heart-rate-mvzp6duu"
   }
  ]
 }
